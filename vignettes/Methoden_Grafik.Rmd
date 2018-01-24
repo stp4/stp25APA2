@@ -1,0 +1,420 @@
+---
+title: "Methoden-Grafik"
+author: "Wolfgang Peter"
+date: "`r Sys.Date()`"
+output:
+ html_document:
+ toc: true
+vignette: >
+ %\VignetteIndexEntry{Grafiken}
+ %\VignetteEngine{knitr::rmarkdown}
+ %\VignetteEncoding{UTF-8}
+---
+#  Grafiken
+
+## Lattice
+
+
+### Format
+
+
+
+```
+MySet(col = NULL, pch = 15:18, lty = 1:3, cex = 1, col.bar = NULL,
+  n = if (is.numeric(col)) col else 4, h.start = 120,
+  theme = latticeExtra::ggplot2like(n = n, h.start = h.start),
+  reset = FALSE, show.device = FALSE, ...)
+ Set3 rosa-himmelblau
+ brewer.pal(8,"Set3")[c(3,4)]
+```
+
+### Farben
+
+
+
+Achtung die Beispiele hier gehen nicht weil knit!
+ http://www.magesblog.com/2012/12/changing-colours-and-legends-in-lattice.html
+
+
+
+```
+library(stp25data)    # meine Daten
+library(stp25plot)    # meine Funktionen
+library(lattice)      # Lattice-Plots
+library(RColorBrewer) # Farben
+library(effects)      # Effekte
+require(gridExtra)    # Plots agregieren
+```
+
+
+
+```{r setup, include=FALSE}
+library(stp25data)
+library(stp25plot)
+library(lattice)
+library(RColorBrewer)
+library(effects)
+require(gridExtra)
+
+```
+
+
+```
+myColours <- brewer.pal(9,"Set1")[c(8,2)]     # --  brewer.pal(4,"Dark2")
+# - get Default settings
+    #    trellis.par.get()$plot.symbol
+    #    names(trellis.par.get())
+
+trellis.par.set(
+       # -- auto.key und dotplot
+                superpose.symbol  = list(col=myColours, pch = 15:17),
+       # -- barchart
+                superpose.polygon = list(col=myColours, border="transparent"),
+                plot.polygon =list(col="#' 377EB8"),
+       # -- linien
+                superpose.line    = list(col=myColours, lty=1:3),
+       # -- boxplotsund symbol fuer ausreiser und xyplot
+                box.dot = list(pch=19, cex=1.2),
+                # box.rectangle =list(),
+                # box.umbrella = list(),
+                plot.symbol=list(pch=1)
+               #  dot.symbol=list( )
+)
+#  windows(8,8)
+#  show.settings()
+```
+
+
+### strip  Sonderzeichen + Größe
+
+```{r,fig.height=4, fig.width=6}
+# -------------------------------------------------------------------------------
+ x1<-rnorm(100);  x2<-gl(2, 50, labels = c("Control", "Treat"))
+ y<-(1.5-as.numeric(x2))*x1+rnorm(100)
+#windows(7,4)
+p1<- xyplot(y~x1|x2,
+            xlab = expression(hat(mu)[0]),
+            type=(c("p", "r")),
+            # - auch mit fontsize=20
+            ylab=list(label="Percent of Respondents", cex=2),
+            par.strip.text=list(lines=2.5, col=6),
+            strip=strip.custom(factor.levels=
+                                 expression(
+                                   sqrt(G^{1}), sqrt(italic(R)^{1}))))
+ print(p1)
+
+```
+
+
+### MySet
+
+Für  Rmd- Files muss MySet(knit=TRUE) verwendet werden. Referenzlienien sind weiss können aber direkt lattice::trellis.par.set geändert werden.
+```
+ trellis.par.set(list(
+       axis.line = list(col = NA),
+       reference.line = list(col = "grey")) )
+```
+
+```{r, fig.height=4, fig.width=6}
+MySet(knit=TRUE, axis.grid=TRUE)
+xyplot(y~x1|x2,
+            xlab = expression(hat(mu)[0]),
+            type=(c("p", "r"))
+            # par.settings = list( axis.line = list(col = NA),
+            #                      reference.line = list(col = "grey"))
+       )
+```
+
+
+
+### Boxplot Gruppen
+
+```{r,fig.height=3.4, fig.width=4}
+MySet()
+bwplot2(tzell ~ factor(lai), hkarz, groups=gruppe, xlab="",
+             box.width = 1/4,
+             auto.key=list(columns=2)
+)
+```
+
+
+
+### Mittelwerte
+
+```{r,fig.height=4, fig.width=6}
+
+ bwplot(yield ~ site, barley, groups = year,
+       panel = function(x, y, groups, subscripts, ...) {
+          #  panel.grid(h = -1, v = 0)
+           panel.stripplot(x, y, ..., jitter.data = TRUE,
+                           groups = groups, subscripts = subscripts)
+           panel.superpose(x, y, ..., panel.groups = panel.average,
+                           groups = groups, subscripts = subscripts)
+
+            panel.points(x, y, ..., panel.groups = panel.average,
+                           groups = groups, subscripts = subscripts)
+          #  panel.mean(x, y, ... )
+       },
+       auto.key = list(points = FALSE, lines = TRUE, columns = 2))
+
+```
+
+
+
+
+### Effect-Plot
+
+
+```{r, Effectplot_model }
+ x1<- rnorm(10); x2<- rnorm(10); x3<-  rnorm(10)
+ y1<- x1*2+x2 +rnorm(10); y2<- x1/2+x2 +rnorm(10)
+
+ m1<- lm(y1 ~x1+x2+x3)
+ m2<- lm(y2 ~x1+x2)
+```
+
+zum Extrahieren der (Lattice) Grafikgibt es zwei werde erstens über allEffects() und zugriff auf das Listenobjekt oder durch direkte Auswahl über effect()
+
+```
+  p1 <- plot(allEffects(m1)[[1]])
+ p2 <- plot(allEffects(m2)[[1]])
+ p3 <- plot(allEffects(m2)[[2]])
+ class(p1) <- class(p2) <- class(p3) <-"trellis"
+ windows(8,8)
+ grid.arrange(p1, p2,p3, ncol=3)
+```
+
+
+```{r, fig.height=3, fig.width=6}
+ p1 <- plot(effect("x1", m1) )
+ p2 <- plot(effect("x1", m2) )
+ p3 <- plot(effect("x2", m2) )
+
+ grid.arrange(p1, p2, p3, ncol=3)
+```
+
+
+
+
+
+### Strips und Keys
+
+```
+strip=strip.custom(strip.names=FALSE)
+```
+
+
+
+```{r}
+fit2<-lm(chol0 ~ rrs0 + ak*g + med*g, hyper)
+#head(hyper)
+```
+
+ Default Einstellung ohne das g (Geschlecht) im Factor-Heading.
+
+```{r, fig.height=5, fig.width=7}
+plot(allEffects(fit2), main="",
+     factor.names=FALSE
+     )
+
+```
+
+ Jetzt mit Multilines    multiline=TRUE mit , z.var=2
+
+
+
+
+```{r, fig.height=6, fig.width=6}
+fit2<-lm(chol0 ~ rrs0 + ak*g + med*g, hyper)
+
+# Modifiziert geht nicht mehr plot.efflist <- stp25:::plot.efflist
+assignInNamespace("plot.efflist", stp25plot:::plot.efflist, "effects")
+
+plot(allEffects(fit2), main="",
+     multiline=TRUE,
+     ylab= "HDL-Cholesterin\n[mg/dl]",
+     # das geht nicht
+     xlab=c("syst. Blutdruck",  "Altersklassen",   "Medikament"),
+     key.args=list(x=0.35,y=0.99,
+                   corner=c(x=1, y=1),
+                   border=0,
+                   #geht nicht lines=FALSE Workaround
+                   lines=list(col=0), between=-2.05,
+                   cex=.7, title = NULL #, cex.title = 1.2
+
+     )
+)
+```
+
+
+### Position der Beschriftung
+
+**alternating = FALSE** ergibt beschriftung überall unten.
+
+```
+plot(
+  effect("g:med", fit2),
+  main = "",
+  factor.names = FALSE,
+  grid = TRUE ,
+  alternating = FALSE,
+  axes = list(x = list(rotate = 90))
+)
+
+plot(
+  effect("g:med", fit2),  main = "",
+  factor.names = FALSE,
+  lines = list(
+      multiline = TRUE,
+      col = 1:2,
+      lwd = 3
+  ),
+  axes = list(x = list(rotate = 90))
+)
+```
+
+
+
+### Skalen Transformieren
+
+
+```
+     multiline=TRUE mit , z.var=2
+
+ #-- log-Skala
+   plot(allEffects(fit2,
+        transformation=list(link=log, inverse=exp)))
+   APA2(allEffects(fit_lme2), transform=TRUE)
+   APA2(allEffects(fit_lme2))
+   APA2(allEffects(fit_lme2, transformation=list(link=log, inverse=exp)))
+
+```
+
+### Labels und Xlab ändern
+
+
+```
+library(effects)
+library(gridExtra)
+A = rnorm(100); B = rnorm(100); C = factor(rep(c("This", "That"), 50))
+
+model = lm(A~B*C)
+
+p1<-plot(ef<-effect("B:C", model), x.var="C")
+
+ef$variables$C$levels <- c("foo", "bar")
+levels(ef$x$C) <- c("foo", "bar")
+p2<-plot(ef, x.var="C")
+
+grid.arrange(p1,p2)
+
+
+#ef$variables
+#
+ef[[1]]$variables$C$levels <- c("foo", "bar")
+levels(ef[[1]]$x$C) <- c("foo", "bar")
+windows(8,8)
+plot(ef, x.var="C")
+
+
+#-- Modifiziert wegen xlab
+
+plot.efflist<- stp25:::plot.efflist
+
+ef<-allEffects(lm(A~B+C))
+  plot(ef, xlab=c("Foo","Bar"))
+```
+
+
+
+### Alternative zu Effect
+
+
+```{r, include=FALSE}
+library(HH)
+library(effects)
+data(hotdog, package="HH")
+```
+
+```
+library(HH)
+library(effects)
+data(hotdog, package="HH")
+```
+
+
+
+```{r,fig.height=3.4, fig.width=6}
+CpT <- ancovaplot(Sodium ~ Calories + Type,
+                  data=hotdog,
+                  superpose.panel=TRUE)
+CpT
+
+anova(fit<-aov(Sodium ~ Calories*Type, data=hotdog))
+
+plot(allEffects(fit))
+```
+
+
+## Eigene Grafiken
+
+## bARPLOT
+
+
+## Torte
+
+
+
+## Anhang
+
+###Farbpalette
+
+ Diverging palettes (div maxcolors=11)
+
+ palettes  | colorblind |Farbe
+ --------- | ---------- | ----
+ BrBG | TRUE | braun-gruen
+ PiYG | TRUE | violet-gruen
+ PRGn | TRUE | violet-gruen
+ PuOr | TRUE | braun-violett
+ RdBu | TRUE | rot-blau
+ RdGy | FALSE | rot-grau
+ RdYlBu | TRUE | rot-blau
+ RdYlGn | FALSE | rot-gruen
+ Spectral | FALSE|  rot-blau
+
+ Qualitative palettes (qual)
+
+palettes|maxcolors|colorblind
+------ | ------- | ----------
+Accent|8|FALSE
+Dark2|8|TRUE
+Paired|12|TRUE
+Pastel1|9|FALSE
+Pastel2|8|FALSE
+Set1|9|FALSE
+Set2|8|TRUE
+Set3|12|FALSE
+
+Sequentialpalettes(maxcolors=9, seq)
+
+palettes|colorblind
+------ | ----------
+Blues|TRUE
+BuGn|TRUE
+BuPu|TRUE
+GnBu|TRUE
+Greens|TRUE
+Greys|TRUE
+Oranges|TRUE
+OrRd|TRUE
+PuBu|TRUE
+PuBuGn|TRUE
+PuRd|TRUE
+Purples|TRUE
+RdPu|TRUE
+Reds|TRUE
+YlGn|TRUE
+YlGnBu|TRUE
+YlOrBr|TRUE
+YlOrRd|TRUE
