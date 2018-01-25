@@ -440,6 +440,30 @@ APA2(ans, caption="Alle")
  
 
 
+## Tests
+
+Quelle: https://cran.r-project.org/doc/contrib/Ricci-refcard-regression.pdf
+
+-  *ad.test*: Anderson-Darling test for normality (nortest)
+-  *bartlett.test*: Performs Bartlett's test of the null that the variances in each of the groups (samples) are the same (stats)
+-  *bgtest*: Breusch-Godfrey Test (lmtest)
+-  *bptest*: Breusch-Pagan Test (lmtest)
+-  *cvm.test*: Cramer-von Mises test for normality (nortest)
+-  *durbin.watson*: Durbin-Watson Test for Autocorrelated Errors (car)
+-  *dwtest*: Durbin-Watson Test (lmtest)
+-  *levene.test*: Levene's Test (car)
+-  *lillie.test*: Lilliefors (Kolmogorov-Smirnov) test for normality (nortest)
+-  *ncv.test*: Score Test for Non-Constant Error Variance (car)
+-  *pearson.test*: Pearson chi-square test for normality (nortest)
+-  *sf.test*: Shapiro-Francia test for normality (nortest) Vito Ricci - R Functions For Regression Analysis 
+-  *shapiro.test*: Performs the Shapiro-Wilk test of normality (stats) Variables transformations
+-  *box.cox*: Box-Cox Family of Transformations (car)
+-  *boxcox*: Box-Cox Transformations for Linear Models (MASS)
+-  *box.cox.powers*: Multivariate Unconditional Box-Cox Transformations (car)
+-  *box.tidwell*: Box-Tidwell Transformations (car)
+-  *box.cox.var*: Constructed Variable for Box-Cox Transformation (car) 
+
+
 
  
 
@@ -649,9 +673,27 @@ Kreuztabelle: Cohen’s w, φ, Cramer’s V, C
 ANOVA/Regression: f, η², η²part und d, Δ, Hedge’s g (bei Vergleich der Stichproben) sowie Odds Ratio, Risk Ratio, r, R²
 
 
+
+
 ### Lineare Regressionsanalyse (lm)
 Die Bezeichnung Regression stammte historisch gesehen von Francis Galton, er untersuchte den Zusammenhang der Körpergröße von Eltern und Kindern (Regression to the Mean). Ziel der Regressionsanalyse ist eine funktionale Beziehung zwischen zwei Größen zu finden.[1] Mathematisch lässt sich das folgend formulieren   ($\hat{Y} = c + bX + e$), dabei ist $X$ die unabhängige und $\hat{Y}$ die abhängige Variable und $e$ der statistische Fehler. Gesucht wird, die “Formel” der Gerade, die in der graphischen Darstellung durch den Mittelwert verläuft. Die Regression ist quasi die Erweiterung der Korrelationsanalyse die ja die Stärke des Zusammenhangs ermittelt.
 
+#### Linear model
+-  *Anova*: Anova Tables for Linear and Generalized Linear Models (car)
+-  *anova*: Compute an analysis of variance table for one or more linear model fits(stasts)
+-  *coef*: is a generic function which extracts model coefficients from objects returned by modeling functions. coefficients is an alias for it (stasts)
+-  *coeftest*: Testing Estimated Coefficients (lmtest)
+-  *confint*: Computes confidence intervals for one or more parameters in a fitted model. Base has a method for objects inheriting from class "lm" (stasts)
+-  *deviance*:Returns the deviance of a fitted model object (stats)
+-  *effects*: Returns (orthogonal) effects from a fitted model, usually a linear model. This is a generic function, but currently only has a methods for objects inheriting from classes "lm" and "glm" (stasts)
+-  *fitted*: is a generic function which extracts fitted values from objects returned by modeling functions fitted.values is an alias for it (stasts)
+-  *formula*: provide a way of extracting formulae which have been included in other objects (stasts)
+-  *linear.hypothesis*: Test Linear Hypothesis (car) stratum analysis of variance and analysis of covariance (stasts)
+-  *model.matrix*: creates a design matrix (stasts)
+*predict*: Predicted values based on linear model object (stasts)
+*residuals*: is a generic function which extracts model residuals from objects
+returned by modeling functions (stasts)
+*summary.lm*: summary method for class "lm" (stats) *vcov*: Returns the variance-covariance matrix of the main parameters of a fitted model object (stasts) 
 
 ```{r, results='asis', warning=FALSE}
 
@@ -852,8 +894,23 @@ häufig Überlebenszeiten herangezogen. Diese sollten
 https://www.uni-kiel.de/medinfo/lehre/seminare/methodik/Dtsch%20Arztebl%2015%20%C3%9Cberlebenszeitanalyse.pdf
 
 
-Beispiel Magenkarzinom (mkarz) Buehl Seite 553
-Die Datei mkarz.sav ist ein Datensatz mit 106 Patientan
+
+#### Survival analysis
+-  *anova.survreg*: ANOVA tables for survreg objects (survival)
+-  *clogit*: Conditional logistic regression (survival)
+-  *cox.zph*: Test the proportional hazards assumption of a Cox regression (survival)
+-  *coxph*: Proportional Hazards Regression (survival)
+-  *coxph.detail*: Details of a cox model fit (survival)
+-  *coxph.rvar*: Robust variance for a Cox model (survival)
+-  *ridge*: ridge regression (survival)
+-  *survdiff*: Test Survival Curve Differences (survival)
+-  *survexp*: Compute Expected Survival (survival)
+-  *survfit*: Compute a survival Curve for Censored Data (survival)
+-  *survreg*: Regression for a parametric survival model (survival) 
+
+
+#### Beispiel MagenkarzinomBuehl  
+Die Datei mkarz.sav Seite 553 ist ein Datensatz mit 106 Patientan
  mit Magenkarzinom über einen Zeitraum von 5 Jahren
 
 ```{r, results='asis', warning=FALSE}

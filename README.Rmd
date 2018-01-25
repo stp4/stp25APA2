@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
 ```
 
 # stp25APA2 
+Achtung das ist nur ein experimentelles Projekt und wird wieder gelöscht. 
 Hier sind alle Funktionen vereint die für die Aufbereitung der Ergebnisse zuständig sind. Die Funktione sind ein Konglomerat aus Kopien  texreg und psych sowie eigene Funktionen die aus Bortz abgeleitet sind.
 
 Overview
