@@ -34,8 +34,6 @@ knitr::opts_chunk$set(echo = TRUE)
 <!-- C:/Users/wpete/Documents/R/win-library/3.4 -->
 
 
-Test mit Git
-
 # Einleitung
 
 Die von mir verwendeten statistischen Methoden basieren vor allem auf den Empfehlungen von Bortz [4] sowie Sachs [7].
