@@ -23,27 +23,27 @@ Overview
 
 ### Apa-Style Tabellen
 
--  **APA2** Tabellen aus Formeln und R-Objekten
--  **Tabelle**  Deskriptive Analyse
--  **APA_Table**  Regressionsanalyse (Kopie von texreg)
--  **APA_Correlation**  Korrelationen
--  **APA_Xtabs**  Kreuztabellen
--  **Prop_Test**  Konfidenzintervallen von Häufikeiten
+-  `APA2` Tabellen aus Formeln und R-Objekten
+-  `Tabelle`  Deskriptive Analyse
+-  `APA_Table`  Regressionsanalyse (Kopie von texreg)
+-  `APA_Correlation`  Korrelationen
+-  `APA_Xtabs`  Kreuztabellen
+-  `Prop_Test`  Konfidenzintervallen von Häufikeiten
 
 ### Statistik-Methoden
 
--  **Likert**  Analyse von Likertskalen
--  **Kano**  Kano-Kodierung
-- **Rangreihe** Rangordnungen von Objekten  http://www.eric-klopp.de/texte/angewandte-psychologie/18-die-kano-methode
--  **ICC**  Intra-Klassen-Korrelation. (Kopie von psych)
--  **Principal, PCA**  Faktoranalyse PCA (Kopie von psych)
--  **Reliability, Alpha**  Cronbach-Alpha + Mittelwerte (Kopie von psych)
--  **Index** Summenfunktion
--  **VIF**  variance inflation factor
--  **R2**   Berechnung der R-Quadrats
--  **RMSE**    square root of the variance
--  **Mediation**  Mediation Funktion Sobel-Test 
--  **MetComp, BlandAltman, Kappa** Uebereinstimmung und Praezision von Messwerten
+-  `Likert`  Analyse von Likertskalen
+-  `Kano`  Kano-Kodierung
+- `Rangreihe` Rangordnungen von Objekten  
+-  `ICC`  Intra-Klassen-Korrelation. (Kopie von psych)
+-  `Principal, PCA`  Faktoranalyse PCA (Kopie von psych)
+-  `Reliability, Alpha`  Cronbach-Alpha + Mittelwerte (Kopie von psych)
+-  `Index` Summenfunktion
+-  `VIF`  variance inflation factor
+-  `R2`   Berechnung der R-Quadrats
+-  `RMSE`    square root of the variance
+-  `Mediation`  Mediation Funktion Sobel-Test 
+-  `MetComp, BlandAltman, Kappa` Uebereinstimmung und Praezision von Messwerten
 
 
 ### Usage

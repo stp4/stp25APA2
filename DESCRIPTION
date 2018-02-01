@@ -2,12 +2,11 @@ Package: stp25APA2
 Type: Package
 Title: Resultate Formatiern
 Version: 0.2.1
+Date: 2017-02-25
 Author: Wolfgang Peter
 Maintainer: Wolfgang Peter <w.peter@statistik-peter.at>
-Description: Hier sind alle Funktionen vereint die fuer die Aufbereitung der Ergebnisse zustaendig sind. Output ist immer ein Dataframe oder ein Text.
-License: GPL-3
+Description: APA-Style Tabellen
 Encoding: UTF-8
-Imports: Hmisc
 LazyData: true
 RoxygenNote: 6.0.1
 Suggests: knitr, rmarkdown

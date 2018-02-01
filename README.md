@@ -1,36 +1,40 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-stp25APA2
-=========
 
-Hier sind alle Funktionen vereint die für die Aufbereitung der Ergebnisse zuständig sind. Die Funktione sind ein Konglomerat aus Kopien texreg und psych sowie eigene Funktionen die aus Bortz abgeleitet sind.
+# stp25APA2
 
-Overview
---------
+Achtung das ist nur ein experimentelles Projekt und wird wieder
+gelöscht. Hier sind alle Funktionen vereint die für die Aufbereitung
+der Ergebnisse zuständig sind. Die Funktione sind ein Konglomerat aus
+Kopien texreg und psych sowie eigene Funktionen die aus Bortz abgeleitet
+sind.
+
+## Overview
 
 ### Apa-Style Tabellen
 
--   **APA2** Tabellen aus Formeln und R-Objekten
--   **Tabelle** Deskriptive Analyse
--   **APA\_Table** Regressionsanalyse (Kopie von texreg)
--   **APA\_Correlation** Korrelationen
--   **APA\_Xtabs** Kreuztabellen
--   **Prop\_Test** Konfidenzintervallen von Häufikeiten
+  - `APA2` Tabellen aus Formeln und R-Objekten
+  - `Tabelle` Deskriptive Analyse
+  - `APA_Table` Regressionsanalyse (Kopie von texreg)
+  - `APA_Correlation` Korrelationen
+  - `APA_Xtabs` Kreuztabellen
+  - `Prop_Test` Konfidenzintervallen von Häufikeiten
 
 ### Statistik-Methoden
 
--   **Likert** Analyse von Likertskalen
--   **Kano** Kano-Kodierung
--   **Rangreihe** Rangordnungen von Objekten <http://www.eric-klopp.de/texte/angewandte-psychologie/18-die-kano-methode>
--   **ICC** Intra-Klassen-Korrelation. (Kopie von psych)
--   **Principal, PCA** Faktoranalyse PCA (Kopie von psych)
--   **Reliability, Alpha** Cronbach-Alpha + Mittelwerte (Kopie von psych)
--   **Index** Summenfunktion
--   **VIF** variance inflation factor
--   **R2** Berechnung der R-Quadrats
--   **RMSE** square root of the variance
--   **Mediation** Mediation Funktion Sobel-Test
--   **MetComp, BlandAltman, Kappa** Uebereinstimmung und Praezision von Messwerten
+  - `Likert` Analyse von Likertskalen
+  - `Kano` Kano-Kodierung
+  - `Rangreihe` Rangordnungen von Objekten  
+  - `ICC` Intra-Klassen-Korrelation. (Kopie von psych)
+  - `Principal, PCA` Faktoranalyse PCA (Kopie von psych)
+  - `Reliability, Alpha` Cronbach-Alpha + Mittelwerte (Kopie von psych)
+  - `Index` Summenfunktion
+  - `VIF` variance inflation factor
+  - `R2` Berechnung der R-Quadrats
+  - `RMSE` square root of the variance
+  - `Mediation` Mediation Funktion Sobel-Test
+  - `MetComp, BlandAltman, Kappa` Uebereinstimmung und Praezision von
+    Messwerten
 
 ### Usage
 
@@ -53,8 +57,13 @@ Overview
 
 ### Literatur
 
-\[1\] Bortz, J. & Doering, N. (2006). Forschungsmethoden und Evaluation fuer Human-und Sozialwissenschaftler (4. Auflage). Berlin: Springer
+\[1\] Bortz, J. & Doering, N. (2006). Forschungsmethoden und Evaluation
+fuer Human-und Sozialwissenschaftler (4. Auflage). Berlin: Springer
 
-\[2\] Philip Leifeld (2013). texreg: Conversion of Statistical Model Output in R to LaTeX and HTML Tables. Journal of Statistical Software, 55(8), 1-24. URL <http://www.jstatsoft.org/v55/i08/>
+\[2\] Philip Leifeld (2013). texreg: Conversion of Statistical Model
+Output in R to LaTeX and HTML Tables. Journal of Statistical Software,
+55(8), 1-24. URL <http://www.jstatsoft.org/v55/i08/>
 
-\[3\] Revelle, W. (2017) psych: Procedures for Personality and Psychological Research, Northwestern University, Evanston, Illinois, USA, <https://CRAN.R-project.org/package=psych> Version = 1.7.8.
+\[3\] Revelle, W. (2017) psych: Procedures for Personality and
+Psychological Research, Northwestern University, Evanston, Illinois,
+USA, <https://CRAN.R-project.org/package=psych> Version = 1.7.8.
