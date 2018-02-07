@@ -435,3 +435,9 @@ Corr1<- function(y,
   if(dimnames) dimnames(res)<- dimnames(mycor$r)
   res
 }
+
+
+
+
+
+ 
