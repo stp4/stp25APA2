@@ -2,15 +2,9 @@
 % Please edit documentation in R/APA2_Effsize.R
 \name{APA_Effsize}
 \alias{APA_Effsize}
-\alias{APA_Effsize.default}
-\alias{APA_Effsize.formula}
 \title{APA_Effsize}
 \usage{
 APA_Effsize(x, ...)
-
-\method{APA_Effsize}{default}(x, ...)
-
-\method{APA_Effsize}{formula}(..., type = "cohen.d")
 }
 \arguments{
 \item{x}{Objekt oder Formel}

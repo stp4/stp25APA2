@@ -8,7 +8,8 @@
 \usage{
 APA_Ttest(x, data, var.equal = FALSE, paired = FALSE,
   alternative = "two.sided", include.mean = TRUE, include.d = TRUE,
-  include.mean.diff = TRUE, include.test = TRUE, digits = 2, ...)
+  include.mean.diff = TRUE, include.se = TRUE, type = "t.test",
+  digits = 2, ...)
 
 cohens.d(x, ...)
 }
@@ -25,11 +26,13 @@ cohens.d(x, ...)
 
 \item{include.mean.diff}{Mittlere Differenzen}
 
-\item{digits}{nachkommastellen}
+\item{include.se}{Standardfehler noch nicht Fertig}
+
+\item{type}{Methode t.test oder wilcox.test}
+
+\item{digits}{Nachkommastellen}
 
 \item{...}{an Output}
-
-\item{include.se}{Standardfehler}
 
 \item{x, y}{formel oder x, y}
 
@@ -41,13 +44,13 @@ list
 vector
 }
 \description{
-Berechnung von Mittelwerten und Mittelwertdifferenzen
+Berechnung von Mittelwerten und Mittelwertdifferenzen und des T-Test
 
 Computes Cohen's d
 Cohen, J. (1988).  Statistical power analysis for the behavioral sciences (2nd ed.).  New York:Academic Press.
 }
 \examples{
- 
+
 #require(stpvers)
 
 #Projekt("html")
@@ -68,8 +71,8 @@ APA_Ttest(m~time, varanax, var.equal=FALSE)
 #End()
 
 #require(stpvers)
-set.seed(45)                        ## be reproducible 
- x <- rnorm(10, 10, 1)                
+set.seed(45)                        ## be reproducible
+ x <- rnorm(10, 10, 1)
  y <- rnorm(10, 5, 5)
 
 cohens.d(x, y)

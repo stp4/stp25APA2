@@ -548,7 +548,7 @@ Multi2default<- function(x,
   else if(is.logical(x)){
     x<- as.factor(x, c(TRUE, FALSE))
   }
-  else if(is.nuleric(x) & is.integer(x)) {
+  else if(is.numeric(x) & is.integer(x)) {
     x <- facror( ifelse(x == 1, 1, 0), 1:0)
 
   } else {

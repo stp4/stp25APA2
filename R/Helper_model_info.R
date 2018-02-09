@@ -29,6 +29,31 @@ model_info.default<- function(x, ...){
   )
 }
 
+
+#' @rdname model_info
+#' @export
+model_info.data.frame<- function(x, ...){
+  list(
+    class =class(x) ,
+    family = NULL ,
+    y = NULL ,
+    x = NULL ,
+    labels = NULL,
+    N=nrow(x)
+  )
+}
+
+#' @rdname model_info
+#' @export
+Infomation <- function(x, ...){
+  if(!is.null(comment(x)))
+    Text(comment(x))
+  else 
+    Text("Daten: N = ", nrow(x), ", Col = ", ncol(x) )
+  
+  invisible(x)
+}
+
 #' @rdname model_info
 #' @export
 

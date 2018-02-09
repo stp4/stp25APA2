@@ -46,7 +46,8 @@ conTest = function(fml,
   # t-Test
   TTest2 <- function(fml, data) {
     res <- stats::t.test(fml, data, alternative =  "two.sided")
-    rndr_T(res[2], res[3], res[4])
+   
+    rndr_T(res$statistic, res$parameter, res$p.value)
   }
 
 # Begin Funktion ---------------------------

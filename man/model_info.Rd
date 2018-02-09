@@ -3,6 +3,8 @@
 \name{model_info}
 \alias{model_info}
 \alias{model_info.default}
+\alias{model_info.data.frame}
+\alias{Infomation}
 \alias{model_info.formula}
 \alias{model_info.eff}
 \alias{model_info.htest}
@@ -23,6 +25,10 @@
 model_info(x, ...)
 
 \method{model_info}{default}(x, ...)
+
+\method{model_info}{data.frame}(x, ...)
+
+Infomation(x, ...)
 
 \method{model_info}{formula}(x, ...)
 

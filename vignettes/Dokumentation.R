@@ -1,4 +1,7 @@
 ## ----setup, include=FALSE------------------------------------------------
+
+#vignette: |
+ # %\VignetteIndexEntry{Statistische Methoden} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}#
 #setwd("C:/Users/wpete/Dropbox/3_Forschung/R-Project/stp25APA2/vignettes")
 knitr::opts_chunk$set(echo = TRUE)
 #owd = setwd('vignettes')
@@ -42,6 +45,27 @@ APA2(tzell[1]+Lai~gruppe, hkarz,
      type=c("auto", "median"),
      caption="Einfache Auswertung",
      test=TRUE, include.n = TRUE)
+
+## ---- results='asis', warning=FALSE--------------------------------------
+# T-Test
+ APA( t.test(m1 ~ geschl, varana, var.equal=TRUE))
+ APA( t.test(m1 ~ geschl, varana))
+# ANOVA 
+ APA(aov( m1 ~ geschl, varana ))
+
+APA2(m1+m2 ~ geschl, varana, test="t.test")
+APA_Ttest(m1+m2 ~ geschl, varana)
+
+#varanax<-Melt2(m1+m2~nr,varana , key="time", value="m")
+# broom::tidy(with(varana, t.test(m1,m2 ) ))
+# broom::tidy(  t.test(m~time, varanax, var.equal=FALSE)) )
+
+#APA_Ttest(m~time, varanax, paired = TRUE, include.mean=FALSE)
+#APA_Ttest(m~time, varanax, paired = TRUE, type="U-Test", include.mean=FALSE)
+#APA_Ttest(m~time, varanax, var.equal=TRUE, include.mean=FALSE)
+ 
+1+1
+
 
 ## ------------------------------------------------------------------------
 
@@ -147,7 +171,10 @@ roc.test(roc1, roc2)
 #plot(ciobj, type = "shape", col="#D3D3D3", alpha = .5) 
 
 ## ---- results='asis', warning=FALSE--------------------------------------
- APA2(tzell~gruppe,hkarz, type="cohen.d")  # APA_Effsize ist das gleiche
+# APA2(tzell~gruppe,hkarz, type="cohen.d")  # APA_Effsize ist das gleiche
+
+1+1
+
 
 ## ----include=FALSE-------------------------------------------------------
  n<- 2*8

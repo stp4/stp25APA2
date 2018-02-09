@@ -2,23 +2,31 @@
 title: "Statistische Methoden"
 author: "Wolfgang Peter"
 date: "`r Sys.Date()`"
-output:  
+output:
   html_document:
-    toc: true
+    toc: yes
+  pdf_document:
+    toc: yes
+  md_document:
+    variant: markdown_github
 vignette: >
   %\VignetteIndexEntry{Statistische Methoden}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
 
 
   <!-- html_document: -->
   <!--  number_sections: yes  -->
  
+   
  
 
 
 ```{r setup, include=FALSE}
+
+#vignette: |
+ # %\VignetteIndexEntry{Statistische Methoden} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}#
 #setwd("C:/Users/wpete/Dropbox/3_Forschung/R-Project/stp25APA2/vignettes")
 knitr::opts_chunk$set(echo = TRUE)
 #owd = setwd('vignettes')
@@ -37,7 +45,8 @@ knitr::opts_chunk$set(echo = TRUE)
 # Einleitung
 
 Die von mir verwendeten statistischen Methoden basieren vor allem auf den Empfehlungen von Bortz [4] sowie Sachs [7].
-Die Darstellung der Ergebnisse entspricht wissenschaftlicher Vorgaben, insbesondere halte ich mich bei den Tabellen und Grafiken sowie der Darstellung statistischer Kennzahlen an die Vorgaben von APA-Style[2]. (APA-Style ist im Kontext sozialwissenschaftlicher Forschung quasi der Gold-Standard hinsichtlich des Berichtens von Ergebnissen.)
+Die Darstellung der Ergebnisse entspricht wissenschaftlicher Vorgaben, insbesondere halte ich mich bei den Tabellen und  [Grafiken](Methoden_Grafik.html)
+  sowie der Darstellung statistischer Kennzahlen an die Vorgaben von APA-Style[2]. (APA-Style ist im Kontext sozialwissenschaftlicher Forschung quasi der Gold-Standard hinsichtlich des Berichtens von Ergebnissen.)
 
 
 
@@ -126,6 +135,38 @@ APA2(tzell[1]+Lai~gruppe, hkarz,
      type=c("auto", "median"),
      caption="Einfache Auswertung",
      test=TRUE, include.n = TRUE)
+```
+
+### T-Test
+
+Student's t-Test ist der ueberbegriff von **Two Sample t-test**,
+**Welch Two Sample t-test** und 
+**Paired t-test**
+Dabei ist zu beruecksichtigen dass der Welch Test von ungleichen Varianzen ausgeht und bei mir die Standart -Funktion für den T-Test ist. Interessant ist auch ass Anova und T-Test identisch sind.
+
+Zum T-Test gehört auch  Cohen's d  als Effektstärke.
+
+
+```{r, results='asis', warning=FALSE}
+# T-Test
+ APA( t.test(m1 ~ geschl, varana, var.equal=TRUE))
+ APA( t.test(m1 ~ geschl, varana))
+# ANOVA 
+ APA(aov( m1 ~ geschl, varana ))
+
+APA2(m1+m2 ~ geschl, varana, test="t.test")
+APA_Ttest(m1+m2 ~ geschl, varana)
+
+#varanax<-Melt2(m1+m2~nr,varana , key="time", value="m")
+# broom::tidy(with(varana, t.test(m1,m2 ) ))
+# broom::tidy(  t.test(m~time, varanax, var.equal=FALSE)) )
+
+#APA_Ttest(m~time, varanax, paired = TRUE, include.mean=FALSE)
+#APA_Ttest(m~time, varanax, paired = TRUE, type="U-Test", include.mean=FALSE)
+#APA_Ttest(m~time, varanax, var.equal=TRUE, include.mean=FALSE)
+ 
+1+1
+
 ```
 
 
@@ -312,7 +353,10 @@ $$\eta ^{2}={\frac  {QS_{{{\rm {Effekt}}}}}{QS_{{{\rm {Effekt}}}}+QS_{{{{\rm {Re
 
 
 ```{r, results='asis', warning=FALSE}
- APA2(tzell~gruppe,hkarz, type="cohen.d")  # APA_Effsize ist das gleiche
+# APA2(tzell~gruppe,hkarz, type="cohen.d")  # APA_Effsize ist das gleiche
+
+1+1
+
 ```
 
 ### Korrelation
