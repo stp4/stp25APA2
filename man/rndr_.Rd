@@ -12,11 +12,13 @@
 \alias{rndr_r}
 \alias{rndr_df}
 \alias{rndr_CI}
+\alias{rndr_mean_CI}
 \alias{rndr_F}
 \alias{rndr_T}
 \alias{rndr_H}
 \alias{rndr_W}
-\alias{rndr_W}
+\alias{rndr_U}
+\alias{rndr_shapiro}
 \alias{rndr_lm}
 \alias{rndr_X}
 \alias{rndr_Chisq}
@@ -28,7 +30,8 @@
 \alias{rndr_rmsea_cfa}
 \alias{rndr_cfi_cfa}
 \alias{rndr_nfi_cfa}
-\title{render for html-output}
+\alias{symbol_chi2}
+\title{Render}
 \usage{
 rndr_(...)
 
@@ -38,25 +41,27 @@ rndr_mean(m, s, digits)
 
 rndr_ods(x, digits = 2)
 
-rndr_percent(prozent, anzahl, percent = TRUE,
+rndr_percent(x, n, percent = TRUE,
   digits = options()$stp25$apa.style$prozent$digits[1],
   percentage_str = options()$stp25$apa.style$prozent$percentage_str,
   style = options()$stp25$apa.style$prozent$style,
   null_percent_sign = options()$stp25$apa.style$prozent$null_percent_sign)
 
-rndr_P(p_val, include.symbol = TRUE, include.bracket = FALSE)
+rndr_P(p, include.symbol = TRUE, include.bracket = FALSE)
 
-rndr_Stars(p_val)
+rndr_Stars(p)
 
-rndr_corr(r, p, df)
+rndr_corr(x, p, df)
 
-rndr_r(r, include.symbol = TRUE)
+rndr_r(x, include.symbol = TRUE)
 
 rndr_df(df1, df2 = NULL)
 
-rndr_CI(x, digits = 2, sep = options()$stp25$apa.style$sep_element,
+rndr_CI(ci, digits = 2, sep = options()$stp25$apa.style$sep_element,
   sep_1 = options()$stp25$apa.style$brackets[1],
   sep_2 = options()$stp25$apa.style$brackets[2])
+
+rndr_mean_CI(m, ci, digits)
 
 rndr_F(F_val, df1, df2, p = NULL)
 
@@ -66,7 +71,9 @@ rndr_H(F_val, df1, p = NULL)
 
 rndr_W(F_val, p = NULL)
 
-rndr_W(F_val, p = NULL)
+rndr_U(F_val, p = NULL)
+
+rndr_shapiro(F_val, p = NULL)
 
 rndr_lm(F_val, df1, df2, p, r2, ar2)
 
@@ -74,24 +81,54 @@ rndr_X(x, df1, df2 = NULL, p = NULL)
 
 rndr_Chisq(x, df, p)
 
-rndr_fischer(or, p)
+rndr_fischer(x, p)
 
-rndr_gfi_cfa(gfi)
+rndr_gfi_cfa(x)
 
-rndr_agfi_cfa(agfi)
+rndr_agfi_cfa(x)
 
-rndr_rmsea_cfa(rmsea)
+rndr_rmsea_cfa(x)
 
-rndr_Chisq_cfa(chsq, df = 1)
+rndr_Chisq_cfa(x, df = 1)
 
-rndr_rmsea_cfa(rmsea)
+rndr_rmsea_cfa(x)
 
-rndr_cfi_cfa(nfi)
+rndr_cfi_cfa(x)
 
-rndr_nfi_cfa(nfi)
+rndr_nfi_cfa(x)
+
+symbol_chi2(output = stp25output:::which_output())
 }
 \arguments{
 \item{...}{alles an format}
+
+\item{m}{Mittelwert}
+
+\item{iqr}{IRQ  (ein Wert)}
+
+\item{digits}{Nachkommastellen}
+
+\item{s}{SD (ein Wert)}
+
+\item{x}{Obkekt oder vektor}
+
+\item{n}{Anzahl}
+
+\item{percent, style}{Formatierung als Prozent oder als Prozent(Anzahl)}
+
+\item{percentage_str, null_percent_sign}{Formatierungs Optionen}
+
+\item{p}{p-Wert}
+
+\item{include.symbol, include.bracket}{Formatierungs Optionen}
+
+\item{df, df1, df2}{Freiheitsgrade}
+
+\item{ci}{Vektor mit zwei Werten}
+
+\item{F_val}{Objekt aus einem Test}
+
+\item{output}{nur intern HTML oder Konsole}
 }
 \value{
 Objekt als Character
@@ -100,47 +137,24 @@ Objekt als Character
 Formatiere Zahlen zu Character feur die Ausgabe. Im gegensatz zu Format2()
 und ff() werden die Zahlen mit zB p=.002 ausgegeben.
 
-median
-
-mean
-
-Odds
-
 rndr_percent()
 Percentages are also most clearly displayed in parentheses with no decimal places:
 Nearly half (49%) of the sample was married.
 
 Prozent
 
-APA Textausgabe
-p-Werte \code{rndr_P()}
-
 rndr_corr
 Correlations are reported with the degrees of freedom (which is N-2)
 in parentheses and the significance level:
 The two variables were strongly correlated, r(55) = .49, p < .01.
 
-CI-Wert\code{rndr_CI()}  rndr_CI(matrix(c(NA, 1:10, NA), ncol=2))
+F-Wert \code{rndr_F()}
 
-F-Wert\code{rndr_F()}
-
-T-Wert\code{rndr_T()}
+T-Wert \code{rndr_T()}
 T Tests are reported like chi-squares, but only the degrees of freedom are
  in parentheses. Following that, report the t statistic (rounded to two decimal places)
   and the significance level.
  There was a significant effect for gender, t(54) = 5.43, p < .001, with men receiving higher scores than women.
-
-H-Wert\code{rndr_H()}
-
-W-Wert\code{rndr_W()}
-
-U-Wert\code{rndr_U()}
-
-Lm-Wert\code{rndr_ lm()}
-
-Chi-Wert\code{rndr_X()}
-
-Fischer-test\code{rndr_fischer()}
 
 CFA Confirmatorische Faktoranalyse
 
@@ -151,7 +165,7 @@ AGIF Adjusted-Goodness-of-Fit-Index
 
 SRMR
 
-Moosbrugger, Kelava 2012 Testtheorie 2. Auflage Seite 339
+Chisq_cfa:  Moosbrugger, Kelava 2012 Testtheorie 2. Auflage Seite 339
 CHISQ Chi-Quadrat/df 0 ,2, 3
 
 RMSEA Root-Mean-Square-Error of Approximation 0, 0.050, 0.080
@@ -175,9 +189,12 @@ rndr_percent(10, 3, F, 2)
 
 rndr_P(c(1,.25,.08,0.05,0.01,0.0001))
 rndr_corr(-.548369,0.005896,55)
+  rndr_CI(matrix(c(NA, 1:10, NA), ncol=2))
 rndr_T(25.45, 45, .0045)
 rndr_H(25.45, 45, .0045)
- rndr_gfi_cfa(c(1,.9,.89))
+#capture.output(Hmisc::spearman2(pauli~g, data = rechentest))
+ 
+rndr_gfi_cfa(c(1,.9,.89))
 rndr_agfi_cfa(c(1,.9,.89))
 rndr_rmsea_cfa(c(1,.9,.89))
 rndr_Chisq_cfa(c(0,2,3,2.01,3.4))
