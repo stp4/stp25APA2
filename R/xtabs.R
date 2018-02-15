@@ -1,0 +1,370 @@
+#' @rdname APA2
+#' @export
+#' @examples
+#' #-- APA2.summary.table
+#'
+#' a <- letters[1:3]
+#' APA2(summary(table(a, sample(a))))
+APA2.summary.table <- function(x, ...) {
+  Text(paste0(
+    "Chisq(df=",
+    x$parameter,
+    ")=",
+    Format2(x$statistic, 2),
+    ", p=",
+    ffpvalue(x$p.value)
+  ))
+}
+
+
+
+
+#' @rdname APA_
+#' @description APA_Xtabs Kreuztabellen
+#' @export
+APA_Xtabs <- function(x, data, ...) {
+  #is_formula2()
+  if (stpvers::is_formula2(x))
+    x <- stats::xtabs(x, data) #- altlast abfangen
+  
+  APA2(x)
+  invisible(x)
+}
+
+
+
+ 
+
+
+#' @rdname APA2
+#' @description Kreuztabellen APA2.xtabs Formatiert xtabs() 2x2 Tabellen werden mit Haufigkeit wahlweise mit Prozent
+#' (verhalten wird ueber \code{margin = 2}) geseuert. Berechnet werden mittels
+#'  \link{fisher.test} die Odds-Ratio mit 95%CI und die p-Werte. Alternatibe ist die Funktion
+#'  \link{oddsratio} aus dem Paket \code{vcd}. Weiters laesst sich mit der Option \code{type = 2}
+#'  eine sensitivit?tsanalyse erstellen.
+#'  Bei NxM-Tabellen wird als Test-Statistik Pearson und der
+#'  Kontingentkoeffizient berechnet alternativ steht auch  der Phi-Coefficient zur verf?gung
+#'  auch hier mit \code{type = 2}. die Berechnung erfolgt hier mit \link{assocstats}
+#'  aus dem Packet \code{vcd}.
+#' @param test Signifikanztest TRUE/FALSE  type = FALSE
+#' @param type   type = c("fischer", "odds","sensitivity", "chisquare","correlation", "r")bei 2x2-Tabellen Fischer-test und
+#' @param include.percent Prozent TRUE/FALSE
+#' @param margin Zeilenprozent, Spaltenprozent
+#' @param digits fuer Sensitivitaet sonst ueber Start() einstellen
+#' @param  include.total default = FALSE total/sum
+#' @param  include.total.columns columns total/sum
+#' @param  include.total.sub  sum total/sum
+#' @param include.total.rows  rows total/sum
+#' @export
+#' @examples
+#' # library(stp25data)
+#' # Projekt("html")
+#' hkarz$LAI<- factor(hkarz$lai, 0:1, c("pos", "neg"))
+#' hkarz$Tzell<- cut(hkarz$tzell, 3, c("low", "med", "hig"))
+#'
+#'
+#' xtab <- xtabs(~ gruppe+LAI, hkarz)
+#' APA2(xtab, caption="Harnblasenkarzinom", test=FALSE)
+#' APA2(xtab, type="sens", test=TRUE, caption = "type=sens")
+#' APA2(xtab, type="sens", caption = "geht nur mit teat=TRUE +  type=sens")
+#' APA2(xtabs(~ gruppe+Tzell, hkarz), caption="APA_Xtabs: 2x3 Tabelle", test=FALSE)
+#' APA2(xtabs(~ gruppe+LAI+Tzell, hkarz), caption="APA_Xtabs: 2x2x3 Tabelle", test=FALSE)
+#'
+#'
+#' APA2(xtab, include.total.columns=TRUE, caption = "include.total.columns")
+#' APA2(xtab, include.total.sub=TRUE, caption = "include.total.sub")
+#'
+#'
+#'
+#'
+#' xtab <- xtabs(~ gruppe+Tzell, hkarz)
+#' APA2(xtab, test=FALSE, caption="APA2: 2x3 Tabelle")
+APA2.xtabs <- APA2.table <- function(x,
+                      caption = "" ,
+                      note = "",
+                      digits = NULL,
+                      test = FALSE,
+                      type = c("fischer", "odds",
+                                "sensitivity", "chisquare",
+                                "correlation", "r"),
+                      include.total = FALSE, # total/sum,
+                      include.total.columns = include.total, # total/sum,
+                      include.total.sub = include.total, # total/sum,
+                      include.total.rows = include.total, # total/sum,
+                      include.percent = TRUE,
+                    #  include.odds=FALSE, include.CI = FALSE,
+                   #   include.RR=FALSE,
+                    #  include.sens=FALSE,
+                    #  include.fischer=FALSE,
+                   #   include.chisquare=FALSE,
+                   #   include.corr=FALSE,
+
+                     # include.n = TRUE,
+                     # include.all.n = NULL, # print.n,
+                     # include.header.n = TRUE,
+
+                     # include.test = FALSE, # test,
+                     # include.p = TRUE,
+                     # include.sig.star = FALSE,
+
+                     # include.variance = TRUE,
+
+
+                     # include.beta = TRUE,
+                     # include.eta = TRUE,
+
+                     #
+                     # include.pseudo = FALSE, #Preudo R
+                    #  include.ftest = FALSE,   # noch nicht fertig
+                     # include.loglik = FALSE  # noch nicht fertig
+                      margin = NULL,
+                      add.margins = seq_along(dim(x)),
+                       ...) {
+
+  res <- list(xtab=NULL, fischer=NULL, sensitivity=NULL)
+  type <-  match.arg(type, several.ok = TRUE)
+  test <- if (test) type else 0
+  digits <- if(is.null(digits)) options()$stp25$apa.style$prozent$digits
+            else c(digits[1], 0)
+  dimension <- length(dimnames(x))
+
+  if (dimension==1) {
+    cat("Proportion")
+    Text("Funktion noch nicht fertig")
+  }else if (dimension==2) {
+    #Zeilen/Spalten-Summen
+    if(include.total | (include.total.columns & include.total.rows))
+        add.margins <- seq_along(dim(x))
+    else if(include.total.columns ) {
+        add.margins <- 2
+        if(is.null(margin)) margin <- 1}
+    else if(include.total.rows ) {
+        add.margins <- 1
+        if(is.null(margin)) margin <- 2}
+        else add.margins <- FALSE
+        if (length(x) != 4) {
+           res <- xtabl_NxM(x,
+                  caption = caption,
+                  digits = digits,
+                  type = test,
+                  percent = include.percent,
+                  margin = margin,
+                  add.margins=add.margins,
+                  ...)}
+        else{
+           res <- xtabl_2x2(x,
+                  caption = caption,
+                  digits = digits,
+                  type = test,
+                  percent = include.percent,
+                  margin = margin,
+                  add.margins=add.margins,
+                  ...)
+     }
+  } else if (dimension==3) {
+    #Zeilen/Spalten-Summen
+      if(include.total | (include.total.columns & include.total.rows))
+        add.margins <- seq_along(dim(x))
+      else if(include.total.columns ) {
+        add.margins <- 3
+        if(is.null(margin)) margin <- 1}
+      else if(include.total.rows ) {
+        add.margins <- 1
+        if(is.null(margin)) margin <- 3}
+      else add.margins <- FALSE
+      #die subs kommen extra dazu
+      if(include.total.sub) add.margins <- c(2, add.margins)
+            res$xtab <- Format_xtabs(x, margin,
+                               add.margins, include.percent, digits)
+      Output(res$xtab, caption, note)
+
+      if(test!=0)
+         Text("Funktion noch nicht fertig. eventuell summary oder likelihood.test")
+  }else {
+      cat("NxMx... - Tabelle")
+      Text("Funktion noch nicht fertig")
+  }
+  invisible(res)
+}
+
+
+# Format ------------------------------------------------------------------
+#Input: Anzahl + Einstellungen
+#Output: Anzahl+Prozent
+Format_xtabs <- function(x, margin,
+                         add.margins= seq_along(dim(x)),
+                         percent,
+                         digits,
+                         ...) {
+  Text("Format_xtabs percent: ", percent)
+ # cat(" In Format_xtabs ")
+  if(!add.margins ){
+   # cat(" In Format_xtabs !add.margins ")
+    anzahl  <- ftable(x)
+    prozent <- ftable(prop.table(x, margin = margin)) * 100
+  }else if (is.null(margin) | length(dim(x)) > 2) {
+   # cat(" In Format_xtabs is.null(margin)")
+    anzahl  <- ftable(addmargins(x, add.margins))
+    prozent <- ftable(addmargins(
+                      prop.table(x, margin = margin)
+                      , add.margins)) * 100
+  }
+  else {#- Spezialfall
+    add.margins <- if (margin == 1) 2 else 1
+    anzahl  <- ftable(addmargins(x, add.margins))
+    prozent <- ftable(addmargins(
+                        prop.table(x, margin = margin),
+                        add.margins) * 100)
+  }
+  rndr_percent(prozent, anzahl, percent, digits)
+}
+
+
+# Fischer -----------------------------------------------------------------
+
+
+fisher_Statistik <- function(x, digits = 2) {
+  fisher <- fisher.test(x)
+  res <- data.frame(
+    OR  = Format2(fisher$estimate, digits),
+    CI  = ffCI(fisher$conf.int),
+    #       paste0("(", Format2(fisher$conf.int[1],3), ", " , Format2(fisher$conf.int[2],3),")")
+    p   = ffpvalue(fisher$p.value)
+  )
+  names(res) <- c("OR", "95% CI" , "p-Value")
+  res
+}
+
+# Chi ---------------------------------------------------------------------
+
+
+chisq_Statistik <- function(xtabs, type,
+                            x = summary(xtabs),
+                            dins = length(dimnames(xtabs))
+                            ) {
+  stat <- vcd::assocstats(xtabs)
+  ans<- list()
+
+  if ("chisquare" %in% type)
+   {
+
+    ans[["Chisq"]] <- data.frame(
+              Test = rownames(stat$chisq_tests),
+              Chi2 = fftest(stat$chisq_tests[, 1]),
+              df   = Format2(stat$chisq_tests[, 2], 0),
+              p    = ffpvalue(stat$chisq_tests[, 3]))}
+
+ if (any(c("correlation", "r") %in% type))
+  ans[["Correlation"]] <- data.frame(
+        Test = c("Phi-Coefficient","Contingency Coefficient","Cramer's V"),
+        r = Format2(c(stat$phi,stat$contingency,stat$cramer), 3)
+      )
+  ans
+}
+
+
+#' @rdname APA2
+#' @export
+#' @examples
+#'
+#' # Fit Log-Linear Models by Iterative Proportional Scaling
+#' library(MASS)
+#'
+#' fit<-loglm(~ Type + Origin, xtabs(~ Type + Origin, Cars93))
+#' APA2(fit)
+APA2.loglm <- function(x, ...) {
+  #-- Orginal MASS::print.loglm
+  ts.array <- rbind(c(x$lrt, x$df,
+                      if (x$df > 0L)
+                        1 - pchisq(x$lrt, x$df)
+                      else
+                        1),
+                    c(x$pearson, x$df,
+                      if (x$df > 0L)
+                        1 - pchisq(x$pearson, x$df)
+                      else
+                        1))
+  dimnames(ts.array) <- list(c("Likelihood Ratio",
+                               "Pearson"),
+                             c("Chi2", "Df", "p.value"))
+  Output(fix_data_frame2(Test = rownames(ts.array), ts.array))
+}
+
+
+
+
+
+
+
+
+
+
+
+# interne Functions NxM --------------------------------------
+
+xtabl_NxM <- function (xtab,
+                       caption,
+                       digits,
+                       type,
+                       percent,
+                       margin,
+                       add.margins,
+                       ...)
+{
+  x_tab <- Format_xtabs(xtab, margin,
+                       add.margins,
+                       percent, digits)
+  x_tab <- prepare_output(x_tab, caption=caption)
+  Output(x_tab)
+  res <- list(xtab=x_tab)
+
+  if (type[1] != 0) {
+    ans <- chisq_Statistik(xtab, type = type)
+    for (i in names(ans)){
+      res[[i]] <- ans[[i]]
+      #Error in if (translate) nms <- Names2Language(nms)
+      Output(ans[[i]], caption = paste(i, caption), fix_colnames = FALSE)}
+  }
+  res
+}
+
+
+# interne Functions  2x2 Tabelle -------------------------------------------------------------
+xtabl_2x2 <- function(xtab,
+                      caption,
+                      digits,
+                      type,
+                      percent,
+                      margin,
+                      add.margins,
+                      lvs = c("+", "-"),
+                      ...) {
+ # cat(" In xtabl_2x2 ")
+Text("include.percent: ", percent)
+  x_tab <- Format_xtabs(xtab, margin,
+                        add.margins,
+                        percent, digits)
+
+
+  x_tab <- prepare_output(x_tab, caption=caption)
+ # print(str(res$xtab))
+  Output(x_tab)
+  res <- list(xtab = x_tab)
+  # type kann mehr sein
+  #-- c("fischer", "odds","sensitivity", "chisquare" )
+  if ("fischer" %in%  type ){
+    x_fisher <- prepare_output(
+                   fisher_Statistik(xtab),
+                   caption = paste("Fisher's Exact Test ", caption) )
+    Output(x_fisher, row.names = FALSE)
+    res$fisher <- x_fisher
+  }
+  if ( "sensitivity" %in% type ) {
+    x_diagnostic <- prepare_output(
+                      Klassifikation.xtabs(xtab, lvs),
+                      caption = paste("Sensitivity Test", caption))
+    res$diagnostic <- x_diagnostic
+    Output(x_diagnostic)
+  }
+  res
+}

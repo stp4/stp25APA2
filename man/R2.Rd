@@ -7,6 +7,9 @@
 \alias{R2.mlm}
 \alias{R2.merMod}
 \alias{R2.lme}
+\alias{RMSE}
+\alias{RMSE.default}
+\alias{RMSE.mlm}
 \title{R2}
 \usage{
 R2(x, ...)
@@ -20,6 +23,12 @@ R2(x, ...)
 \method{R2}{merMod}(x, ...)
 
 \method{R2}{lme}(x, ...)
+
+RMSE(x, ...)
+
+\method{RMSE}{default}(x, ...)
+
+\method{RMSE}{mlm}(x, ...)
 }
 \arguments{
 \item{x}{fit-Objekt lm glm}
@@ -49,7 +58,7 @@ ein dataframe-Objekt.
 }
 \description{
 Berechnung der R-Quadrats
- R-Quadrat
+
  Cox und Snell R2: [ 0.2 = akzeptabel, 0.4 = gut ]
  Nagelkerke R2: [ 0.2 = akzeptabel, 0.4 = gut, 0.5 = sehr gut]
  McFaddens R2: [ 0.2 = akzeptabel, 0.4 = gut ]
@@ -58,7 +67,7 @@ Berechnung der R-Quadrats
 Marginal and conditional r-squared for lme objects
 
 
-for R2.lme an lme model (usually fit using \code{\link{lme}})
+for R2.lme an lme model (usually fit using \code{lme}
 This method extracts the variance for fixed and random effects,
 as well as residuals, and calls \code{rsquared.glmm}
 
@@ -80,6 +89,10 @@ Users should call the higher-level generic "r.squared", or implement a method fo
 corresponding class to get varF, varRand and the family from the specific object
 
  return A data frame with "Class", "Family", "Marginal", "Conditional", and "AIC" columns
+
+R2: The RMSE is the square root of the variance of the residuals.
+Compute the root mean squared error
+(see \code{\link{sigma}})
 }
 \examples{
 fit1<-lm(chol1~chol0, hyper)

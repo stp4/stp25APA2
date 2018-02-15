@@ -53,7 +53,7 @@ Die Darstellung der Ergebnisse entspricht wissenschaftlicher Vorgaben, insbesond
 
 ```{r setup2, include=FALSE}
  #getwd()
-library(stp25vers)
+library(stpvers)
 set.seed(1)
 Projekt("", "Introduction" )
 hkarz$Lai<- factor(hkarz$lai, 0:1, c("negativ", "positiv"))

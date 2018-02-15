@@ -243,8 +243,6 @@ regression_output  <-
     result <- prepare_output(fix_to_data_frame(rbind(m, gofs)),
                              caption , note)
 
-    stp25output:::Output.data.frame(result,
-                                    rgroup = rgroup,
-                                    n.rgroup = nrow(m))
+    Output(result, rgroup = rgroup, n.rgroup = nrow(m))
     invisible(result)
   }

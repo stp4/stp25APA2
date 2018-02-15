@@ -1,8 +1,33 @@
+#' @rdname APA_
+#' @description APA_R2: R2-Tabelle (noch nicht fretig)
+#' @export
+#' @examples
+#'
+#' fit1<-lm(score ~ grade + treatment, schools)
+#' fit2<-lm(score ~ grade + treatment + stdTest, schools)
+#' APA_R2(fit1, fit2)
+#'
+APA_R2 <- function(..., caption, note) {
+  res <- list()
+  fits <- list(...)
+  j <- 0
+  for (i in fits) {
+    j <- j + 1
+    rsqr <- R2(i)
+    mi <- model_info(i)
+    res[[j]] <- rsqr
+  }
+  res
+}
+
+
+
+
 #' @rdname R2
 #' @title R2
 #' @name R2
 #' @description Berechnung der R-Quadrats
-#'  R-Quadrat
+#' 
 #'  Cox und Snell R2: [ 0.2 = akzeptabel, 0.4 = gut ]
 #'  Nagelkerke R2: [ 0.2 = akzeptabel, 0.4 = gut, 0.5 = sehr gut]
 #'  McFaddens R2: [ 0.2 = akzeptabel, 0.4 = gut ]
@@ -11,7 +36,7 @@
 #' Marginal and conditional r-squared for lme objects
 #'
 #'
-#' for R2.lme an lme model (usually fit using \code{\link{lme}})
+#' for R2.lme an lme model (usually fit using \code{lme}
 #' This method extracts the variance for fixed and random effects,
 #' as well as residuals, and calls \code{rsquared.glmm}
 #'
@@ -63,18 +88,7 @@ R2 <- function(x, ...) {
 
 
 
-APA_R2 <- function(..., caption, note){
-  res<-list()
-  fits<-list(...)
-  j<-0
-  for (i in fits){
-    j<-j+1
-    rsqr<- R2(i)
-    mi<- model_info(i)
-    res[[j]]<- rsqr
-  }
-  res
-}
+
 
 
 
@@ -350,3 +364,37 @@ family_link.stop <- function(family, link) {
     "link."
   ))
 }
+
+
+
+#' @rdname R2
+#' @description R2: The RMSE is the square root of the variance of the residuals.
+#' Compute the root mean squared error
+#' (see \code{\link{sigma}})
+#' @export
+RMSE<- function(x, ...){
+  UseMethod("RMSE")
+  
+}
+
+#' @rdname R2
+#' @export
+RMSE.default <- function(x,...)
+{
+  data.frame(sigma=sigma(x),
+             RMSE = sqrt(mean(x$residuals^2)))
+}
+
+#' @rdname R2
+#' @export
+RMSE.mlm <- function(x,...)
+{
+  broom::fix_data_frame(
+    data.frame(sigma=sigma(fit1),
+               RMSE= apply(fit1$residuals, 2 ,
+                           FUN=function(rr) sqrt(mean(rr^2)))))
+}
+
+ 
+
+ 

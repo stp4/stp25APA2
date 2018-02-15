@@ -100,15 +100,13 @@ rndr_nfi_cfa(x)
 symbol_chi2(output = stp25output:::which_output())
 }
 \arguments{
-\item{...}{alles an format}
+\item{...}{alles an Format2()}
 
 \item{m}{Mittelwert}
 
-\item{iqr}{IRQ  (ein Wert)}
-
 \item{digits}{Nachkommastellen}
 
-\item{s}{SD (ein Wert)}
+\item{s, iqr}{SD,IRQ  (ein Wert)}
 
 \item{x}{Obkekt oder vektor}
 
@@ -126,16 +124,17 @@ symbol_chi2(output = stp25output:::which_output())
 
 \item{ci}{Vektor mit zwei Werten}
 
+\item{sep, sep_1, sep_2}{intern seperator}
+
 \item{F_val}{Objekt aus einem Test}
 
 \item{output}{nur intern HTML oder Konsole}
 }
 \value{
-Objekt als Character
+Character-String
 }
 \description{
-Formatiere Zahlen zu Character feur die Ausgabe. Im gegensatz zu Format2()
-und ff() werden die Zahlen mit zB p=.002 ausgegeben.
+Formatiere von Zahlen nach dem APA-Style ( American Psychological Association ).
 
 rndr_percent()
 Percentages are also most clearly displayed in parentheses with no decimal places:
@@ -166,25 +165,23 @@ AGIF Adjusted-Goodness-of-Fit-Index
 SRMR
 
 Chisq_cfa:  Moosbrugger, Kelava 2012 Testtheorie 2. Auflage Seite 339
-CHISQ Chi-Quadrat/df 0 ,2, 3
+CHISQ Chi-Quadrat/df 0,2, 3
 
 RMSEA Root-Mean-Square-Error of Approximation 0, 0.050, 0.080
 
 CFI Comparative-Fit-Index .970-1.00, .950-.969
 
-NFI Normed-Fit-Index .950-1.00 , .900-.949
+NFI Normed-Fit-Index .950-1.00, .900-.949
 }
 \details{
+see:
 http://winvector.github.io/APAsig/APAsig.html
-Format quality of a linear regerssion in
-roughly in "APA Style" ( American Psychological Association ).
-see: http://my.ilstu.edu/~jhkahn/apastats.html
+ http://my.ilstu.edu/~jhkahn/apastats.html
      https://web2.uconn.edu/writingcenter/pdf/Reporting_Statistics.pdf
-Not linking direclty to the style guide as they charge for it.
 }
 \examples{
 rndr_(1.234, 3)
-rndr_percent(c(.2568, 99, 0.02568) , c(4, 569, 25), digits = 1)
+rndr_percent(c(.2568, 99, 0.02568), c(4, 569, 25), digits = 1)
 rndr_percent(10, 3, F, 2)
 
 rndr_P(c(1,.25,.08,0.05,0.01,0.0001))
@@ -200,5 +197,5 @@ rndr_rmsea_cfa(c(1,.9,.89))
 rndr_Chisq_cfa(c(0,2,3,2.01,3.4))
 rndr_rmsea_cfa(c(0, 0.050, 0.080, .051, .081) )
 rndr_cfi_cfa(c(.970,1.00, .950-.969,.8))
-rndr_nfi_cfa(c(.950, 1.00 , .900,  .949))
+rndr_nfi_cfa(c(.950, 1.00, .900,  .949))
 }
