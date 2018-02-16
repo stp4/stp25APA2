@@ -4,8 +4,8 @@
 \alias{Tabelle}
 \alias{Tabelle2}
 \alias{Tabelle.default}
-\alias{Tabelle.lm}
 \alias{Describe}
+\alias{Tabelle.lm}
 \alias{errate_statistik3}
 \alias{corr_tabel_X}
 \alias{conTest}
@@ -26,9 +26,10 @@ Tabelle2(...)
   cor_diagonale_up = TRUE, max_factor_length = 35, order = FALSE,
   decreasing = FALSE, useconTest = FALSE, normality.test = FALSE)
 
-\method{Tabelle}{lm}(x, ..., caption, note)
-
 Describe(x, ...)
+
+\method{Tabelle}{lm}(x, digits = 2, fun = function(x) {     c(n = length(x),
+  M = mean(x, na.rm = TRUE), SD = sd(x, na.rm = TRUE)) })
 
 errate_statistik3(..., type = NULL, caption = "", note = "",
   digits = NULL, test = FALSE, na.action = na.pass, exclude = NA,

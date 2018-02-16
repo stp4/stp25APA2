@@ -23,80 +23,87 @@ APA_Effsize<- function(x, ...){
 #' @export
 APA2.eff <- function(...) {APA2.efflist(...)}
 
+# @rdname Ordnen
+# @export
+# Ordnen.eff <- function(x, ...) {
+#   if (names(x)[2] %in% "formula")
+#     efflist <- list(Effect = x)
+#   Ordnen.efflist(efflist, ...)
+# }
+
+
 #' @rdname APA2
 #' @export
+#' @examples 
+#' #----------------------------------------------------------
+#' # Effekte / Mittelwerte
+#' 
+#'  Tabelle2(fit1, digits=2)  # mean SD
+#'  require(effects)
+#'  fit1 <- lm(chol0 ~  ak + rrs0 + med + g, hyper)
+#'  eff<-allEffects(fit1)
+#'   
+#'  APA2(eff)
 APA2.efflist <- function(x,
-                         caption="Effekte: ",
-                         type=NULL, ##c("fit", "lower",  "upper" ),
-                         note="",
-                         digits=2,
-                         include.fit=TRUE,
-                         include.n=FALSE,
-                         include.ci=TRUE,
-                         include.se=FALSE,
+                         caption = "Effekte: ",
+                         type = NULL,
+                         ##c("fit", "lower",  "upper" ),
+                         note = "",
+                         digits = 2,
+                         include.fit = TRUE,
+                         include.n = FALSE,
+                         include.ci = TRUE,
+                         include.se = FALSE,
                          ...) {
-  
-  if(is.null(type)){
-    if(include.fit)  type <- "fit"
-    if (include.se)  type <- c(type, "se")
-    if (include.ci)  type <- c(type, "lower", "upper")
-    if (include.n)   type <- c("N", type)
+  if (is.null(type)) {
+    if (include.fit)
+      type <- "fit"
+    if (include.se)
+      type <- c(type, "se")
+    if (include.ci)
+      type <- c(type, "lower", "upper")
+    if (include.n)
+      type <- c("N", type)
     type <- setdiff(c("N", "fit", "se", "lower", "upper"), type)
   }
   else{
     type <- setdiff(c("N", "fit", "se", "lower", "upper"), type)
   }
   
-  #  print(type)
-  res<- Ordnen(x)
-  for(i in names(res)) {
-    spalte <- which(names(res[[i]]) %in% type)
-    #  print(names(res[[i]]))
-    # print(names(res[[i]]) %in% type)
-    # print(spalte)
-    #print(res[[i]][1:2, -spalte]  )
-    
-    
-    ans<- prepare_output(res[[i]][-spalte],
-                         caption= paste(caption, i),
-                         note=note
-    )
-    if (include.n) ans$N <- Format2(ans$N, 0)
-    res[[i]]<- ans
-    Output(fix_format(ans, digits=digits))
+  
+  res <- fix_eff_to_df(x, caption =  caption,
+                          note = note 
+                       )
+  
+  for (i in names(res)) {
+      spalte = which(names(res[[i]]) %in% type)
+    Output(fix_format( res[[i]][-spalte], digits = digits))
   }
   invisible(res)
 }
 
+ 
+ 
 
 
 
 
-#' @rdname Ordnen
-#' @export
-Ordnen.eff <- function(x, ...) {
-  if (names(x)[2] %in% "formula")
-    efflist <- list(Effect = x)
-  Ordnen.efflist(efflist, ...)
-}
-
-#' @rdname Ordnen
-#' @export
-Ordnen.efflist <- function(x, ...) {
+# @rdname Ordnen
+# @export
+fix_eff_to_df <- function(x, caption, note ) {
   res_list <- NULL
   for (i in names(x)) {
     info <- model_info(x[[i]])
     AV <- ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
     ans <- as.data.frame(x[[i]])
     n<- ncol(ans)
-    
+
     ans[1:(n-4) ] <- lapply(ans[1:(n-4)], as.character)
-    
-    
+
     myN <- aggregate_effect(x[[i]], info$y, info$x)
     #- aggregate verwirft Leere Eintraege
     if (nrow(ans) == nrow(myN)) {
-      ans$N <- myN[, ncol(myN)]
+      ans$N <- Format2(myN[, ncol(myN)], 0)
       attr(ans, "note") = ""
     }
     else{
@@ -106,7 +113,9 @@ Ordnen.efflist <- function(x, ...) {
     attr(ans, "caption") =  paste0("AV: ", AV)
     attr(ans, "N") = info$N
     attr(ans, "labels") = info$labels
-    
+
+ 
+
     res_list[[i]] <- ans
   }
   res_list

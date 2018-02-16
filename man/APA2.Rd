@@ -350,6 +350,15 @@ APA2(~chol0+chol1+chol6+chol12, hyper, caption="Korrelation", test=TRUE, sig.sta
 
 #End()
 
+#----------------------------------------------------------
+# Effekte / Mittelwerte
+
+ Tabelle2(fit1, digits=2)  # mean SD
+ require(effects)
+ fit1 <- lm(chol0 ~  ak + rrs0 + med + g, hyper)
+ eff<-allEffects(fit1)
+  
+ APA2(eff)
 
 #- manova ---------------------------------------------
  

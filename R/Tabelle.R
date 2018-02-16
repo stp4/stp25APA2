@@ -35,7 +35,9 @@
 #'     )
 #' )
 #'
-Tabelle <- function(...) {UseMethod("Tabelle")}
+Tabelle <- function(...) {
+  UseMethod("Tabelle")
+}
 
 #' @rdname Tabelle
 #' @description Tabelle2:  html-Output Tabelle(...) %>% Output()
@@ -62,7 +64,9 @@ Tabelle2 <- function(...) {
 Tabelle.default <- function(...,
                             formula = NULL,
                             fun = NULL,
-                            type = c("2", "1",
+                            type = c(
+                              "2",
+                              "1",
                               "auto",
                               "freq",
                               "mean",
@@ -154,19 +158,11 @@ Tabelle.default <- function(...,
                      caption, note)
     }
   }
-  }
-
-
-
-#' @rdname Tabelle
-#' @export
-Tabelle.lm <- function(x, ..., caption, note) {
-  res <- mittelwert_fit(x, ...)
-  for (i in names(res)) {
-    Output(fix_format(res[[i]]))
-  }
-  invisible(res)
 }
+
+
+
+
 
 
 
@@ -182,29 +178,40 @@ Describe <-  function(x, ...) {
 
 # Mittelwerte -------------------------------------------------------------
 
-
-mittelwert_fit <- function(x,
-                           fun = function(x) {
-                             c(
-                               n = length(x),
-                               M = mean(x, na.rm = TRUE),
-                               SD = sd(x, na.rm = TRUE)
-                             )
-                           }
-                           ,
-                           ...) {
-  myeff <- effects::allEffects(x)
+#' @rdname Tabelle
+#' @export
+Tabelle.lm <- function(x,
+                       digits = 2,
+                       fun = function(x) {
+                         c(
+                           n = length(x),
+                           M = mean(x, na.rm = TRUE),
+                           SD = sd(x, na.rm = TRUE)
+                         )
+                       }) {
   res_list <- NULL
+  myeff <- effects::allEffects(x)
+  
   for (i in names(myeff)) {
     info <- model_info(myeff[[i]])
     ans <- aggregate_effect(myeff[[i]], info$y, info$x, fun)
+    
     AV <- ifelse(is.na(info$labels[info$y]),
                  info$y, info$labels[info$y])
-    res_list[[i]] <- prepare_output(ans, paste0("AV: ", AV), "",
+    
+    ans <-
+      data.frame(plyr::llply(ans, function(x)
+        if (is.numeric(x))
+          round(x, digits)
+        else
+          x))
+    res_list[[i]] <- prepare_output(ans,
+                                    paste0("AV: ", AV), "",
                                     info$N,  info$labels)
   }
   res_list
 }
+
 
 
 
@@ -215,12 +222,10 @@ aggregate_effect <- function(eff,
                                length(x)) {
   fm <- formula(paste(y, "~", paste(x, collapse = "+")))
   df <- eff$data
-  
   #-- Faktoren fuer N berechnung vorbereiten
   for (j in names(eff$variables)) {
     if (!eff$variables[[j]]$is.factor)
-      df[, j] <-
-        cut(df[, j], length(eff$variables[[j]]$levels))
+      df[, j] <- cut(df[, j], length(eff$variables[[j]]$levels))
   }
   
   res <- try(aggregate(fm, df, fun, drop = FALSE))
@@ -228,7 +233,6 @@ aggregate_effect <- function(eff,
     data.frame(NULL)  #  wegen ncol im weiteren progammverlauf
   else
     do.call(data.frame, res)
-  
 }
 
 
@@ -259,7 +263,7 @@ calculate_tabelle2 <- function(X,
         X$row_name[i] <- paste0(X$row_name[i], " (mean)")
       
     }
-   
+    
     res[[X$measure.vars[i]]]  <-
       berechne.default(
         X$data,
@@ -275,10 +279,10 @@ calculate_tabelle2 <- function(X,
       )
     
   }
- 
+  
   df <- plyr::ldply(res)
   df[, 1] <- factor(df[, 1], names(X$row_name), X$row_name)
-
+  
   prepare_output(df, caption, note, nrow(X$data), NA)
 }
 
@@ -308,9 +312,9 @@ errate_statistik3 <-
             include.n = TRUE,
             include.nr = FALSE,
             include.total = FALSE,
-           
+            
             include.test = test,
-           
+            
             include.p = TRUE,
             include.sig.star = FALSE,
             corr_test = "pearson",
@@ -354,7 +358,8 @@ errate_statistik3 <-
         x1 <- cbind(Item = "&nbsp;&nbsp;", res)
         rr <- rbind(x0, x1)
       } else
-        rr <- cbind(Item = c(X$row_name[i], rep("", nrow(res) - 1)), res)
+        rr <-
+        cbind(Item = c(X$row_name[i], rep("", nrow(res) - 1)), res)
       
       rr
     }
@@ -405,7 +410,7 @@ errate_statistik3 <-
       } else  if (X$measure.class[i] == "factor" &
                   X$group.class[j] == "factor") {
         fm_chi <- formula(paste("~", measure.vars[i], "+",  j))
-      #  print(fm_chi)
+        #  print(fm_chi)
         catTest(fm_chi, X$data, include.test)
       }
       else
@@ -485,7 +490,8 @@ errate_statistik3 <-
               ans_in <-
                 ans_in[c(1, 2, seq(4, ncol(ans_in), by = 2), ncol(ans_in))]
             else
-              ans_in <- ans_in[c(1, 2, seq(4, ncol(ans_in), by = 2))]
+              ans_in <-
+                ans_in[c(1, 2, seq(4, ncol(ans_in), by = 2))]
             
             names(ans_in) <- gsub("_m", "", names(ans_in))
           }
@@ -562,13 +568,13 @@ corr_tabel_X <-
         # vor corr_2"
         
         
-        ans <- stp25APA2:::corr_2(Y_data[g1, ], X_data[g1, 1], type)
+        ans <- stp25APA2:::corr_2(Y_data[g1,], X_data[g1, 1], type)
         names(ans)[2:4] <- paste0(lvls[1], "_", names(ans)[2:4])
         
         for (i in 2:(length(lvls))) {
           g2 <- which(condition == lvls[i])
           ans2 <-
-            stp25APA2:::corr_2(Y_data[g2, ], X_data[g2, 1], type)
+            stp25APA2:::corr_2(Y_data[g2,], X_data[g2, 1], type)
           names(ans2)[2:4] <-
             paste0(lvls[i], "_", names(ans2)[2:4])
           ans <- cbind(ans, ans2[-1])
@@ -690,16 +696,19 @@ ordne_corr_tabel <- function(ans,
 
 
 
-Describe2<- function(fml, data, caption="", note="",
-                     stat=c("n", "mean","sd","min","max"),
-                     #  na.rm = TRUE,
-                     ...){
+Describe2 <- function(fml,
+                      data,
+                      caption = "",
+                      note = "",
+                      stat = c("n", "mean", "sd", "min", "max"),
+                      #  na.rm = TRUE,
+                      ...) {
   vars <- which(names(data) %in% all.vars(fml))
   data <- data[vars]
   result <-  as.data.frame(psych::describe(data))[stat]
-  result[-1] <- Format2(result[-1] )
-  prepare_output(
-    cbind(Item=GetLabelOrName(data), result),
-    caption, note,nrow(data)
-  )
+  result[-1] <- Format2(result[-1])
+  prepare_output(cbind(Item = GetLabelOrName(data), result),
+                 caption,
+                 note,
+                 nrow(data))
 }
