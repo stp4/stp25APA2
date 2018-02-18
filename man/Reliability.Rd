@@ -3,27 +3,31 @@
 \name{Reliability}
 \alias{Reliability}
 \alias{Reliability.data.frame}
-\alias{Reliability.default}
+\alias{Reliability.formula}
 \alias{Reliability2}
-\alias{Reliability_helper}
+\alias{Reliability.default}
 \alias{Alpha}
-\alias{print.Reliability}
+\alias{print.stp25_relibility}
+\alias{Index}
 \title{Reliability}
 \usage{
 Reliability(x, data, ...)
 
-\method{Reliability}{data.frame}(data, x = NULL, ..., name = NULL)
+\method{Reliability}{data.frame}(x, ..., name = NULL)
 
-\method{Reliability}{default}(x, data, ..., name = NULL)
+\method{Reliability}{formula}(x, data, ..., name = NULL)
 
-Reliability2(..., caption = "", note = "")
+Reliability2(x, ..., caption = "", note = "")
 
-Reliability_helper(fm = NULL, data, revcoded = FALSE, check.keys = FALSE,
+\method{Reliability}{default}(x, revcoded = FALSE, check.keys = FALSE,
   max.level = NA, min.level = NA, type = "mean", na.rm = TRUE, ...)
 
 Alpha(..., type = 1)
 
-\method{print}{Reliability}(x)
+\method{print}{stp25_relibility}(x)
+
+Index(x, revcoded = FALSE, fun = "mean", na.rm = TRUE, digits = 4,
+  max.level = NA, min.level = NA, output = "index", ...)
 }
 \arguments{
 \item{x}{Formula-Objekt oder data.frame}
@@ -40,17 +44,13 @@ Alpha(..., type = 1)
 
 \item{revcoded}{position zum umcodieren. Kann entweder nummer oder name oder TRUE sein.}
 
-\item{max.level}{ueberschrift}
+\item{max.level, max.level}{ueberschrift}
 
 \item{type}{Aggregatfunktion fuer die Skala (mean, median und trimmed)}
 
 \item{na.rm}{Fehlende Werte}
 
-\item{max.level}{max.level}
-
 \item{check.keye}{aus psych wenn \code{check.keye=TRUE} gesetzt wird werden die Daten automatisch umkodiert}
-
-\item{type}{mittelwerte}
 }
 \value{
 \code{Reliability()} gibt eine Liste mit den Resultaten und den transformierten Daten
@@ -65,6 +65,8 @@ Alpha(..., type = 1)
  data: Daten Umcodiert.
 
  keys:  Umcodiert.
+
+Vektor
 }
 \description{
 Reliabilitaets Analyse mit Cronbach-Alpha + Mittelwerte
@@ -93,6 +95,8 @@ Um die interne Konsistenz zu bestimmen, wurde Cronbachs Alpha für die Subskala 
 English
 
 For reliability analysis, Cronbach’s alpha was calculated to assess the internal consistency of the subscale for positive affect, which consists of ten questions. The internal consistency of the questionnaire is satisfying, with Cronbach’s alpha for positive affect = .89.
+
+\code{Index} Summen Index eine Summenfunktion mit der Erweiterung zum Umcodieren
 }
 \examples{
 

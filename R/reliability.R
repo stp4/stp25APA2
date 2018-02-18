@@ -93,100 +93,74 @@
 Reliability <- function(x, data, ...) {
   UseMethod("Reliability")
 }
+
 #' @rdname Reliability
 #' @param data ist ein data.frame-Objekt
 #' @param name Slalen namen
 #' @export
-Reliability.data.frame <- function(data, x=NULL, ... , name=NULL) {
-  if(is.null(name)){
-    name <- deparse(substitute(data))
+Reliability.data.frame <- function(x,
+                                   ... ,
+                                   name = NULL) {
+  if (is.null(name)) {
+    name <- deparse(substitute(x))
     name <- unlist(strsplit(name, " <- "))[1]
-    if (length(name) == 0) name <- "Skale"
+    if (length(name) == 0)
+      name <- "Skale"
   }
-  res<- Reliability_helper(x, data, ...)
-  res$name<- name
-
+  res <- Reliability_helper(x, ...)
+  res$name <- name
+  
   res
 }
 
 #' @rdname Reliability
 #' @export
-Reliability.default <- function(x, data, ..., name=NULL) {
-  if(is.null(name)){
-     name <- deparse(substitute(x))
-     name <- unlist(strsplit(name, " <- "))[1]
-    if (length(name) == 0) name <- "Skale"
+Reliability.formula <- function(x,
+                                data,
+                                ...,
+                                name = NULL) {
+  if (is.null(name)) {
+    name <- deparse(substitute(x))
+    name <- unlist(strsplit(name, " <- "))[1]
+    if (length(name) == 0)
+      name <- "Skale"
   }
-   res<- Reliability_helper(x, data, ...)
-   res$name<- name
-
-   res
+  
+  data <- Formula_Data(fm, data)$Y_data
+  
+  res <- Reliability_helper(x, data, ...)
+  res$name <- name
+  
+  res
 }
 
 #' @rdname Reliability
 #' @param caption ueberschrift
 #' @param note Note
 #' @export
-Reliability2 <- function(...,
-                         caption="", note="") {
-  res <- Reliability(...)
-  stp25output:::Output.Reliability(res,
-                                   caption = caption,
-                                   note=note)
-  invisible(res)
-}
-
-#' @rdname Reliability
-#' @param max.level ueberschrift
-#' @param max.level max.level
-#' @param revcoded position zum umcodieren. Kann entweder nummer oder name oder TRUE sein.
-#' @param type Aggregatfunktion fuer die Skala (mean, median und trimmed)
-#' @param na.rm Fehlende Werte
-#' @param check.keye aus psych wenn \code{check.keye=TRUE} gesetzt wird werden die Daten automatisch umkodiert
-#' @param type mittelwerte
-Reliability_helper <- function(fm=NULL,
-                               data,
-                               revcoded = FALSE,
-                               check.keys = FALSE,
-                               max.level = NA,
-                               min.level = NA,
-                               type = "mean",
-                               na.rm = TRUE,
-                               ...) {
- if ((!is.null(fm)) & is_formula2(fm) & is.data.frame(data)) {
-    data <- Formula_Data(fm, data)$Y_data
-  }
-
-  data <- transform_to_numeric(data)
-  #- data ist jetzt eine Liste mit # list(data, range , label)
-  result <-
-    item_statistik(data, revcoded, check.keys, ...)     # list(data, range , label, keys, list(alpha) , Alpha)
-  result <-
-    skala_statistik(result, type, na.rm)  # list(data, range , label, keys, list(alpha) , Alpha, index, n...schapiro)
-
-  class(result) <- "Reliability"
-  result
-}
-
-#' @rdname Reliability
-#' @export
-Alpha <- function(..., type=1) {
-names<- paste(as.list(sys.call())[-1] )
- skalen <- list(...)
-  result<- NULL
-  for(i in skalen) {
-    result <- rbind(result, fix_alpha(i) )
-  }
-
-  result$Source<-names
-  result
-}
-
-fix_alpha <- function(x ) {
+Reliability2 <- function(x,
+                         ...,
+                         caption = "",
+                         note = "") {
+  res <- Reliability(x, ...)
+  
+  mynames <- grap_call_name(x) # name Holen interne Funktion
+  if (is.null(caption))
+    if (length(grep("Reliability" , mynames)) == 0)
+      caption <- paste("", mynames)
+  
+  item <-
+    data.frame(
+      Items = paste0(x$labels, ifelse(x$keys < 0, " (-)", "")),
+      n = x$item_statistik$n,
+      M = Format2(x$item_statistik$m, 2),
+      SD = Format2(x$item_statistik$sd, 2),
+      "Alpha if Item Deleted" = Format2(x$psych$item.stats$r.drop, 2)
+    )
+  
   aplha_statistik <- with(
     x,
     data.frame(
-      Source= name,
       Items = Items,
       n = n,
       M = Format2(M, 2),
@@ -196,36 +170,83 @@ fix_alpha <- function(x ) {
       Skew = Format2(Skew, 2),
       Kurtosi = Format2(Kurtosi, 2) ,
       "Shapiro Test" = shapiro
-    ))
-
-  aplha_statistik
+    )
+  )
+  
+  res$item_statistics <- prepare_output(item,
+                                        caption = paste("Itemstatistiken", caption),
+                                        note = note)
+  res$aplha_statistics <-
+    prepare_output(
+      aplha_statistik ,
+      caption = paste("Item-Mittelwerte", caption),
+      note = note
+    )
+  
+  Output(res$item_statistics)
+  
+  Output(res$aplha_statistics)
+  
+  invisible(res)
 }
+
+#' @rdname Reliability
+#' @param max.level,max.level ueberschrift
+#' @param revcoded position zum umcodieren. Kann entweder nummer oder name oder TRUE sein.
+#' @param type Aggregatfunktion fuer die Skala (mean, median und trimmed)
+#' @param na.rm Fehlende Werte
+#' @param check.keye aus psych wenn \code{check.keye=TRUE} gesetzt wird werden die Daten automatisch umkodiert
+Reliability.default <- function(x,
+                                revcoded = FALSE,
+                                check.keys = FALSE,
+                                max.level = NA,
+                                min.level = NA,
+                                type = "mean",
+                                na.rm = TRUE,
+                                ...) {
+  data <- transform_to_numeric(x)
+  #- data ist jetzt eine Liste mit # list(data, range , label)
+  result <-
+    item_statistik(data, revcoded, check.keys, ...)     # list(data, range , label, keys, list(alpha) , Alpha)
+  result <-
+    skala_statistik(result, type, na.rm)  # list(data, range , label, keys, list(alpha) , Alpha, index, n...schapiro)
+  
+  class(result) <- c(class(result), "stp25_relibility")
+  result
+}
+
+#' @rdname Reliability
+#' @export
+Alpha <- function(..., type = 1) {
+  names <- paste(as.list(sys.call())[-1])
+  skalen <- list(...)
+  result <- NULL
+  for (i in skalen) {
+    result <- rbind(result, fix_alpha(i))
+  }
+  
+  result$Source <- names
+  result
+}
+
+
 
 
 
 #' @rdname Reliability
 #' @export
-print.Reliability <- function(x) {
-  cat("\nnames: ", paste(names(x), collapse=", "),"\n")
-  cat("\nAlpha: " )
+print.stp25_relibility <- function(x) {
+  cat("\nnames: ", paste(names(x), collapse = ", "), "\n")
+  cat("\nAlpha: ")
   print(x$Alpha)
 }
 
 
 
-
-#' Summen Index
-#'
-#' Eigendlich nur eine Summenfunktion mit der Erweiterung zum Umcodieren
-#' @param x Data.frame
-#' @param revcoded position der umzukodierenden Items
-#' @param fun mean oder sum
-#' @param na.rm Fehlende Werte
-#' @param digits default   4
-#' @param max.level maximaler Mevel
+#' @rdname Reliability
+#' @description \code{Index} Summen Index eine Summenfunktion mit der Erweiterung zum Umcodieren
 #' @return Vektor
 #' @export
-
 Index <- function(x,
                   revcoded = FALSE,
                   fun = "mean",
@@ -269,12 +290,12 @@ Index <- function(x,
     sum =  round(rowSums(x, na.rm = na.rm), digits),
     rep(NA, nrow(x))
   )
-
+  
   if (output == "index")
     return(index)
   else
     return(list(data = x, index = index))
-
+  
 }
 
 
@@ -288,7 +309,7 @@ Umcodieren <- function(x,
   if (is.na(min.level))
     min.level <- min(x, na.rm = TRUE)
   mytempdata <- x[, revcoded]
-
+  
   if (is.numeric(mytempdata))
     x[, revcoded] <- max.level + min.level - mytempdata
   else
@@ -304,7 +325,7 @@ Umcodieren <- function(x,
 transform_to_numeric <- function(data, data_range) {
   #data2<- na.omit(data)
   lvls <- GetLabelOrName(data)
-
+  
   objects <-
     sapply(data, function(x)
       if (is.factor(x))
@@ -323,15 +344,15 @@ transform_to_numeric <- function(data, data_range) {
     cat("\n",
         "Falsches Datenformat (Numeric oder Faktor ist erlaubt)",
         "\n")
-   # print(objects)
+    # print(objects)
     data <- sapply(data, as.numeric)
     data_range <- range(data, na.rm = T)
   }
-
+  
   list(data = data,
        range = data_range,
        labels = lvls)
-
+  
 }
 
 
@@ -346,6 +367,7 @@ item_statistik <- function(data, #Data ist Liste
   else if (!is.list(data))
     return(class(data))
   else{
+    
   }
   #Text(revcoded)
   if (is.numeric(revcoded) | is.character(revcoded)) {
@@ -354,11 +376,11 @@ item_statistik <- function(data, #Data ist Liste
                             max.level = data$range[2],
                             min.level = data$range[1])
     data$keys <-  if (is.numeric(revcoded))
-      ifelse(1:ncol(data$data) %in% revcoded,-1, 1)
+      ifelse(1:ncol(data$data) %in% revcoded, -1, 1)
     else
-      ifelse(names(data$data) %in% revcoded,-1, 1)
+      ifelse(names(data$data) %in% revcoded, -1, 1)
     #  Text(data$keys)
-
+    
     data$psych <- psych::alpha(data$data, check.keys = FALSE, ...)
   }
   else if (isTRUE(revcoded) | isTRUE(check.keys)) {
@@ -384,7 +406,7 @@ item_statistik <- function(data, #Data ist Liste
       psych::alpha(data$data, check.keys = check.keys, ...)
     #-- data bleiben gleich
   }
-
+  
   #- library Pych Version: 1.4.3
   #- Date:	 2014--March--25
   #- liefert falsche n (bei n>120 wird 122 ausgegeben)
@@ -396,8 +418,8 @@ item_statistik <- function(data, #Data ist Liste
       n = sapply(data$data, function(x)
         length(na.omit(x)))
     )
-
-
+  
+  
   data$Alpha <- as.numeric(data$psych$total$raw_alpha)
   return(data)
 }
@@ -412,7 +434,7 @@ skala_statistik <- function(data,
   type <- match.arg(type)
   #  type<-"mean"
   # na.rm=TRUE
-
+  
   data$index <- apply(
     data$data,
     1,
@@ -426,17 +448,17 @@ skala_statistik <- function(data,
       )
     }
   )
-
+  
   res_shapiro <- stats::shapiro.test(data$index)
   data$Items <- ncol(data$data)
   # data$N  <- nrow(data)
   data$n  <- length(na.omit(data$index))
   data$M  <- mean(data$index, na.rm = TRUE)
   data$SD <- sd(data$index, na.rm = TRUE)
-
+  
   data$Skew    <- psych::skew(data$index, na.rm = TRUE)
   data$Kurtosi <- psych::kurtosi(data$index , na.rm = TRUE)
-
+  
   data$shapiro <- paste0("W=",
                          Format2(res_shapiro$statistic, 2),
                          " p=",
@@ -444,9 +466,29 @@ skala_statistik <- function(data,
   #  "Shapiro Test" = res_shapiro)
   # print(data)
   return(data)
-
-
+  
+  
 }
 
 
+
+fix_alpha <- function(x) {
+  aplha_statistik <- with(
+    x,
+    data.frame(
+      Source = name,
+      Items = Items,
+      n = n,
+      M = Format2(M, 2),
+      SD = Format2(SD, 2),
+      Alpha = Format2(Alpha, 2),
+      Range = paste(Format2(range, 2), collapse = "; "),
+      Skew = Format2(Skew, 2),
+      Kurtosi = Format2(Kurtosi, 2) ,
+      "Shapiro Test" = shapiro
+    )
+  )
+  
+  aplha_statistik
+}
 
