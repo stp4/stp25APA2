@@ -2,21 +2,21 @@
 % Please edit documentation in R/pca.R
 \name{PCA}
 \alias{PCA}
-\alias{PCA2}
-\alias{PCA2.default}
 \alias{Principal2}
+\alias{PCA2}
 \alias{Principal}
+\alias{PCA.default}
 \title{PCA}
 \usage{
+PCA(x, ...)
+
+Principal2(x, ...)
+
 PCA2(x, ...)
 
-\method{PCA2}{default}(x, ...)
+Principal(x, ...)
 
-Principal2(data, ..., type = c("pca", "plot", "kmo"), w = 5, h = 5,
-  caption = "Standardized loadings (pattern matrix) based upon correlation matrix",
-  note = "", main = "")
-
-Principal(data, nfactors = 1, cut = 0.35, residuals = FALSE,
+\method{PCA}{default}(data, nfactors = 1, cut = 0.35, residuals = FALSE,
   rotate = "varimax", n.obs = NA, covar = FALSE, scores = TRUE,
   missing = FALSE, impute = "median", oblique.scores = TRUE,
   method = "regression", sort = TRUE, N = nrow(data),
@@ -30,16 +30,11 @@ all = FALSE if all=TRUE, then the object is declassed and all output from the fu
 cut = NULL Cluster loadings < cut will not be printed. For the factor analysis functions (fa and factor.pa etc.), cut defaults to 0, for ICLUST to .3, for omega to .2.
 sort = TRUE Cluster loadings are in sorted order}
 
-\item{data}{Output from a psych function}
-
-\item{type}{Was soll ausgegeben werden default alles also
-type=c("pca", "plot", "kmo")}
-
-\item{w}{Grafik Fenster w=5}
-
-\item{h}{Grafik Fenster h=5}
+\item{data}{Daten als data.frame}
 
 \item{nfactors}{Anzahl Faktoren default  nfactors=1}
+
+\item{cut}{Cluster loadings  cut= .30,     <  will not be printed.}
 
 \item{residuals}{Anzeige der Residuen  default: FALSE}
 
@@ -59,7 +54,9 @@ type=c("pca", "plot", "kmo")}
 
 \item{method}{default= "regression"}
 
-\item{sort}{default= TRUE,}
+\item{sort}{default= TRUE}
+
+\item{N}{ist nicht zu ändern}
 }
 \value{
 HTML oder Test Output
@@ -108,8 +105,11 @@ English
 
 We performed a Principal Component Analysis (PCA) to extract the most important independent factors. The Kaiser–Meyer–Olkin measure of sampling adequacy was .867, representing a relatively good factor analysis, and Bartlett’s test of Sphericity was significant (p < .001), indicating that correlations between items were sufficiently large for performing a PCA. Only factors with eigenvalues ≥ 1 were considered (Guttman, 1954; Kaiser, 1960).
 Examination of Kaiser’s criteria and the scree-plot yielded empirical justification for retaining two factors with eigenvalues exceeding 1 which accounted for 60.45 of the total variance. Among the factor solutions, the varimax-rotated two-factor solution yielded the most interpretable solution, and most items loaded highly on only one of the two factors.
+
+Principal() ist die Kopie von principal aus psych
 }
 \examples{
+
 pc <- principal(Harman74.cor$cov,4,rotate="varimax")
 mr <- fa(Harman74.cor$cov,4,rotate="varimax")  #minres factor analysis
 pa <- fa(Harman74.cor$cov,4,rotate="varimax",fm="pa")  # principal axis factor analysis
@@ -125,16 +125,16 @@ APA2(pc2)
 
 
 # -- Buehl Faktoranalyse Seite 475
-##some(DF <- GetData("Raw data/FKV.SAV"))
- #-  Freiburger Fragebogen zur Krankheitsverarbeitung
-##DF <- DF[,-1]
-#APA2( ~., DF, test=T)
-library(arm)
-windows(5,5)
-corrplot(DF, abs=TRUE, n.col.legend=7)#  corrplot {arm}
-SaveData( )
-Principal2(DF, 5, cut=.35)
-APA2(DF[,c(5,16,22,9,26,6,35,33,12,34,4)])
-End(FALSE)
+## some(DF <- GetData("Raw data/FKV.SAV"))
+# -  Freiburger Fragebogen zur Krankheitsverarbeitung
+# #DF <- DF[,-1]
+# APA2( ~., DF, test=T)
+# library(arm)
+# windows(5,5)
+# corrplot(DF, abs=TRUE, n.col.legend=7)#  corrplot {arm}
+# SaveData( )
+# APA_PCA(DF, 5, cut=.35)
+ 
+ 
 
 }

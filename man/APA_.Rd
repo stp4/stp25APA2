@@ -25,7 +25,10 @@ ICC2(x, ..., caption = "ICC", type = c(1, 4))
 
 APA_Likert(...)
 
-APA_PCA(x, ...)
+APA_PCA(data, ..., include.pca = TRUE, include.plot = FALSE,
+  include.kmo = TRUE, w = 5, h = 5,
+  caption = "Standardized loadings (pattern matrix) based upon correlation matrix",
+  note = "", main = "")
 
 APA_Reliability(..., caption = "", note = "")
 
@@ -50,6 +53,10 @@ APA_Xtabs(x, data, ...)
 \item{type}{Methode t.test oder wilcox.test}
 
 \item{data}{Data.frame}
+
+\item{include.pca, include.plot, include.kmo}{type=c("pca", "plot", "kmo")}
+
+\item{w, h, main}{Grafik Fenster w=5 h=5 Ueberschrift}
 
 \item{var.equal, paired, alternative}{an t.Test var.equal = FALSE  "two.sided"}
 

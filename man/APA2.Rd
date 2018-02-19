@@ -206,6 +206,10 @@ labels c("low", "neutral", "high")}
 
 \item{newdata}{lda:model.frame}
 
+\item{all}{if all=TRUE, then the object is declassed and all output from the function is printed}
+
+\item{suppress.warnings}{Fehlermeldung unterdruecken}
+
 \item{custom.model.names}{Namen ner Modelle}
 
 \item{include.custom}{liste mit Statistiken für Gofs also zB F-Tests}
@@ -249,6 +253,10 @@ labels c("low", "neutral", "high")}
 \item{caption, note}{Überschrift}
 
 \item{...}{nicht benutzt}
+
+\item{caption, note}{Ueberschrift}
+
+\item{digits}{Number digits= 2, of digits to use in printing}
 
 \item{x}{Liste mit Objekten (fits)}
 
