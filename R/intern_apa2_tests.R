@@ -17,7 +17,7 @@
 conTest = function(fml,
                    data,
                    test_name = TRUE) {
-  cat("\nin conTest\n\n")
+#  cat("\nin conTest\n\n")
 
   # Default-Tests ------------------------------------
   spearmanTest2 <- function(fml, data) {

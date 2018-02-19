@@ -129,6 +129,14 @@ varana \%>\% Tabelle(
 )
 
 varana2 \%>\% Tabelle2(Merkfgk, by=~ Zeit)
+
+ Tabelle(
+m1[median] + m2[median] + m3[median] + m4[median] ~ geschl,
+varana,
+APA = TRUE,
+include.n = FALSE,
+test = TRUE
+)
 prepare_data2(m1+m2~m3 , varana)
 corr_tabel_X(~m1+m2, varana)
 corr_tabel_X(m1+m2~m3, varana)

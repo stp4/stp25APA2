@@ -299,6 +299,16 @@ calculate_tabelle2 <- function(X,
 #' @param cor_diagonale_up Korrelation
 #' @param max_factor_length Fehler Abfangen bei langen Factoren
 #' @param order,decreasing noch nicht Implementiert
+#' 
+#' @examples 
+#' 
+#'  Tabelle(
+#' m1[median] + m2[median] + m3[median] + m4[median] ~ geschl,
+#' varana,
+#' APA = TRUE,
+#' include.n = FALSE,
+#' test = TRUE
+#' )
 errate_statistik3 <-
   function (...,
             type = NULL,
@@ -402,10 +412,18 @@ errate_statistik3 <-
     }
     
     Test <- function(i, j) {
+      
+    # cat("\n", i,"\n")
+    #  print(X$measure.class[i])
+    #  print(X$group.class[j])
+      
       if (X$measure.class[i] == "numeric" &
           X$group.class[j] == "factor") {
         fm_aov <- formula(paste(measure.vars[i], "~", j))
-        #  print(fm_aov)
+        conTest(fm_aov, X$data, include.test)
+      } else if(X$measure.class[i] == "median" &
+                X$group.class[j] == "factor"){
+        fm_aov <- formula(paste(measure.vars[i], "~", j))
         conTest(fm_aov, X$data, include.test)
       } else  if (X$measure.class[i] == "factor" &
                   X$group.class[j] == "factor") {
