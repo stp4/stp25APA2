@@ -1,34 +1,15 @@
-#' @name Reliability
-#' @rdname Reliability
-#' @title Reliability
-#' @description  Reliabilitaets Analyse mit Cronbach-Alpha + Mittelwerte
-#' mehr unter \link{fkv} Reliability() berechnet die Werte und mit Alpha() koennen die
-#'  Cronbach-Alpha Werte extrahiert werden
-#'
-#'  Cronbachs Alpha (auch Cronbachs α oder einfach nur α) ist ein Maß für die interne Konsistenz einer Skala.
-#'
-#'  > .9	Exzellent
-#'
-#'  > .8	Gut / Hoch
-#'
-#'  > .7	Akzeptabel
-#'
-#'  > .6	Fragwürdig
-#'
-#'  > .5	Schlecht / Niedrig
-#'
-#'  < .5	Inakzeptabel
-#'
-#' Quelle http://statistikguru.de/spss/reliabilitaetsanalyse/auswerten-und-berichten-2.html
-#'
+#' Reliability und Cronbach-Alpha
+#' 
+#' \code{Reliability()} Reliabilitaets Analyse mit Cronbach-Alpha + Mittelwerte
+#' 
 #' Deutsch
-#'
 #' Um die interne Konsistenz zu bestimmen, wurde Cronbachs Alpha für die Subskala positiver Affekt (insgesamt zehn Fragen) berechnet. Die interne Konsistenz war hoch, mit Cronbachs Alpha = .89 für positiven Affekt.
+#' 
 #' English
-#'
 #' For reliability analysis, Cronbach’s alpha was calculated to assess the internal consistency of the subscale for positive affect, which consists of ten questions. The internal consistency of the questionnaire is satisfying, with Cronbach’s alpha for positive affect = .89.
 #'
-#'
+#' @name Reliability
+#' @rdname Reliability 
 #' @param x Formula-Objekt oder data.frame
 #' @param ... an psych
 #' @return \code{Reliability()} gibt eine Liste mit den Resultaten und den transformierten Daten
@@ -46,7 +27,7 @@
 #' @export
 #' @examples
 #'
-#'   n<-200
+#' n<-200
 #' x<- runif(n, min = 1, max = 5)
 #' set.seed(0815)
 #' data<- data.frame( x1 = x+rnorm(n),
@@ -95,42 +76,38 @@ Reliability <- function(x, data, ...) {
 }
 
 #' @rdname Reliability
-#' @param data ist ein data.frame-Objekt
 #' @param name Slalen namen
 #' @export
 Reliability.data.frame <- function(x,
-                                   ... ,
-                                   name = NULL) {
+                                   name = NULL,
+                                   ... ) {
   if (is.null(name)) {
     name <- deparse(substitute(x))
     name <- unlist(strsplit(name, " <- "))[1]
     if (length(name) == 0)
       name <- "Skale"
   }
-  res <- Reliability_helper(x, ...)
+  res <- Reliability.default(x, ...)
   res$name <- name
-  
   res
 }
 
 #' @rdname Reliability
+#' @param data data.frame mit den Daten
 #' @export
+#' @examples 
+#' 
+#' require(stpvers)
+#' Reliability2(~F3+F2+F10+F11, fkv, check.keys =TRUE)
+
 Reliability.formula <- function(x,
                                 data,
-                                ...,
-                                name = NULL) {
-  if (is.null(name)) {
-    name <- deparse(substitute(x))
-    name <- unlist(strsplit(name, " <- "))[1]
-    if (length(name) == 0)
-      name <- "Skale"
-  }
-  
-  data <- Formula_Data(fm, data)$Y_data
-  
-  res <- Reliability_helper(x, data, ...)
+                                name = "Skale",
+                                ...) {
+
+  data <- Formula_Data(x, data)$Y_data
+  res <- Reliability.default(data, ...)
   res$name <- name
-  
   res
 }
 
@@ -138,17 +115,10 @@ Reliability.formula <- function(x,
 #' @param caption ueberschrift
 #' @param note Note
 #' @export
-Reliability2 <- function(x,
-                         ...,
+Reliability2 <- function(...,
                          caption = "",
                          note = "") {
-  res <- Reliability(x, ...)
-  
-  mynames <- grap_call_name(x) # name Holen interne Funktion
-  if (is.null(caption))
-    if (length(grep("Reliability" , mynames)) == 0)
-      caption <- paste("", mynames)
-  
+  x <- Reliability(...)
   item <-
     data.frame(
       Items = paste0(x$labels, ifelse(x$keys < 0, " (-)", "")),
@@ -157,7 +127,6 @@ Reliability2 <- function(x,
       SD = Format2(x$item_statistik$sd, 2),
       "Alpha if Item Deleted" = Format2(x$psych$item.stats$r.drop, 2)
     )
-  
   aplha_statistik <- with(
     x,
     data.frame(
@@ -172,23 +141,73 @@ Reliability2 <- function(x,
       "Shapiro Test" = shapiro
     )
   )
-  
-  res$item_statistics <- prepare_output(item,
-                                        caption = paste("Itemstatistiken", caption),
-                                        note = note)
-  res$aplha_statistics <-
+  x$item_statistics <- 
+    prepare_output(item,
+                   caption = paste("Itemstatistiken", caption),
+                   note = note)
+  x$aplha_statistics <-
     prepare_output(
       aplha_statistik ,
       caption = paste("Item-Mittelwerte", caption),
       note = note
     )
-  
-  Output(res$item_statistics)
-  
-  Output(res$aplha_statistics)
-  
-  invisible(res)
+  Output(x$item_statistics)
+  Output(x$aplha_statistics)
+
+  invisible(x)
 }
+
+
+
+#' @rdname Reliability
+#' @description  \code{Appha} Cronbach-Alpha Werte extrahieren
+#'
+#'  Cronbachs Alpha oder einfach nur α ist ein Maß für die interne Konsistenz einer Skala.
+#'
+#'  > .9	Exzellent
+#'
+#'  > .8	Gut / Hoch
+#'
+#'  > .7	Akzeptabel
+#'
+#'  > .6	Fragwürdig
+#'
+#'  > .5	Schlecht / Niedrig
+#'
+#'  < .5	Inakzeptabel
+#'
+#' Quelle http://statistikguru.de/spss/reliabilitaetsanalyse/auswerten-und-berichten-2.html
+#'
+#' @export
+#' @examples 
+#' 
+#' # ALPHA
+#' Distanz <-  Reliability(~F3+F2+F10+F11, fkv, check.keys =TRUE)
+#' 
+#' Distanz %>% Alpha() %>% Output() # gibt den Namen Distanz nicht aus wegen %>%
+#' Alpha(Distanz) %>% Output()
+#'  
+#' Verarbeitung <- Reliability(~ F5+F16+F22+F9+F26+F6+F35+F33+F12+F34+F4, fkv, check.keys =TRUE)
+#' Coping <- Reliability(~ F7+F8+F17+F14+F15+F18+F19+F1+F13+F20, fkv, check.keys =TRUE)
+#' Vertrauen <- Reliability(~ F28+F27+F31+F29, fkv, check.keys =TRUE)
+#' Religion <- Reliability(~F21+F25+F30+F23+F24, fkv, check.keys =TRUE)
+#' Distanz <- Reliability(~F3+F2+F10+F11, fkv, check.keys =TRUE)
+#' 
+#' 
+#' Alpha(Verarbeitung, Coping, Vertrauen, Religion, Distanz) %>% Output()
+#' 
+Alpha <- function(..., type = 1) {
+  names <- paste(as.list(sys.call())[-1])
+  skalen <- list(...)
+  result <- NULL
+  for (i in skalen) {
+    result <- rbind(result, fix_alpha(i))
+  }
+  
+  result$Source <- names
+  result
+}
+
 
 #' @rdname Reliability
 #' @param max.level,max.level ueberschrift
@@ -215,23 +234,6 @@ Reliability.default <- function(x,
   result
 }
 
-#' @rdname Reliability
-#' @export
-Alpha <- function(..., type = 1) {
-  names <- paste(as.list(sys.call())[-1])
-  skalen <- list(...)
-  result <- NULL
-  for (i in skalen) {
-    result <- rbind(result, fix_alpha(i))
-  }
-  
-  result$Source <- names
-  result
-}
-
-
-
-
 
 #' @rdname Reliability
 #' @export
@@ -245,6 +247,7 @@ print.stp25_relibility <- function(x) {
 
 #' @rdname Reliability
 #' @description \code{Index} Summen Index eine Summenfunktion mit der Erweiterung zum Umcodieren
+#' @param return.index TRUE/FALSE index oder Daten
 #' @return Vektor
 #' @export
 Index <- function(x,
@@ -254,7 +257,7 @@ Index <- function(x,
                   digits = 4,
                   max.level = NA,
                   min.level = NA,
-                  output = "index",
+                  return.index =TRUE,
                   ...) {
   if (!all(apply(x, 2, function(objekt) {
     class(objekt) == "numeric" || class(objekt) == "integer"
@@ -291,7 +294,7 @@ Index <- function(x,
     rep(NA, nrow(x))
   )
   
-  if (output == "index")
+  if (return.index)
     return(index)
   else
     return(list(data = x, index = index))

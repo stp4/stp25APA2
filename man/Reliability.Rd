@@ -5,34 +5,34 @@
 \alias{Reliability.data.frame}
 \alias{Reliability.formula}
 \alias{Reliability2}
-\alias{Reliability.default}
 \alias{Alpha}
+\alias{Reliability.default}
 \alias{print.stp25_relibility}
 \alias{Index}
-\title{Reliability}
+\title{Reliability und Cronbach-Alpha}
 \usage{
 Reliability(x, data, ...)
 
-\method{Reliability}{data.frame}(x, ..., name = NULL)
+\method{Reliability}{data.frame}(x, name = NULL, ...)
 
-\method{Reliability}{formula}(x, data, ..., name = NULL)
+\method{Reliability}{formula}(x, data, name = "Skale", ...)
 
-Reliability2(x, ..., caption = "", note = "")
+Reliability2(..., caption = "", note = "")
+
+Alpha(..., type = 1)
 
 \method{Reliability}{default}(x, revcoded = FALSE, check.keys = FALSE,
   max.level = NA, min.level = NA, type = "mean", na.rm = TRUE, ...)
 
-Alpha(..., type = 1)
-
 \method{print}{stp25_relibility}(x)
 
 Index(x, revcoded = FALSE, fun = "mean", na.rm = TRUE, digits = 4,
-  max.level = NA, min.level = NA, output = "index", ...)
+  max.level = NA, min.level = NA, return.index = TRUE, ...)
 }
 \arguments{
 \item{x}{Formula-Objekt oder data.frame}
 
-\item{data}{ist ein data.frame-Objekt}
+\item{data}{data.frame mit den Daten}
 
 \item{...}{an psych}
 
@@ -42,13 +42,15 @@ Index(x, revcoded = FALSE, fun = "mean", na.rm = TRUE, digits = 4,
 
 \item{note}{Note}
 
+\item{type}{Aggregatfunktion fuer die Skala (mean, median und trimmed)}
+
 \item{revcoded}{position zum umcodieren. Kann entweder nummer oder name oder TRUE sein.}
 
 \item{max.level, max.level}{ueberschrift}
 
-\item{type}{Aggregatfunktion fuer die Skala (mean, median und trimmed)}
-
 \item{na.rm}{Fehlende Werte}
+
+\item{return.index}{TRUE/FALSE index oder Daten}
 
 \item{check.keye}{aus psych wenn \code{check.keye=TRUE} gesetzt wird werden die Daten automatisch umkodiert}
 }
@@ -69,11 +71,11 @@ Index(x, revcoded = FALSE, fun = "mean", na.rm = TRUE, digits = 4,
 Vektor
 }
 \description{
-Reliabilitaets Analyse mit Cronbach-Alpha + Mittelwerte
-mehr unter \link{fkv} Reliability() berechnet die Werte und mit Alpha() koennen die
- Cronbach-Alpha Werte extrahiert werden
+\code{Reliability()} Reliabilitaets Analyse mit Cronbach-Alpha + Mittelwerte
 
- Cronbachs Alpha (auch Cronbachs α oder einfach nur α) ist ein Maß für die interne Konsistenz einer Skala.
+\code{Appha} Cronbach-Alpha Werte extrahieren
+
+ Cronbachs Alpha oder einfach nur α ist ein Maß für die interne Konsistenz einer Skala.
 
  > .9	Exzellent
 
@@ -89,18 +91,18 @@ mehr unter \link{fkv} Reliability() berechnet die Werte und mit Alpha() koennen 
 
 Quelle http://statistikguru.de/spss/reliabilitaetsanalyse/auswerten-und-berichten-2.html
 
-Deutsch
-
-Um die interne Konsistenz zu bestimmen, wurde Cronbachs Alpha für die Subskala positiver Affekt (insgesamt zehn Fragen) berechnet. Die interne Konsistenz war hoch, mit Cronbachs Alpha = .89 für positiven Affekt.
-English
-
-For reliability analysis, Cronbach’s alpha was calculated to assess the internal consistency of the subscale for positive affect, which consists of ten questions. The internal consistency of the questionnaire is satisfying, with Cronbach’s alpha for positive affect = .89.
-
 \code{Index} Summen Index eine Summenfunktion mit der Erweiterung zum Umcodieren
+}
+\details{
+Deutsch
+Um die interne Konsistenz zu bestimmen, wurde Cronbachs Alpha für die Subskala positiver Affekt (insgesamt zehn Fragen) berechnet. Die interne Konsistenz war hoch, mit Cronbachs Alpha = .89 für positiven Affekt.
+
+English
+For reliability analysis, Cronbach’s alpha was calculated to assess the internal consistency of the subscale for positive affect, which consists of ten questions. The internal consistency of the questionnaire is satisfying, with Cronbach’s alpha for positive affect = .89.
 }
 \examples{
 
-  n<-200
+n<-200
 x<- runif(n, min = 1, max = 5)
 set.seed(0815)
 data<- data.frame( x1 = x+rnorm(n),
@@ -141,5 +143,24 @@ DF[,3]<- 6-DF[,3]
 Fachinteresse <- Reliability( DF[ , Cs(F1,F2,F3,F4,F5)], check.keys=TRUE)
 #Reliability2( DF[ , Cs(F1,F2,F3,F4,F5)], check.keys=TRUE)
 Alpha( Fachinteresse)
+
+
+require(stpvers)
+Reliability2(~F3+F2+F10+F11, fkv, check.keys =TRUE)
+
+# ALPHA
+Distanz <-  Reliability(~F3+F2+F10+F11, fkv, check.keys =TRUE)
+
+Distanz \%>\% Alpha() \%>\% Output() # gibt den Namen Distanz nicht aus wegen \%>\%
+Alpha(Distanz) \%>\% Output()
+ 
+Verarbeitung <- Reliability(~ F5+F16+F22+F9+F26+F6+F35+F33+F12+F34+F4, fkv, check.keys =TRUE)
+Coping <- Reliability(~ F7+F8+F17+F14+F15+F18+F19+F1+F13+F20, fkv, check.keys =TRUE)
+Vertrauen <- Reliability(~ F28+F27+F31+F29, fkv, check.keys =TRUE)
+Religion <- Reliability(~F21+F25+F30+F23+F24, fkv, check.keys =TRUE)
+Distanz <- Reliability(~F3+F2+F10+F11, fkv, check.keys =TRUE)
+
+
+Alpha(Verarbeitung, Coping, Vertrauen, Religion, Distanz) \%>\% Output()
 
 }

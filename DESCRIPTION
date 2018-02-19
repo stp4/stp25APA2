@@ -1,0 +1,16 @@
+Package: stp25APA2
+Type: Package
+Title: Resultate Formatiern
+Version: 0.2.3
+Date: 2018-02-18
+Author: Wolfgang Peter
+Maintainer: Wolfgang Peter <w.peter@statistik-peter.at>
+Description: APA-Style Tabellen
+Encoding: UTF-8
+VignetteBuilder: knitr
+License: GPL-3
+Depends: R (>= 3.2)
+Imports: car,Hmisc
+Suggests: haven,knitr,rmarkdown
+LazyData: TRUE
+RoxygenNote: 6.0.1
