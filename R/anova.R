@@ -39,14 +39,7 @@ APA2.summary.aov <- function(x,
   invisible(res)
 }
 
-#' @rdname APA2
-#' @export
-APA_aovlist <- function(...) {
-  if (options()$prompt[1] == "HTML> ")
-    HTML(summary(...))
-  else
-    print(summary(...))
-}
+ 
 
 #' @rdname APA2
 #' @export
@@ -86,6 +79,7 @@ APA2.aovlist <- function(x, ...) {
  
 #' @rdname APA_Table
 #' @description \code{type="anova"} Anova Funktionen
+#' @export
 APA_Table_Anova <- function(myfits,
                             caption, note,
                             names,

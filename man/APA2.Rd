@@ -9,7 +9,6 @@
 \alias{APA2.anova}
 \alias{APA2.aov}
 \alias{APA2.summary.aov}
-\alias{APA_aovlist}
 \alias{APA2.aovlist}
 \alias{APA2.bland_altman}
 \alias{APA2.default}
@@ -51,8 +50,6 @@ APA2(x, ...)
   paste(options()$contrasts, collapse = ", ")))
 
 \method{APA2}{summary.aov}(x, caption = "ANOVA", note = "", ...)
-
-APA_aovlist(...)
 
 \method{APA2}{aovlist}(x, ...)
 
