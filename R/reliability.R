@@ -69,57 +69,43 @@
 #' #Reliability2( DF[ , Cs(F1,F2,F3,F4,F5)], check.keys=TRUE)
 #' Alpha( Fachinteresse)
 #'
-
-
 Reliability <- function(x, data, ...) {
   UseMethod("Reliability")
 }
 
-#' @rdname Reliability
-#' @param name Slalen namen
-#' @export
-Reliability.data.frame <- function(x,
-                                   name = NULL,
-                                   ... ) {
-  if (is.null(name)) {
-    name <- deparse(substitute(x))
-    name <- unlist(strsplit(name, " <- "))[1]
-    if (length(name) == 0)
-      name <- "Skale"
-  }
-  res <- Reliability.default(x, ...)
-  res$name <- name
-  res
-}
-
-#' @rdname Reliability
-#' @param data data.frame mit den Daten
+#' @rdname APA
 #' @export
 #' @examples 
 #' 
-#' require(stpvers)
-#' Reliability2(~F3+F2+F10+F11, fkv, check.keys =TRUE)
+#' APA(Reliability(~F3+F2+F10+F11, fkv, check.keys =TRUE))
 
-Reliability.formula <- function(x,
-                                data,
-                                name = "Skale",
-                                ...) {
-
-  data <- Formula_Data(x, data)$Y_data
-  res <- Reliability.default(data, ...)
-  res$name <- name
-  res
+APA.stp25_relibility <- function(x) {
+  paste("Alpha = ", Format2(x$Alpha, 2))
 }
 
 #' @rdname Reliability
+#' @export
+Reliability2 <- function(...) {
+ cat("Obsolet benutze besser APA_Reliability()")
+  
+  APA_Reliability(...)
+}
+
+#' @rdname APA2
 #' @param caption ueberschrift
 #' @param note Note
 #' @export
-Reliability2 <- function(...,
-                         caption = "",
-                         note = "") {
-  x <- Reliability(...)
-  item <-
+#' @examples 
+#' 
+#'  require(stpvers)
+#'  res <-  Reliability(~F3+F2+F10+F11, fkv, check.keys =TRUE)
+#'  APA2(res)
+#'  
+#'  
+APA2.stp25_relibility <- function(x,
+                                  caption = "",
+                                  note = "") {
+item <-
     data.frame(
       Items = paste0(x$labels, ifelse(x$keys < 0, " (-)", "")),
       n = x$item_statistik$n,
@@ -153,10 +139,84 @@ Reliability2 <- function(...,
     )
   Output(x$item_statistics)
   Output(x$aplha_statistics)
-
-  invisible(x)
+  
+  invisible(x)  
+  
 }
 
+
+
+
+#' @rdname APA_
+#' @param caption ueberschrift
+#' @param note Note
+#' @export
+#' @examples 
+#' 
+#'  require(stpvers)
+#'  APA_Reliability(~F3+F2+F10+F11, fkv, check.keys =TRUE)
+APA_Reliability <- function(...,
+                         caption = "",
+                         note = "") {
+  APA2.stp25_relibility( Reliability(...), caption, note )
+}
+
+
+
+
+
+#' @rdname Reliability
+#' @export
+print.stp25_relibility <- function(x) {
+    cat("\nnames: ", paste(names(x), collapse = ", "), "\n")
+  cat("\nAlpha: ")
+  print(x$Alpha)
+
+}
+
+
+
+
+
+
+
+
+
+
+#' @rdname Reliability
+#' @param name Slalen namen
+#' @export
+Reliability.data.frame <- function(x,
+                                   name = NULL,
+                                   ... ) {
+  if (is.null(name)) {
+    name <- deparse(substitute(x))
+    name <- unlist(strsplit(name, " <- "))[1]
+    if (length(name) == 0)
+      name <- "Skale"
+  }
+  res <- Reliability.default(x, ...)
+  res$name <- name
+  res
+}
+
+#' @rdname Reliability
+#' @param data data.frame mit den Daten
+#' @export
+#' @examples 
+#' 
+#' require(stpvers)
+#' Reliability(~F3+F2+F10+F11, fkv, check.keys =TRUE)
+Reliability.formula <- function(x,
+                                data,
+                                name = "Skale",
+                                ...) {
+
+  data <- Formula_Data(x, data)$Y_data
+  res <- Reliability.default(data, ...)
+  res$name <- name
+  res
+}
 
 
 #' @rdname Reliability
@@ -230,18 +290,12 @@ Reliability.default <- function(x,
   result <-
     skala_statistik(result, type, na.rm)  # list(data, range , label, keys, list(alpha) , Alpha, index, n...schapiro)
   
-  class(result) <- c(class(result), "stp25_relibility")
+  class(result) <- c("stp25_relibility", class(result))
   result
 }
 
 
-#' @rdname Reliability
-#' @export
-print.stp25_relibility <- function(x) {
-  cat("\nnames: ", paste(names(x), collapse = ", "), "\n")
-  cat("\nAlpha: ")
-  print(x$Alpha)
-}
+
 
 
 

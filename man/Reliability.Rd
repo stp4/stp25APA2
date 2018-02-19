@@ -2,29 +2,29 @@
 % Please edit documentation in R/reliability.R
 \name{Reliability}
 \alias{Reliability}
+\alias{Reliability2}
+\alias{print.stp25_relibility}
 \alias{Reliability.data.frame}
 \alias{Reliability.formula}
-\alias{Reliability2}
 \alias{Alpha}
 \alias{Reliability.default}
-\alias{print.stp25_relibility}
 \alias{Index}
 \title{Reliability und Cronbach-Alpha}
 \usage{
 Reliability(x, data, ...)
 
+Reliability2(...)
+
+\method{print}{stp25_relibility}(x)
+
 \method{Reliability}{data.frame}(x, name = NULL, ...)
 
 \method{Reliability}{formula}(x, data, name = "Skale", ...)
-
-Reliability2(..., caption = "", note = "")
 
 Alpha(..., type = 1)
 
 \method{Reliability}{default}(x, revcoded = FALSE, check.keys = FALSE,
   max.level = NA, min.level = NA, type = "mean", na.rm = TRUE, ...)
-
-\method{print}{stp25_relibility}(x)
 
 Index(x, revcoded = FALSE, fun = "mean", na.rm = TRUE, digits = 4,
   max.level = NA, min.level = NA, return.index = TRUE, ...)
@@ -37,10 +37,6 @@ Index(x, revcoded = FALSE, fun = "mean", na.rm = TRUE, digits = 4,
 \item{...}{an psych}
 
 \item{name}{Slalen namen}
-
-\item{caption}{ueberschrift}
-
-\item{note}{Note}
 
 \item{type}{Aggregatfunktion fuer die Skala (mean, median und trimmed)}
 
@@ -146,7 +142,7 @@ Alpha( Fachinteresse)
 
 
 require(stpvers)
-Reliability2(~F3+F2+F10+F11, fkv, check.keys =TRUE)
+Reliability(~F3+F2+F10+F11, fkv, check.keys =TRUE)
 
 # ALPHA
 Distanz <-  Reliability(~F3+F2+F10+F11, fkv, check.keys =TRUE)
