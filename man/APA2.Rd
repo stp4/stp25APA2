@@ -10,6 +10,7 @@
 \alias{APA2.aov}
 \alias{APA2.summary.aov}
 \alias{APA2.aovlist}
+\alias{APA.bland_altman}
 \alias{APA2.bland_altman}
 \alias{APA2.default}
 \alias{APA2.formula}
@@ -53,7 +54,9 @@ APA2(x, ...)
 
 \method{APA2}{aovlist}(x, ...)
 
-\method{APA2}{bland_altman}(...)
+\method{APA}{bland_altman}(x, ...)
+
+\method{APA2}{bland_altman}(x, ...)
 
 \method{APA2}{default}(x, ..., caption = "", output = TRUE)
 
@@ -179,9 +182,9 @@ corr_test-ddefault ist  "pearson" c("pearson","spearman")}
 
 \item{use.level}{Benutzter level in Multi zB ja/nein}
 
-\item{include.n, include.all.n, include.header.n}{N mit ausgeben}
+\item{include.n, include.all.n, include.header.n, include.total}{N mit ausgeben}
 
-\item{include.total}{Total}
+\item{include.total}{default = FALSE total/sum}
 
 \item{include.p, include.sig.star}{p_Werte Sternchen}
 
@@ -275,11 +278,11 @@ labels c("low", "neutral", "high")}
 \item{type}{type = c("fischer", "odds","sensitivity", "chisquare","correlation", "r")bei 2x2-Tabellen Fischer-test und}
 
 \item{digits}{fuer Sensitivitaet sonst ueber Start() einstellen}
-
-\item{include.total}{default = FALSE total/sum}
 }
 \value{
 html-String ueber cat sowi einen data.frame
+
+liste mit data.frames
 
 dataframe mit p.werte
 
@@ -289,6 +292,17 @@ invisible data.frame und Output mit html/knit oder Text.
 APA2 erstellt fertigen HTML-Tabellen Output.
 
 anova: APA2.aov(x, include.eta = TRUE)
+
+Die Funktion \code{APA2.formula} estellt die Standard-Tabellen (analog wie die Hmisc:summary).
+ Links stehen die Zielvariablen rechts die Gruppen.
+ 
+ Fie Formel  \code{a1 + a2[4] +a3 ~ group1 + group2} ergibt zwei Auswertungen. Die Zahle in eckiger Klammer
+ sind die Nachkommastellen. Achtung die Formeln sind auf 500 zeichen begrenzt (Limitation von der Funktion \code{deparse()})
+ Einstellungen werden global erstellt:
+ 
+     \code{set_my_options(prozent=list(digits=c(1,0), style=2))}
+     
+     \code{get_my_options()$apa.style$prozent}
 
 MANOVA: APA2(x, , test="Wilks")
 
@@ -312,23 +326,6 @@ Kreuztabellen APA2.xtabs Formatiert xtabs() 2x2 Tabellen werden mit Haufigkeit w
  auch hier mit \code{type = 2}. die Berechnung erfolgt hier mit \link{assocstats}
  aus dem Packet \code{vcd}.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{formula}: Hier
-    werden Haefigkeiten, Mittelwerte, Gruppenvergleiche und einfache Tests
-     Erstellt analog wie die Hmisc:summary.
-
-     Formel: Links stehen die Zielvariablen rechts die Gruppen.
-     Fie Formel  \code{a1 + a2[4] +a3 ~ group1 + group2} ergibt zwei Auswertungen also
-     zwei Tabellen und nicht eine verschachtelte Tabelle. Die Zahle in eckiger Klammer
-     sind die Nachkommastellen. Achtung die Formeln sind auf 500 zeichen begrenzt (Limitation von der Funktion \code{deparse()})
-
-     Einstellungen werden global mit
-     \code{set_my_options(prozent=list(digits=c(1,0), style=2))}
-     \code{get_my_options()$apa.style$prozent}
-     bewerkstelligt
-}}
-
 \examples{
 
 #- ANOVA ---------

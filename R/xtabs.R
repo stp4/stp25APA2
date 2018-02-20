@@ -1,3 +1,13 @@
+#' @rdname APA_
+#' @description APA.xtabs Chi-Quadrat aus Kreuztabellen
+#' @export
+APA.xtabs <- function(x, ... ) {
+  x<-summary(x)
+  rndr_Chisq(x$statistic, x$parameter, x$p.value)
+}
+
+
+
 #' @rdname APA2
 #' @export
 #' @examples
@@ -19,17 +29,6 @@ APA2.summary.table <- function(x, ...) {
 
 
 
-#' @rdname APA_
-#' @description APA_Xtabs Kreuztabellen
-#' @export
-APA_Xtabs <- function(x, data, ...) {
-  #is_formula2()
-  if (stpvers::is_formula2(x))
-    x <- stats::xtabs(x, data) #- altlast abfangen
-  
-  APA2(x)
-  invisible(x)
-}
 
 
 
@@ -186,6 +185,25 @@ APA2.xtabs <- APA2.table <- function(x,
   }
   invisible(res)
 }
+
+
+
+
+
+
+#' @rdname APA_
+#' @description APA_Xtabs Kreuztabellen
+#' @export
+APA_Xtabs <- function(x, data, ...) {
+  #is_formula2()
+  if (stpvers::is_formula2(x))
+    x <- stats::xtabs(x, data) #- altlast abfangen
+  
+  APA2(x)
+  invisible(x)
+}
+
+
 
 
 # Format ------------------------------------------------------------------

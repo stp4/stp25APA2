@@ -2,13 +2,13 @@
 #' @description APA.biVar: Korrelation mit Hmisc::spearman2
 #' @export
 #' @examples
-#'   # Correlation
+#' 
+#' # Correlation
 #' APA(Hmisc::spearman2(mpg ~ factor(vs), mtcars))
 #' 
 APA.biVar <- function(x, ...) {
   ## Hmisc::spearman2 Wilkox-Test
-  # capture.output (x)[5]
-  
+
   x <- unlist(as.list(x))
   names(x) <- c("rho2",
                 "F", "df1", "df2", "P", "Adjusted.rho2", "n")

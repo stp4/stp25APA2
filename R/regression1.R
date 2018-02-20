@@ -1,10 +1,8 @@
-# Format from model.
 #' @rdname APA
+#' @description APA.lm F-Test aus lm und Anova
 #' @param include.r APA.lm: R-Squar
 #' @export
 APA.lm <- function(x, include.r = TRUE) {
-  
-  #cat("\nin APA.lm\n")
   if (any(class(x) == "aov"))
     x <- lm(x)
   fitSummary <- summary(x)

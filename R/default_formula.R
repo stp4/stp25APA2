@@ -1,16 +1,43 @@
-#' @describeIn APA2  Hier
-#'     werden Haefigkeiten, Mittelwerte, Gruppenvergleiche und einfache Tests
-#'      Erstellt analog wie die Hmisc:summary.
-#'
-#'      Formel: Links stehen die Zielvariablen rechts die Gruppen.
-#'      Fie Formel  \code{a1 + a2[4] +a3 ~ group1 + group2} ergibt zwei Auswertungen also
-#'      zwei Tabellen und nicht eine verschachtelte Tabelle. Die Zahle in eckiger Klammer
-#'      sind die Nachkommastellen. Achtung die Formeln sind auf 500 zeichen begrenzt (Limitation von der Funktion \code{deparse()})
-#'
-#'      Einstellungen werden global mit
+#' @rdname APA
+#' @export
+#' @example 
+#' 
+#'  APA(chol0+chol1 ~ g, hyper)
+#'  
+APA.formula <- function(x,
+                        data,
+                        type = "mean",
+                        digits = 2,
+                        ...) {
+  #type=c("mean","median")
+  if (length(data) == 0)
+    return("Fehlende Daten")
+  type <-  match.arg(type)
+  res <- aggregate(x, data, function(y)
+    paste0(Format2(mean(y, na.rm = TRUE), digits), " (",
+           Format2(mean(y, na.rm = TRUE), digits), ")"))
+  
+  apply(res, 1, function(y) {
+    paste(y, collapse = " = ")
+  })
+}
+
+
+
+
+#' @rdname APA2
+#' 
+#' @description Die Funktion \code{APA2.formula} estellt die Standard-Tabellen (analog wie die Hmisc:summary).
+#'  Links stehen die Zielvariablen rechts die Gruppen.
+#'  
+#'  Fie Formel  \code{a1 + a2[4] +a3 ~ group1 + group2} ergibt zwei Auswertungen. Die Zahle in eckiger Klammer
+#'  sind die Nachkommastellen. Achtung die Formeln sind auf 500 zeichen begrenzt (Limitation von der Funktion \code{deparse()})
+#'  Einstellungen werden global erstellt:
+#'  
 #'      \code{set_my_options(prozent=list(digits=c(1,0), style=2))}
+#'      
 #'      \code{get_my_options()$apa.style$prozent}
-#'      bewerkstelligt
+#'      
 #' @param data Data.frame
 #' @param caption,note UeberschriftNote
 #' @param fun,na.action,direction  eigene Funktion na.action=na.pass
@@ -21,14 +48,13 @@
 #' @param cor_diagonale_up bei Correlation art der Formatierung
 #' @param order,decreasing Sortieren   Reihenfolge der Sortierung
 #' @param use.level Benutzter level in Multi zB ja/nein
-#' @param include.n,include.all.n,include.header.n N mit ausgeben
-#' @param include.total Total
+#' @param include.n,include.all.n,include.header.n,include.total N mit ausgeben
 #' @param include.p,include.sig.star p_Werte Sternchen
 #' @param include.names,include.labels Beschriftung der zeilen
-
 #' @param digits,digits.mean,digits.percent Nachkommastellen
 #' @param print.n,sig.star,pvalues,total veraltet jetzt include.n verwenden
 #' @param output Ausgabe von Ergebiss ueber Output
+#' @return liste mit data.frames
 #' @export
 #' @examples
 #'

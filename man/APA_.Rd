@@ -12,6 +12,7 @@
 \alias{APA_Reliability}
 \alias{APA_R2}
 \alias{APA_Ttest}
+\alias{APA.xtabs}
 \alias{APA_Xtabs}
 \title{APA Syle Table}
 \usage{
@@ -38,6 +39,8 @@ APA_Ttest(x, data, var.equal = FALSE, paired = FALSE,
   alternative = "two.sided", include.mean = TRUE, include.d = TRUE,
   include.mean.diff = TRUE, include.se = TRUE, type = "t.test",
   digits = 2, ...)
+
+\method{APA}{xtabs}(x, ...)
 
 APA_Xtabs(x, data, ...)
 }
@@ -96,6 +99,8 @@ APA_PCA: Faktoranalyse wie SPSS \link{PCA}
 APA_R2: R2-Tabelle (noch nicht fretig)
 
 APA_Ttest: Berechnung von Mittelwerten und Mittelwertdifferenzen und des T-Test
+
+APA.xtabs Chi-Quadrat aus Kreuztabellen
 
 APA_Xtabs Kreuztabellen
 }

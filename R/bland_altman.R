@@ -1,9 +1,22 @@
 #' @rdname APA2
 #' @export
-APA2.bland_altman<- function(...) Output(x)
+APA.bland_altman <-
+  function(x, ...) {
+    paste0("m = ",
+           x$stat$Unit[2],
+           ", d = [",
+           x$stat$Unit[5],
+           ", ",
+           x$stat$Unit[5],
+           "]")
+  }
 
 
-
+#' @rdname APA2
+#' @export
+APA2.bland_altman <- function(x, ...) {
+  Output(x, ...)
+}
 
 
 
