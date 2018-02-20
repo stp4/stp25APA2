@@ -1,3 +1,40 @@
+#' @rdname APA
+#' @description APA.survfit  Mediane berechnen.
+#' @export
+APA.survfit <- function(fit, ...) {
+  if (length(names(fit)) > 11) {
+    # Workaround fuer unterschiedlichen Output
+    # Mediane berechnen
+    mdn <- fix_to_data_frame(summary(fit)$table)
+    mdn <- if (ncol(mdn) == 10)
+      cbind(mdn[, c(1, 2, 5)], mdn[, c(8:10)])
+    else
+      cbind(mdn[, c(1, 4)], mdn[, c(7:9)])
+    unlist(mdn["median"])
+  }
+}
+
+
+#
+
+#' @rdname APA
+#' @description APA.survdiff Log-Rank-Test  berechnen.
+#' @export
+APA.survdiff <- function(fit) {
+  df <- length(fit$n) - 1
+  p.val <- 1 - pchisq(fit$chisq, df)
+  paste0("Log Rank-Test ",
+         rndr_X(fit$chisq, df), ", ",
+         rndr_P(p.val))
+}
+
+
+
+
+
+
+
+
 #' @rdname Kaplan_Meier
 #' @title Kaplan Maier
 #' @name Kaplan_Meier
@@ -62,6 +99,8 @@
 #'
 #' #End()
 NULL
+
+
 
 # stp25data::mkarz
 #' @rdname APA2
@@ -155,33 +194,9 @@ Text(names(mdn))
 
 }
 
-#' @rdname APA
-#' @export
-APA.survfit <- function(fit,...){
-
-  if(length(names(fit))>11){# Workaround fuer unterschiedlichen Output
-    # Mediane berechnen
-    mdn <- fix_to_data_frame(summary(fit)$table)
-    mdn <- if(ncol(mdn) ==10 )
-      cbind(mdn[,c(1,2,5)], mdn[,c(8:10)])
-    else cbind(mdn[,c(1,4)], mdn[,c(7:9)])
-    unlist(mdn["median"] )
 
 
-  }}
 
-
-#Log-Rank-Test
-
-#' @rdname APA
-#' @export
-APA.survdiff<- function(fit){
-  df<-length(fit$n) - 1
-  p.val <- 1 - pchisq(fit$chisq, df)
-  paste0("Log Rank-Test ",
-          rndr_X(fit$chisq, df), ", ",
-          rndr_P(p.val))
-}
 #' @rdname APA2
 #' @export
 APA2.survdiff<- function(fit,

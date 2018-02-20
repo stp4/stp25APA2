@@ -63,6 +63,10 @@ APA.biVar: Korrelation mit Hmisc::spearman2
 
 APA.lm F-Test aus lm und Anova
 
+APA.survfit  Mediane berechnen.
+
+APA.survdiff Log-Rank-Test  berechnen.
+
 APA.htest: T-Test
 }
 \examples{
@@ -75,6 +79,12 @@ APA(aov(mpg ~ drat + wt + qsec, mtcars))
 # Correlation
 APA(Hmisc::spearman2(mpg ~ factor(vs), mtcars))
 
+
+\dontrun{
+ library(stpvars)
+ APA(chol0+chol1 ~ g, hyper)
+ }
+ 
 
 APA(Reliability(~F3+F2+F10+F11, fkv, check.keys =TRUE))
  # T-Test 

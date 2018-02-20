@@ -1,8 +1,11 @@
 #' @rdname APA
 #' @export
-#' @example 
+#' @examples 
 #' 
+#' \dontrun{
+#'  library(stpvars)
 #'  APA(chol0+chol1 ~ g, hyper)
+#'  }
 #'  
 APA.formula <- function(x,
                         data,
@@ -224,13 +227,13 @@ make.proper <- function(x, sep=",") {
 
 
 
-#- name auf Funktionsaufruf extrahieren
-# Name <- Funktion(...)
-# grap_call_name(Name)
-grap_call_name <- function(x) {
-  rsl <- deparse(substitute(x))
-  unlist(strsplit(rsl, " <- "))[1]
-}
+# #- name auf Funktionsaufruf extrahieren
+# # Name <- Funktion(...)
+# # grap_call_name(Name)
+# grap_call_name <- function(x) {
+#   rsl <- deparse(substitute(x))
+#   unlist(strsplit(rsl, " <- "))[1]
+# }
 
 
 
