@@ -5,28 +5,31 @@
 \alias{VIF.default}
 \alias{VIF2}
 \alias{VIF.merModLmerTest}
-\title{VIF Funktion}
+\title{variance inflation factor}
 \usage{
 VIF(x, ...)
 
 \method{VIF}{default}(fit, ...)
 
-VIF2(..., caption = "VIF")
+VIF2(..., caption = "VIF", notes = "")
 
 \method{VIF}{merModLmerTest}(fit, ...)
 }
 \description{
-variance inflation factor, aka VIF  values over 5 are troubling.
-should probably investigate anything over 2.5.
-Quelle: https://hlplab.wordpress.com/2011/02/24/diagnosing-collinearity-in-lme4/
-Kopie der \link{car::vif} funktion
+VIF  values over 5 are troubling, should probably investigate anything over 2.5.
+
+VIF.default lm Methode aus car::vif
+
+VIF.merModLmerTest Quelle https://hlplab.wordpress.com/2011/02/24/diagnosing-collinearity-in-lme4/
 }
 \examples{
 
-set.seed(0815)
-fit<-lm(prestige ~ income + education, data=Duncan)
-car::vif(fit)
-VIF(fit)
+\dontrun{
+ fit<-lm(prestige ~ income + education, data=Duncan)
+ car::vif(fit)
+ VIF(fit)
+}
+
 }
 \author{
 Wolfgang Peter
