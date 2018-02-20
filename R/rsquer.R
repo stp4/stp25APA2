@@ -96,10 +96,6 @@ R2 <- function(x, ...) {
 #' @rdname R2
 #' @export
 R2.lm <- function(x, ...) {
-  # namees <-
-  #    deparse(substitute(fm))
-  #  namees<- unlist(strsplit(namees, " <- "))[1]
-
   rsq <- broom::glance(x)[1:2]
   attr(rsq, "methode") =  "r2"
   rsq

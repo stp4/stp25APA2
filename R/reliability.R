@@ -190,9 +190,8 @@ Reliability.data.frame <- function(x,
                                    name = NULL,
                                    ... ) {
   if (is.null(name)) {
-    name <- deparse(substitute(x))
-    name <- unlist(strsplit(name, " <- "))[1]
-    if (length(name) == 0)
+    name <- grap_call_name(x)
+     if (length(name) == 0)
       name <- "Skale"
   }
   res <- Reliability.default(x, ...)
