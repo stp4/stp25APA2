@@ -56,31 +56,25 @@ catTest(fml, data, include.test = "chisq.test")
 
 \item{type}{1 oder 2 1 ist kurzes Format 2 int lang}
 
-\item{caption, note}{Wir in attribute gespeichert Ueberschrift und Note.}
+\item{caption, note}{Uberschrift an Output}
 
 \item{digits}{Kommastellen}
 
-\item{APA}{APA2 versuion}
+\item{APA}{APA2 Style TRUE/FALSE}
 
-\item{test, include.test, corr_test, useconTest, normality.test}{Signifikanz Test}
+\item{test, include.test, include.p, include.sig.star}{Signifikanz Test}
 
-\item{na.action, exclude}{An Formula nict benutzt}
+\item{na.action, exclude}{an Formula}
 
-\item{include.n, include.nr}{Ausgabe von Anzahl}
+\item{include.n, include.nr, include.total}{Anzahl ausgeben}
 
-\item{include.total}{Ausgabe vonTotal}
+\item{corr_test, cor_diagonale_up}{Korrelationen und Format}
 
-\item{include.p, include.sig.star}{p-Werte, Sternchen}
+\item{max_factor_length}{Fehler bei langen Faktoren abfangen}
 
-\item{cor_diagonale_up}{Korrelation}
+\item{order, decreasing}{Sortieren}
 
-\item{max_factor_length}{Fehler Abfangen bei langen Factoren}
-
-\item{order, decreasing}{noch nicht Implementiert}
-
-\item{.data}{Daten data.frame}
-
-\item{type}{welche Auswertung}
+\item{useconTest, normality.test}{Auswahl des sig. Tests}
 }
 \value{
 Tabelle: data.frame oder list mit data.frame
@@ -92,10 +86,6 @@ verwendet werden.
 Die Funktion arbeitet Intern mit \code{aggregate} bzw. mi  berechne.default().
 
 Tabelle2:  html-Output Tabelle(...) %>% Output()
-
-Hilfsfunktion fuer Tabellen
-
-Hilfsfunktion fuer Tabellen
 
 conTest Hilfsfunktion fuer Tabellen
 
@@ -137,10 +127,13 @@ APA = TRUE,
 include.n = FALSE,
 test = TRUE
 )
+
+\dontrun{
 prepare_data2(m1+m2~m3 , varana)
 corr_tabel_X(~m1+m2, varana)
 corr_tabel_X(m1+m2~m3, varana)
 corr_tabel_X(m1+m2~m3|geschl, varana)
+}
 }
 \author{
 Wolfgang Peter

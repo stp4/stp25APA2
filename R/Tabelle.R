@@ -52,14 +52,28 @@ Tabelle2 <- function(...) {
 
 
 #' @rdname Tabelle
-#' @param .data  Daten data.frame
+#'
 #' @param ...   Die auszuwertenden Variablen  sex, age="mean", usw
 #' @param type 1 oder 2 1 ist kurzes Format 2 int lang
-#' @param caption,note Wir in attribute gespeichert Ueberschrift und Note.
 #' @param formula An dcast Gruppe ~ .id ist zum Zeilen und Spalten vertauschen
 #' @param fun Eigene Function am Berechne
 #' @param digits Kommastellen
-#' @param APA APA2 versuion
+#' @param caption,note Uberschrift an Output
+#'  
+#' @param test,include.test,include.p,include.sig.star Signifikanz Test
+#' @param na.action,exclude an Formula
+#'   
+#' @param include.n,include.nr,include.total Anzahl ausgeben
+#'  
+#' @param corr_test,cor_diagonale_up Korrelationen und Format
+#'  
+#' @param max_factor_length Fehler bei langen Faktoren abfangen
+#' @param order,decreasing Sortieren
+#'  
+#' @param useconTest,normality.test Auswahl des sig. Tests
+#'  
+#' @param APA APA2 Style TRUE/FALSE
+#'
 #' @export
 Tabelle.default <- function(...,
                             formula = NULL,
@@ -289,16 +303,6 @@ calculate_tabelle2 <- function(X,
 
 
 #' @rdname Tabelle
-#' @description Hilfsfunktion fuer Tabellen
-#' @param type welche Auswertung
-#' @param test,include.test,corr_test,useconTest,normality.test Signifikanz Test
-#' @param na.action,exclude An Formula nict benutzt
-#' @param include.n,include.nr  Ausgabe von Anzahl
-#' @param include.total Ausgabe vonTotal
-#' @param include.p,include.sig.star p-Werte, Sternchen
-#' @param cor_diagonale_up Korrelation
-#' @param max_factor_length Fehler Abfangen bei langen Factoren
-#' @param order,decreasing noch nicht Implementiert
 #' 
 #' @examples 
 #' 
@@ -528,13 +532,14 @@ errate_statistik3 <-
 
 
 #' @rdname Tabelle
-#' @description Hilfsfunktion fuer Tabellen
-#' @export
 #' @examples
+#' 
+#' \dontrun{
 #' prepare_data2(m1+m2~m3 , varana)
 #' corr_tabel_X(~m1+m2, varana)
 #' corr_tabel_X(m1+m2~m3, varana)
 #' corr_tabel_X(m1+m2~m3|geschl, varana)
+#' }
 corr_tabel_X <-
   function (...,
             type = c("pearson", "spearman"),
