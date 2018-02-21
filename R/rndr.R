@@ -24,6 +24,22 @@ rndr_median <- function(m, iqr, digits)
   paste0(Format2(m, digits), " (IRQ ", Format2(iqr, digits), ")")
 
 
+#' @rdname rndr_
+#' @export
+rndr_median_quant<- function(x, digits=2){
+  paste0(
+    Format2(x[3], digits),
+    " (",
+    Format2(x[2], digits),
+    symbol_seperator,
+    Format2(x[4], digits),
+    ")"
+  )
+}
+
+
+
+
 
 #' @rdname rndr_
 #' @export

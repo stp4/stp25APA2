@@ -3,6 +3,7 @@
 \name{rndr_}
 \alias{rndr_}
 \alias{rndr_median}
+\alias{rndr_median_quant}
 \alias{rndr_mean}
 \alias{rndr_ods}
 \alias{rndr_percent}
@@ -36,6 +37,8 @@
 rndr_(...)
 
 rndr_median(m, iqr, digits)
+
+rndr_median_quant(x, digits = 2)
 
 rndr_mean(m, s, digits)
 
@@ -106,9 +109,9 @@ symbol_chi2(output = stp25output:::which_output())
 
 \item{digits}{Nachkommastellen}
 
-\item{s, iqr}{SD,IRQ  (ein Wert)}
-
 \item{x}{Obkekt oder vektor}
+
+\item{s, iqr}{SD,IRQ  (ein Wert)}
 
 \item{n}{Anzahl}
 

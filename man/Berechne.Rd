@@ -63,7 +63,8 @@ Prozent2(x, exclude = NA, rtrn = "", max_factor_length = 35, ...)
 
 Mean2default(x, digits = 2, n = length(x))
 
-Median2default(x, digits = 2, n = length(x))
+Median2default(x, digits = 2, n = length(x),
+  median.style = get_my_options()$apa.style$mittelwert$median.style)
 
 Prozent2default(x, digits = 0, n = length(x), exclude = NA,
   max_factor_length = 25)
