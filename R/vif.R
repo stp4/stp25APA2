@@ -3,6 +3,9 @@
 #'  VIF  values over 5 are troubling, should probably investigate anything over 2.5.
 #'  
 #' @author Wolfgang Peter
+#' @param x fit-Objekt
+#' @param caption,note Ueberschrift an Output
+#' @param ... weitere Einstellungen
 #' @export
 #' @name VIF
 #' @examples

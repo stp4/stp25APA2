@@ -15,6 +15,13 @@ VIF2(..., caption = "VIF", notes = "")
 
 \method{VIF}{merModLmerTest}(fit, ...)
 }
+\arguments{
+\item{x}{fit-Objekt}
+
+\item{...}{weitere Einstellungen}
+
+\item{caption, note}{Ueberschrift an Output}
+}
 \description{
 VIF  values over 5 are troubling, should probably investigate anything over 2.5.
 
