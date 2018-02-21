@@ -5,7 +5,9 @@
 #' 
 #' @name APA
 #' @param x Objekt
-#' @param ... weitere Objekte nicht benutzt
+#' @param data data.frame wenn x eine Formel ist
+#' @param digits Nachkommastellen
+#' @param ... weitere Objekte
 #' @return   Character Vector mit einem oder meheren Eintraegen
 #' @examples
 #' 
@@ -37,11 +39,12 @@ APA.NULL <- function(x, ...) {
 #'
 #' APA2 erstellt fertigen HTML-Tabellen Output.
 #' 
-#' @rdname APA2
 #' @name APA2
 #' @param x Ein R Objekt oder eine Formel oder ein data.frame
+#' @param data data.frame wenn x eine Formel ist
+#' @param caption,note Ueberschrift an Output
+#' @param digits Nachkommastellen
 #' @param ... weitere Argumente
-#' @param caption,note Ueberschrift
 #' @return html-String ueber cat sowi einen data.frame
 #' @export
 APA2 <- function(x,  ...) {
@@ -64,10 +67,13 @@ APA2.NULL <- function(x, ...) {
 #' as the first argument.
 #' 
 #' @name APA_
-#' @param x An object to be converted into a tidy data.frame
+#' @param x An object to be converted into a tidy data.frame or Formula
+#' @param data data.frame wenn x eine Formel ist
+#' @param digits Nachkommastellen
+#' @param caption,note Ueberschrift an Output
+#' 
 #' @param ... extra arguments
-#' @param caption,note Ueberschrift
-#' @return a data.frame
+#' @return a data.frame or list with data.frame
 #' @export
 APA_NULL <- function(x, ...) {
     Text("no input")
@@ -76,6 +82,28 @@ APA_NULL <- function(x, ...) {
 
 
 
+
+
+
+
+
+
+#' @rdname APA
+#' @export
+APA.default <- function(x, ...) {
+  cat("\nKeine Methode fuer: ", class(x), "\n")
+}
+
+
+#' @rdname APA2
+#' @export
+APA2.default <- function(x,
+                         ...,
+                         caption = "",
+                         output = TRUE) {
+  
+  Text("Keine Methode fuer ", class(x) ," vorganden!")
+}
 
 
 

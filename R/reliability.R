@@ -92,8 +92,6 @@ Reliability2 <- function(...) {
 }
 
 #' @rdname APA2
-#' @param caption ueberschrift
-#' @param note Note
 #' @export
 #' @examples 
 #' 
@@ -148,8 +146,6 @@ item <-
 
 
 #' @rdname APA_
-#' @param caption ueberschrift
-#' @param note Note
 #' @export
 #' @examples 
 #' 

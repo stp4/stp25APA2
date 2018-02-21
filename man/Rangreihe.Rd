@@ -45,6 +45,8 @@ die Intervallskalierten Markmalsauspraegungen gebildet.
 Literatur: Bortz, J. & Doering, N. (2006). Forschungsmethoden und Evaluation fuer Human-und Sozialwissenschaftler (4. Auflage). Berlin: Springer. Seite 155
 }
 \examples{
+
+\dontrun{
 #require(HH)
 #library(stp5)
 #Start("html")
@@ -95,4 +97,7 @@ Rangreihe(~R1+R2+R3, DF2)
 #         SaveData("Kaffeeform")
 
 #End()
+}
+
+
 }

@@ -1,25 +1,7 @@
-#' Errate korekte Auswertung
-#' Extrahieren der Variablen aus Formula.
-#' @param Formula Formel a~b
-#' @param data data.frame
-#' @param type type=c("auto", "freq", "mean", "median")
-#' @param include.test   sig test bei auto fuer SPSS-like test=="wilcox.test"  test=="kruskal.test"
-#' @param exclude fuer factor
-#' @param include.sig.star logical Formatierung
-#' @param include.p  p-Werte ja nein
-#' @param include.all.n  N ausgeben oder nicht
-#' @param include.header.n Kopfzeile
-#' @param corr_test  default ist  "pearson"
-#' @param cor_diagonale_up logical
-#' @param max_factor_length  interne Funktion
-#' @param total  logical   Hinzufuegen der Gesamtwerte bei Gruppenvergleichen
-#' @param order  logical interne Funktion
-#' @param decreasing  interne Funktion
-#' @param useconTest logical auswahl des Sig.test   bis jetzt nur con_tests implementiert (t-test usw)
-#' @param normality.test logical
-#' @param test_name Welche Teste
-#' @param ... weitere Parameter
-#'
+# Errate korekte Auswertung
+# Extrahieren der Variablen aus Formula.
+
+
 errate_statistik2 <- function(
            Formula,
            data,

@@ -1,7 +1,5 @@
 #' @rdname APA2
-#' @description MANOVA: APA2(x, , test="Wilks")
-#' @param test manova: "Wilks", "Pillai"
-#' @param output  manova:  "anova", "manova")
+#' @description MANOVA: APA2(x, , test="Wilks") test : "Wilks", "Pillai"
 #' @export
 #' @examples 
 #' 

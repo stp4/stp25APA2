@@ -496,10 +496,11 @@ APA2(fit1)
 
 ## ---- results='asis', warning=FALSE--------------------------------------
 # Kopie der \link{car::vif} funktion
-library(car)
- fit<-lm(prestige ~ income + education, data=Duncan)
- car::vif(fit)
- VIF2(fit)
+#library(car)
+ #fit<-lm(prestige ~ income + education, data=Duncan)
+ #car::vif(fit)
+# VIF2(fit)
+ 
 
 ## ---- results='asis', warning=FALSE--------------------------------------
 Verarbeitung <- Reliability(~ F5+F16+F22+F9+F26+F6+F35+F33+F12+F34+F4, fkv, check.keys =TRUE)
@@ -507,7 +508,7 @@ Coping <- Reliability(~ F7+F8+F17+F14+F15+F18+F19+F1+F13+F20, fkv, check.keys =T
 Vertrauen <- Reliability(~ F28+F27+F31+F29, fkv, check.keys =TRUE)
 Religion <- Reliability(~F21+F25+F30+F23+F24, fkv, check.keys =TRUE)
 Distanz <- Reliability(~F3+F2+F10+F11, fkv, check.keys =TRUE)
-Verarbeitung %>% Output
+#Verarbeitung %>% APA2()
 
 Alpha(Verarbeitung, Coping, Vertrauen, Religion, Distanz) %>% Output()
 

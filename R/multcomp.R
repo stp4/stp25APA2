@@ -92,11 +92,8 @@ APA2.TukeyHSD <- function(x,
 
 
 #' @rdname APA2
-#' @description Kopie von multcomp glht
-#' @param x multcomp Objekt
-#' @param caption,note Überschrift
-#' @param include.ci  Cis
-#' @param ... nicht benutzt
+#' @description APA2.glht  multcomp::glht
+#' @param include.ci APA2.glht: Cis
 #'
 #' @return dataframe mit p.werte
 #' @export
@@ -167,5 +164,6 @@ APA2.glht <-
   }
 
 
-
+#' @rdname APA2
+#' @export
 APA2.multicomp <-function(x,...) APA2.glht(x,...)

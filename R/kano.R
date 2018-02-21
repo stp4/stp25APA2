@@ -1,5 +1,4 @@
 #' @name Kano
-#' @rdname Kano
 #' @title Analyze Kano type items.
 #' @description Transformiert Kano-Fragebogen zu Kano-Kodierung
 #' http://www.eric-klopp.de/texte/angewandte-psychologie/18-die-kano-methode

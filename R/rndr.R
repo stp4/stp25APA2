@@ -1135,3 +1135,45 @@ countDigits <- function(x) {
 #   x <- strsplit(as.character(x),"\\.")[[1]][2]
 #   if (is.na(x)) 0 else nchar(x)
 # }
+
+
+
+
+
+# --- noch nicht benutzte Funktionen ----------------------
+
+# adapted from John Fox's numbers2words function
+
+make.digits <- function(x) {
+  # This is a function breaks an input number x into the positive (left)
+  # and negative(right) elements and returns these as numbers
+  x <- toString(x)
+  negative <- substr(x,1,1)=="-"
+  if (negative) x <- substring(x,2)
+  
+  if (length(grep('.',x, fixed=TRUE))==0) {
+    left <- x %>% strsplit("") %>% unlist
+    right <- NULL
+  }
+  else {
+    y <- x %>% strsplit(".", fixed=TRUE)
+    left <- y[[1]][1] %>% strsplit("") %>% unlist
+    right <- y[[1]][2] %>% strsplit("") %>% unlist
+  }
+  list(left,right, negative)
+}
+
+
+
+# Insert commas where needed in large numbers
+make.proper <- function(x, sep=",") {
+  if (is.numeric(x)) x <- format(x, scientific=FALSE)
+  digits <- make.digits(x)
+  outlength <- ceiling(length(digits[[1]])/3)-1+length(digits[[1]])
+  right <- digits[[2]]
+  left <- rep("", outlength)
+  left[outlength:1 %% 4==0] <- sep
+  left[outlength:1 %% 4!=0] <- digits[[1]]
+  if (length(right>0)) paste(c(left, ".", right), collapse="")
+  else  paste(left, collapse="")
+}

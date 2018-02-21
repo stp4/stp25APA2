@@ -8,9 +8,9 @@
 #'
 #' Gestolen von https://cran.r-project.org/web/packages/effsize/effsize.pdf
 #' @name Effsize
-#' @rdname Effsize
 #' @param x Objekt oder Formel
 #' @param ... weitere Optionen
+#' 
 APA_Effsize<- function(x, ...){
   
   if(is_formula2(x) | is.numeric(x)) cohens.d(x, ...)

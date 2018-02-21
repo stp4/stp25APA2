@@ -1,3 +1,6 @@
+#' @param type Mittelwert ("mean")
+#' @param ... 
+#'
 #' @rdname APA
 #' @export
 #' @examples 
@@ -41,20 +44,18 @@ APA.formula <- function(x,
 #'      
 #'      \code{get_my_options()$apa.style$prozent}
 #'      
-#' @param data Data.frame
-#' @param caption,note UeberschriftNote
 #' @param fun,na.action,direction  eigene Funktion na.action=na.pass
 #' (Auswertung ueeber die Funktionen \code{melt, cast}.)
 #' @param type moeglich sind \code{c("auto", "freq", "mean", "median", "ci", "freq.ci")} also Haufigkeit, Mittelwert, Median und neu sind 95 CIs
-#' @param test,include.test,corr_test    Sig test bei  \code{type = auto} moegliche Parameter sind  test=TRUE, test="conTest" oder "sapiro.test" fuer den Test auf Normalverteilung, fuer SPSS-like \code{test=="wilcox.test"}  oder \code{test=="kruskal.test"}
+#' @param test,include.test,corr_test,include.p,include.sig.star    Sig test bei  \code{type = auto} moegliche Parameter sind  test=TRUE, test="conTest" oder "sapiro.test" fuer den Test auf Normalverteilung, fuer SPSS-like \code{test=="wilcox.test"}  oder \code{test=="kruskal.test"}
 #'  corr_test-ddefault ist  "pearson" c("pearson","spearman")
 #' @param cor_diagonale_up bei Correlation art der Formatierung
 #' @param order,decreasing Sortieren   Reihenfolge der Sortierung
 #' @param use.level Benutzter level in Multi zB ja/nein
 #' @param include.n,include.all.n,include.header.n,include.total N mit ausgeben
-#' @param include.p,include.sig.star p_Werte Sternchen
+#' 
 #' @param include.names,include.labels Beschriftung der zeilen
-#' @param digits,digits.mean,digits.percent Nachkommastellen
+#' @param digits.mean,digits.percent Nachkommastellen
 #' @param print.n,sig.star,pvalues,total veraltet jetzt include.n verwenden
 #' @param output Ausgabe von Ergebiss ueber Output
 #' @return liste mit data.frames
@@ -189,41 +190,7 @@ else Text(Tab(),class(result), " ", result)
 invisible(result)
 }
 
-# adapted from John Fox's numbers2words function
 
-make.digits <- function(x) {
-  # This is a function breaks an input number x into the positive (left)
-  # and negative(right) elements and returns these as numbers
-  x <- toString(x)
-  negative <- substr(x,1,1)=="-"
-  if (negative) x <- substring(x,2)
-
-  if (length(grep('.',x, fixed=TRUE))==0) {
-    left <- x %>% strsplit("") %>% unlist
-    right <- NULL
-  }
-  else {
-    y <- x %>% strsplit(".", fixed=TRUE)
-    left <- y[[1]][1] %>% strsplit("") %>% unlist
-    right <- y[[1]][2] %>% strsplit("") %>% unlist
-  }
-  list(left,right, negative)
-}
-
-
-
-# Insert commas where needed in large numbers
-make.proper <- function(x, sep=",") {
-  if (is.numeric(x)) x <- format(x, scientific=FALSE)
-  digits <- make.digits(x)
-  outlength <- ceiling(length(digits[[1]])/3)-1+length(digits[[1]])
-  right <- digits[[2]]
-  left <- rep("", outlength)
-  left[outlength:1 %% 4==0] <- sep
-  left[outlength:1 %% 4!=0] <- digits[[1]]
-  if (length(right>0)) paste(c(left, ".", right), collapse="")
-  else  paste(left, collapse="")
-}
 
 
 #- Interne Recast-Function

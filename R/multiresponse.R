@@ -1,9 +1,13 @@
+
+
+#' @rdname APA_
+#' @export
 APA2_multiresponse<- function(Formula,
                               data,
-                              caption="",
+                              caption="",note="",
 
                           #    type, ## wegen ... nicht benutzt
-                              test=FALSE,note="",
+                              test=FALSE, 
 
                               order=FALSE, decreasing = TRUE,
                               sig_test="fischer.test",

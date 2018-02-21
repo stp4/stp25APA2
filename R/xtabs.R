@@ -45,17 +45,17 @@ APA2.summary.table <- function(x, ...) {
 #'  Kontingentkoeffizient berechnet alternativ steht auch  der Phi-Coefficient zur verf?gung
 #'  auch hier mit \code{type = 2}. die Berechnung erfolgt hier mit \link{assocstats}
 #'  aus dem Packet \code{vcd}.
-#' @param test Signifikanztest TRUE/FALSE  type = FALSE
-#' @param type   type = c("fischer", "odds","sensitivity", "chisquare","correlation", "r")bei 2x2-Tabellen Fischer-test und
+#'
+#' @param type  APA2.xtabs: type = c("fischer", "odds","sensitivity", "chisquare","correlation", "r")bei 2x2-Tabellen Fischer-test und
 #' @param include.percent Prozent TRUE/FALSE
 #' @param margin Zeilenprozent, Spaltenprozent
-#' @param digits fuer Sensitivitaet sonst ueber Start() einstellen
-#' @param  include.total default = FALSE total/sum
-#' @param  include.total.columns columns total/sum
-#' @param  include.total.sub  sum total/sum
+#' @param include.total default = FALSE total/sum
+#' @param include.total.columns columns total/sum
+#' @param include.total.sub  sum total/sum
 #' @param include.total.rows  rows total/sum
 #' @export
 #' @examples
+#' 
 #' # library(stp25data)
 #' # Projekt("html")
 #' hkarz$LAI<- factor(hkarz$lai, 0:1, c("pos", "neg"))

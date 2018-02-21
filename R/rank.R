@@ -16,6 +16,8 @@
 #' @param ... Weitere Argumente
 #' @return Vector
 #' @examples
+#' 
+#' \dontrun{
 #' #require(HH)
 #' #library(stp5)
 #' #Start("html")
@@ -66,6 +68,9 @@
 #' #         SaveData("Kaffeeform")
 #'
 #' #End()
+#' }
+#' 
+#' 
 #' @export
 Rangreihe <-
   function(x, ...) {

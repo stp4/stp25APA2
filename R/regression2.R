@@ -1,9 +1,8 @@
 #' @rdname APA2
 #' @description Ausgabe von Regressions Tabelle nach der APA-Style vorgabe. Die Funktion
 #' ist eine Kopie von  texreg:::aggregate.matrix.
-#' @param x  Liste mit Objekten (fits)
-#' @param caption,note Ueberschrift
-#' @param digits Kommastellen bei uebergabe einer liste  muss exakt die Reighenfolge eingehalten werden.
+#' @param x  APA2.list: Liste mit Objekten (fits)
+#' @param digits APA2.list: Kommastellen bei uebergabe einer liste  muss exakt die Reighenfolge eingehalten werden.
 #' @param custom.model.names Namen ner Modelle
 #' @param include.custom liste mit Statistiken für Gofs also zB F-Tests
 #' @param include.se,include.ci,include.odds SE, 95-Ci, OR noch nicht fertig

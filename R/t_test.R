@@ -27,21 +27,13 @@ APA.ScalarIndependenceTest <- function(x, ...) {
 
 
 
-
 #' @rdname APA_
 #' @description APA_Ttest: Berechnung von Mittelwerten und Mittelwertdifferenzen und des T-Test
-#'
-#' @param x Formula
-#' @param data Data.frame
 #' @param var.equal,paired,alternative an t.Test var.equal = FALSE  "two.sided"
-#' @param digits Nachkommastellen
 #' @param include.mean Mittelwerte mit SD
 #' @param include.d Cohens d
 #' @param include.mean.diff  Mittlere Differenzen
 #' @param include.se Standardfehler noch nicht Fertig
-#' @param type Methode t.test oder wilcox.test
-#' @param ... an Output
-#' @return list
 #' @export
 #'
 #' @examples

@@ -45,10 +45,8 @@ APA2.fa <- function(...) {
 
 
 #' @rdname APA2
-#' @param caption,note Ueberschrift
-#' @param  digits Number digits= 2, of digits to use in printing
-#' @param  all  if all=TRUE, then the object is declassed and all output from the function is printed
-#' @param suppress.warnings Fehlermeldung unterdruecken
+#' @param  all APA2.principal if all=TRUE, then the object is declassed and all output from the function is printed
+#' @param suppress.warnings APA2.principal Fehlermeldung unterdruecken
 #' @export
 APA2.principal <-
   function (x,
