@@ -1,12 +1,10 @@
 #' @rdname APA2
-#' @param caption,note,col_names,print_col APA2: an Output
 #' @param type APA2: c(1, 2), oder c("Freq", "Precent")
-#' @param ReferenceZero,labels APA2: ReferenceZero Neutrales Element in Kombination mit
+#' @param ReferenceZero,labels APA2.likert: ReferenceZero Neutrales Element in Kombination mit
 #'  labels c("low", "neutral", "high")
-#' @param print.mean APA2: Mittelwerte T/F
-#' @param na.exclude APA2: NAs entfernen
-#' @param nlevels APA2: nicht ändern
-#' @param order APA2: reihenfolge nach Mittelwerten T/F
+#' @param include.mean APA2.likert: Mittelwerte T/F
+#' @param na.exclude APA2.likert: NAs entfernen
+#' @param nlevels APA2.likert: nicht ändern
 #' @export
 APA2.likert <- function(x,
                         caption = "" ,
@@ -16,7 +14,7 @@ APA2.likert <- function(x,
                         ...,
                         ReferenceZero = NULL,
                         type = "percent",
-                        print.mean = TRUE,
+                        include.mean = TRUE,
                         na.exclude = FALSE,
                         nlevels = x$nlevels,
                         labels = c("low", "neutral", "high"),
@@ -70,7 +68,7 @@ APA2.likert <- function(x,
   if (type == "percent" | type == 2) x$freq <- ffprozent(results2Prozent, x$freq)
   
   
- if (print.mean)
+ if (include.mean)
     ans <-cbind(x$names,
           x$freq,
           n = x$n,
