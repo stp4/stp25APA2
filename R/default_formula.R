@@ -49,7 +49,7 @@ APA.formula <- function(x,
 #' @param type formula: \code{c("auto", "freq", "mean", "median", "ci", "freq.ci")} 
 #' xtabs: type = c("fischer", "odds","sensitivity", "chisquare","correlation", "r")
 #' 
-#' @param test,include.test,corr_test,include.p,include.sig.star    Sig test bei  \code{type = auto} moegliche Parameter sind  test=TRUE, test="conTest" oder "sapiro.test" fuer den Test auf Normalverteilung, fuer SPSS-like \code{test=="wilcox.test"}  oder \code{test=="kruskal.test"}
+#' @param test,include.test,corr_test,include.p,include.stars    Sig test bei  \code{type = auto} moegliche Parameter sind  test=TRUE, test="conTest" oder "sapiro.test" fuer den Test auf Normalverteilung, fuer SPSS-like \code{test=="wilcox.test"}  oder \code{test=="kruskal.test"}
 #'  corr_test-ddefault ist  "pearson" c("pearson","spearman")
 #' @param cor_diagonale_up bei Correlation art der Formatierung
 #' @param order,decreasing Sortieren   Reihenfolge der Sortierung
@@ -58,7 +58,7 @@ APA.formula <- function(x,
 #' 
 #' @param include.names,include.labels Beschriftung der zeilen
 #' @param digits.mean,digits.percent Nachkommastellen
-#' @param print.n,sig.star,pvalues,total veraltet jetzt include.n verwenden
+#' 
 #' @param output Ausgabe von Ergebiss ueber Output
 #' @return liste mit data.frames
 #' @export
@@ -71,7 +71,7 @@ APA.formula <- function(x,
 #' APA2(chol0+chol1 ~ g, hyper, caption="Spalte mit Characteristik loeschen", print_col=-2)
 #' APA2(gew + rrs0 ~ g, hyper, print.n=FALSE, test=TRUE)
 #' APA2(~chol0+chol1~chol6+chol12, hyper, caption="Korrelation", test=TRUE)
-#' APA2(~chol0+chol1+chol6+chol12, hyper, caption="Korrelation", test=TRUE, sig.star=FALSE)
+#' APA2(~chol0+chol1+chol6+chol12, hyper, caption="Korrelation", test=TRUE, stars=FALSE)
 #'
 #' #End()
 #'
@@ -81,21 +81,19 @@ APA2.formula <- function(x,
                                   "ci", "multiresponse","cohen.d","effsize",
                                   "freq.ci","describe"),
                          note="", na.action=na.pass, test = FALSE,
-                         sig.star = TRUE, p.value=FALSE,
-                         pvalues =  if(p.value) p.value else FALSE,
-                         print.n = NULL, #veraltet # head.n = print.n,
+                     
                          corr_test = "pearson", cor_diagonale_up=TRUE,
                          direction = "long",
-                         order = FALSE, decreasing = TRUE,total=FALSE, #veraltet
+                         order = FALSE, decreasing = TRUE, 
                          use.level=1, # Multi
 
                      include.n=TRUE,
-                     include.all.n=print.n,
+                     include.all.n=NULL,
                      include.header.n=TRUE,
-                     include.total=total,
+                     include.total=FALSE,
                      include.test=test,
-                     include.p=pvalues,
-                     include.sig.star=sig.star,
+                     include.p=FALSE,
+                     include.stars=TRUE,
                      include.names=FALSE,
                      include.labels=TRUE,
                      #include.type=TRUE,
@@ -165,10 +163,8 @@ result <- switch(type[1],
                           include.total=include.total,
                           include.test=include.test,
                           include.p=include.p,
-                          include.sig.star=include.sig.star,
-
-                         # test = test, sig.star = sig.star,
-                         # pvalues = pvalues, print.n = print.n,
+                          include.stars=include.stars,
+ 
                           order = order, decreasing = decreasing,
                           corr_test = corr_test, cor_diagonale_up=cor_diagonale_up,
                          # total=total,

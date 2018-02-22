@@ -94,9 +94,7 @@ APA2.xtabs <- APA2.table <- function(x,
                      # include.header.n = TRUE,
 
                      # include.test = FALSE, # test,
-                     # include.p = TRUE,
-                     # include.sig.star = FALSE,
-
+                    
                      # include.variance = TRUE,
 
 

@@ -18,11 +18,11 @@ errate_statistik2 <- function(
            include.total = FALSE, # total,
            include.test = FALSE, # test,
            include.p = TRUE,
-           include.sig.star = FALSE,
+           include.stars = FALSE,
 # include.type=TRUE,
 
-            #sig.star = TRUE, pvalues=FALSE,
-            #print.n=TRUE,
+           
+           
             #head.n=TRUE,
             corr_test = "pearson",
             cor_diagonale_up = TRUE,
@@ -239,40 +239,11 @@ return_data_frame <- function(ans, var_vektor = "") {
         #cat("\nEinzelvergleich\n")oder normality.test
       #  print(ANS)
         if(include.test & !normality.test ){
-          # Sig Test angefordert also Correlationsmatrix
-#
-#           if(any(sapply(X$Y_data, class) == "factor")){
-#             mycorrtable <- rep("Gemischte Skalenniveaus use as.numeric", nrow(ANS))}
-#           if(nrow(na.omit(X$Y_data)) < 4){
-#             mycorrtable <- rep("must have >4 observations", nrow(ANS))
-#           }else{
-#
-#
-#             mycor <- Hmisc::rcorr(as.matrix(X$Y_data), type = corr_test)
-#             mycorrtable <- round(mycor$r, 2)
-#             note <- paste("Korrelation nach" , Hmisc::upFirst(corr_test))
-#
-#             if(include.p){
-#               p <- mycor$P
-#               pval <- apply(p, 2, ffpvalue)
-#               pval <- paste0(" (p=",pval,")")
-#               mycorrtable <- matrix(paste0(mycorrtable, pval), ncol = ncol(mycorrtable))
-#             }
-#             if(include.sig.star){
-#               p <- mycor$P
-#               pval <- apply(p, 2, ffsigstars)
-#               mycorrtable <- matrix(paste0(mycorrtable, pval), ncol = ncol(mycorrtable))
-#             }
-#             diag(mycorrtable) <- "1"
-#             if(cor_diagonale_up)
-#               mycorrtable[lower.tri(mycorrtable)] <- ""
-#             else
-#               mycorrtable[upper.tri(mycorrtable)] <- ""
-#           }#- end else nrow(na.omit(X$Y_data)) < 4
+ 
 
         mycorrtable <- Corr1(X$Y_data,
                               nrow(ANS), corr_test,
-                              include.p, include.sig.star, cor_diagonale_up)
+                              include.p, include.stars, cor_diagonale_up)
         note <- paste("Korrelation nach" , Hmisc::upFirst(type))
 
          # Corr1()
@@ -282,12 +253,7 @@ return_data_frame <- function(ans, var_vektor = "") {
           else
             ANS <- cbind(ANS, mycorrtable)
 
-#
-# cat("\nin mycorrtable\n")
-# print(mycorrtable)
-#           print(ANS)
-
-#cat("\n-----\n")
+ 
         }else if (include.test & normality.test) {
 
           ANS <- cbind(ANS,
@@ -331,7 +297,7 @@ return_data_frame <- function(ans, var_vektor = "") {
         if (is.null(my_levels)){ #--Gruppe ist Numeric also Correlation
             if (corr_test %in% c("pearson", "spearman")) {
               note <- paste( note, "Korrelation nach", Hmisc::upFirst(corr_test))
-              ANS <- Corr2(X$Y_data, Xi, corr_test, include.sig.star)
+              ANS <- Corr2(X$Y_data, Xi, corr_test, include.stars)
               ANS[,1] <-rownames(ANS)
               colnames(ANS)[1] <- x_name
               ANS <- if (include.test) ANS[, c(1, 2, 6)] else ANS[, c(1, 2, 5)]

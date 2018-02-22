@@ -60,7 +60,7 @@ Tabelle2 <- function(...) {
 #' @param digits Kommastellen
 #' @param caption,note Uberschrift an Output
 #'  
-#' @param test,include.test,include.p,include.sig.star Signifikanz Test
+#' @param test,include.test,include.p,include.stars Signifikanz Test
 #' @param na.action,exclude an Formula
 #'   
 #' @param include.n,include.nr,include.total Anzahl ausgeben
@@ -108,7 +108,7 @@ Tabelle.default <- function(...,
                             include.test = test,
                             
                             include.p = TRUE,
-                            include.sig.star = FALSE,
+                            include.stars = FALSE,
                             corr_test = "pearson",
                             cor_diagonale_up = TRUE,
                             max_factor_length = 35,
@@ -133,7 +133,7 @@ Tabelle.default <- function(...,
       include.total = include.total,
       include.test = include.test,
       include.p = include.p,
-      include.sig.star = include.sig.star,
+      include.stars = include.stars,
       corr_test = corr_test,
       cor_diagonale_up = cor_diagonale_up,
       max_factor_length = max_factor_length,
@@ -330,7 +330,7 @@ errate_statistik3 <-
             include.test = test,
             
             include.p = TRUE,
-            include.sig.star = FALSE,
+            include.stars = FALSE,
             corr_test = "pearson",
             cor_diagonale_up = TRUE,
             max_factor_length = 35,
@@ -547,7 +547,7 @@ corr_tabel_X <-
             subset,
             na.action = na.pass,
             cor_diagonale_up = TRUE,
-            sig.star = TRUE,
+           stars = TRUE,
             p.value = FALSE,
             include.mean = FALSE,
             include.n = TRUE)
@@ -643,7 +643,7 @@ corr_tabel_X <-
 
 ordne_corr_tabel <- function(ans,
                              cor_diagonale_up = TRUE,
-                             sig.star = TRUE,
+                            stars = TRUE,
                              p.value = FALSE,
                              # mean = FALSE, # Veraltet
                              include.mean = FALSE,
@@ -667,7 +667,7 @@ ordne_corr_tabel <- function(ans,
     # colnames(n)<- paste0(colnames(n), "_", "n" )
     r <- format_diagonale(Format2(ans$r, 2))
     
-    if (sig.star) {
+    if (stars) {
       p <- apply(ans$P, 2, function(x)
         cut(
           x,

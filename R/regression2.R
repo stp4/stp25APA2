@@ -44,7 +44,7 @@ APA2.list <-
             include.odds = FALSE,
             include.se = if (include.ci) FALSE else TRUE,
             include.p = FALSE,
-            include.sig.star = if (include.p) FALSE else TRUE,
+            include.stars = if (include.p) FALSE else TRUE,
             include.ftest = FALSE,
             include.loglik = FALSE,
             include.pseudo = TRUE,
@@ -174,7 +174,7 @@ APA2.list <-
           models[[i]]@ci.up  # models[[i]]@coef - (z * models[[i]]@se)
         ci <- rndr_CI(cbind(cil, ciu), digits)
       } else ci<- NA
-      if (include.sig.star ){
+      if (include.stars ){
         if(include.b)  cf <- paste0(cf, p_stars)
         else if(include.odds) or <- paste0(or, p_stars)
       }

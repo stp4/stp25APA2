@@ -96,7 +96,7 @@ corr_tabel.data.frame <- function(.data,
                                   groups = NULL,
                                   type = c("pearson", "spearman"),
                                   cor_diagonale_up = TRUE,
-                                  sig.star = TRUE,
+                                  stars = TRUE,
                                   p.value = FALSE,
                                   include.mean = FALSE,
                                   include.n = FALSE) {
@@ -120,7 +120,7 @@ corr_tabel.data.frame <- function(.data,
     Formula, .data, groups,
     type,
     cor_diagonale_up = cor_diagonale_up,
-    sig.star = sig.star, p.value = p.value,
+    stars = stars, p.value = p.value,
     include.mean = include.mean,
     include.n = include.n
   )
@@ -133,7 +133,7 @@ corr_tabel.data.frame <- function(.data,
 #' @param groups groups spezielle Gruppen  wie zB Korrelation zwischen den Geschlechtern al
 #' @param type Cor-Typ   default = "pearson" , type=c("pearson","spearman")
 #' @param cor_diagonale_up diagonale   Linksbuendig = TRUE
-#' @param sig.star,p.value Sternchen oder p-Werte
+#' @param stars,p.value Sternchen oder p-Werte
 #' @param include.mean Mittelwert mit SD
 #' @param include.n Anzahl N
 #' @examples
@@ -150,7 +150,7 @@ corr_tabel.formula <-
             type = c("pearson", "spearman"),
             exclude = NA, subset, na.action = na.pass,
             cor_diagonale_up = TRUE,
-            sig.star = TRUE, p.value = FALSE,
+            stars = TRUE, p.value = FALSE,
             include.mean = FALSE,
             include.n = TRUE)
   {
@@ -236,7 +236,7 @@ corr_tabel.formula <-
 #'
 corr_tabel2 <- function(...,
                         cor_diagonale_up = TRUE,
-                        sig.star = TRUE,
+                        stars = TRUE,
                         p.value = FALSE,
                         # mean = FALSE, # Veraltet
                         include.mean = FALSE,
@@ -261,7 +261,7 @@ corr_tabel2 <- function(...,
     # colnames(n)<- paste0(colnames(n), "_", "n" )
     r <- format_diagonale(Format2(ans$r, 2))
 
-    if (sig.star) {
+    if (stars) {
       p <- apply(ans$P, 2, function(x)
         cut(
           x,
@@ -373,7 +373,7 @@ corr_2 <- function(x, y = NULL, type = "pearson") {
 Corr2 <- function(x,
                  y = NULL,
                  type="pearson",
-                 sig.star,
+                 stars,
                  ...) {
   # cat("\nin funktion Corr2\n")
   names_x <- names(x)
@@ -385,7 +385,7 @@ Corr2 <- function(x,
   r<-ans$r[-k, k]
   p <- ans$P[-k, k]
   r <- rndr_r(r, include.symbol=FALSE)
-  r2<- if(sig.star) paste0(r, rndr_Stars(p))
+  r2<- if(stars) paste0(r, rndr_Stars(p))
         else   paste0(r, rndr_P(p, include.bracket=TRUE))
   data.frame(Characteristics = NA,
              N = ans$n[-k, k],
@@ -407,7 +407,7 @@ Corr1<- function(y,
                  n= nrow(y),
                  type="pearson",
                  include.p=FALSE,
-                 include.sig.star=TRUE,
+                 include.stars=TRUE,
                  cor_diagonale_up=TRUE,
                 # digits=2,
                  dimnames=FALSE# nur interner gebrauch zum Testen
@@ -431,7 +431,7 @@ Corr1<- function(y,
       pval <- rndr_P(mycor$P, include.bracket=TRUE)
       res <- matrix(paste0(res, pval), ncol = ncol(res))
     }
-    if(include.sig.star){
+    if(include.stars){
      # p <- mycor$P
     #  pval <- apply(p, 2, ffsigstars)
       pval <- rndr_Stars(mycor$P)
