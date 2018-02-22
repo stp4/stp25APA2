@@ -46,7 +46,9 @@ APA.formula <- function(x,
 #'      
 #' @param fun,na.action,direction  eigene Funktion na.action=na.pass
 #' (Auswertung ueeber die Funktionen \code{melt, cast}.)
-#' @param type moeglich sind \code{c("auto", "freq", "mean", "median", "ci", "freq.ci")} also Haufigkeit, Mittelwert, Median und neu sind 95 CIs
+#' @param type formula: \code{c("auto", "freq", "mean", "median", "ci", "freq.ci")} 
+#' xtabs: type = c("fischer", "odds","sensitivity", "chisquare","correlation", "r")
+#' 
 #' @param test,include.test,corr_test,include.p,include.sig.star    Sig test bei  \code{type = auto} moegliche Parameter sind  test=TRUE, test="conTest" oder "sapiro.test" fuer den Test auf Normalverteilung, fuer SPSS-like \code{test=="wilcox.test"}  oder \code{test=="kruskal.test"}
 #'  corr_test-ddefault ist  "pearson" c("pearson","spearman")
 #' @param cor_diagonale_up bei Correlation art der Formatierung

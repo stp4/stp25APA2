@@ -15,7 +15,6 @@
 \alias{APA_R2}
 \alias{APA_Ttest}
 \alias{APA_vif}
-\alias{APA.xtabs}
 \alias{APA_Xtabs}
 \title{APA Syle Table}
 \usage{
@@ -48,8 +47,6 @@ APA_Ttest(x, data, var.equal = FALSE, paired = FALSE,
   digits = 2, ...)
 
 APA_vif(..., caption = "VIF", notes = "")
-
-\method{APA}{xtabs}(x, ...)
 
 APA_Xtabs(x, data, ...)
 }
@@ -98,8 +95,6 @@ APA_R2: R2-Tabelle (noch nicht fretig)
 APA_Ttest: Berechnung von Mittelwerten und Mittelwertdifferenzen und des T-Test
 
 APA_vif:  variance inflation factor, aka VIF
-
-APA.xtabs Chi-Quadrat aus Kreuztabellen
 
 APA_Xtabs Kreuztabellen
 }

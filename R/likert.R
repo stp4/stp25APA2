@@ -324,7 +324,7 @@ Likert.formula<- function(x,
 }
 
 
-#' @rdname print
+#' @rdname Likert
 #' @export
 print.likert<-function(x){
   cat("\nnames: ", paste(names(x), collapse=", "),"\n")

@@ -53,8 +53,6 @@ Analyse von Likertskalen
 
 Farpalette für Likert-plot ist eine Kopie von \code{brewer.pal.likert} kann aber auch schwarz-weiss
 und hat blau-rot als default
-
-Plot Methode
 }
 \examples{
 library(stp25)

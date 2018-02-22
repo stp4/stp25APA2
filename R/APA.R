@@ -1,10 +1,10 @@
 #' APA Style Text-Ausgabe
 #' 
-#' APA erstellt einen einzelnen  Text als Ergebnis.
+#' Ausgabe von APA-Style formatiertem Text.
 #' 
 #' 
 #' @name APA
-#' @param x Objekt
+#' @param x Objekt fit, formula usw
 #' @param data data.frame wenn x eine Formel ist
 #' @param digits Nachkommastellen
 #' @param ... weitere Objekte
@@ -41,9 +41,11 @@ APA.NULL <- function(x, ...) {
 #' 
 #' @name APA2
 #' @param x Ein R Objekt oder eine Formel oder ein data.frame
+#' APA2.list: Liste mit Objekten (fits)
 #' @param data data.frame wenn x eine Formel ist
 #' @param caption,note Ueberschrift an Output
-#' @param digits Nachkommastellen
+#' @param digits Nachkommastellen 
+#'  APA2.list: Kommastellen bei uebergabe einer liste  muss exakt die Reighenfolge eingehalten werden.
 #' @param ... weitere Argumente
 #' @return html-String ueber cat sowi einen data.frame
 #' @export

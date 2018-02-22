@@ -1,5 +1,7 @@
-#' @rdname APA_
-#' @description APA.xtabs Chi-Quadrat aus Kreuztabellen
+
+#' \code{APA.xtabs}: Chi-Quadrat aus Kreuztabellen
+#' 
+#' @rdname APA
 #' @export
 APA.xtabs <- function(x, ... ) {
   x<-summary(x)
@@ -28,13 +30,6 @@ APA2.summary.table <- function(x, ...) {
 
 
 
-
-
-
-
- 
-
-
 #' @rdname APA2
 #' @description Kreuztabellen APA2.xtabs Formatiert xtabs() 2x2 Tabellen werden mit Haufigkeit wahlweise mit Prozent
 #' (verhalten wird ueber \code{margin = 2}) geseuert. Berechnet werden mittels
@@ -46,13 +41,9 @@ APA2.summary.table <- function(x, ...) {
 #'  auch hier mit \code{type = 2}. die Berechnung erfolgt hier mit \link{assocstats}
 #'  aus dem Packet \code{vcd}.
 #'
-#' @param type  APA2.xtabs: type = c("fischer", "odds","sensitivity", "chisquare","correlation", "r")bei 2x2-Tabellen Fischer-test und
 #' @param include.percent Prozent TRUE/FALSE
-#' @param margin Zeilenprozent, Spaltenprozent
-#' @param include.total default = FALSE total/sum
-#' @param include.total.columns columns total/sum
-#' @param include.total.sub  sum total/sum
-#' @param include.total.rows  rows total/sum
+#' @param margin,add.margins Zeilenprozent, Spaltenprozent
+#' @param include.total.columns,include.total.sub,include.total.rows xtabs: default = FALSE total/sum
 #' @export
 #' @examples
 #' 
@@ -214,7 +205,7 @@ Format_xtabs <- function(x, margin,
                          percent,
                          digits,
                          ...) {
-  Text("Format_xtabs percent: ", percent)
+  #Text("Format_xtabs percent: ", percent)
  # cat(" In Format_xtabs ")
   if(!add.margins ){
    # cat(" In Format_xtabs !add.margins ")

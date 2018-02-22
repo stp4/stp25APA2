@@ -475,22 +475,16 @@ Median2default <- function(x,
                            n = length(x),
                            median.style=get_my_options()$apa.style$mittelwert$median.style
                            ) {
-    
+    #style=IQR  quantile rndr_median_range
   calc_median <-
     function(x) {
       if (median.style == "IQR") {
         rndr_median(median(x), ifelse(n > 2, IQR(x), NA), digits)
-      }
-      else {
+      } else {
         rndr_median_quant(quantile(x, na.rm = TRUE), digits)
       }
     }
-  
-  
-  m <- if (is.numeric(x))
-    calc_median(x)
-  else
-    calc_median(as.numeric(x))
+    m <- if (is.numeric(x)) calc_median(x) else calc_median(as.numeric(x))
 
   data.frame(lev = "(median)",
              n = as.character(n),

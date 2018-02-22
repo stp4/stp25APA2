@@ -4,6 +4,7 @@
 \alias{rndr_}
 \alias{rndr_median}
 \alias{rndr_median_quant}
+\alias{rndr_median_range}
 \alias{rndr_mean}
 \alias{rndr_ods}
 \alias{rndr_percent}
@@ -39,6 +40,8 @@ rndr_(...)
 rndr_median(m, iqr, digits)
 
 rndr_median_quant(x, digits = 2)
+
+rndr_median_range(m, iqr, mn, mx, digits = 2)
 
 rndr_mean(m, s, digits)
 
@@ -184,6 +187,7 @@ http://winvector.github.io/APAsig/APAsig.html
 }
 \examples{
 rndr_(1.234, 3)
+
 rndr_percent(c(.2568, 99, 0.02568), c(4, 569, 25), digits = 1)
 rndr_percent(10, 3, F, 2)
 
@@ -202,3 +206,4 @@ rndr_rmsea_cfa(c(0, 0.050, 0.080, .051, .081) )
 rndr_cfi_cfa(c(.970,1.00, .950-.969,.8))
 rndr_nfi_cfa(c(.950, 1.00, .900,  .949))
 }
+\keyword{internal}

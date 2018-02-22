@@ -1,18 +1,15 @@
 #' @rdname APA2
 #' @description Ausgabe von Regressions Tabelle nach der APA-Style vorgabe. Die Funktion
 #' ist eine Kopie von  texreg:::aggregate.matrix.
-#' @param x  APA2.list: Liste mit Objekten (fits)
-#' @param digits APA2.list: Kommastellen bei uebergabe einer liste  muss exakt die Reighenfolge eingehalten werden.
 #' @param custom.model.names Namen ner Modelle
 #' @param include.custom liste mit Statistiken für Gofs also zB F-Tests
 #' @param include.se,include.ci,include.odds SE, 95-Ci, OR noch nicht fertig
-#' @param include.p,include.stars p-Werte explizit
 #' @param include.ftest,include.loglik  noch nicht fertig
 #' @param include.r,include.pseudo pseudo R
 #' @param include.aic,include.bic geht nur zusammen
 #' @param ci.level Ci default 95 Prozent
 #' @param rgroup Zwischen Beschriftung
-#' @param ... an texreg:::extract
+
 #'
 #' @return invisible data.frame und Output mit html/knit oder Text.
 #' @export
@@ -47,7 +44,7 @@ APA2.list <-
             include.odds = FALSE,
             include.se = if (include.ci) FALSE else TRUE,
             include.p = FALSE,
-            include.stars = if (include.p) FALSE else TRUE,
+            include.sig.star = if (include.p) FALSE else TRUE,
             include.ftest = FALSE,
             include.loglik = FALSE,
             include.pseudo = TRUE,
@@ -177,7 +174,7 @@ APA2.list <-
           models[[i]]@ci.up  # models[[i]]@coef - (z * models[[i]]@se)
         ci <- rndr_CI(cbind(cil, ciu), digits)
       } else ci<- NA
-      if (include.stars ){
+      if (include.sig.star ){
         if(include.b)  cf <- paste0(cf, p_stars)
         else if(include.odds) or <- paste0(or, p_stars)
       }

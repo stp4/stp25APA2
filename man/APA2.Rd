@@ -86,8 +86,8 @@ APA2(x, ...)
 
 \method{APA2}{likert}(x, caption = "", note = "", col_names = NULL,
   print_col = NULL, ..., ReferenceZero = NULL, type = "percent",
-  include.mean = TRUE, na.exclude = FALSE, nlevels = x$nlevels,
-  labels = c("low", "neutral", "high"), order = FALSE)
+  include.mean = TRUE, na.exclude = FALSE, labels = c("low", "neutral",
+  "high"), order = FALSE)
 
 \method{APA2}{manova}(x, test = "Wilks", caption = "MANOVA", note = "",
   output = c("anova", "manova"))
@@ -110,8 +110,8 @@ APA2(x, ...)
 \method{APA2}{list}(x, caption = "", note = "", digits = 2,
   custom.model.names = NULL, include.custom = NULL, include.b = TRUE,
   include.ci = FALSE, include.odds = FALSE, include.se = if (include.ci)
-  FALSE else TRUE, include.p = FALSE, include.stars = if (include.p) FALSE
-  else TRUE, include.ftest = FALSE, include.loglik = FALSE,
+  FALSE else TRUE, include.p = FALSE, include.sig.star = if (include.p)
+  FALSE else TRUE, include.ftest = FALSE, include.loglik = FALSE,
   include.pseudo = TRUE, include.r = TRUE, include.aic = TRUE,
   include.bic = include.aic, ci.level = 0.95, rgroup = c("Parameter",
   "Goodness of fit"), output = stp25output:::which_output(), ...)
@@ -157,7 +157,8 @@ APA2(x, ...)
 \method{APA2}{loglm}(x, ...)
 }
 \arguments{
-\item{x}{Ein R Objekt oder eine Formel oder ein data.frame}
+\item{x}{Ein R Objekt oder eine Formel oder ein data.frame
+APA2.list: Liste mit Objekten (fits)}
 
 \item{...}{weitere Argumente}
 
@@ -170,7 +171,8 @@ APA2(x, ...)
 \item{fun, na.action, direction}{eigene Funktion na.action=na.pass
 (Auswertung ueeber die Funktionen \code{melt, cast}.)}
 
-\item{type}{moeglich sind \code{c("auto", "freq", "mean", "median", "ci", "freq.ci")} also Haufigkeit, Mittelwert, Median und neu sind 95 CIs}
+\item{type}{formula: \code{c("auto", "freq", "mean", "median", "ci", "freq.ci")} 
+xtabs: type = c("fischer", "odds","sensitivity", "chisquare","correlation", "r")}
 
 \item{test, include.test, corr_test, include.p, include.sig.star}{Sig test bei  \code{type = auto} moegliche Parameter sind  test=TRUE, test="conTest" oder "sapiro.test" fuer den Test auf Normalverteilung, fuer SPSS-like \code{test=="wilcox.test"}  oder \code{test=="kruskal.test"}
 corr_test-ddefault ist  "pearson" c("pearson","spearman")}
@@ -185,13 +187,10 @@ corr_test-ddefault ist  "pearson" c("pearson","spearman")}
 
 \item{include.n, include.all.n, include.header.n, include.total}{N mit ausgeben}
 
-\item{include.total}{default = FALSE total/sum}
-
-\item{include.p, include.stars}{p-Werte explizit}
-
 \item{include.names, include.labels}{Beschriftung der zeilen}
 
-\item{digits}{Nachkommastellen}
+\item{digits}{Nachkommastellen 
+APA2.list: Kommastellen bei uebergabe einer liste  muss exakt die Reighenfolge eingehalten werden.}
 
 \item{digits.mean, digits.percent}{Nachkommastellen}
 
@@ -199,14 +198,10 @@ corr_test-ddefault ist  "pearson" c("pearson","spearman")}
 
 \item{include.se, include.ci, include.odds}{SE, 95-Ci, OR noch nicht fertig}
 
-\item{ReferenceZero, labels}{APA2.likert: ReferenceZero Neutrales Element in Kombination mit
-labels c("low", "neutral", "high")}
+\item{ReferenceZero, labels}{Likert: ReferenceZero=2 Neutrales Element in Kombination mit
+labels = c("low", "neutral", "high")}
 
-\item{include.mean}{APA2.likert: Mittelwerte T/F}
-
-\item{na.exclude}{APA2.likert: NAs entfernen}
-
-\item{nlevels}{APA2.likert: nicht ändern}
+\item{include.mean}{Likert: Mittelwerte T/F}
 
 \item{fit_predict}{lda: MASS predict.lda}
 
@@ -232,25 +227,11 @@ labels c("low", "neutral", "high")}
 
 \item{anova_type}{bei lme:  "F"  F-werte (wie SPSS) oder Chi (car::Anova)}
 
-\item{include.total.columns}{columns total/sum}
-
-\item{include.total.sub}{sum total/sum}
-
-\item{include.total.rows}{rows total/sum}
+\item{include.total.columns, include.total.sub, include.total.rows}{xtabs: default = FALSE total/sum}
 
 \item{include.percent}{Prozent TRUE/FALSE}
 
-\item{margin}{Zeilenprozent, Spaltenprozent}
-
-\item{type}{APA2: c(1, 2), oder c("Freq", "Precent")}
-
-\item{x}{APA2.list: Liste mit Objekten (fits)}
-
-\item{digits}{APA2.list: Kommastellen bei uebergabe einer liste  muss exakt die Reighenfolge eingehalten werden.}
-
-\item{...}{an texreg:::extract}
-
-\item{type}{APA2.xtabs: type = c("fischer", "odds","sensitivity", "chisquare","correlation", "r")bei 2x2-Tabellen Fischer-test und}
+\item{margin, add.margins}{Zeilenprozent, Spaltenprozent}
 }
 \value{
 html-String ueber cat sowi einen data.frame
@@ -276,6 +257,8 @@ Die Funktion \code{APA2.formula} estellt die Standard-Tabellen (analog wie die H
      \code{set_my_options(prozent=list(digits=c(1,0), style=2))}
      
      \code{get_my_options()$apa.style$prozent}
+
+Likert type : c(1, 2), oder c("Freq", "Precent")
 
 MANOVA: APA2(x, , test="Wilks") test : "Wilks", "Pillai"
 

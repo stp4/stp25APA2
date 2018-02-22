@@ -11,8 +11,10 @@
 #' @param ... alles an Format2()
 #' @return Character-String
 #' @export
+#' @keywords internal
 #' @examples
 #' rndr_(1.234, 3)
+#' 
 rndr_ <- function(...) Format2(...)
 
 
@@ -37,7 +39,20 @@ rndr_median_quant<- function(x, digits=2){
   )
 }
 
-
+#' @rdname rndr_
+#' @export
+# noch nicht umgesetzt (Tabelle(..., APA=TRUE))
+rndr_median_range <- function (m, iqr, mn, mx,
+                               digits = 2) {
+  paste0(
+    rndr_median(m, iqr, digits),
+    ", range ",
+    Format2(mn, digits),
+    " to ",
+    Format2(mx, digits),
+    ")"
+  )
+}
 
 
 
