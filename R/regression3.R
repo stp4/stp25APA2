@@ -141,7 +141,7 @@ APA_Table <- function(...,
                       include.beta = FALSE,
                       include.eta = TRUE,
                       include.odds = FALSE,
-                      include.ci = NULL,
+                      include.ci = FALSE,
                       
                       
                       #Fehler abfangeb
@@ -167,6 +167,10 @@ APA_Table <- function(...,
                       rgroup = c("Parameter", "Goodness of fit"))
 # Parameter Goodness of fit)
 {
+  
+  if(include.ftest) Text("Achtung include.ftest noch nicht fertig!")
+  if(include.beta) Text("Achtung include.beta noch nicht fertig!")
+   
   result <- NULL
   type <-  match.arg(type, several.ok = TRUE)
   # print(include.pseudo)
@@ -250,7 +254,7 @@ APA_Table <- function(...,
       #                          custom.model.names = names,
       #                          col_names= col_names,
       #                          digits = digits,
-      #                          p.value=include.p,
+      #                        
       #                          rgroup = rgroup, # Parameter Goodness of fit
       #                          include.pseudo=include.pseudo,
       #                          include.ftest=include.ftest,
@@ -441,7 +445,7 @@ type_texreg <- function(list,
     # print(res)
   }
   # reset p-value -----------------------------
-  if (p.value) {
+  if (include.p) {
     assignInNamespace("stars.string", old_stars.string, "texreg")
   }
   texreg:::get.data(list) # ruckgabe der Ergebnisse als liste
