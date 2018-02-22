@@ -1,10 +1,10 @@
+
+#' Likert type : c(1, 2), oder c("Freq", "Precent")
+#' 
 #' @rdname APA2
-#' @param type APA2: c(1, 2), oder c("Freq", "Precent")
-#' @param ReferenceZero,labels APA2.likert: ReferenceZero Neutrales Element in Kombination mit
-#'  labels c("low", "neutral", "high")
-#' @param include.mean APA2.likert: Mittelwerte T/F
-#' @param na.exclude APA2.likert: NAs entfernen
-#' @param nlevels APA2.likert: nicht ändern
+#' @param ReferenceZero,labels Likert: ReferenceZero=2 Neutrales Element in Kombination mit
+#'  labels = c("low", "neutral", "high")
+#' @param include.mean  Likert: Mittelwerte T/F
 #' @export
 APA2.likert <- function(x,
                         caption = "" ,
@@ -16,16 +16,18 @@ APA2.likert <- function(x,
                         type = "percent",
                         include.mean = TRUE,
                         na.exclude = FALSE,
-                        nlevels = x$nlevels,
+                        
                         labels = c("low", "neutral", "high"),
                         order = FALSE) {
   RowSums2 <-  function(x)  if (is.vector(x))   x  else   rowSums(x, na.rm = TRUE)
+ # nlevels = x$nlevels
   
+  #gelöscht @param nlevels APA2.likert: nicht ändern
   if (!is.null(ReferenceZero)) {
     if (is.character(ReferenceZero))
       ReferenceZero <- which(x$levels %in% ReferenceZero)
     else if (!is.numeric(ReferenceZero))
-      ReferenceZero <- median(1:nlevels)
+      ReferenceZero <- median(1:x$nlevels)
     
     cat(ReferenceZero, "\\n")
     
@@ -33,13 +35,13 @@ APA2.likert <- function(x,
       freq <- cbind(
         lowrange = RowSums2(x$freq[, 1:(ReferenceZero - 1)]),
         neutral = x$freq[, ReferenceZero],
-        highrange = RowSums2(x$freq[, (ReferenceZero + 1):nlevels])
+        highrange = RowSums2(x$freq[, (ReferenceZero + 1):x$nlevels])
       )
       colnames(freq) <-
         c(
           paste0(labels[1], "(1:", ReferenceZero - 1, ")"),
           paste0(labels[2], "(", ReferenceZero, ")"),
-          paste0(labels[3], "(", ReferenceZero + 1, ":", nlevels, ")")
+          paste0(labels[3], "(", ReferenceZero + 1, ":", x$nlevels, ")")
         )
       x$freq <- freq
       x$freq.na <- if (names(x$freq.na)[ncol(x$freq.na)] == "NA")
@@ -50,10 +52,10 @@ APA2.likert <- function(x,
     } else{
       freq <-
         cbind(lowrange = RowSums2(x$freq[, 1:floor(ReferenceZero)]),
-              highrange = RowSums2(x$freq[, ceiling(ReferenceZero):nlevels]))
+              highrange = RowSums2(x$freq[, ceiling(ReferenceZero):x$nlevels]))
       colnames(freq) <-
         c(paste0(labels[1], "(1:", floor(ReferenceZero), ")"),
-          paste0(labels[3], "(", ceiling(ReferenceZero), ":", nlevels, ")"))
+          paste0(labels[3], "(", ceiling(ReferenceZero), ":", x$nlevels, ")"))
       x$freq <- freq
       x$freq.na <- if (names(x$freq.na)[ncol(x$freq.na)] == "NA")
         cbind(freq, x$freq.na[ncol(x$freq.na)])
