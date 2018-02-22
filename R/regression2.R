@@ -334,7 +334,7 @@ APA2.lme <- function(x,
     
     goodnes <- cbind(
       Obs = fit_sum$dims[["N"]],
-      round(r.squared(x)[, 4:6], 2) ,
+      round(R2(x), 2) ,
       BIC = round(fit_sum$BIC, 2),
       logLik = round(c(fit_sum$logLik), 2)
     )

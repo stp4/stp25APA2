@@ -213,8 +213,8 @@ APA_Table <- function(...,
         names = names,
         digits = digits,
         single.row = single.row,
-        stars = stars,
-        p.value = p.value,
+        include.stars = include.stars,
+        include.p  = include.p ,
         include.variance = include.variance
       )
     }
@@ -267,8 +267,8 @@ APA_Table <- function(...,
         note = note,
         digits = digits,
         single.row = single.row,
-        stars = stars,
-        p.value = p.value,
+        include.stars = include.stars,
+        include.p = include.p ,
         names = names,
         include.variance = include.variance
       )
@@ -357,8 +357,8 @@ type_texreg <- function(list,
                         names = NULL,
                         digits = 2,
                         single.row = TRUE,
-                        stars = TRUE,
-                        p.value = FALSE,
+                        include.stars = TRUE,
+                        include.p  = FALSE,
                         ci.force = FALSE,
                         include.variance = TRUE,
                         output = stp25output:::which_output(),
@@ -385,7 +385,7 @@ type_texreg <- function(list,
   }
 
 
-  if (p.value) {
+  if (include.p) {
     old_stars.string <- texreg:::stars.string  # texreg::stars.string
     assignInNamespace("stars.string", stars.string, "texreg")
   }

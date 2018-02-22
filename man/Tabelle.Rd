@@ -22,9 +22,9 @@ Tabelle2(...)
   digits = NULL, APA = FALSE, test = FALSE, na.action = na.pass,
   exclude = NA, include.n = TRUE, include.nr = FALSE,
   include.total = FALSE, include.test = test, include.p = TRUE,
-  include.sig.star = FALSE, corr_test = "pearson",
-  cor_diagonale_up = TRUE, max_factor_length = 35, order = FALSE,
-  decreasing = FALSE, useconTest = FALSE, normality.test = FALSE)
+  include.stars = FALSE, corr_test = "pearson", cor_diagonale_up = TRUE,
+  max_factor_length = 35, order = FALSE, decreasing = FALSE,
+  useconTest = FALSE, normality.test = FALSE)
 
 Describe(x, ...)
 
@@ -34,13 +34,13 @@ Describe(x, ...)
 errate_statistik3(..., type = NULL, caption = "", note = "",
   digits = NULL, test = FALSE, na.action = na.pass, exclude = NA,
   include.n = TRUE, include.nr = FALSE, include.total = FALSE,
-  include.test = test, include.p = TRUE, include.sig.star = FALSE,
+  include.test = test, include.p = TRUE, include.stars = FALSE,
   corr_test = "pearson", cor_diagonale_up = TRUE, max_factor_length = 35,
   order = FALSE, decreasing = FALSE, useconTest = FALSE,
   normality.test = FALSE)
 
 corr_tabel_X(..., type = c("pearson", "spearman"), exclude = NA, subset,
-  na.action = na.pass, cor_diagonale_up = TRUE, sig.star = TRUE,
+  na.action = na.pass, cor_diagonale_up = TRUE, stars = TRUE,
   p.value = FALSE, include.mean = FALSE, include.n = TRUE)
 
 conTest(fml, data, test_name = TRUE)
@@ -62,7 +62,7 @@ catTest(fml, data, include.test = "chisq.test")
 
 \item{APA}{APA2 Style TRUE/FALSE}
 
-\item{test, include.test, include.p, include.sig.star}{Signifikanz Test}
+\item{test, include.test, include.p, include.stars}{Signifikanz Test}
 
 \item{na.action, exclude}{an Formula}
 

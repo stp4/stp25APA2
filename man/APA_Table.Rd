@@ -16,7 +16,7 @@ APA_Table(..., caption = NULL, note = NULL, type = c("default", "long",
   "broom", "texreg", "stargazer", "sjPlot", "anova"), names = NULL,
   custom.model.names = NULL, digits = 2, include.b = TRUE,
   include.se = TRUE, include.beta = FALSE, include.eta = TRUE,
-  include.odds = FALSE, include.ci = NULL, include.p = FALSE,
+  include.odds = FALSE, include.ci = FALSE, include.p = FALSE,
   include.stars = if (include.p) FALSE else TRUE, include.variance = TRUE,
   include.r = TRUE, include.pseudo = FALSE, include.ftest = FALSE,
   include.loglik = FALSE, include.custom = NULL, include.aic = TRUE,
@@ -27,7 +27,7 @@ type_default(x, caption = NULL, note = NULL, custom.model.names = "",
   include.ci = FALSE, include.odds = FALSE, digits = digits)
 
 type_texreg(list, caption = "", note = "", names = NULL, digits = 2,
-  single.row = TRUE, sig.stars = TRUE, p.value = FALSE,
+  single.row = TRUE, include.stars = TRUE, include.p = FALSE,
   ci.force = FALSE, include.variance = TRUE,
   output = stp25output:::which_output(), custom.model.names = if
   (is.null(names)) paste0("(", 1:length(list), ")") else names,

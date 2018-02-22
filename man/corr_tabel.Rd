@@ -14,26 +14,25 @@
 corr_tabel(x, ...)
 
 \method{corr_tabel}{data.frame}(.data, ..., by = NULL, groups = NULL,
-  type = c("pearson", "spearman"), cor_diagonale_up = TRUE,
-  sig.star = TRUE, p.value = FALSE, include.mean = FALSE,
-  include.n = FALSE)
+  type = c("pearson", "spearman"), cor_diagonale_up = TRUE, stars = TRUE,
+  p.value = FALSE, include.mean = FALSE, include.n = FALSE)
 
 \method{corr_tabel}{formula}(Formula, data, groups = NULL,
   type = c("pearson", "spearman"), exclude = NA, subset,
-  na.action = na.pass, cor_diagonale_up = TRUE, sig.star = TRUE,
+  na.action = na.pass, cor_diagonale_up = TRUE, stars = TRUE,
   p.value = FALSE, include.mean = FALSE, include.n = TRUE)
 
-corr_tabel2(..., cor_diagonale_up = TRUE, sig.star = TRUE,
-  p.value = FALSE, include.mean = FALSE, include.n = TRUE)
+corr_tabel2(..., cor_diagonale_up = TRUE, stars = TRUE, p.value = FALSE,
+  include.mean = FALSE, include.n = TRUE)
 
 corr_1(x, type = "pearson")
 
 corr_2(x, y = NULL, type = "pearson")
 
-Corr2(x, y = NULL, type = "pearson", sig.star, ...)
+Corr2(x, y = NULL, type = "pearson", stars, ...)
 
 Corr1(y, n = nrow(y), type = "pearson", include.p = FALSE,
-  include.sig.star = TRUE, cor_diagonale_up = TRUE, dimnames = FALSE)
+  include.stars = TRUE, cor_diagonale_up = TRUE, dimnames = FALSE)
 }
 \arguments{
 \item{.data}{ist das erste Obkjekt}
@@ -47,7 +46,7 @@ Gruppe gewaelt werdendefault = NULL}
 
 \item{cor_diagonale_up}{diagonale   Linksbuendig = TRUE}
 
-\item{sig.star, p.value}{Sternchen oder p-Werte}
+\item{stars, p.value}{Sternchen oder p-Werte}
 
 \item{include.mean}{Mittelwert mit SD}
 

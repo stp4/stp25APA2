@@ -64,15 +64,13 @@ APA2(x, ...)
 \method{APA2}{formula}(x, data = NULL, caption = "", fun = NULL,
   type = c("auto", "freq", "mean", "median", "ci", "multiresponse", "cohen.d",
   "effsize", "freq.ci", "describe"), note = "", na.action = na.pass,
-  test = FALSE, sig.star = TRUE, p.value = FALSE, pvalues = if (p.value)
-  p.value else FALSE, print.n = NULL, corr_test = "pearson",
-  cor_diagonale_up = TRUE, direction = "long", order = FALSE,
-  decreasing = TRUE, total = FALSE, use.level = 1, include.n = TRUE,
-  include.all.n = print.n, include.header.n = TRUE, include.total = total,
-  include.test = test, include.p = pvalues, include.sig.star = sig.star,
-  include.names = FALSE, include.labels = TRUE, digits = NULL,
-  digits.mean = if (!is.null(digits)) c(digits, digits) else NULL,
-  digits.percent = if (is.null(digits))
+  test = FALSE, corr_test = "pearson", cor_diagonale_up = TRUE,
+  direction = "long", order = FALSE, decreasing = TRUE, use.level = 1,
+  include.n = TRUE, include.all.n = NULL, include.header.n = TRUE,
+  include.total = FALSE, include.test = test, include.p = FALSE,
+  include.stars = TRUE, include.names = FALSE, include.labels = TRUE,
+  digits = NULL, digits.mean = if (!is.null(digits)) c(digits, digits) else
+  NULL, digits.percent = if (is.null(digits))
   options()$stp25$apa.style$prozent$digits else c(digits, 0), output = TRUE,
   ...)
 
@@ -110,8 +108,8 @@ APA2(x, ...)
 \method{APA2}{list}(x, caption = "", note = "", digits = 2,
   custom.model.names = NULL, include.custom = NULL, include.b = TRUE,
   include.ci = FALSE, include.odds = FALSE, include.se = if (include.ci)
-  FALSE else TRUE, include.p = FALSE, include.sig.star = if (include.p)
-  FALSE else TRUE, include.ftest = FALSE, include.loglik = FALSE,
+  FALSE else TRUE, include.p = FALSE, include.stars = if (include.p) FALSE
+  else TRUE, include.ftest = FALSE, include.loglik = FALSE,
   include.pseudo = TRUE, include.r = TRUE, include.aic = TRUE,
   include.bic = include.aic, ci.level = 0.95, rgroup = c("Parameter",
   "Goodness of fit"), output = stp25output:::which_output(), ...)
@@ -174,10 +172,8 @@ APA2.list: Liste mit Objekten (fits)}
 \item{type}{formula: \code{c("auto", "freq", "mean", "median", "ci", "freq.ci")} 
 xtabs: type = c("fischer", "odds","sensitivity", "chisquare","correlation", "r")}
 
-\item{test, include.test, corr_test, include.p, include.sig.star}{Sig test bei  \code{type = auto} moegliche Parameter sind  test=TRUE, test="conTest" oder "sapiro.test" fuer den Test auf Normalverteilung, fuer SPSS-like \code{test=="wilcox.test"}  oder \code{test=="kruskal.test"}
+\item{test, include.test, corr_test, include.p, include.stars}{Sig test bei  \code{type = auto} moegliche Parameter sind  test=TRUE, test="conTest" oder "sapiro.test" fuer den Test auf Normalverteilung, fuer SPSS-like \code{test=="wilcox.test"}  oder \code{test=="kruskal.test"}
 corr_test-ddefault ist  "pearson" c("pearson","spearman")}
-
-\item{print.n, sig.star, pvalues, total}{veraltet jetzt include.n verwenden}
 
 \item{cor_diagonale_up}{bei Correlation art der Formatierung}
 
@@ -311,7 +307,7 @@ APA2(~ g, hyper, caption="Einfache Tabelle")
 APA2(chol0+chol1 ~ g, hyper, caption="Spalte mit Characteristik loeschen", print_col=-2)
 APA2(gew + rrs0 ~ g, hyper, print.n=FALSE, test=TRUE)
 APA2(~chol0+chol1~chol6+chol12, hyper, caption="Korrelation", test=TRUE)
-APA2(~chol0+chol1+chol6+chol12, hyper, caption="Korrelation", test=TRUE, sig.star=FALSE)
+APA2(~chol0+chol1+chol6+chol12, hyper, caption="Korrelation", test=TRUE, stars=FALSE)
 
 #End()
 
