@@ -43,7 +43,7 @@ APA_R2(..., caption, note)
 
 APA_Ttest(x, data, var.equal = FALSE, paired = FALSE,
   alternative = "two.sided", include.mean = TRUE, include.d = TRUE,
-  include.mean.diff = TRUE, include.se = TRUE, type = "t.test",
+  include.mean.diff = TRUE, include.se = FALSE, type = "t.test",
   digits = 2, ...)
 
 APA_vif(..., caption = "VIF", notes = "")
@@ -84,7 +84,6 @@ as the first argument.
 
 APA_Correlation: Korrelationstabelle (Interkorrelationen mit hilfe
 der Funktion \code{\link[Hmisc]{rcorr}}. Erlaubt ist die getrennte Auswertung ueber groups bzw mit by.
-Interne Funktion \code{\link{corr_tabel}}.
 
 APA_ICC  Intra-Klassen-Korrelation ( mit psych ).
 

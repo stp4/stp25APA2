@@ -26,7 +26,7 @@ APA.biVar <- function(x, ...) {
 #' @rdname APA_
 #' @description APA_Correlation: Korrelationstabelle (Interkorrelationen mit hilfe
 #' der Funktion \code{\link[Hmisc]{rcorr}}. Erlaubt ist die getrennte Auswertung ueber groups bzw mit by.
-#' Interne Funktion \code{\link{corr_tabel}}.
+#' 
 #' @export
 #' @examples
 #' n<- 2*8
@@ -71,28 +71,25 @@ APA_Correlation <-
 #' interne Funktion fuer die Korrelationen
 #' 
 #' Die Funktion \code{corr_tabel}: ist die interne Funktion die die Berechnungen erstellt.
-#' @name intern_cor
-#' @rdname intern_cor
+#' 
 #' @return corr_tabel: liste mit "r",        "n",        "P",        "mean",     "row_name"
-#' @export
+#' @keywords internal
 corr_tabel <- function(x, ...) {
   UseMethod("corr_tabel")
 }
 
 
-#' @rdname intern_cor
+#' @rdname corr_tabel
 #' @description corr_tabel.data.frame ist die Data.Frame- methode bei der die Variablennamen ueber das ...
 #' Argument uebergeben werden. Die Funktion arbeitet intern mit der corr_tabel.formula Funktion.
 #' @param .data ist das erste Obkjekt
 #' @param by  wenn das erste Argument die Daten sind kann hier die
 #' Gruppe gewaelt werdendefault = NULL
-#' @export
 #' @examples
 #'
 #' #-- corr_tabel.data.frame
-#' corr_tabel(data, a, b, d)
+#' # corr_tabel(data, a, b, d)
 #'
-
 corr_tabel.data.frame <- function(.data,
                                   ...,
                                   by = NULL,
@@ -129,7 +126,7 @@ corr_tabel.data.frame <- function(.data,
   )
 }
 
-#' @rdname intern_cor
+#' @rdname corr_tabel
 #' @param Formula Ist das erste Element
 #' @param data   daten fuer Formula-Methode
 #' @param exclude,subset,na.action  fuer Formula Data (geht aber nicht)
@@ -139,14 +136,13 @@ corr_tabel.data.frame <- function(.data,
 #' @param sig.star,p.value Sternchen oder p-Werte
 #' @param include.mean Mittelwert mit SD
 #' @param include.n Anzahl N
-#' @export
 #' @examples
 #' #-- corr_tabel.formula
 #'
-#' corr_tabel(a+b~d+c, data)
-#' corr_tabel(a+b+c ~ d, data)
+#' #corr_tabel(a+b~d+c, data)
+#' #corr_tabel(a+b+c ~ d, data)
 #'
-#' corr_tabel(a+b+c~d, data, groups = ~g)
+#' #corr_tabel(a+b+c~d, data, groups = ~g)
 #'
 corr_tabel.formula <-
   function (Formula, data,
@@ -230,10 +226,9 @@ corr_tabel.formula <-
 }
 
 
-#' @rdname intern_cor
+#' @rdname corr_tabel
 #' @description corr_tabel2 ist die Ausgabe von corr_tabel als Formatierte Tabelle
 #' @return corr_tabel2: data.frame()
-#' @export
 #' @examples
 #' #--corr_tabel2
 #'
@@ -317,10 +312,10 @@ corr_tabel2 <- function(...,
 
 #-- Helper ---------------
 
-#' @rdname intern_cor
+#' @rdname corr_tabel
 #' @examples
 #' #-- corr_1
-#' stp25APA2:::corr_1(data[1:3])
+#' # stp25APA2:::corr_1(data[1:3])
 corr_1 <- function(x, type = "pearson") {
   names_x <- names(x)
   #if(ncol(x)<2) (warnings("Zu wenig Variablen"))
@@ -331,7 +326,7 @@ corr_1 <- function(x, type = "pearson") {
   ans
 }
 
-#' @rdname intern_cor
+#' @rdname corr_tabel
 #' @examples
 #' #-- corr_2
 #' # stp25APA2:::corr_2(data[1:3], data[4])
@@ -367,13 +362,13 @@ corr_2 <- function(x, y = NULL, type = "pearson") {
   ans
 }
 
-#' @rdname intern_cor
+#' @rdname corr_tabel
 #' @description Die Interne Fznction \code{Corr2} wird in APA2 verwendete Korrelation
 #' @examples
 #'
 #' #-- Corr2
 #' # APA2(a+b+c~d, data )
-#' stp25APA2:::Corr2(data[1:3], data[4], "pearson", TRUE)
+#' #stp25APA2:::Corr2(data[1:3], data[4], "pearson", TRUE)
 #'
 Corr2 <- function(x,
                  y = NULL,
@@ -401,14 +396,13 @@ Corr2 <- function(x,
              stringsAsFactors = F)
 }
 
-#' @rdname intern_cor
-#' @description Die Interne Fznction \code{Corr2} wird in APA2 verwendete Korrelation
+#' @rdname corr_tabel
 #' @examples
 #'
 #' #-- Corr1
 #' # APA2(~a+b+cd, data)
-#' stp25APA2:::Corr1(data[1:3], dimnames=TRUE)
-#' stp25APA2:::Corr1(data[1:3], dimnames=TRUE, include.p=TRUE)
+#' #stp25APA2:::Corr1(data[1:3], dimnames=TRUE)
+#' #stp25APA2:::Corr1(data[1:3], dimnames=TRUE, include.p=TRUE)
 Corr1<- function(y,
                  n= nrow(y),
                  type="pearson",
@@ -453,9 +447,3 @@ Corr1<- function(y,
   if(dimnames) dimnames(res)<- dimnames(mycor$r)
   res
 }
-
-
-
-
-
- 
