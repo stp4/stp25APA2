@@ -14,18 +14,17 @@ APA_Table_Anova(myfits, caption, note, names, include.eta)
 
 APA_Table(..., caption = NULL, note = NULL, type = c("default", "long",
   "broom", "texreg", "stargazer", "sjPlot", "anova"), names = NULL,
-  custom.model.names = NULL, digits = 2, sig.stars = TRUE,
-  p.value = FALSE, include.b = TRUE, include.se = TRUE,
-  include.beta = FALSE, include.eta = TRUE, include.odds = FALSE,
-  include.ci = NULL, include.CI = if (!is.null(include.ci)) include.ci else
-  FALSE, include.p = p.value, include.stars = if (include.p) FALSE else
-  TRUE, include.variance = TRUE, include.r = TRUE, include.pseudo = FALSE,
-  include.ftest = FALSE, include.loglik = FALSE, include.custom = NULL,
-  include.aic = TRUE, include.bic = include.aic, ci.level = 0.95,
-  single.row = TRUE, rgroup = c("Parameter", "Goodness of fit"))
+  custom.model.names = NULL, digits = 2, include.b = TRUE,
+  include.se = TRUE, include.beta = FALSE, include.eta = TRUE,
+  include.odds = FALSE, include.ci = NULL, include.p = FALSE,
+  include.stars = if (include.p) FALSE else TRUE, include.variance = TRUE,
+  include.r = TRUE, include.pseudo = FALSE, include.ftest = FALSE,
+  include.loglik = FALSE, include.custom = NULL, include.aic = TRUE,
+  include.bic = include.aic, ci.level = 0.95, single.row = TRUE,
+  rgroup = c("Parameter", "Goodness of fit"))
 
 type_default(x, caption = NULL, note = NULL, custom.model.names = "",
-  include.CI = FALSE, include.odds = FALSE, digits = digits)
+  include.ci = FALSE, include.odds = FALSE, digits = digits)
 
 type_texreg(list, caption = "", note = "", names = NULL, digits = 2,
   single.row = TRUE, sig.stars = TRUE, p.value = FALSE,
@@ -57,11 +56,9 @@ regression_output(fits, caption = "", note = "",
 
 \item{digits}{Kommastellen auch als Matrix bei type =long}
 
-\item{sig.stars, p.value}{Obsolet}
-
 \item{include.b, include.se, include.beta, include.odds}{Parameter, b=estimate, OR exp(b)}
 
-\item{include.ci, include.CI, ci.level}{95-CI}
+\item{include.ci, ci.level}{95-CI}
 
 \item{include.p, include.stars}{Sternchen und P-Werte}
 

@@ -1,16 +1,14 @@
 #' Regressions Tabelle
 #'
 #' Erstellt APA-Style Tabellen aus R-Objekten (lm, glm,lmer, usw). 
-#' @name APA_Table
 #' @rdname APA_Table
 #' @param ... Modelle
 #' @param caption,note,names,custom.model.names,rgroup rgroup:ype="long" long die Zwischenueberschrift  Beschriftung
 #' @param type type = c("default", "broom","long", "texreg", "stargazer", "sjPlot","anova")
 #' @param digits Kommastellen auch als Matrix bei type =long
-#' @param sig.stars,p.value Obsolet
 #' @param include.b,include.se,include.beta,include.odds Parameter, b=estimate, OR exp(b)
 #' @param include.eta Eta bei Anova
-#' @param include.ci,include.CI,ci.level 95-CI
+#' @param include.ci,ci.level 95-CI
 #' @param include.p,include.stars Sternchen und P-Werte
 #' @param include.variance Variance
 #' @param include.r,include.pseudo R-Quadrat
@@ -18,7 +16,7 @@
 #' @param include.custom Liste mit eigenen Einträgen
 #' @param include.aic,include.bic AIC BIC
 #' @param single.row Agrument texreg = TRUE
-#'
+#' 
 #' @return invisible data.frame und Output mit html/knit oder Text.
 #' @export
 #'
@@ -136,8 +134,8 @@ APA_Table <- function(...,
                       names = NULL,
                       custom.model.names = NULL,
                       digits = 2,
-                      sig.stars = TRUE,
-                      p.value = FALSE,
+                      
+                     
                       include.b = TRUE,
                       include.se = TRUE,
                       include.beta = FALSE,
@@ -145,9 +143,9 @@ APA_Table <- function(...,
                       include.odds = FALSE,
                       include.ci = NULL,
                       
-                      include.CI = if (!is.null(include.ci)) include.ci else FALSE,
+                      
                       #Fehler abfangeb
-                      include.p = p.value,
+                      include.p = FALSE,
                       include.stars = if (include.p) FALSE  else TRUE,
                       
                       include.variance = TRUE,
@@ -198,7 +196,7 @@ APA_Table <- function(...,
         caption = caption,
         note = note,
         custom.model.names = custom.model.names[i],
-        include.CI = include.CI,
+        include.ci = include.ci,
         include.odds = include.odds,
         digits = digits
       )
@@ -229,7 +227,7 @@ APA_Table <- function(...,
         custom.model.names = names ,
         include.custom = include.custom ,
         include.b = include.b,
-        include.ci =  include.CI,
+        include.ci =  include.ci,
         #Fehler abfangen mit alter schreibweise
         include.odds = include.odds,
         include.se = include.se,
@@ -257,7 +255,7 @@ APA_Table <- function(...,
       #                          include.pseudo=include.pseudo,
       #                          include.ftest=include.ftest,
       #                          include.loglik=include.loglik,
-      #                          include.CI=include.CI
+      #                          include.ci=include.ci
       #                          )
       
       
@@ -312,7 +310,7 @@ type_default <- function(x,
                          caption = NULL,
                          note = NULL,
                          custom.model.names = "",
-                         include.CI = FALSE,
+                         include.ci = FALSE,
                          include.odds = FALSE,
                          digits = digits
                                                   ) {
@@ -321,7 +319,7 @@ type_default <- function(x,
   res <-  Ordnen.default(x) # ist das gleiche wie broom::tidy(x)
   # cat("\n in type_default ")
   #default <-default_caption_note(x)
-  if (include.CI) {
+  if (include.ci) {
     res <- cbind(res,
                  confint(x))
   }
