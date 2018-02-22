@@ -1,4 +1,3 @@
-
 #' Likert type : c(1, 2), oder c("Freq", "Precent")
 #' 
 #' @rdname APA2
@@ -107,7 +106,6 @@ APA_Likert <- function(...){
 
 
 #' @name Likert
-#' @rdname Likert
 #' @title Likert-Skalen.
 #' @description Analyse von Likertskalen
 #' @param x Objekt data.frame oder Formula
@@ -183,10 +181,6 @@ APA_Likert <- function(...){
 #' APA2(Res1, ReferenceZero="-")
 #' APA2(Res2, ReferenceZero=3, na.exclude=TRUE, type="freq")
 #'
-
-
-
-
 Likert <- function(x, ...) {
   UseMethod("Likert")
 }
@@ -202,6 +196,7 @@ Likert <- function(x, ...) {
 #' brewer_pal_likert( ) #Default 5 Stufen mit Grau in der Mitte
 #' #  HH::brewer.pal.likert(5, "RdBu", "gray80")
 #'
+#' @importFrom HH brewer.pal.likert
 brewer_pal_likert <- function(n=5,
                               name="RdBu",
                               middle.color="gray80",
@@ -329,8 +324,7 @@ Likert.formula<- function(x,
 }
 
 
-#' @rdname Likert
-#' @description Plot Methode
+#' @rdname print
 #' @export
 print.likert<-function(x){
   cat("\nnames: ", paste(names(x), collapse=", "),"\n")
@@ -391,36 +385,5 @@ if(all(sapply(items, is.factor))
        factor(x,labels)}))
    }
 
-
-
-
-  # if (any(is.factor(items[,1]))) {
-  #   first_item <- if (is.null(labels))
-  #     levels(items[,1])
-  #   else
-  #     labels
-  #
-  #   items <- dapply2(items, function(x) {
-  #     if (any(is.factor(x)))
-  #       factor(x, levels = first_item)
-  #     else
-  #       factor(x, levels = 1:length(first_item), first_item)
-  #   })
-  # }else {
-  #   first_item <-
-  #     unique(unlist(
-  #       lapply(items, function(x)levels(factor(x)))
-  #       ))
-  #
-  #   items <- dapply2(items, function(x) {
-  #     if (is.null(labels))
-  #       factor(x, levels = first_item)
-  #     else
-  #       factor(x, levels = first_item, labels = labels)
-  #   })
-  # }
- # if (output == "factor")
-    #return(items)
-  #else
-   # return(dapply2(items))
+ 
 }
