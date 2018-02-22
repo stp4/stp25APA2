@@ -65,7 +65,7 @@ APA_Ttest <- function(x,
                       include.mean = TRUE,
                       include.d = TRUE,
                       include.mean.diff = TRUE,
-                      include.se = TRUE,
+                      include.se = FALSE,
                       type="t.test",
                       digits = 2,
                       ...) {
@@ -106,6 +106,11 @@ APA_Ttest <- function(x,
         if (include.d) {
           ans <- cbind(ans, cohens.d = Format2(cohens.d(fm, data), 2))
         }
+        if (include.se) {
+          ans <- cbind(ans, SE = Format2(calculate_se(fm, data), 2))
+        }
+        
+        
         if(type == "t.test")  ans <- cbind(ans, T.test = res_sig)
         else {
           res <- wilcox.test(fm,
@@ -142,7 +147,13 @@ APA_Ttest <- function(x,
 }
 
 
-
+# Standard error
+### Calculate standard error manually
+calculate_se <- function(x, data) {
+  x <- as.numeric(data[[all.vars(x[[2L]])]])
+  sd(x, na.rm = TRUE) /
+    sqrt(length(x[!is.na(x)]))
+}   
 
 
 
