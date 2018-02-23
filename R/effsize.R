@@ -21,15 +21,16 @@ APA_Effsize<- function(x, ...){
 
 #' @rdname APA2
 #' @export
-APA2.eff <- function(...) {APA2.efflist(...)}
+APA2.eff <- function(x, ...) {
+  if (names(x)[2] %in% "formula") {
+    efflist <- list(Effect = x)
+    APA2.efflist(efflist, ...)
+  }
+  else
+    "Weis nich was das ist?"
+}
 
-# @rdname Ordnen
-# @export
-# Ordnen.eff <- function(x, ...) {
-#   if (names(x)[2] %in% "formula")
-#     efflist <- list(Effect = x)
-#   Ordnen.efflist(efflist, ...)
-# }
+
 
 
 #' @rdname APA2
@@ -70,26 +71,16 @@ APA2.efflist <- function(x,
     type <- setdiff(c("N", "fit", "se", "lower", "upper"), type)
   }
   
-  
   res <- fix_eff_to_df(x, caption =  caption,
-                          note = note 
-                       )
-  
+                       note = note)
   for (i in names(res)) {
-      spalte = which(names(res[[i]]) %in% type)
-    Output(fix_format( res[[i]][-spalte], digits = digits))
+    spalte = which(names(res[[i]]) %in% type)
+    Output(fix_format(res[[i]][-spalte], digits = digits))
   }
   invisible(res)
 }
 
- 
- 
 
-
-
-
-# @rdname Ordnen
-# @export
 fix_eff_to_df <- function(x, caption, note ) {
   res_list <- NULL
   for (i in names(x)) {

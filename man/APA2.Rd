@@ -75,7 +75,7 @@ APA2(x, ...)
   options()$stp25$apa.style$prozent$digits else c(digits, 0), output = TRUE,
   ...)
 
-\method{APA2}{eff}(...)
+\method{APA2}{eff}(x, ...)
 
 \method{APA2}{efflist}(x, caption = "Effekte: ", type = NULL, note = "",
   digits = 2, include.fit = TRUE, include.n = FALSE, include.ci = TRUE,
@@ -146,7 +146,12 @@ APA2(x, ...)
 
 \method{APA2}{summary.table}(x, ...)
 
-\method{APA2}{table}(x, ...)
+\method{APA2}{table}(x, caption = "", note = "", digits = NULL,
+  test = FALSE, type = c("fischer", "odds", "sensitivity", "chisquare",
+  "correlation", "r"), include.total = FALSE,
+  include.total.columns = include.total, include.total.sub = include.total,
+  include.total.rows = include.total, include.percent = TRUE,
+  margin = NULL, add.margins = seq_along(dim(x)), ...)
 
 \method{APA2}{xtabs}(x, caption = "", note = "", digits = NULL,
   test = FALSE, type = c("fischer", "odds", "sensitivity", "chisquare",
@@ -271,11 +276,12 @@ ist eine Kopie von  texreg:::aggregate.matrix.
 A Poisson regression was run to predict the number of publications an academic publishes in the last 12 months based on the experience of the academic and the number of hours an academic spends each week working on research. For every extra hour worked per week on research, 1.044 (95% CI, 1.004 to 1.085) times more publications were published, a statistically significant result, p = .030.
 https://statistics.laerd.com/spss-tutorials/poisson-regression-using-spss-statistics.php
 
-Kreuztabellen APA2.xtabs Formatiert xtabs() 2x2 Tabellen werden mit Haufigkeit wahlweise mit Prozent
+\strong{Kreuztabellen} 
+APA2.xtabs Formatiert xtabs() 2x2 Tabellen werden mit Haufigkeit wahlweise mit Prozent
 (verhalten wird ueber \code{margin = 2}) geseuert. Berechnet werden mittels
  \link{fisher.test} die Odds-Ratio mit 95%CI und die p-Werte. Alternatibe ist die Funktion
  \link{oddsratio} aus dem Paket \code{vcd}. Weiters laesst sich mit der Option \code{type = 2}
- eine sensitivit?tsanalyse erstellen.
+ eine sensitivitaetsanalyse erstellen.
  Bei NxM-Tabellen wird als Test-Statistik Pearson und der
  Kontingentkoeffizient berechnet alternativ steht auch  der Phi-Coefficient zur verf?gung
  auch hier mit \code{type = 2}. die Berechnung erfolgt hier mit \link{assocstats}
