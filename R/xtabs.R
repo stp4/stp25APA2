@@ -8,7 +8,9 @@ APA.xtabs <- function(x, ... ) {
   rndr_Chisq(x$statistic, x$parameter, x$p.value)
 }
 
-
+#' @rdname APA
+#' @export
+APA.table <- function(x, ...) APA.xtabs(x, ...)
 
 #' @rdname APA2
 #' @export
@@ -28,14 +30,52 @@ APA2.summary.table <- function(x, ...) {
   ))
 }
 
-
+#' @rdname APA2
+#' @export
+APA2.table <- function(x,
+                       caption = "" ,
+                       note = "",
+                       digits = NULL,
+                       test = FALSE,
+                       type = c("fischer",
+                                "odds",
+                                "sensitivity",
+                                "chisquare",
+                                "correlation",
+                                "r"),
+                       include.total = FALSE,
+                       # total/sum,
+                       include.total.columns = include.total,
+                       # total/sum,
+                       include.total.sub = include.total,
+                       # total/sum,
+                       include.total.rows = include.total,
+                       # total/sum,
+                       include.percent = TRUE,
+                       margin = NULL,
+                       add.margins = seq_along(dim(x)),
+                       ...) {
+  APA2.xtabs(
+    x,
+    caption,note, digits,
+    test, type,
+    include.total,
+    include.total.columns,
+    include.total.sub,
+    include.total.rows,
+    include.percent,
+    margin, add.margins,
+    ...
+  )
+}
 
 #' @rdname APA2
-#' @description Kreuztabellen APA2.xtabs Formatiert xtabs() 2x2 Tabellen werden mit Haufigkeit wahlweise mit Prozent
+#' @description \strong{Kreuztabellen} 
+#' APA2.xtabs Formatiert xtabs() 2x2 Tabellen werden mit Haufigkeit wahlweise mit Prozent
 #' (verhalten wird ueber \code{margin = 2}) geseuert. Berechnet werden mittels
 #'  \link{fisher.test} die Odds-Ratio mit 95%CI und die p-Werte. Alternatibe ist die Funktion
 #'  \link{oddsratio} aus dem Paket \code{vcd}. Weiters laesst sich mit der Option \code{type = 2}
-#'  eine sensitivit?tsanalyse erstellen.
+#'  eine sensitivitaetsanalyse erstellen.
 #'  Bei NxM-Tabellen wird als Test-Statistik Pearson und der
 #'  Kontingentkoeffizient berechnet alternativ steht auch  der Phi-Coefficient zur verf?gung
 #'  auch hier mit \code{type = 2}. die Berechnung erfolgt hier mit \link{assocstats}
@@ -69,7 +109,7 @@ APA2.summary.table <- function(x, ...) {
 #'
 #' xtab <- xtabs(~ gruppe+Tzell, hkarz)
 #' APA2(xtab, test=FALSE, caption="APA2: 2x3 Tabelle")
-APA2.xtabs <- APA2.table <- function(x,
+APA2.xtabs  <- function(x,
                       caption = "" ,
                       note = "",
                       digits = NULL,
@@ -82,29 +122,6 @@ APA2.xtabs <- APA2.table <- function(x,
                       include.total.sub = include.total, # total/sum,
                       include.total.rows = include.total, # total/sum,
                       include.percent = TRUE,
-                    #  include.odds=FALSE, include.CI = FALSE,
-                   #   include.RR=FALSE,
-                    #  include.sens=FALSE,
-                    #  include.fischer=FALSE,
-                   #   include.chisquare=FALSE,
-                   #   include.corr=FALSE,
-
-                     # include.n = TRUE,
-                     # include.all.n = NULL, # print.n,
-                     # include.header.n = TRUE,
-
-                     # include.test = FALSE, # test,
-                    
-                     # include.variance = TRUE,
-
-
-                     # include.beta = TRUE,
-                     # include.eta = TRUE,
-
-                     #
-                     # include.pseudo = FALSE, #Preudo R
-                    #  include.ftest = FALSE,   # noch nicht fertig
-                     # include.loglik = FALSE  # noch nicht fertig
                       margin = NULL,
                       add.margins = seq_along(dim(x)),
                        ...) {
