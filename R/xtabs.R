@@ -187,6 +187,9 @@ APA_Xtabs <- function(x, data, ...) {
   #is_formula2()
   if (stpvers::is_formula2(x))
     x <- stats::xtabs(x, data) #- altlast abfangen
+  if( class(fit)[1]=="glm"  ){
+   x<- Klassifikation(x, ...)$xtab
+  }
   
   APA2(x)
   invisible(x)
@@ -279,7 +282,10 @@ chisq_Statistik <- function(xtabs, type,
 #'
 #' fit<-loglm(~ Type + Origin, xtabs(~ Type + Origin, Cars93))
 #' APA2(fit)
-APA2.loglm <- function(x, ...) {
+APA2.loglm <- function(x,
+                       caption = "Likelihood",
+                       note = "",
+                       ...) {
   #-- Orginal MASS::print.loglm
   ts.array <- rbind(c(x$lrt, x$df,
                       if (x$df > 0L)
@@ -294,7 +300,11 @@ APA2.loglm <- function(x, ...) {
   dimnames(ts.array) <- list(c("Likelihood Ratio",
                                "Pearson"),
                              c("Chi2", "Df", "p.value"))
-  Output(fix_data_frame2(Test = rownames(ts.array), ts.array))
+  res <-
+    prepare_output(fix_data_frame2(Test = rownames(ts.array), ts.array), caption, note)
+  
+  Output(res)
+  invisible(res)
 }
 
 
