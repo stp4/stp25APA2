@@ -17,6 +17,7 @@
 \alias{APA.htest}
 \alias{APA.ScalarIndependenceTest}
 \alias{APA.xtabs}
+\alias{APA.table}
 \title{APA Style Text-Ausgabe}
 \usage{
 APA(x, ...)
@@ -48,6 +49,8 @@ test_APA2(x)
 \method{APA}{ScalarIndependenceTest}(x, ...)
 
 \method{APA}{xtabs}(x, ...)
+
+\method{APA}{table}(x, ...)
 }
 \arguments{
 \item{x}{Objekt fit, formula usw}

@@ -38,6 +38,7 @@
 \alias{APA2.htest}
 \alias{APA2.pairwise.htest}
 \alias{APA2.summary.table}
+\alias{APA2.table}
 \alias{APA2.xtabs}
 \alias{APA2.loglm}
 \title{APA Style HTML-Tabellen-Ausgabe}
@@ -145,6 +146,8 @@ APA2(x, ...)
 
 \method{APA2}{summary.table}(x, ...)
 
+\method{APA2}{table}(x, ...)
+
 \method{APA2}{xtabs}(x, caption = "", note = "", digits = NULL,
   test = FALSE, type = c("fischer", "odds", "sensitivity", "chisquare",
   "correlation", "r"), include.total = FALSE,
@@ -152,7 +155,7 @@ APA2(x, ...)
   include.total.rows = include.total, include.percent = TRUE,
   margin = NULL, add.margins = seq_along(dim(x)), ...)
 
-\method{APA2}{loglm}(x, ...)
+\method{APA2}{loglm}(x, caption = "Likelihood", note = "", ...)
 }
 \arguments{
 \item{x}{Ein R Objekt oder eine Formel oder ein data.frame

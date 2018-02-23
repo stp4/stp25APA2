@@ -103,44 +103,32 @@ Klassifikation.glm<- function(x,
   data <- x$model
   predictor <- fitted(x) # vorhergesagte Wahrscheinlichkeit
   data$Response <- data[, response]
+  cat("\nKontrolle:\n")
+  print(head(data))
   #response  predictor
 
-  mylevels <- if(is.factor(data$response))
-                  levels(data$response)
+  mylevels <- if(is.factor(data$Response))
+                  levels(data$Response)
               else 0:1
   data$Predictor <- cut(predictor,
                           breaks=c(-Inf, thresh, Inf), labels=mylevels )
-
+  print(head(data))
   # Kontingenztafel: tatsaechliche vs. vorhergesagte Kategorie
   cTab <- stats::xtabs( ~ Response + Predictor, data = data)
 
   if (length(cTab)==4){
-   res <- Klassifikation.xtabs(cTab)
+    res <- Klassifikation.xtabs(cTab)
     res$response=data$Response
     res$predictor=predictor
-    res
+  #  res
 
   }
-  else list(xtab=x,
+  else res <- list(xtab=cTab,
             statistic=NULL,
-            response=Response,
+            response=response,
             predictor=predictor)
 
-  #tab2x2 <- length(cTab)==4
-
-  # cTab <-addmargins(cTab, 2)
-  # cnames <- colnames(cTab)
-  #
-  #
-  # # colnames(cTab)[length(cnames)]<- "Summe"
-  # if(tab2x2){
-  #   # prepare_output(cTab, caption=caption,
-  #   #                note= paste("Accuracy =",
-  #   #                            round((cTab[1,1] +
-  #   #                                     cTab[2,2]) /(cTab[1,3] +
-  #   #                                                    cTab[2,3]), 2)))
-  # } else{prepare_output(cTab, caption=caption, note= note) note<- ""}
-
+return(res)
 
 }
 
