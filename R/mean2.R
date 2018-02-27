@@ -137,12 +137,6 @@ return("NaN") }
 
 
 
-
-
-
-#@rdname APA2_fun
-# @export
-#Median2 <-
 #' @rdname Berechne
 #' @export
 Median2 <- function(x, ...) {
@@ -310,125 +304,197 @@ else {# hier kommt alles aus Recast2 an weil recast Character weitergibt
 
 
 #' @rdname Berechne
+#' @description Prozent2 wird in APA.formula errate_statistik2 verwendet
+#' freq = Prozent2(x_NA, exclude, digits=digits.percent, rtrn = "df", max_factor_length = max_factor_length)
 #' @export
-Prozent2 <- function(x,  exclude=NA,
-                     #digits = 1,continuous = 3, breaks = NULL, labels = NULL,
-                     # count_factor = c("yes","ja", "T", "TRUE", 1),
-                     # retur_tabel=FALSE,
-                     rtrn="",
-                     max_factor_length=35,
-                     ...) {
-  Non_Factor_To_Factor<- function(x) {
-    if(is.logical(x)){
-      x<-factor(x, c(TRUE, FALSE))
-    }else if(is.numeric(x)){
-        if(is_all_0_1(x)) x<-factor(x, c(0, 1))
-        else{
-          x <- as.numeric(x)
-          xf <- factor(x)
-          if(nlevels(xf) > 7) x<-cut(x, quantile(x, na.rm = TRUE))
-          else x<-xf
+Prozent2APA <- function(x,
+                        exclude = NA,
+                        digits = 1,
+                        max_factor_length = 35,
+                        ...) {
+  Non_Factor_To_Factor <- function(x) {
+    if (is.logical(x)) {
+      x <- factor(x, c(TRUE, FALSE))
+    } else if (is.numeric(x)) {
+      if (is_all_0_1(x))
+        x <- factor(x, c(0, 1))
+      else{
+        x <- as.numeric(x)
+        xf <- factor(x)
+        if (nlevels(xf) > 7)
+          x <- cut(x, quantile(x, na.rm = TRUE))
+        else
+          x <- xf
       }
-    }else x<-rep(NA, length(x))
+    } else
+      x <- rep(NA, length(x))
     x
   }
-
-   APA2_Prozent<- function() {
-    if (!is.factor(x)) {
-      x <- Non_Factor_To_Factor(x)
-      }
-
-    x_NA <- x  # --mit nas
-    N    <- length(x)
-    x    <- na.omit(x)
-    n    <- length(x)
-
-    if (n == 0) {
-      result <- ""
-      ans<- rep(NA, nlevels(x_NA))
-      names(ans) <- levels(x_NA)
-    }else {
-      if (is.null(exclude)) x <- x_NA
-      ans <- table(x, exclude = exclude)
-
-      if(length(ans) > max_factor_length) {
-        naLev<- levels(x)[-(1:max_factor_length)]
-        Text("NA = ", paste(naLev, collapse=", "))
-
-        x <- factor(x, levels(x)[1:max_factor_length], exclude = NULL)
-        x <- addNA(x)  #- addNA modifies a factor by turning NA into an extra level
-        N <- length(x)
-        n <- length(x)
-        ans<-table(x)
-      }
-
-      Freq <- as.data.frame(ans)
-      Precent <- as.data.frame(round(prop.table(ans) * 100, 3))
-
-      result <- ffprozent.default(Precent[, 2], Freq[, 2])
-      ##data.frame(Characteristics = "", n = as.character(n), Statistics =Meanci2(x, ...)),
+  
+  if (!is.factor(x))
+    x <- Non_Factor_To_Factor(x)
+  
+  x_NA <- x  # --mit nas
+  N    <- length(x)
+  x    <- na.omit(x)
+  n    <- length(x)
+  
+  if (n == 0) {
+    result <- ""
+    ans <- rep(NA, nlevels(x_NA))
+    names(ans) <- levels(x_NA)
+  } else {
+    if (is.null(exclude))
+      x <- x_NA
+    ans <- table(x, exclude = exclude)
+    
+    if (length(ans) > max_factor_length) {
+      naLev <- levels(x)[-(1:max_factor_length)]
+      Text("NA = ", paste(naLev, collapse = ", "))
+      
+      x <- factor(x, levels(x)[1:max_factor_length], exclude = NULL)
+      x <- addNA(x)  #- addNA modifies a factor by turning NA into an extra level
+      N <- length(x)
+      n <- length(x)
+      ans <- table(x)
     }
-
-   # print(ans)
-    if(rtrn=="df") data.frame(Characteristics = names(ans),
-                              n = c(n, rep("", length(ans) - 1)),
-                              Statistics = result)
-    else result
-   }
-
-
-
-
-  if(match.call()[[1]]=="Prozent2")  APA2_Prozent()
-  else Prozent(x, ...)
+    
+    Freq <- as.data.frame(ans)
+    Precent <- as.data.frame(round(prop.table(ans) * 100, 3))
+    result <- rndr_percent(Precent[, 2], Freq[, 2], digits = digits)
+    # result <- ffprozent.default(Precent[, 2], Freq[, 2])
+  }
+  data.frame(
+    Characteristics = names(ans),
+    n = c(n, rep("", length(ans) - 1)),
+    Statistics = result
+  )
+  
 }
+
+
+
+
+
+# Prozent2 <- function(x,  exclude=NA,
+#                      #digits = 1,continuous = 3, breaks = NULL, labels = NULL,
+#                      # count_factor = c("yes","ja", "T", "TRUE", 1),
+#                      # retur_tabel=FALSE,
+#                      rtrn="",
+#                      max_factor_length=35,
+#                      ...) {
+#   Non_Factor_To_Factor<- function(x) {
+#     if(is.logical(x)){
+#       x<-factor(x, c(TRUE, FALSE))
+#     }else if(is.numeric(x)){
+#       if(is_all_0_1(x)) x<-factor(x, c(0, 1))
+#       else{
+#         x <- as.numeric(x)
+#         xf <- factor(x)
+#         if(nlevels(xf) > 7) x<-cut(x, quantile(x, na.rm = TRUE))
+#         else x<-xf
+#       }
+#     }else x<-rep(NA, length(x))
+#     x
+#   }
+#   
+#   APA2_Prozent<- function() {
+#     if (!is.factor(x)) {
+#       x <- Non_Factor_To_Factor(x)
+#     }
+#     
+#     x_NA <- x  # --mit nas
+#     N    <- length(x)
+#     x    <- na.omit(x)
+#     n    <- length(x)
+#     
+#     if (n == 0) {
+#       result <- ""
+#       ans<- rep(NA, nlevels(x_NA))
+#       names(ans) <- levels(x_NA)
+#     }else {
+#       if (is.null(exclude)) x <- x_NA
+#       ans <- table(x, exclude = exclude)
+#       
+#       if(length(ans) > max_factor_length) {
+#         naLev<- levels(x)[-(1:max_factor_length)]
+#         Text("NA = ", paste(naLev, collapse=", "))
+#         
+#         x <- factor(x, levels(x)[1:max_factor_length], exclude = NULL)
+#         x <- addNA(x)  #- addNA modifies a factor by turning NA into an extra level
+#         N <- length(x)
+#         n <- length(x)
+#         ans<-table(x)
+#       }
+#       
+#       Freq <- as.data.frame(ans)
+#       Precent <- as.data.frame(round(prop.table(ans) * 100, 3))
+#       
+#       result <- ffprozent.default(Precent[, 2], Freq[, 2])
+#       ##data.frame(Characteristics = "", n = as.character(n), Statistics =Meanci2(x, ...)),
+#     }
+#     
+#     # print(ans)
+#     if(rtrn=="df") data.frame(Characteristics = names(ans),
+#                               n = c(n, rep("", length(ans) - 1)),
+#                               Statistics = result)
+#     else result
+#   }
+#   
+#   
+#   
+#   
+#   if(match.call()[[1]]=="Prozent2")  APA2_Prozent()
+#   else Prozent(x, ...)
+# }
+
 
 # Normskalen
 #
 # Eine Kopie von <environment: namespace:psytabs>  norms(1:10, "IQ")
 #- nicht benutzt bis jetzt
-Norms <-function (sumscores,
-                  statistics = "PR",
-                  from=min(sumscores, na.rm=TRUE),
-                  to=max(sumscores, na.rm=TRUE)) {
-    sumscores.range <- from:to
-    xecdf <- ecdf(sumscores)
-    sumscores.z <- (sumscores.range - mean(sumscores, na.rm = TRUE))/sd(sumscores,
-                                                                        na.rm = TRUE)
-    norm.table <- data.frame(Score = sumscores.range)
-    if (!is.na(statistics[1])) {
-      if ("PR" %in% statistics) {
-        sumscores.percentranks <- round(xecdf(sumscores.range) *
-                                          100, 1)
-        norm.table <- cbind(norm.table, PR = sumscores.percentranks)
-      }
-      if ("T" %in% statistics) {
-        sumscores.t <- round(50 + 10 * sumscores.z, 1)
-        norm.table <- cbind(norm.table, T = sumscores.t)
-      }
-      if ("Stanine" %in% statistics) {
-        sumscores.stanine <- trunc(5 + sumscores.z * 2)
-        sumscores.stanine[sumscores.stanine < 1] <- 1
-        sumscores.stanine[sumscores.stanine > 9] <- 9
-        norm.table <- cbind(norm.table, STANINE = sumscores.stanine)
-      }
-      if ("IQ" %in% statistics) {
-        sumscores.iq <- round(100 + 15 * sumscores.z, 1)
-        norm.table <- cbind(norm.table, IQ = sumscores.iq)
-      }
-      if ("Z" %in% statistics) {
-        sumscores.Z <- round(100 + 10 * sumscores.z, 1)
-        norm.table <- cbind(norm.table, Z = sumscores.Z)
-      }
-      if ("z" %in% statistics) {
-        norm.table <- cbind(norm.table, z = sumscores.z)
-      }
-    }
-    else {
-    NULL
-    }
-    return(norm.table)
-  }
+# Norms <-function (sumscores,
+#                   statistics = "PR",
+#                   from=min(sumscores, na.rm=TRUE),
+#                   to=max(sumscores, na.rm=TRUE)) {
+#     sumscores.range <- from:to
+#     xecdf <- ecdf(sumscores)
+#     sumscores.z <- (sumscores.range - mean(sumscores, na.rm = TRUE))/sd(sumscores,
+#                                                                         na.rm = TRUE)
+#     norm.table <- data.frame(Score = sumscores.range)
+#     if (!is.na(statistics[1])) {
+#       if ("PR" %in% statistics) {
+#         sumscores.percentranks <- round(xecdf(sumscores.range) *
+#                                           100, 1)
+#         norm.table <- cbind(norm.table, PR = sumscores.percentranks)
+#       }
+#       if ("T" %in% statistics) {
+#         sumscores.t <- round(50 + 10 * sumscores.z, 1)
+#         norm.table <- cbind(norm.table, T = sumscores.t)
+#       }
+#       if ("Stanine" %in% statistics) {
+#         sumscores.stanine <- trunc(5 + sumscores.z * 2)
+#         sumscores.stanine[sumscores.stanine < 1] <- 1
+#         sumscores.stanine[sumscores.stanine > 9] <- 9
+#         norm.table <- cbind(norm.table, STANINE = sumscores.stanine)
+#       }
+#       if ("IQ" %in% statistics) {
+#         sumscores.iq <- round(100 + 15 * sumscores.z, 1)
+#         norm.table <- cbind(norm.table, IQ = sumscores.iq)
+#       }
+#       if ("Z" %in% statistics) {
+#         sumscores.Z <- round(100 + 10 * sumscores.z, 1)
+#         norm.table <- cbind(norm.table, Z = sumscores.Z)
+#       }
+#       if ("z" %in% statistics) {
+#         norm.table <- cbind(norm.table, z = sumscores.z)
+#       }
+#     }
+#     else {
+#     NULL
+#     }
+#     return(norm.table)
+#   }
 
 
 
@@ -511,7 +577,7 @@ Prozent2default <-
     if (!is.factor(x))
       x <- factor(x)
 
-    x_NA <- x  # --mit nas
+    x_NA <- x  #  x mit nas
     N    <- length(x)
     if (n == 0) {
       result <- ""
