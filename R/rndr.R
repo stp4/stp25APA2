@@ -103,17 +103,12 @@ rndr_percent <- function(
       prz <- ifelse(
         x < 1 / (10 ^ digits),
         paste0("<", 1 / (10 ^ digits), "%"),
-        paste0(
-          formatC(
-            x,
-            format = "f",
-            digits = digits,
-            decimal.mark = getOption("OutDec")
-          ),
-          percentage_str
-        )
-      )
+        paste0( formatC(x,
+            format = "f",  digits = digits,
+            decimal.mark = getOption("OutDec")),percentage_str))
+      
       anz <- formatC(n, format = "f", digits =  0)
+      
       if (style == 1)
         res <- paste0(prz, " (", anz, ")")
       else
@@ -128,6 +123,7 @@ rndr_percent <- function(
       res[which(n==0)] <- null_percent_sign
 
     return(res)
+    
   } else{
     myattr <- attributes(n) #-- colnames and rownames
     nrw <- nrow(n)
@@ -152,7 +148,7 @@ rndr_percent <- function(
     attributes(res) <- myattr
 
     if(!is.null(null_percent_sign))
-      res[which(anzahl==0)] <- null_percent_sign
+      res[which(n==0)] <- null_percent_sign
 
     return(res)
   }

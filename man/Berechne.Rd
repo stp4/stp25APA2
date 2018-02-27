@@ -18,7 +18,7 @@
 \alias{Median2.formula}
 \alias{Median2.default}
 \alias{Meanci2}
-\alias{Prozent2}
+\alias{Prozent2APA}
 \alias{Mean2default}
 \alias{Median2default}
 \alias{Prozent2default}
@@ -59,7 +59,7 @@ Median2(x, ...)
 
 Meanci2(x, digits = NULL, ...)
 
-Prozent2(x, exclude = NA, rtrn = "", max_factor_length = 35, ...)
+Prozent2APA(x, exclude = NA, digits = 1, max_factor_length = 35, ...)
 
 Mean2default(x, digits = 2, n = length(x))
 
@@ -113,6 +113,9 @@ Vector
 Die Lagemasse werden ueber die Standard-Funktionen berechnet unterschied ist nur dass
 Faktoren zu Zahlen transformiert werden und das \code{na.rm=TRUE} gesetzt wird.
 CI = Hmisc::smean.cl.normal
+
+Prozent2 wird in APA.formula errate_statistik2 verwendet
+freq = Prozent2(x_NA, exclude, digits=digits.percent, rtrn = "df", max_factor_length = max_factor_length)
 }
 \examples{
 berechne(hyper, "chol0" )

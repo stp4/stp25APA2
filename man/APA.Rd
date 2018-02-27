@@ -32,7 +32,7 @@ test_APA2(x)
 
 \method{APA}{biVar}(x, ...)
 
-\method{APA}{formula}(x, data, type = "mean", digits = 2, ...)
+\method{APA}{formula}(x, data, exclude = NA, max_factor_length = 25)
 
 \method{APA}{lm}(x, include.r = TRUE)
 
@@ -59,11 +59,11 @@ test_APA2(x)
 
 \item{data}{data.frame wenn x eine Formel ist}
 
-\item{type}{Mittelwert ("mean")}
+\item{include.r}{APA.lm: R-Squar}
 
 \item{digits}{Nachkommastellen}
 
-\item{include.r}{APA.lm: R-Squar}
+\item{type}{Mittelwert ("mean")}
 
 \item{...}{}
 }
@@ -96,9 +96,13 @@ APA(aov(mpg ~ drat + wt + qsec, mtcars))
 APA(Hmisc::spearman2(mpg ~ factor(vs), mtcars))
 
 
+
+
 \dontrun{
  library(stpvars)
- APA(chol0+chol1 ~ g, hyper)
+ APA( ~ rrs0 + rrs1 + g, hyper)
+ 
+ APA(chol0+chol1 ~ g, hyper) das geht nicht
  }
  
 
