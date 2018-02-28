@@ -34,66 +34,34 @@ berechne.default <- function(data, x, by="1", measure , type = 2,
       data,
       FUN = function(x) {
 
-        if(is.null(digits)){
+    
           if (type == 2 | type == "long")
-            ffmedian_long(
-              median(x, na.rm = TRUE),
-              IQR(x, na.rm = TRUE),
-              min(x, na.rm = TRUE),
-              max(x, na.rm = TRUE)
-            )
-          else
-            ffmedian(quantile(x))
-        }else{
-          if (type == 2 | type == "long")
-            ffmedian_long(
+            rndr_median_range(
               median(x, na.rm = TRUE),
               IQR(x, na.rm = TRUE),
               min(x, na.rm = TRUE),
               max(x, na.rm = TRUE), digits=digits
             )
           else
-            ffmedian(quantile(x), digits=digits)
-        }
+            rndr_median_quant(quantile(x), digits=digits)
+      
       }
     )
   }
   mn <- function() {
-    #     cat("\nin Mea\n")
-    #    print(fm)
-    #    print(head(data))
-
-    aggregate(
+     aggregate(
       fm,
       data,
       FUN = function(x) {
-        #print(x)
-        #print(digits)
-        #print(mean(x, na.rm = TRUE))
-        if(is.null(digits)){
+         
           if (type == 2 | type == "long")
-            ffmean_long(mean(x, na.rm = TRUE),
-                        sd(x, na.rm = TRUE),
-                        min(x, na.rm = TRUE),
-                        max(x, na.rm = TRUE))
-          else
-            ffmean(mean(x, na.rm = TRUE),
-                   sd(x, na.rm = TRUE))}
-        else{
-
-          #cat("digits: \n")
-          # print(digits)
-          if (type == 2 | type == "long")
-            ffmean_long(mean(x, na.rm = TRUE),
+            rndr_mean_range(mean(x, na.rm = TRUE),
                         sd(x, na.rm = TRUE),
                         min(x, na.rm = TRUE),
                         max(x, na.rm = TRUE), digits=digits)
           else
-            ffmean(mean(x, na.rm = TRUE),
-                   sd(x, na.rm = TRUE),digits=digits)
-
-
-        }
+            rndr_mean(mean(x, na.rm = TRUE),
+                   sd(x, na.rm = TRUE), digits=digits)
 
       }
     )
@@ -104,9 +72,6 @@ berechne.default <- function(data, x, by="1", measure , type = 2,
       data ,
       FUN = function(x) {
         r <- table(x)
-        # pr<-prop.table(r)
-        # pr <-  if(length(x)>99)  paste0(round(pr/100), "%") else round(pr,2)
-        # r<- paste0(r, "(", pr, ")")
         paste(r, collapse = "/")
       }
     )

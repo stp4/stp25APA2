@@ -6,6 +6,7 @@
 #' @param ci Grenzen der Konfidenzintervalle
 #' @param ... Weitere Argumente
 #' @return Vector
+#' @export
 #' @examples
 #' mean2(rnorm(100))
 #' sd2(rnorm(100))
@@ -120,12 +121,10 @@ Mean2.formula<-  function(x, data, ...){
 #' @export
 Mean2.default<- function(x, digits=NULL){  #- test_that
     calc_mean<- function(x){
-      x <- na.omit(x)
-      n <- length(x)
       if(is.null(digits)) ffmean(mean2(x), ifelse(n>2, sd2(x), NA))
       else  ffmean(mean2(x), ifelse(n>2, sd2(x), NA), digits)
     }
-
+print(str(x))
 if (length(x)<=0) return("NaN")
 if( is.vector(x) | is.numeric(x)){calc_mean(x)
 }else if( is.data.frame(x) ){

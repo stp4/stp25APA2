@@ -12,10 +12,6 @@
 \alias{ffprozent.default}
 \alias{ffprozent.data.frame}
 \alias{ffprozent.matrix}
-\alias{ffmean}
-\alias{ffmean_long}
-\alias{ffmedian_long}
-\alias{ffmedian}
 \alias{ffCI}
 \alias{ffreta}
 \alias{fftest}
@@ -56,17 +52,6 @@ ffprozent(prz, frq = NULL, ...)
 \method{ffprozent}{data.frame}(prz, frq = NULL, ...)
 
 \method{ffprozent}{matrix}(prz, frq = NULL, ...)
-
-ffmean(m, s = NULL, digits = rep_len(countDigits(m), 2),
-  plusmin_sign = options()$stp25$apa.style$mittelwert$plusmin_sign,
-  sym = options()$stp25$apa.style$mittelwert$plusmin_str, ...)
-
-ffmean_long(m, s, mn, mx, digits = countDigits(m), ...)
-
-ffmedian_long(m, iq, mn, mx, digits = countDigits(m), ...)
-
-ffmedian(quant, digits = NA, style = options()$stp25$apa.style$median,
-  sep = options()$stp25$apa.style$sep_element, ...)
 
 ffCI(CIs, digits = 2,
   lead.zero = options()$stp25$apa.style$mittelwert$lead.zero,

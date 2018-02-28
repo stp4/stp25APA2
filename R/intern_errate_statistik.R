@@ -31,8 +31,8 @@ errate_statistik2 <- function(Formula,
                               decreasing = FALSE,
                               useconTest = FALSE,
                               normality.test = FALSE,
-                              digits.mean = NULL,
-                              digits.percent = NULL,
+                              digits.mean = options()$stp25$apa.style$m$digits,
+                              digits.percent = options()$stp25$apa.style$prozent$digits[1],
                               test_name = "Hmisc",
                               # auto_wrap = NULL, #-- neu Zeilenumbruch
                               ...)

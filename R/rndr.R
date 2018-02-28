@@ -59,7 +59,7 @@ rndr_median_range <- function (m, iqr, mn, mx,
 #' @rdname rndr_
 #' @export
 rndr_mean <- function(m, s, digits) {
-  #  print(c(m, s, digits))
+     print(c(m, s, digits))
   paste0(Format2(m, digits), " (", Format2(s, digits), ")")
 
 }

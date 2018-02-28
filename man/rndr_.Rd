@@ -6,6 +6,7 @@
 \alias{rndr_median_quant}
 \alias{rndr_median_range}
 \alias{rndr_mean}
+\alias{rndr_mean_range}
 \alias{rndr_ods}
 \alias{rndr_percent}
 \alias{rndr_P}
@@ -37,13 +38,15 @@
 \usage{
 rndr_(...)
 
-rndr_median(m, iqr, digits)
+rndr_median(m, iqr, digits = NULL, ...)
 
-rndr_median_quant(x, digits = 2)
+rndr_median_quant(x, digits = NULL, ...)
 
-rndr_median_range(m, iqr, mn, mx, digits = 2)
+rndr_median_range(m, iqr, mn, mx, digits = NULL, ...)
 
-rndr_mean(m, s, digits)
+rndr_mean(m, s, digits = NULL, ...)
+
+rndr_mean_range(m, s, mn, mx, digits = NULL, ...)
 
 rndr_ods(x, digits = 2)
 
@@ -188,6 +191,10 @@ http://winvector.github.io/APAsig/APAsig.html
 \examples{
 rndr_(1.234, 3)
 
+ rndr_mean_range(1,2,3,4)
+  rndr_mean (1,2 )
+  rndr_median_range(1,2,3,4)
+  rndr_median(1,2)
 rndr_percent(c(.2568, 99, 0.02568), c(4, 569, 25), digits = 1)
 rndr_percent(10, 3, F, 2)
 
