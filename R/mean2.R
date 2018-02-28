@@ -14,26 +14,27 @@
 #' StdErr(rnorm(100))
 #' mean2(rnorm(100))
 mean2 <-
-  function(x, na.rm=TRUE, ... ){  #- test_that
-        #  cat(str(x))
-    mean_factor<- function(x, na.rm=TRUE){
-           # cat(levels(x),"\n")
-         if(nlevels(x)==2)    mean(as.numeric(x), na.rm=na.rm) -1
-         else   mean(as.numeric(x), na.rm=na.rm)
+  function(x, na.rm = TRUE, ...) {
+    #- test_that
+    mean_factor <- function(x, na.rm = TRUE) {
+      if (nlevels(x) == 2)
+        mean(as.numeric(x), na.rm = na.rm) - 1
+      else
+        mean(as.numeric(x), na.rm = na.rm)
     }
-
-
-    if(is.numeric(x)) mean(x, na.rm=na.rm)
-    else if(is.factor(x)) {
+    if (is.numeric(x))
+      mean(x, na.rm = na.rm)
+    else if (is.factor(x)) {
       warning("Die Mittelwerte wurden durch Transformation auf Numeric berechnet!")
-      mean_factor(x, na.rm=na.rm)
+      mean_factor(x, na.rm = na.rm)
     }
     else {
-        warning("Die Mittelwerte sind eventuel Falsch!")
-        mean_factor(factor(x), na.rm=na.rm)
-
-        }
+      warning("Die Mittelwerte sind eventuel Falsch!")
+      mean_factor(factor(x), na.rm = na.rm)
+    }
   }
+
+
 #' @rdname Berechne
 #' @export
 median2 <-
@@ -101,37 +102,47 @@ Mean2 <- function(x, ...){UseMethod("Mean2")}
 
 #' @rdname Berechne
 #' @export
-Mean2.formula<-  function(x, data, ...){
-    if(length(x) == 2){
-        strg<- c(NULL)
-        for(i in all.vars(x) ){
-            strg<- c(strg, Mean2(data[,i]))
-        }
-        #strg
-    } else {
-   strg <-  aggregate(x, data, FUN=Mean2.default)
+Mean2.formula <-  function(x, data, ...) {
+  if (length(x) == 2) {
+    strg <- c(NULL)
+    for (i in all.vars(x)) {
+      strg <- c(strg, Mean2(data[, i]))
+    }
+  } else {
+    strg <-  aggregate(x, data, FUN = Mean2.default)
     apply(strg, 1, function(x) {
-        paste(x, collapse=" = ")
-    })}
-
-    strg
+      paste(x, collapse = " = ")
+    })
+  }
+  strg
 }
 
 #' @rdname Berechne
 #' @export
-Mean2.default<- function(x, digits=NULL){  #- test_that
-    calc_mean<- function(x){
-      if(is.null(digits)) ffmean(mean2(x), ifelse(n>2, sd2(x), NA))
-      else  ffmean(mean2(x), ifelse(n>2, sd2(x), NA), digits)
+Mean2.default <- function(x, digits = NULL) {
+  #- test_that
+  calc_mean <- function(x) {
+    x <- na.omit(x)
+    n <- length(x)
+    rndr_mean(mean2(x), ifelse(n > 2, sd2(x), NA), digits)
+  }
+  
+  
+  if (length(x) <= 0)
+    return("NaN")
+  if (is.vector(x) | is.numeric(x)) {
+    calc_mean(x)
+  } else if (is.data.frame(x)) {
+    if (ncol(x) == 1) {
+      calc_mean(x[, 1])
     }
-print(str(x))
-if (length(x)<=0) return("NaN")
-if( is.vector(x) | is.numeric(x)){calc_mean(x)
-}else if( is.data.frame(x) ){
-    if( ncol(x)==1 ){calc_mean(x[,1])}
-    else{ unlist(lapply(as.data.frame(x), calc_mean))}
-}else{ cat("Unbekanter Datentype",class(x) )
-return("NaN") }
+    else{
+      unlist(lapply(as.data.frame(x), calc_mean))
+    }
+  } else{
+    cat("Unbekanter Datentype", class(x))
+    return("NaN")
+  }
 }
 
 
@@ -168,10 +179,7 @@ Median2.default<- function(x, digits = NULL, ...) {
     if (is.vector(x) | is.numeric(x)) {
         if (!is.numeric(x))
             x <- as.numeric(x)
-        if (is.null(digits))
-            ffmedian(quantile(x, na.rm = TRUE), ...)
-        else
-            ffmedian(quantile(x, na.rm = TRUE), digits, ...)
+            rndr_median_quant(quantile(x, na.rm = TRUE), digits, ...)
     } else if (is.data.frame(x)) {
         if (ncol(x) == 1) {
             Median2(x[, 1])

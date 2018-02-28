@@ -18,23 +18,30 @@
 rndr_ <- function(...) Format2(...)
 
 
+# Mean --------------------------------------------------------------------
+
+
+
 #' @rdname rndr_
 #' @param m Mittelwert 
 #' @param s,iqr SD,IRQ  (ein Wert)
 #' @export
-rndr_median <- function(m, iqr, digits)
-  paste0(Format2(m, digits), " (IRQ ", Format2(iqr, digits), ")")
+rndr_median <- function(m, iqr, digits=NULL, ...){
+  if(is.null(digits))  digits <- options()$stp25$apa.style$mittelwert$digits
+  paste0(Format2(m, digits[1],...), " (IRQ ", Format2(iqr, digits[1],...), ")")
+  }
 
 
 #' @rdname rndr_
 #' @export
-rndr_median_quant<- function(x, digits=2){
+rndr_median_quant<- function(x, digits=NULL, ...){
+  if(is.null(digits))  digits <- options()$stp25$apa.style$mittelwert$digits
   paste0(
-    Format2(x[3], digits),
+    Format2(x[3], digits[1], ...),
     " (",
-    Format2(x[2], digits),
+    Format2(x[2], digits[1], ...),
     symbol_seperator,
-    Format2(x[4], digits),
+    Format2(x[4], digits[1], ...),
     ")"
   )
 }
@@ -43,26 +50,131 @@ rndr_median_quant<- function(x, digits=2){
 #' @export
 # noch nicht umgesetzt (Tabelle(..., APA=TRUE))
 rndr_median_range <- function (m, iqr, mn, mx,
-                               digits = 2) {
+                               digits = NULL, ...) {
+  if(is.null(digits))  digits <- options()$stp25$apa.style$mittelwert$digits
   paste0(
-    rndr_median(m, iqr, digits),
+    Format2(m, digits[1],...), " (IRQ ", Format2(iqr, digits[1],...), 
     ", range ",
-    Format2(mn, digits),
+    Format2(mn, digits[1],...),
     " to ",
-    Format2(mx, digits),
+    Format2(mx, digits[1],...),
     ")"
   )
 }
+
+ 
+# ffmedian_long <-function (m, iq, mn, mx,
+#                           digits = countDigits(m),
+#                           ...)
+# {
+#   
+#  
+#   
+#   paste0(
+#     Format2(m, digits[1], ...), " (IQR ",
+#     Format2(iq, digits[1], ...), ", range ",
+#     Format2(mn, digits[1], ...), "-",
+#     Format2(mx, digits[1], ...), ")"
+#   )
+#  
+# }
+# 
+# 
+#  
+# ffmedian <-function (quant, digits=NA,
+#                      style= options()$stp25$apa.style$median,
+#                      sep=options()$stp25$apa.style$sep_element,
+#                      ...)
+# {
+#   #input <- length(quant[3])
+#   if(is.na(digits) | is.null(digits)) digits<- countDigits(quant[3])
+#   if(is.null(style)){
+#     paste0(Format2(quant[3], digits, ...),
+#            " (", Format2(quant[2], digits, ...),
+#            sep," ",
+#            Format2(quant[4], digits, ...),
+#            ")")}
+#   else{
+#     paste0(Format2(quant[3], digits, ...),
+#            " (IQR=", Format2(abs(quant[2]-quant[4]), digits, ...),
+#            ")")
+#   }
+# }
+# 
+# 
+
+
+
 
 
 
 #' @rdname rndr_
 #' @export
-rndr_mean <- function(m, s, digits) {
-     print(c(m, s, digits))
-  paste0(Format2(m, digits), " (", Format2(s, digits), ")")
+#' @examples 
+#'  rndr_mean_range(1,2,3,4)
+#'   rndr_mean (1,2 )
+#'   rndr_median_range(1,2,3,4)
+#'   rndr_median(1,2)
+rndr_mean <- function(m, s, digits=NULL, ...) {
+  if(is.null(digits))  digits <- options()$stp25$apa.style$mittelwert$digits
+  paste0(Format2(m, digits[1], ...), " (", Format2(s, digits[1], ...), ")")
 
 }
+#' @rdname rndr_
+#' @export
+rndr_mean_range <- function(m, s, mn, mx, digits=NULL, ...) {
+  if(is.null(digits))  digits <- options()$stp25$apa.style$mittelwert$digits 
+   paste0(
+    Format2(m, digits[1], ...), " (SD ",
+    Format2(s, digits[1], ...), ", range ",
+    Format2(mn, digits[1], ...), " to ", Format2(mx, digits[1], ...), ")"
+  )
+  
+}
+#  
+# ffmean <-function (m, s = NULL,
+#                    digits = rep_len(countDigits(m), 2),
+#                    plusmin_sign=options()$stp25$apa.style$mittelwert$plusmin_sign,
+#                    sym=options()$stp25$apa.style$mittelwert$plusmin_str,
+#                    ...)
+# {
+#   if (!is.null(s)){
+#     if(!plusmin_sign)
+#       x <- paste0(Format2(m, digits[1],...), " (",
+#                   Format2(s, digits[2], ...), ")")
+#     else x <- paste0(Format2(m, digits[1],...), " (", sym,
+#                      Format2(s, digits[2], ...), ")")
+#   }  else {x <- Format2(m, digits[1], ...)}
+#   x
+# }
+# 
+#  
+# ffmean_long <-function (m, s, mn, mx,
+#                         digits = countDigits( m ),
+#                         ...)
+# {
+#  
+#   paste0(
+#     Format2(m, digits, ...), " (SD ",
+#     Format2(s, digits, ...), ", range ",
+#     Format2(mn, digits, ...), "-",
+#     Format2(mx, digits, ...), ")"
+#   )
+#   
+#  
+#   
+# }
+# 
+# 
+#  
+
+
+
+
+
+
+
+
 
 #' @rdname rndr_
 #' @export
@@ -543,10 +655,10 @@ Format2 <- function(x, ...) {
 #' @examples
 #' x<-matrix(rnorm(10), ncol=2)
 #' Format2.matrix(x[,1],c(1:5))
-Format2.matrix <- function(x, digits,...){
+Format2.matrix <- function(x, digits, ...){
   if(!is.matrix(x)) x <- matrix(x)
   
-  if(length(digits)==1) apply(x, 2, Format2, digits=digits,...)
+  if(length(digits)==1) apply(x, 2, Format2, digits=digits, ...)
   else matrix(mapply(Format2, x, digits,...), ncol=ncol(x))
 }
 
@@ -949,122 +1061,7 @@ ffprozent.matrix<- function (prz, frq =NULL, ...){
 
 
 
-#-------------------------------------------------------------------------------------
-#' @rdname Format2
-#' @export
-ffmean <-function (m, s = NULL,
-                   digits = rep_len(countDigits(m), 2),
-                   plusmin_sign=options()$stp25$apa.style$mittelwert$plusmin_sign,
-                   sym=options()$stp25$apa.style$mittelwert$plusmin_str,
-                   ...)
-{
-  
-  input <- lengths(m)
-  
-  
-  
-  
-  #   options()$stp25$apa.style$mittelwert$plusmin_str else ""
-  if (!is.null(s)){
-    if(!plusmin_sign)
-      x <- paste0(Format2(m, digits[1],...), " (",
-                  Format2(s, digits[2], ...), ")")
-    else x <- paste0(Format2(m, digits[1],...), " (", sym,
-                     Format2(s, digits[2], ...), ")")
-  }  else {x <- Format2(m, digits[1], ...)}
-  
-  ## Pruefe ob die Lange passt
-  if(!identical(input, lengths(x))) {
-    print(input)
-    print( lengths(x) )
-    stop("ffmean")
-  }
-  
-  x
-}
 
-#' @rdname Format2
-#' @export
-ffmean_long <-function (m, s, mn, mx,
-                        digits = countDigits( m ),
-                        ...)
-{
-  input <- lengths(m)
-  x<- paste0(
-    Format2(m, digits, ...), " (SD ",
-    Format2(s, digits, ...), ", range ",
-    Format2(mn, digits, ...), "-",
-    Format2(mx, digits, ...), ")"
-  )
-  
-  ## Pruefe ob die Lange passt
-  if(!identical(input, lengths(x))) {
-    print(input)
-    print( lengths(x) )
-    stop("ffmean_long")
-  }
-  x
-  
-}
-
-
-#   ffmean_long(1,2,3,4)
-#   ffmean (1,2 )
-#   ffmedian_long(1,2,3,4)
-#   ffmedian(1,2)
-#' @rdname Format2
-#' @export
-ffmedian_long <-function (m, iq, mn, mx,
-                          digits = countDigits(m),
-                          ...)
-{
-  
-  input <- lengths(m)
-  
-  x <-  paste0(
-    Format2(m, digits, ...), " (IQR ",
-    Format2(iq, digits, ...), ", range ",
-    Format2(mn, digits, ...), "-",
-    Format2(mx, digits, ...), ")"
-  )
-  
-  ## Pruefe ob die Lange passt
-  if(!identical(input, lengths(x))) {
-    print(input)
-    print( lengths(x) )
-    stop("ffmedian_long")
-  }
-  x
-}
-
-
-#-------------------------------------------------------------------------------------
-#' @rdname Format2
-#' @export
-ffmedian <-function (quant, digits=NA,
-                     style= options()$stp25$apa.style$median,
-                     # Optionen fuer median sind
-                     # noch nicht fertig
-                     # style ist quasi die einzige Option
-                     
-                     #lead.zero = options()$stp25$apa.style$mittelwert$lead.zero,
-                     sep=options()$stp25$apa.style$sep_element,
-                     ...)
-{
-  #input <- length(quant[3])
-  if(is.na(digits) | is.null(digits)) digits<- countDigits(quant[3])
-  if(is.null(style)){
-    paste0(Format2(quant[3], digits, ...),
-           " (", Format2(quant[2], digits, ...),
-           sep," ",
-           Format2(quant[4], digits, ...),
-           ")")}
-  else{
-    paste0(Format2(quant[3], digits, ...),
-           " (IQR=", Format2(abs(quant[2]-quant[4]), digits, ...),
-           ")")
-  }
-}
 
 #-------------------------------------------------------------------------------------
 
