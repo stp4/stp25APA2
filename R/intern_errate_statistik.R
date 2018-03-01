@@ -37,6 +37,8 @@ errate_statistik2 <- function(Formula,
                               # auto_wrap = NULL, #-- neu Zeilenumbruch
                               ...)
 {
+ # print(Formula)
+ 
   if (!is.logical(include.test)) {
     if (include.test == "conTest")
       useconTest <- TRUE
@@ -93,6 +95,9 @@ errate_statistik2 <- function(Formula,
     
     if (all(is.na(x)))
       type_switch <- "all_NA"
+    
+    #cat(type_switch,"\n")
+    
     result <- switch(
       type_switch,
       mean = mydf(n, Mean2(x, digits = digits.mean, ...), "(mean)"),
@@ -106,6 +111,8 @@ errate_statistik2 <- function(Formula,
       all_NA =  mydf(0, "n.a."),
       mydf(n, class(x)) # nur eine Zeile ausgeben# Fehler abfangen
     )
+    
+  #  print(str(result))
     
     if (include.all.n)
       result
