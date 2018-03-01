@@ -172,14 +172,27 @@ Median2.formula<-  function(x, data, ...){
 
 #' @rdname Berechne
 #' @export
-Median2.default<- function(x, digits = NULL, ...) {
+Median2.default<- function(x, digits = NULL, 
+                           median.style=get_my_options()$apa.style$mittelwert$median.style, 
+                           ...) {
+ # cat("in Median2\n")
+ # print(head(x))
+ # print(digits)
+  
     #- test_that
     if (length(x) <= 0)
         return("NaN")
-    if (is.vector(x) | is.numeric(x)) {
+    if (is.vector(x) | is.numeric(x)) { 
         if (!is.numeric(x))
             x <- as.numeric(x)
-            rndr_median_quant(quantile(x, na.rm = TRUE), digits, ...)
+        
+        if (median.style == "IQR") {
+          rndr_median(median(x), ifelse(n > 2, IQR(x), NA), digits)
+        } else {
+          rndr_median_quant(quantile(x, na.rm = TRUE), digits)
+        }
+              
+           # rndr_median_quant(quantile(x, na.rm = TRUE), digits, ...)
     } else if (is.data.frame(x)) {
         if (ncol(x) == 1) {
             Median2(x[, 1])
@@ -374,7 +387,8 @@ Prozent2APA <- function(x,
   data.frame(
     Characteristics = names(ans),
     n = c(n, rep("", length(ans) - 1)),
-    Statistics = result
+    Statistics = result, 
+    stringsAsFactors=FALSE
   )
   
 }
@@ -538,7 +552,8 @@ Mean2default <- function(x, digits = 2, n = length(x)) {
     calc_mean(as.numeric(x))
   data.frame(lev = "(mean)",
              n = as.character(n),
-             m = m)
+             m = m, 
+             stringsAsFactors=FALSE)
 }
 
 #' @rdname Berechne
@@ -561,7 +576,8 @@ Median2default <- function(x,
 
   data.frame(lev = "(median)",
              n = as.character(n),
-             m = m)
+             m = m, 
+             stringsAsFactors=FALSE)
 }
 
 
@@ -609,7 +625,8 @@ Prozent2default <-
     data.frame(
       lev = names(ans),
       n = c(n, rep("", length(ans) - 1)),
-      m = as.vector(result)
+      m = as.vector(result), 
+      stringsAsFactors=FALSE
     )
   }
 
@@ -633,7 +650,8 @@ Multi2default<- function(x,
     return( data.frame(
         lev ="",
         n =n,
-        m = "n.a.") )
+        m = "n.a.", 
+        stringsAsFactors=FALSE) )
   }
 
     Prozent2default(x, digits, n)[1,]

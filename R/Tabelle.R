@@ -13,6 +13,7 @@
 #' library(dplyr)
 #' library(tidyr)
 #' #names(varana)
+#' #  set_my_options(mittelwert=list(median.style="Quantil")) # ++IQR
 #' varana2 <- varana %>%
 #'   gather(Zeit, Merkfgk, m1:m4) %>%
 #'   mutate(Zeit = factor(Zeit, Cs(m1, m2, m3 , m4), Cs(t0, t1, t2, t3))) %>%
@@ -356,8 +357,8 @@ errate_statistik3 <-
         logical = Prozent2default(x, X$digits[i], n, exclude, max_factor_length),
         freq =    Prozent2default(x, X$digits[i], n, exclude, max_factor_length),
         mean =    Mean2default(x, X$digits[i], n),
-        median =   Median2default(x, X$digits[i], n),
-        multi =    Multi2default(x, X$digits[i], n),
+        median =  Median2default(x, X$digits[i], n),
+        multi =   Multi2default(x, X$digits[i], n),
         
         "NA"
       )
