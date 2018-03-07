@@ -33,7 +33,7 @@ prepare_data2 <- function(...)
 #' @param na.action  nicht zum aendern
 #' @export
 #' @examples
-#' # require(stp25vers)
+#' # require(stpvers)
 #' prepare_data2(~ m1 + m2 + m3 + m4, varana)
 #' prepare_data2(~ log(m1) + m2 + m3 + m4, varana)
 #' prepare_data2(~ m1[1] + m2 + m3 + m4, varana)

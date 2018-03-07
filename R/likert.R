@@ -66,7 +66,7 @@ APA2.likert <- function(x,
   if (!na.exclude)  x$freq <- x$freq.na
   results2Prozent <- x$freq / x$n * 100
   
-  if (type == "percent" | type == 2) x$freq <- ffprozent(results2Prozent, x$freq)
+  if (type == "percent" | type == 2) x$freq <- rndr_percent(results2Prozent, x$freq)
   
   
  if (include.mean)
@@ -276,7 +276,7 @@ Likert.formula<- function(x,
                      n    = reshape2::dcast(xans_num, fm2, function(x) length(na.omit(x)), drop = FALSE ),
                      m    = reshape2::dcast(xans_num, fm2, function(x) mean(x, na.rm=TRUE), drop = FALSE),
                      sd   = reshape2::dcast(xans_num, fm2, function(x) sd(x, na.rm=TRUE), drop = FALSE),
-                     statistic = reshape2::dcast(xans_num, fm2, function(x) ffmean( mean(x, na.rm=TRUE), sd(x, na.rm=TRUE)), drop = FALSE)
+                     statistic = reshape2::dcast(xans_num, fm2, function(x) rndr_mean( mean(x, na.rm=TRUE), sd(x, na.rm=TRUE)), drop = FALSE)
                 )
   }else{
     xans <- stp25aggregate::Melt2(cbind( X$X_data, items), id.vars=1:ncol(X$X_data))
@@ -293,7 +293,7 @@ Likert.formula<- function(x,
                    n    = reshape2::dcast(xans_num, fm2, function(x) length(na.omit(x)), drop = FALSE),
                    m    = reshape2::dcast(xans_num, fm2, function(x) mean(x, na.rm=TRUE ), drop = FALSE),
                    sd   = reshape2::dcast(xans_num, fm2, function(x) sd(x, na.rm=TRUE ), drop = FALSE),
-                   statistic = reshape2::dcast(xans_num, fm2, function(x) ffmean( mean(x, na.rm=TRUE), sd(x, na.rm=TRUE)), drop = FALSE)
+                   statistic = reshape2::dcast(xans_num, fm2, function(x) rndr_mean( mean(x, na.rm=TRUE), sd(x, na.rm=TRUE)), drop = FALSE)
                )
        }
   results.with.na <- result$freq # sicherung mit NA
