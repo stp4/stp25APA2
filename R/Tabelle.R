@@ -3,7 +3,7 @@
 #' @title Tabelle
 #' @description  Einfache deskriptive Tabelle die in medizinischen Arbeiten
 #' verwendet werden.
-#' Die Funktion arbeitet Intern mit \code{aggregate} bzw. mi  berechne.default().
+#' Die Funktion arbeitet Intern mit \code{aggregate} bzw. mit  berechne.default() also aggregate(formula, data,FUN).
 #' @return Tabelle: data.frame oder list mit data.frame
 #' Tabelle2: HTML
 #' @author Wolfgang Peter
@@ -290,7 +290,8 @@ calculate_tabelle2 <- function(X,
         digits =  if (is.null(digits))
           X$digits[i]
         else
-          digits
+          digits,
+        measure.name = "value"
       )
     
   }
@@ -633,7 +634,11 @@ corr_tabel_X <-
       ans <- corr_1(Y_data, type = type) ## liste
       print(ans)
       ans$mean <-
-        t(berechne.default(Y_data , measure.vars, measure = "mean", type = 1))
+        t(berechne.default(Y_data , 
+                           measure.vars, 
+                           measure = "mean", 
+                           type = 1,
+                           measure.name = "value"))
       
       ans$row_name <- row_name
     }

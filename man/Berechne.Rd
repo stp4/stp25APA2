@@ -27,7 +27,7 @@
 berechne(...)
 
 \method{berechne}{default}(data, x, by = "1", measure, type = 2,
-  fun = NULL, fm = NULL, digits = NULL, measure.name = "value")
+  fun = NULL, fm = NULL, digits = NULL, measure.name = NULL)
 
 \method{berechne}{data.frame}(.data, ..., by = "1", type = 1,
   na.rm = TRUE, conf.interval = 0.95, .drop = TRUE)
@@ -55,7 +55,8 @@ Median2(x, ...)
 
 \method{Median2}{formula}(x, data, ...)
 
-\method{Median2}{default}(x, digits = NULL, ...)
+\method{Median2}{default}(x, digits = NULL,
+  median.style = get_my_options()$apa.style$mittelwert$median.style, ...)
 
 Meanci2(x, digits = NULL, ...)
 
@@ -84,7 +85,7 @@ Prozent2default(x, digits = 0, n = length(x), exclude = NA,
 
 \item{digits}{Nachkommastellen}
 
-\item{measure.name, measure, by}{Variablen name des Ergebnisses}
+\item{measure.name, measure, by}{Variablen name des Ergebnisses. In corr_tabel() und Tabelle() measure.name  ="value"}
 
 \item{.data}{Daten}
 
@@ -118,6 +119,16 @@ Prozent2 wird in APA.formula errate_statistik2 verwendet
 freq = Prozent2(x_NA, exclude, digits=digits.percent, rtrn = "df", max_factor_length = max_factor_length)
 }
 \examples{
+
+#  Tabelle( hyper, chol0,chol1,chol6,chol12,by=~ g)
+
+res<-stp25APA2:::berechne.default(hyper, 
+                                  Cs(chol0,chol1,chol6,chol12), 
+                                  by=~med+g, 
+                                  measure="mean")
+names(res)
+ # res
+ 
 berechne(hyper, "chol0" )
 names(hyper)
 hyper \%>\% berechne(chol0,chol1,chol6,chol12, by=~med+g)

@@ -7,65 +7,83 @@
 #' @param ... weitere Objekte
 #' @return  ein dataframe Objekt oder ein Character-String
 #' @export
-#' @examples
-#' berechne(hyper, "chol0" )
-#' names(hyper)
-#' hyper %>% berechne(chol0,chol1,chol6,chol12, by=~med+g)
+
 berechne<- function(...){UseMethod("berechne")}
 
 #' @rdname Berechne
 #' @param fm formel
 #' @param x Namen der  measure.vars
 #' @param type mean, median
-#' @param measure.name,measure,by Variablen name des Ergebnisses
+#' @param measure.name,measure,by Variablen name des Ergebnisses. In corr_tabel() und Tabelle() measure.name  ="value"
 #' @param digits Nachkommastellen
 #' @param fun Function an plyr::ddply
 #' @export
-berechne.default <- function(data, x, by="1", measure , type = 2,
-                             fun=NULL, fm=NULL, digits=NULL,
-                             measure.name="value") {
+#' 
+#' @examples 
+#' 
+#' #  Tabelle( hyper, chol0,chol1,chol6,chol12,by=~ g)
+#' 
+#' res<-stp25APA2:::berechne.default(hyper, 
+#'                                   Cs(chol0,chol1,chol6,chol12), 
+#'                                   by=~med+g, 
+#'                                   measure="mean")
+#'names(res)
+#'  # res
+#'  
+berechne.default <- function(data,
+                             x,
+                             by = "1",
+                             measure ,
+                             type = 2,
+                             fun = NULL,
+                             fm = NULL,
+                             digits = NULL,
+                             measure.name = NULL 
+                             
+                             ) {
 
-  if(is.null(fm)) fm <- makeFormula(x, by)
-  # cat("\nin berechne\n")
-  #  print(fm)
+#print(measure.name)
   mdn <- function() {
     aggregate(
       fm,
       data,
       FUN = function(x) {
-
-    
-          if (type == 2 | type == "long")
-            rndr_median_range(
-              median(x, na.rm = TRUE),
-              IQR(x, na.rm = TRUE),
-              min(x, na.rm = TRUE),
-              max(x, na.rm = TRUE), digits=digits
-            )
-          else
-            rndr_median_quant(quantile(x), digits=digits)
-      
+        if (type == 2 | type == "long")
+          rndr_median_range(
+            median(x, na.rm = TRUE),
+            IQR(x, na.rm = TRUE),
+            min(x, na.rm = TRUE),
+            max(x, na.rm = TRUE),
+            digits = digits
+          )
+        else
+          rndr_median_quant(quantile(x), digits = digits)
+        
       }
     )
   }
+  
   mn <- function() {
-     aggregate(
+    aggregate(
       fm,
       data,
       FUN = function(x) {
-         
-          if (type == 2 | type == "long")
-            rndr_mean_range(mean(x, na.rm = TRUE),
-                        sd(x, na.rm = TRUE),
-                        min(x, na.rm = TRUE),
-                        max(x, na.rm = TRUE), digits=digits)
-          else
-            rndr_mean(mean(x, na.rm = TRUE),
-                   sd(x, na.rm = TRUE), digits=digits)
-
+        if (type == 2 | type == "long")
+          rndr_mean_range(
+            mean(x, na.rm = TRUE),
+            sd(x, na.rm = TRUE),
+            min(x, na.rm = TRUE),
+            max(x, na.rm = TRUE),
+            digits = digits
+          )
+        else
+          rndr_mean(mean(x, na.rm = TRUE),
+                    sd(x, na.rm = TRUE), digits = digits)
+        
       }
     )
   }
+  
   frq <- function() {
     aggregate(
       fm,
@@ -76,43 +94,55 @@ berechne.default <- function(data, x, by="1", measure , type = 2,
       }
     )
   }
-  if(!is.null(fun)){
+  
+  custom_fun <- function() {
+    aggregate(fm,
+              data ,
+              FUN = fun)
+  }
+  
+  if (is.null(fm)){
+    fm <- makeFormula(x, by)
+    } else  {
     type <- 0
     measure <- "custom_fun"
-
+    
   }
-  custom_fun <- function() {
-    aggregate(
-      fm,
-      data ,
-      FUN = fun
-    )
-  }
-
-  # print(head(data[1:2]))
-  if(type != 3) {
-    if( type[1] =="median") {
-      measure<- type[1]
-      type<- 2 ##Lange version
+  
+  if (type[1] != 3) {
+    if (type[1] == "median") {
+      measure <- type[1]
+      type <- 2 ## Lange version
     }
-    res <- switch (measure,
-                   median = mdn(),
-                   factor = frq() ,
-                   numeric = mn(),
-                   integer = mn(),
-                   mean = mn(),
-                   custom_fun=custom_fun(),
-                   NULL)
-
+    res <- switch (
+      measure,
+      median = mdn(),
+      factor = frq() ,
+      numeric = mn(),
+      integer = mn(),
+      mean = mn(),
+      custom_fun = custom_fun(),
+      NULL
+    )
+    
   } else{
-    if(is.factor(x))
-      x <- if( nlevels(x) ==2 ) as.numeric(x)-1  else as.numeric(x)
-
-    res <- aggregate(fm, data,
-                     FUN = function(x) mean(x, na.rm = TRUE))
-
+    if (is.factor(x))
+      x <- if (nlevels(x) == 2)
+        as.numeric(x) - 1
+    else
+      as.numeric(x)
+    
+    res <- aggregate(
+      fm,
+      data,
+      FUN = function(x)
+        mean(x, na.rm = TRUE)
+    )
+    
   }
-  names(res)[ncol(res)] <- measure.name
+  
+  
+  if(!is.null(measure.name)) names(res)[ncol(res)] <- measure.name[1]
   res
 }
 
@@ -122,6 +152,10 @@ berechne.default <- function(data, x, by="1", measure , type = 2,
 #' @param conf.interval CIs
 #' @param .drop anplyr::ddply
 #' @export
+#' @examples
+#' berechne(hyper, "chol0" )
+#' names(hyper)
+#' hyper %>% berechne(chol0,chol1,chol6,chol12, by=~med+g)
 berechne.data.frame <- function(.data,
                                 ...,
                                 by = "1",
@@ -130,7 +164,7 @@ berechne.data.frame <- function(.data,
                                 conf.interval=.95, .drop=TRUE
 ) {
 
-  Text("berechne.data.frame: Achtung die Funktion wird bals geloescht!")
+ # Text("berechne.data.frame: Achtung die Funktion wird bals geloescht!")
 
   measure <-
     sapply(lazyeval::lazy_dots(...), function(x) {

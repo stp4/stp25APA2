@@ -83,7 +83,7 @@ Tabelle2: HTML
 \description{
 Einfache deskriptive Tabelle die in medizinischen Arbeiten
 verwendet werden.
-Die Funktion arbeitet Intern mit \code{aggregate} bzw. mi  berechne.default().
+Die Funktion arbeitet Intern mit \code{aggregate} bzw. mit  berechne.default() also aggregate(formula, data,FUN).
 
 Tabelle2:  html-Output Tabelle(...) %>% Output()
 
@@ -96,6 +96,7 @@ conTest Hilfsfunktion fuer Tabellen
 library(dplyr)
 library(tidyr)
 #names(varana)
+#  set_my_options(mittelwert=list(median.style="Quantil")) # ++IQR
 varana2 <- varana \%>\%
   gather(Zeit, Merkfgk, m1:m4) \%>\%
   mutate(Zeit = factor(Zeit, Cs(m1, m2, m3 , m4), Cs(t0, t1, t2, t3))) \%>\%

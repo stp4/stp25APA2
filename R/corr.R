@@ -145,12 +145,16 @@ corr_tabel.data.frame <- function(.data,
 #' #corr_tabel(a+b+c~d, data, groups = ~g)
 #'
 corr_tabel.formula <-
-  function (Formula, data,
+  function (Formula,
+            data,
             groups = NULL,
             type = c("pearson", "spearman"),
-            exclude = NA, subset, na.action = na.pass,
+            exclude = NA,
+            subset,
+            na.action = na.pass,
             cor_diagonale_up = TRUE,
-            stars = TRUE, p.value = FALSE,
+            stars = TRUE,
+            p.value = FALSE,
             include.mean = FALSE,
             include.n = TRUE)
   {
@@ -158,7 +162,7 @@ corr_tabel.formula <-
     #-- Vorbereiten der Daten (na.omit, subset)
     X <- Formula_Data(Formula, data, subset, na.action)
     N <- nrow(X$Y_data)
-
+    
     row_name <- GetLabelOrName(X$Y_data)
     ## wenn nur ein element dann ergibt sich ein Fehler
     if (ncol(X$Y_data) == 1)
@@ -172,23 +176,23 @@ corr_tabel.formula <-
           warning("Achtung nur eine Faktor kann Gruppen bilden!")
           return(head(data))
         }
-
+        
         groups <- droplevels(groups)
         lvls <- levels(groups)
         g1 <- which(groups == lvls[1])
-
-       # vor corr_2"
-        ans <- corr_2(X$Y_data[g1,], X$X_data[g1, 1], type)
+        
+        # vor corr_2"
+        ans <- corr_2(X$Y_data[g1, ], X$X_data[g1, 1], type)
         names(ans)[2:4] <- paste0(lvls[1], "_", names(ans)[2:4])
-
+        
         for (i in 2:(length(lvls))) {
           g2 <- which(groups == lvls[i])
-          ans2 <-  corr_2(X$Y_data[g2,], X$X_data[g2, 1], type)
+          ans2 <-  corr_2(X$Y_data[g2, ], X$X_data[g2, 1], type)
           names(ans2)[2:4] <-
             paste0(lvls[i], "_", names(ans2)[2:4])
           ans <- cbind(ans, ans2[-1])
         }
-
+        
       }
       else{
         return("Achtung nur eine Gruppe kann berechnet werden!")
@@ -200,7 +204,7 @@ corr_tabel.formula <-
     else if (!is.null(X$xname)) {
       # Beginn der Funktion -----------------------------------------------------
       ans <- corr_2(X$Y_data, X$X_data[1], type)
-
+      
       if (length(X$xname) > 1) {
         names(ans)[2:4] <- paste0(X$xname[1], "_", names(ans)[2:4])
         for (i in  2:(length(X$xname))) {
@@ -216,14 +220,18 @@ corr_tabel.formula <-
     }
     else{
       ans <- corr_1(X$Y_data, type = type) ## liste
-
+      
       ans$mean <-
-        t(berechne.default(X$Y_data , X$yname, measure = "mean", type = 1))
-
+        t(berechne.default(X$Y_data, 
+                           X$yname, 
+                           measure = "mean", 
+                           type = 1,
+                           measure.name = "value"))
+      
       ans$row_name <- row_name
     }
     ans
-}
+  }
 
 
 #' @rdname corr_tabel
