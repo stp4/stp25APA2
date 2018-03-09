@@ -3,7 +3,7 @@
 #' @description Transformiert Kano-Fragebogen zu Kano-Kodierung
 #' http://www.eric-klopp.de/texte/angewandte-psychologie/18-die-kano-methode
 #'
-#' M O A I R Q Hoeufigkeit
+#' M O A I R Q Heufigkeit
 #'
 #' max Category
 #'
@@ -21,7 +21,7 @@
 #'
 #' CS minus	Index Negativ CS.minus= (O+M)/(A+O+M+I)
 #'
-#' Chi-Test	Eigendlich unsinn Testet ob Verteilung von M, a, O und I gleich ist
+#' Chi-Test	Eigendlich unsinn Testet ob Verteilung von M, A, O und I gleich ist
 #'
 #' Fong-Test Vergleich der zwei Haeufigsten-Kategorien gegenueber der Gesammtzahl
 #' Ergebnis ist entweder ein signifikente oder ein nicht signifikente Verteilung.
@@ -76,105 +76,18 @@
 #'    \item \code{use.categorie=TRUE  M, O, A, oder i mit in die Labels ausgeben }
 #'
 #' }
-#' @return data.frame mit der Kano-Kodierung
+#' @return Liste mit
+#' value: data.frame mit der Kano-Kodierung
+#' scors: Scors,
+#' data= data,
+#' molten=molten,
+#' formula= fm,
+#' removed=Errorrs,
+#' N=nrow(data),
+#' Attributes= c("Must-be","One-dimensional", "Attractive","Indifferent","Reverse", "Questionable"),
+#' answers
 #' @export
-#' @examples
-#' library(stp5)
-#'  Start("")
-#'  head(DF<-GetData("   Geschlecht f1 f2 f3 f4 f5 f6 f7 f8 f9 f10 f11 f12 f13 f14 f15 f16 f17 f18
-#'  1           w  1  1  1  2  1  3  1  4  1   5   5   1   4   1   5   2   5   1
-#'  2           w  2  1  2  2  2  3  2  4  2   5   2   5   1   3   2   5   2   5
-#'  3           m  3  1  3  2  3  3  3  4  3   5   5   1   4   1   5   2   5   1
-#'  4           m  4  1  4  2  4  3  4  4  4   5   5   1   4   1   5   2   5   1
-#'  5           w  5  1  5  2  5  3  5  4  5   5   5   1   4   1   5   2   5   1
-#'  6           w  NA NA NA NA NA NA NA NA NA  NA  NA  NA  NA  NA  NA  NA  NA  NA
-#'  7           m  2  5  1  5  2  5  1  5  1   5   2   5   1   5   1   5   2   5
-#'  8           w  2  4  2  5  1  3  1  3  2   5   3   3   1   3   1   4   1   3
-#'  9           m  2  4  2  5  2  3  1  3  2   5   1   3   1   3   2   4   3   3
-#'  10          m  2  5  1  5  1  4  1  5  2   5   1   4   1   5   2   5   1   3
-#'  11          w  1  5  2  5  1  4  1  4  1   5   1   4   2   5   2   5   1   4
-#'  12          m  2  5  2  5  2  5  2  4  1   5   1   3   1   4   2   5   3   3
-#'  13          w  2  5  2  5  3  3  1  5  2   5   1   5   1   5   3   3   3   3
-#'  14          m  2  5  1  5  1  5  2  5  2  NA   1   5   1   5   2   5   1   5
-#'  15          w  1  4  2  5  1  3  2  5  1   5   1   3   1   4   2   5   1   3
-#'  16          w  1  4  2  5  2  5  2  5  1   5   1   4   2   5   2   5   1   3
-#'  17          w  1  5  2  5  1  5  1  5  2   5   1   4   1   5   2   5   1   4
-#'  18          w  1  5  2  5  2  5  2  5  1   5   1   2   1   5   1   5   3   2
-#'  19          m  1  5  2  5  2  5  2  5  2   5   1   4   2   5   2   5   1   3
-#'  20          w  2  5  2  5  2  5  2  5  2   5   1   3   2   5   2   5   1   3
-#'  21          w  2  5  2  5  1  5  2  5  2   5   1   5   2   5   2   5   1   3
-#'  22          m  1  3  2  5  1  3  2  5  2   5   1   3   2   5   1   3   1   3
-#'  23          w  1  5  2  5  3  3  2  5  2   5   1   4   2   5   2   5   1   4
-#'  24          w  2  4  2  5  2  3  2  4  2   5   3   3   2   4   2   4   1   3
-#'  25          m  2  4  1  5  1  4  2  4  1   5   1   3   3   3   2   4   1   3
-#'  26          w  1  5  1  5  1  3  1  5  1   5   1   3   1   5   1   5   3   3
-#'  27          w  1  5  2  5  3  3  1  4  2   4   1   3   1   3   3   3   5   1
-#'  28          w  2  5  2  5  1  4  2  5  1   5   1   3   2   4   2   5   4   1
-#'  29          w  2  5  2  5  2  4  2  4  2   5   1   4   2   4   1   5   1   4
-#'  30          m  1  5  2  5  1  3  1  3  1   4   1   3   1   3   1   3   1   3
-#'  31          m  1  3  2  5  1  4  1  4  3   3   5   2   2   4  NA  NA   1   3
-#'  "))
-#'
-#'  DF<- upData(DF,  labels=c(f1="f1.motiviert"
-#'                            ,f3="f2.anpasst"
-#'                            ,f5="f3.programm"
-#'                            ,f7="f4.info"
-#'                            ,f9="f5.text"
-#'                            ,f11="f6.reagieren"
-#'                            ,f13="f7.text"
-#'                            ,f15="f8.Arzt"
-#'                            ,f17="f9.Telefonanruf"
-#'  ))
-#'
-#'#  match(DF$f1, 1) & match(DF$f2, 5)
-#'
-#'
-#'  kano_res <- KANO2(DF[, -1], grouping = DF[1],
-#'        # type = 5,
-#'        # umcodieren = FALSE,
-#'        # rm_Q = 999,
-#'        # rm_I = 999
-#'  )
-#'
-#'
-#'  kano_res <- KANO2( .~ Geschlecht, DF)
-#'
-#'
-#'  names(kano_res)
-#'  #"value"      "scors"      "data"       "molten"     "formula"  "removed"    "Attributes" "answers"
-#'
-#'  APA2(kano_res, caption = "Ueber Objekt")
-#'  APA2(value ~ variable, kano_res, caption = "Ueber formula")
-#'  APA2(value ~ variable + Geschlecht , kano_res, caption = "Ueber formula +Gechlecht")
-#'
-#' #Kano_Auswertung( kano_res$molten, kano_res$formula)
-#'
-#'
-#' library(stp25plot)
-#'  Kano_plot(value ~ variable + Geschlecht, kano_res,
-#'      main = "kano-analysis",
-#'      ylab = "Prozent",
-#'      type = 2, col = 2:7,
-#'      prop.table = TRUE)
-#'
-#'  Kano_plot(value ~ variable + Geschlecht, kano_res,
-#'      main = "kano-analysis",
-#'      center.axis = TRUE)
-#'
-#' #   windows(8, 8)
-#  #Kano_plot(value ~ variable, kano_res, main = main, ylab = "CS+", xlab = "CS-")  #   center.axis = F,
-#   #SaveData(paste0("txt ",plot_name))
-#   #windows(8, 8)
-#   #Kano_plot(value ~ variable, kano_res, main = main, use.labels = FALSE, ylab = "CS+", xlab = "CS-")
-#   #SaveData(paste0("nr ",plot_name))
-#'
-#'  End()
-#'
-NULL
-
-#' @rdname Kano
-#' @export
-KANO2<-function(X,
+Kano<-function(X,
                 grouping  =NULL,
                 type = 5, # langversion oder Kurzversion
                 umcodieren = FALSE,
@@ -335,122 +248,258 @@ KANO2<-function(X,
 
   )
   class(res)<-"Kano"
-  return(res)
+  
+ res 
 }
 
 
-#' @rdname Kano
-#' @export
-Kano <- KANO2
+# @rdname Kano
+# @export
+#Kano <- KANO2
 
 
 #' @rdname Kano
 #' @export
-Kano_Auswertung <- function(data,
-                            formula,
-                            digits= options()$stp4$apa.style$prozent$digits[1],
-                            prop.table=TRUE,
-                            ...,
-                            var_names=c("N","Total",
-                                        "M","O","A","I","R","Q",
-                                        "max Category","M>O>A>I","Total Strength","Category Strength",
-                                        "CS plus","CS minus","Chi-Test","Fong-Test" )
+# Kano_Auswertung <- function(data,
+#                             formula,
+#                             digits= options()$stp4$apa.style$prozent$digits[1],
+#                             prop.table=TRUE,
+#                             ...,
+#                             var_names=c("N","Total",
+#                                         "M","O","A","I","R","Q",
+#                                         "max Category","M>O>A>I","Total Strength","Category Strength",
+#                                         "CS plus","CS minus","Chi-Test","Fong-Test" )
+# 
+# 
+# ){
+# 
+# 
+#   Fong<-function(x){
+#     if(length(x)==0) {"ns"}
+#     else{
+#       x<-as.numeric(x)
+#       a<-sort(x)[4]
+#       b<-sort(x)[3]
+#       n<-sum(x)
+#       ifelse( abs(a-b)<1.65*sqrt(((a+b)*(2*n-a-b)) / (2*n) ), "sig.","ns") }
+#   }
+#   kano_aggregate <- function(x) {
+# 
+#     x   <-   factor(x, levels= Cs(M,O,A,I,R,Q))
+#     tab <-   table(x)
+# 
+#     chi <-   if(length(x)==0) list(statistic=0, p.value=1)  else chisq.test(tab[1:4])
+#     proptab<-prop.table(tab)
+#     prop<- rndr_percent(proptab*100, tab)
+#         #paste0(ff(proptab*100, digits, options()$stp4$apa.style$prozent$lead.zero), "%")
+#     names(prop)<- names(tab)
+# 
+#     Kat <-   names( sort( tab, decreasing = TRUE))
+#     max.Kat<-Kat[1]
+#     Cat <-   as.numeric(diff(sort(proptab[c("O", "A", "M", "I", "R")], decreasing = TRUE)[2:1]))    # Category.Strength
+#     Tot <-   as.numeric(proptab["A"]+proptab["O"]+proptab["M"] )        # Total.Strength
+#     # q.value <-  (tab["A"]*3+ tab["O"]*2+ tab["M"])/(tab["A"]+ tab["O"]+ tab["M"])
+#     Auswertregel <-  ifelse(  Cat > 0.06,         max.Kat
+#                      ,ifelse( any(Kat[1:2]=="M"), "M"
+#                      ,ifelse( any(Kat[1:2]=="O"), "O"
+#                      ,ifelse (any(Kat[1:2]=="A"), "A"
+#                      ,ifelse( any(Kat[1:2]=="I"), "I", NA)))))
+# 
+#     #Auswertung nach (O + A + M) >< (I + Q + R)
+#     #Wenn M + A + O > I + Q + R, dann Max (M, A, O)
+#     #Wenn M + A + O < I + Q + R, dann Max (I, Q, R)
+# 
+#     c(N=length(x),
+#       n=length(na.omit(x)),
+#       if(prop.table) prop else tab
+#       ,max.Kat = max.Kat
+#       ,M.O.A.I = Auswertregel
+#       ,Total.Strength =   paste0(ff(Tot*100, digits, options()$stp4$apa.style$prozent$lead.zero), "%")
+#       ,Category.Strength=  paste0(ff(Cat*100, digits, options()$stp4$apa.style$prozent$lead.zero), "%")
+#       #,q.value=round(q.value,2)
+#       ,CS.plus=  round( as.numeric((tab["A"]+tab["O"])/(tab["A"]+tab["O"]+tab["M"]+tab["I"])),3)
+#       ,CS.minus= round( as.numeric((tab["O"]+tab["M"])/(tab["A"]+tab["O"]+tab["M"]+tab["I"])),3) *-1
+#       ,Chi=   paste0(round(chi$statistic, 2), ifelse(chi$p.value<0.05,"*",""))
+#       ,Fong=Fong(tab)
+#     )
+#   }
+# 
+#   ##-16-07-2016 Anderung die Formel mit . ist obsolet
+#   ## - workaround fue cast
+#   #--  cas ist ja aus dem packages reshape das nich mehr weiterentwicklt wird
+# 
+# 
+#   # y <- unlist(strsplit(gsub(" ", "", deparse(formula[[2L]])), split = "\\+"))
+#   # x <- unlist(strsplit(gsub(" ", "", deparse(formula[[3L]])), split = "\\+"))
+#   #
+#   # dotformula<- if (y[1] == "." | x[1] == ".") TRUE  else FALSE
+#   #
+#   # if(dotformula){
+#   #   if (!require("reshape")) {
+#   #     install.packages("reshape")
+#   #     require(reshape)
+#   #   }
+#   #   ans<- cast(data, formula, fun.aggregate = kano_aggregate)
+#   #   names(ans)[1]<- "Item"
+#   #   names(ans)[ (ncol(ans)-15): ncol(ans)] <- var_names
+#   #
+#   #
+#   # }else{
+#     ans<-  as.data.frame(aggregate(formula, data, FUN = kano_aggregate )    )
+#     #  print(str(ans))
+#     #  print(names(ans))
+#     n_names <-length(names(ans))
+#     ans_value <-  as.data.frame(ans[n_names]$value)
+#     names(ans_value) <- var_names
+#     ans <- cbind( ans[,-n_names], ans_value )
+#     names(ans)[1]<- "Item"
+# 
+#  # }
+# 
+# return(ans)
+# }
 
 
-){
 
 
-  Fong<-function(x){
-    if(length(x)==0) {"ns"}
+
+
+#' @rdname APA2
+#' @param include.n Anzahl 
+#' @param include.percent Prozent
+#' @param include.total N und Total
+#' @param include.test Fong und Chie-Test,
+#' @export
+APA2.Kano <- function(x,
+                      caption = "",
+                      note = "note",
+                      formula = x$formula,
+                      data = x$molten,
+                      digits = options()$stp4$apa.style$prozent$digits[1],
+                      prop.table = TRUE,
+                      
+                      include.n=TRUE,
+                      include.percent=TRUE,
+                      include.total=TRUE,
+                      include.test=TRUE,
+                      ...) {
+  var_names = c(
+   # "N",
+    "Total",
+    "M",
+    "O",
+    "A",
+    "I",
+    "R",
+    "Q",
+    "max Category",
+    "M>O>A>I",
+    "Total Strength",
+    "Category Strength",
+    "CS plus",
+    "CS minus",
+    "Chi-Test",
+    "Fong-Test"
+  )
+  
+  
+  
+  
+  
+  Fong <- function(x) {
+    if (length(x) == 0) {
+      "ns"
+    }
     else{
-      x<-as.numeric(x)
-      a<-sort(x)[4]
-      b<-sort(x)[3]
-      n<-sum(x)
-      ifelse( abs(a-b)<1.65*sqrt(((a+b)*(2*n-a-b)) / (2*n) ), "sig.","ns") }
+      x <- as.numeric(x)
+      a <- sort(x)[4]
+      b <- sort(x)[3]
+      n <- sum(x)
+      ifelse(abs(a - b) < 1.65 * sqrt(((a + b) * (2 * n - a - b)) / (2 *
+                                                                       n)), "sig.", "ns")
+    }
   }
   kano_aggregate <- function(x) {
-
-    x   <-   factor(x, levels= Cs(M,O,A,I,R,Q))
+    x   <-   factor(x, levels = Cs(M, O, A, I, R, Q))
     tab <-   table(x)
-
-    chi <-   if(length(x)==0) list(statistic=0, p.value=1)  else chisq.test(tab[1:4])
-    proptab<-prop.table(tab)
-    prop<- ffprozent(proptab*100)
-        #paste0(ff(proptab*100, digits, options()$stp4$apa.style$prozent$lead.zero), "%")
-    names(prop)<- names(tab)
-
-    Kat <-   names( sort( tab, decreasing = TRUE))
-    max.Kat<-Kat[1]
-    Cat <-   as.numeric(diff(sort(proptab[c("O", "A", "M", "I", "R")], decreasing = TRUE)[2:1]))    # Category.Strength
-    Tot <-   as.numeric(proptab["A"]+proptab["O"]+proptab["M"] )        # Total.Strength
+    
+    chi <-
+      if (length(x) == 0)
+        list(statistic = 0, p.value = 1)
+    else
+      chisq.test(tab[1:4])
+     proptab <- prop.table(tab)
+    if (include.percent) {
+      
+      if (include.n) {
+        myTab <- rndr_percent(as.vector(proptab* 100), as.vector(tab))
+      } else{
+        myTab <- rndr_percent(as.vector(proptab* 100))
+      }
+    }    else{      myTab <- as.vector(tab)    }
+    names(myTab) <- names(tab)   
+    
+      
+    
+    Kat <-   names(sort(tab, decreasing = TRUE))
+    max.Kat <- Kat[1]
+    Cat <-
+      as.numeric(diff(sort(proptab[c("O", "A", "M", "I", "R")], decreasing = TRUE)[2:1]))    # Category.Strength
+    Tot <-
+      as.numeric(proptab["A"] + proptab["O"] + proptab["M"])        # Total.Strength
     # q.value <-  (tab["A"]*3+ tab["O"]*2+ tab["M"])/(tab["A"]+ tab["O"]+ tab["M"])
-    Auswertregel <-  ifelse(Cat > 0.06, max.Kat
-                            ,ifelse( any(Kat[1:2]=="M"), "M"
-                                     ,ifelse(any(Kat[1:2]=="O"), "O"
-                                             ,ifelse(any(Kat[1:2]=="A"), "A"
-                                                     ,ifelse(any(Kat[1:2]=="I"), "I", NA))))  )
-
+    Auswertregel <- ifelse(Cat > 0.06,           max.Kat
+                  , ifelse(any(Kat[1:2] == "M"), "M"
+                  , ifelse(any(Kat[1:2] == "O"), "O"
+                  , ifelse(any(Kat[1:2] == "A"), "A"
+                  , ifelse(any(Kat[1:2] == "I"), "I"
+                                               , NA
+                  )))))
+    
     #Auswertung nach (O + A + M) >< (I + Q + R)
     #Wenn M + A + O > I + Q + R, dann Max (M, A, O)
     #Wenn M + A + O < I + Q + R, dann Max (I, Q, R)
-
-
-    #  print(proptab[c("M","O", "A",  "I")])
-    # print(  sort(proptab[c("O", "A", "M", "I")], decreasing = TRUE)[2:1])
-    #  print(Cat)
-    c(N=length(x),
-      n=length(na.omit(x)),
-      if(prop.table) prop else tab
-      ,max.Kat = max.Kat
-      ,M.O.A.I = Auswertregel
-      ,Total.Strength =   paste0(ff(Tot*100, digits, options()$stp4$apa.style$prozent$lead.zero), "%")
-      ,Category.Strength=  paste0(ff(Cat*100, digits, options()$stp4$apa.style$prozent$lead.zero), "%")
+    
+ 
+    res<- c(
+     # N = length(x),
+      n = length(na.omit(x)),
+      myTab,
+      max.Kat = max.Kat,
+      M.O.A.I = Auswertregel,
+      Total.Strength =   rndr_percent(Tot * 100),
+      Category.Strength =  rndr_percent(Cat * 100),
       #,q.value=round(q.value,2)
-      ,CS.plus=  round( as.numeric((tab["A"]+tab["O"])/(tab["A"]+tab["O"]+tab["M"]+tab["I"])),3)
-      ,CS.minus= round( as.numeric((tab["O"]+tab["M"])/(tab["A"]+tab["O"]+tab["M"]+tab["I"])),3) *-1
-      ,Chi=   paste0(round(chi$statistic, 2), ifelse(chi$p.value<0.05,"*",""))
-      ,Fong=Fong(tab)
+      
+      CS.plus =  round(as.numeric((tab["A"] + tab["O"]) / (
+                 tab["A"] + tab["O"] + tab["M"] + tab["I"] )), 3),
+      CS.minus = round(as.numeric((tab["O"] + tab["M"]) / (
+                 tab["A"] + tab["O"] + tab["M"] + tab["I"])), 3) * -1
+    
     )
+    if(include.test) res<- c(res, 
+                             Chi = rndr_Chisq_stars(chi$statistic, chi$p.value),
+                             Fong = Fong(tab))
+      
+    if(include.total) res  else res[-1]
+      
   }
-
-  ##-16-07-2016 Anderung die Formel mit . ist obsolet
-  ## - workaround fue cast
-  #--  cas ist ja aus dem packages reshape das nich mehr weiterentwicklt wird
-
-
-  # y <- unlist(strsplit(gsub(" ", "", deparse(formula[[2L]])), split = "\\+"))
-  # x <- unlist(strsplit(gsub(" ", "", deparse(formula[[3L]])), split = "\\+"))
-  #
-  # dotformula<- if (y[1] == "." | x[1] == ".") TRUE  else FALSE
-  #
-  # if(dotformula){
-  #   if (!require("reshape")) {
-  #     install.packages("reshape")
-  #     require(reshape)
-  #   }
-  #   ans<- cast(data, formula, fun.aggregate = kano_aggregate)
-  #   names(ans)[1]<- "Item"
-  #   names(ans)[ (ncol(ans)-15): ncol(ans)] <- var_names
-  #
-  #
-  # }else{
-    ans<-  as.data.frame(aggregate(formula, data, FUN = kano_aggregate )    )
-    #  print(str(ans))
-    #  print(names(ans))
-    n_names <-length(names(ans))
-    ans_value <-  as.data.frame(ans[n_names]$value)
-    names(ans_value) <- var_names
-    ans <- cbind( ans[,-n_names], ans_value )
-    names(ans)[1]<- "Item"
-
- # }
-
-return(ans)
+  
+  
+  
+  ans <-
+    as.data.frame(aggregate(formula, data, FUN = kano_aggregate))
+  
+  n_names <- length(names(ans))
+  ans_value <-  as.data.frame(ans[n_names]$value)
+  names(ans_value) <- var_names
+  ans <- cbind(ans[, -n_names], ans_value)
+  #names(ans)[1] <- "Item"
+  
+  ans <- prepare_output(ans, caption = caption, note = note)
+  Output(ans)
+  invisible(ans)
 }
-
-
-
 
 
 

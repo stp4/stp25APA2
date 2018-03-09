@@ -2,24 +2,16 @@
 % Please edit documentation in R/kano.R
 \name{Kano}
 \alias{Kano}
-\alias{KANO2}
-\alias{Kano}
-\alias{Kano_Auswertung}
+\alias{APA2.Kano}
 \title{Analyze Kano type items.}
 \usage{
-KANO2(X, grouping = NULL, type = 5, umcodieren = FALSE, rm_Q = 10000,
-  rm_I = 10000, methode = 1, vars_func = NULL, vars_dysfunc = NULL,
-  data = grouping, subset = NULL, na.action = NULL, ...)
-
 Kano(X, grouping = NULL, type = 5, umcodieren = FALSE, rm_Q = 10000,
   rm_I = 10000, methode = 1, vars_func = NULL, vars_dysfunc = NULL,
   data = grouping, subset = NULL, na.action = NULL, ...)
 
-Kano_Auswertung(data, formula,
-  digits = options()$stp4$apa.style$prozent$digits[1], prop.table = TRUE,
-  ..., var_names = c("N", "Total", "M", "O", "A", "I", "R", "Q",
-  "max Category", "M>O>A>I", "Total Strength", "Category Strength", "CS plus",
-  "CS minus", "Chi-Test", "Fong-Test"))
+\method{APA2}{Kano}(x, caption = "", note = "note", formula = x$formula,
+  data = x$molten, digits = options()$stp4$apa.style$prozent$digits[1],
+  prop.table = TRUE, ...)
 }
 \arguments{
 \item{X}{data.frame mit parweisen Kano Fragen}
@@ -67,13 +59,22 @@ Kano_Auswertung(data, formula,
 }}
 }
 \value{
-data.frame mit der Kano-Kodierung
+Liste mit
+value: data.frame mit der Kano-Kodierung
+scors: Scors,
+data= data,
+molten=molten,
+formula= fm,
+removed=Errorrs,
+N=nrow(data),
+Attributes= c("Must-be","One-dimensional", "Attractive","Indifferent","Reverse", "Questionable"),
+answers
 }
 \description{
 Transformiert Kano-Fragebogen zu Kano-Kodierung
 http://www.eric-klopp.de/texte/angewandte-psychologie/18-die-kano-methode
 
-M O A I R Q Hoeufigkeit
+M O A I R Q Heufigkeit
 
 max Category
 
@@ -91,7 +92,7 @@ CS plus	Indx Positiv  CS.plus=  (A+O)/(A+O+M+I)
 
 CS minus	Index Negativ CS.minus= (O+M)/(A+O+M+I)
 
-Chi-Test	Eigendlich unsinn Testet ob Verteilung von M, a, O und I gleich ist
+Chi-Test	Eigendlich unsinn Testet ob Verteilung von M, A, O und I gleich ist
 
 Fong-Test Vergleich der zwei Haeufigsten-Kategorien gegenueber der Gesammtzahl
 Ergebnis ist entweder ein signifikente oder ein nicht signifikente Verteilung.
@@ -111,92 +112,4 @@ Ergebnis ist entweder ein signifikente oder ein nicht signifikente Verteilung.
  \subsection{Unerhebliche- Faktoren }{
  Unerhebliche-Merkmale (I...Indifferent) werden vom Kunden Ignoriert.
  }
-}
-\examples{
-library(stp5)
- Start("")
- head(DF<-GetData("   Geschlecht f1 f2 f3 f4 f5 f6 f7 f8 f9 f10 f11 f12 f13 f14 f15 f16 f17 f18
- 1           w  1  1  1  2  1  3  1  4  1   5   5   1   4   1   5   2   5   1
- 2           w  2  1  2  2  2  3  2  4  2   5   2   5   1   3   2   5   2   5
- 3           m  3  1  3  2  3  3  3  4  3   5   5   1   4   1   5   2   5   1
- 4           m  4  1  4  2  4  3  4  4  4   5   5   1   4   1   5   2   5   1
- 5           w  5  1  5  2  5  3  5  4  5   5   5   1   4   1   5   2   5   1
- 6           w  NA NA NA NA NA NA NA NA NA  NA  NA  NA  NA  NA  NA  NA  NA  NA
- 7           m  2  5  1  5  2  5  1  5  1   5   2   5   1   5   1   5   2   5
- 8           w  2  4  2  5  1  3  1  3  2   5   3   3   1   3   1   4   1   3
- 9           m  2  4  2  5  2  3  1  3  2   5   1   3   1   3   2   4   3   3
- 10          m  2  5  1  5  1  4  1  5  2   5   1   4   1   5   2   5   1   3
- 11          w  1  5  2  5  1  4  1  4  1   5   1   4   2   5   2   5   1   4
- 12          m  2  5  2  5  2  5  2  4  1   5   1   3   1   4   2   5   3   3
- 13          w  2  5  2  5  3  3  1  5  2   5   1   5   1   5   3   3   3   3
- 14          m  2  5  1  5  1  5  2  5  2  NA   1   5   1   5   2   5   1   5
- 15          w  1  4  2  5  1  3  2  5  1   5   1   3   1   4   2   5   1   3
- 16          w  1  4  2  5  2  5  2  5  1   5   1   4   2   5   2   5   1   3
- 17          w  1  5  2  5  1  5  1  5  2   5   1   4   1   5   2   5   1   4
- 18          w  1  5  2  5  2  5  2  5  1   5   1   2   1   5   1   5   3   2
- 19          m  1  5  2  5  2  5  2  5  2   5   1   4   2   5   2   5   1   3
- 20          w  2  5  2  5  2  5  2  5  2   5   1   3   2   5   2   5   1   3
- 21          w  2  5  2  5  1  5  2  5  2   5   1   5   2   5   2   5   1   3
- 22          m  1  3  2  5  1  3  2  5  2   5   1   3   2   5   1   3   1   3
- 23          w  1  5  2  5  3  3  2  5  2   5   1   4   2   5   2   5   1   4
- 24          w  2  4  2  5  2  3  2  4  2   5   3   3   2   4   2   4   1   3
- 25          m  2  4  1  5  1  4  2  4  1   5   1   3   3   3   2   4   1   3
- 26          w  1  5  1  5  1  3  1  5  1   5   1   3   1   5   1   5   3   3
- 27          w  1  5  2  5  3  3  1  4  2   4   1   3   1   3   3   3   5   1
- 28          w  2  5  2  5  1  4  2  5  1   5   1   3   2   4   2   5   4   1
- 29          w  2  5  2  5  2  4  2  4  2   5   1   4   2   4   1   5   1   4
- 30          m  1  5  2  5  1  3  1  3  1   4   1   3   1   3   1   3   1   3
- 31          m  1  3  2  5  1  4  1  4  3   3   5   2   2   4  NA  NA   1   3
- "))
-
- DF<- upData(DF,  labels=c(f1="f1.motiviert"
-                           ,f3="f2.anpasst"
-                           ,f5="f3.programm"
-                           ,f7="f4.info"
-                           ,f9="f5.text"
-                           ,f11="f6.reagieren"
-                           ,f13="f7.text"
-                           ,f15="f8.Arzt"
-                           ,f17="f9.Telefonanruf"
- ))
-
-#  match(DF$f1, 1) & match(DF$f2, 5)
-
-
- kano_res <- KANO2(DF[, -1], grouping = DF[1],
-       # type = 5,
-       # umcodieren = FALSE,
-       # rm_Q = 999,
-       # rm_I = 999
- )
-
-
- kano_res <- KANO2( .~ Geschlecht, DF)
-
-
- names(kano_res)
- #"value"      "scors"      "data"       "molten"     "formula"  "removed"    "Attributes" "answers"
-
- APA2(kano_res, caption = "Ueber Objekt")
- APA2(value ~ variable, kano_res, caption = "Ueber formula")
- APA2(value ~ variable + Geschlecht , kano_res, caption = "Ueber formula +Gechlecht")
-
-#Kano_Auswertung( kano_res$molten, kano_res$formula)
-
-
-library(stp25plot)
- Kano_plot(value ~ variable + Geschlecht, kano_res,
-     main = "kano-analysis",
-     ylab = "Prozent",
-     type = 2, col = 2:7,
-     prop.table = TRUE)
-
- Kano_plot(value ~ variable + Geschlecht, kano_res,
-     main = "kano-analysis",
-     center.axis = TRUE)
-
-#   windows(8, 8)
-
- End()
-
 }

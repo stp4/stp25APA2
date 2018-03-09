@@ -200,7 +200,7 @@ rndr_ods <- function(x, digits = 2) {
 
 rndr_percent <- function(
   x,
-  n,
+  n=NULL,
   percent = TRUE, # nur die Anzahl zurueckgeben (xtabs)
   digits = options()$stp25$apa.style$prozent$digits[1],
   percentage_str = options()$stp25$apa.style$prozent$percentage_str,
@@ -213,26 +213,37 @@ rndr_percent <- function(
 
   if (is.vector(x)) {
     if (percent) {
+      
+        
       prz <- ifelse(
         x < 1 / (10 ^ digits),
         paste0("<", 1 / (10 ^ digits), "%"),
         paste0( formatC(x,
             format = "f",  digits = digits,
             decimal.mark = getOption("OutDec")),percentage_str))
-      
+      if(!is.null(n)){
       anz <- formatC(n, format = "f", digits =  0)
       
       if (style == 1)
         res <- paste0(prz, " (", anz, ")")
       else
         res <- paste0(anz, " (", prz, ")")
+      
+     
+       
+      } else { # in Kano verwendet
+        null_percent_sign<- NULL #fehler abangen
+        res <-  prz
+      }
+      
+      
     }
 
     else{
       res <- formatC(n, format = "f", digits =  0)
     }
 
-    if(!is.null(null_percent_sign))
+     if(!is.null(null_percent_sign))
       res[which(n==0)] <- null_percent_sign
 
     return(res)
@@ -477,7 +488,12 @@ rndr_X<-function(x, df1, df2=NULL, p=NULL){
 rndr_Chisq <- function(x, df, p) rndr_X(x, df, NULL, p )
 
 
-
+#' @rdname rndr_
+#' @export
+rndr_Chisq_stars <- function(x, p) {
+ # in Kano Benutzt
+  paste0(fftest(x) , ffsigstars(p))
+}
 
 
  

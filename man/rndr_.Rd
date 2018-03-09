@@ -50,7 +50,7 @@ rndr_mean_range(m, s, mn, mx, digits = NULL, ...)
 
 rndr_ods(x, digits = 2)
 
-rndr_percent(x, n, percent = TRUE,
+rndr_percent(x, n = NULL, percent = TRUE,
   digits = options()$stp25$apa.style$prozent$digits[1],
   percentage_str = options()$stp25$apa.style$prozent$percentage_str,
   style = options()$stp25$apa.style$prozent$style,
