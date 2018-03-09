@@ -10,8 +10,12 @@ APA.survfit <- function(fit, ...) {
       cbind(mdn[, c(1, 2, 5)], mdn[, c(8:10)])
     else
       cbind(mdn[, c(1, 4)], mdn[, c(7:9)])
+    
+    
     unlist(mdn["median"])
   }
+  
+  
 }
 
 
@@ -173,9 +177,9 @@ Text(names(mdn))
     }
     mdn <- if(ncol(mdn) == 10 )
                    cbind(mdn[,c(1,2,5)], mdn[,c(8:10)],
-                         Mean= ffmean(mdn[,6],mdn[,7]))
+                         Mean= rndr_mean(mdn[,6],mdn[,7]))
            else cbind(mdn[,c(1,4)], mdn[,c(7:9)],
-                      Mean= ffmean(mdn[,5],mdn[,6]))
+                      Mean= rndr_mean(mdn[,5],mdn[,6]))
     Output(mdn,
            caption=paste("Survival Mean ", caption), note=note)
 

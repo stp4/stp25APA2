@@ -207,6 +207,7 @@ rndr_percent <- function(
   style = options()$stp25$apa.style$prozent$style,
   null_percent_sign = options()$stp25$apa.style$prozent$null_percent_sign
 ) {
+  
 
  if(is.null(percent)) percent <- style != 0
 
@@ -239,29 +240,45 @@ rndr_percent <- function(
   } else{
     myattr <- attributes(n) #-- colnames and rownames
     nrw <- nrow(n)
-    n <- suppressWarnings(
-      formatC(n, format = "f", digits = 0))
+    #n <- suppressWarnings(
+    #  formatC(n, format = "f", digits = 0))
+   
+    n_char <- apply(n, 2, function(x) formatC(x, format = "f", digits = 0) )
+   
     #------------------------------------------------
     if (percent) {
-      x <- suppressWarnings(formatC(
-        x,
-        format = "f",
-        digits = digits,
-        decimal.mark = getOption("OutDec")
-      ))
+      # x <- suppressWarnings(formatC(
+      #   x,
+      #   format = "f",
+      #   digits = digits,
+      #   decimal.mark = getOption("OutDec")
+      # ))
+      x_char <- apply(x, 2, function(y) formatC(
+           y,
+           format = "f",
+           digits = digits,
+           decimal.mark = getOption("OutDec")
+         ))
+      
       if (style == 1)
-        res <- matrix(paste0(x, "% (", n, ")"), nrow = nrw)
+         res <- matrix(paste0(x_char, "% (", n_char, ")"), nrow = nrw)
+       
       else
-        res <- matrix(paste0(n, " (", x, "%)"), nrow = nrw)
+        res <- matrix(paste0(n_char, " (", x_char, "%)"), nrow = nrw)
 
     } else
-      res <-  n
+      res <-  n_char
 
-    attributes(res) <- myattr
-
+    res<- data.frame(res, row.names= myattr$row.names,
+                     stringsAsFactors = FALSE)
+  
+    names(res) <- myattr$names
+  
+    
+    
     if(!is.null(null_percent_sign))
       res[which(n==0)] <- null_percent_sign
-
+    
     return(res)
   }
 }

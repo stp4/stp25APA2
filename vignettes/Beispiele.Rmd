@@ -23,7 +23,8 @@ require(tidyverse)
 require(lmerTest)
 require(modelr)
 require(stpvers)
-
+Tab_Index <- 0
+Abb_Index <- 0
 
 
 ```
@@ -145,8 +146,9 @@ Korrelationen Buehl Seite 323
 #head(hyper)
 ##-- 
 APA_Correlation(~chol0+chol1+chol6+chol12, hyper,
-caption="Korrelation nach Pearson",
-p.value=FALSE, sig.star=TRUE)
+caption="Korrelation nach Pearson"#,
+#p.value=FALSE, sig.star=TRUE
+)
 
 APA_Correlation(~chol0+chol1+chol6+chol12, hyper,
          caption="Rangkorrelation nach Spearman",

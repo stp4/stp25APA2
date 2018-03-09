@@ -204,7 +204,8 @@ APA_Xtabs <- function(x, data, ...) {
   #is_formula2()
   if (stpvers::is_formula2(x))
     x <- stats::xtabs(x, data) #- altlast abfangen
-  if( class(fit)[1]=="glm"  ){
+  
+  if( class(x)[1]=="glm"  ){
    x<- Klassifikation(x, ...)$xtab
   }
   

@@ -164,8 +164,20 @@ APA_Ttest(m1+m2 ~ geschl, varana)
 #APA_Ttest(m~time, varanax, paired = TRUE, include.mean=FALSE)
 #APA_Ttest(m~time, varanax, paired = TRUE, type="U-Test", include.mean=FALSE)
 #APA_Ttest(m~time, varanax, var.equal=TRUE, include.mean=FALSE)
+
+
+
+#https://www.r-bloggers.com/is-it-time-to-ditch-the-comparison-of-means-t-test/
+
+#exakt das selbe wie t.test(m1 ~ geschl, varana, var.equal=TRUE))
+#t.test(m1 ~ geschl, varana, var.equal=TRUE))
  
-1+1
+require(broom)
+require(nlme)
+res <- summary(gls(m1 ~ geschl, varana,  weights=varIdent(form = ~ 1 | geschl)))
+res$tTable %>% fix_format() %>% Output(caption="Generalized Least Squares")
+ 
+
 
 ```
 
