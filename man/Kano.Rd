@@ -2,21 +2,85 @@
 % Please edit documentation in R/kano.R
 \name{Kano}
 \alias{Kano}
-\alias{APA2.Kano}
+\alias{Kano.data.frame}
+\alias{Kano.formula}
+\alias{Kano_Auswertung}
+\alias{kano_plot2}
 \title{Analyze Kano type items.}
 \usage{
-Kano(X, grouping = NULL, type = 5, umcodieren = FALSE, rm_Q = 10000,
-  rm_I = 10000, methode = 1, vars_func = NULL, vars_dysfunc = NULL,
-  data = grouping, subset = NULL, na.action = NULL, ...)
+Kano(x, ...)
 
-\method{APA2}{Kano}(x, caption = "", note = "note", formula = x$formula,
-  data = x$molten, digits = options()$stp4$apa.style$prozent$digits[1],
-  prop.table = TRUE, ...)
+\method{Kano}{data.frame}(x, ...)
+
+\method{Kano}{formula}(x, data, subset, na.action, ...)
+
+Kano_Auswertung(x, caption = "", note = "", formula = x$formula,
+  data = x$molten[-1], digits = options()$stp4$apa.style$prozent$digits[1],
+  include.n = TRUE, include.percent = TRUE, include.total = TRUE,
+  include.test = TRUE, rnd_output = TRUE, ...)
+
+kano_plot2(x, main = "", xlim = c(0, 1), ylim = c(0, 1), mar = c(0, 1,
+  2, 1), legend.position = list(x = "right", y = NULL), legend.title = NULL,
+  my.lines = "circle", col.bg = "gray95", col = NA, txt.bg = list(m =
+  "M", i = "I", o = "O", a = "A"), cex.bg = 12, jitter = TRUE, cex = 1,
+  cex.items = cex * 1, cex.lab = cex * 1.07, cex.legend = cex * 1.1,
+  ylab = "Zufriedenheitsstiftung (CS+)",
+  xlab = "Unzufriedenheitsstiftung (CS-)", center.axis = FALSE,
+  use.labels = TRUE, use.total.strength = TRUE, use.categorie = TRUE,
+  use.points = FALSE, ...)
 }
 \arguments{
-\item{X}{data.frame mit parweisen Kano Fragen}
+\item{x, data}{Daten mit/oder formula}
 
-\item{grouping}{Dataframe mit Gruppen}
+\item{...}{}
+
+\item{caption, note}{Ueberschrift}
+
+\item{formula, data}{intern daten aus Kano-Objekt}
+
+\item{digits}{Nachkommastellen}
+
+\item{include.n}{Anzahl}
+
+\item{include.percent}{Prozent}
+
+\item{include.total}{N und Total}
+
+\item{include.test}{Fong und Chie-Test}
+
+\item{rnd_output}{Intern fuer Plot bei FALSE ausgabe als Zahl}
+
+\item{main}{Header}
+
+\item{mar, xlim, ylim}{Plot Limits}
+
+\item{legend.position, legend.title}{legend.position = list(x="right", y=NULL) 
+Beim Streudiagram die Legende bei Barplot  scale=list}
+
+\item{my.lines}{Grafik Element Halbkreis fuer Indiferent}
+
+\item{col}{Farbe der Punkte}
+
+\item{txt.bg, cex.bg, col.bg}{Hintergrund mit den Grossen Bchstaben}
+
+\item{jitter}{Rauschen bei Uberlappung}
+
+\item{cex, cex.items, cex.lab, cex.legend}{Schriftgroesse}
+
+\item{ylab, xlab}{x-y Beschrifung}
+
+\item{center.axis}{center.axis=FALSE}
+
+\item{use.labels}{use.labels=FALSE  Zahlen oder Text als 
+Beschriftung bei den Streudiagrammen}
+
+\item{use.total.strength}{use.total.strength=TRUE  groese der Schrift 
+als Indikator fuer Total Strenght}
+
+\item{use.categorie}{use.categorie=TRUE  M, O, A, 
+oder I mit in die Labels ausgeben}
+
+\item{use.points}{use.points = FALSE Punkte statt Text}
 
 \item{type}{Fragetype entwerer vollstaendig (5) oder gekuerzt (3)}
 
@@ -32,34 +96,13 @@ Kano(X, grouping = NULL, type = 5, umcodieren = FALSE, rm_Q = 10000,
 
 \item{vars_dysfunc}{Welche Items sind die Dys-Funktionalen}
 
-\item{...}{\itemize{
-   \item \code{type=c(1,2)}  Streudiagram (1) oder Balken (2)
-   \item \code{groups= NULL} wenn ein Dataframe uebergeben dan sind das die Gruppen
-   \item \code{legend.position = list(x="right", y=NULL) } - Beim Streudiagram die
-   Legende bei Barplot \code{scale=list()}
-   \item \code{txt.bg=list(m="M",i= "I", o="O", a="A")} Beim Streudiagram der
-   Hintergrundtext
-   \item \code{jitter=TRUE} Beim Streudiagram Verrauschen der Items (wegen besserer
-   lesbarkeit)
-   \item \code{col.bg="gray95"}
-   \item \code{col = NA}
-   \item \code{cex=0.70}
-   \item \code{cex.items=cex*1}
+\item{X, grouping}{intern uebergabe der daten parweisen beides sind data.frames}
 
-   \item \code{cex.lab=cex*1.07}
-   \item \code{cex.legend=cex*1.1}
-   \item \code{ylab="Zufriedenheitsstiftung (CS+)"}
-   \item \code{xlab="Unzufriedenheitsstiftung (CS-)"}
-   \item \code{CS.minus = "CS minus"}
-   \item \code{center.axis=FALSE}
-   \item \code{use.labels=FALSE  Zahlen oder Text als Beschriftung bei den Streudiagrammen}
-   \item \code{use.total.strength =TRUE  groese der Schrift als Indikator fuer Total Strenght}
-   \item \code{use.categorie=TRUE  M, O, A, oder i mit in die Labels ausgeben }
-
-}}
+\item{x}{Kano-Objekt}
 }
 \value{
-Liste mit
+Liste mit:
+
 value: data.frame mit der Kano-Kodierung
 scors: Scors,
 data= data,
@@ -73,7 +116,8 @@ answers
 \description{
 Transformiert Kano-Fragebogen zu Kano-Kodierung
 http://www.eric-klopp.de/texte/angewandte-psychologie/18-die-kano-methode
-
+}
+\details{
 M O A I R Q Heufigkeit
 
 max Category
@@ -97,8 +141,7 @@ Chi-Test	Eigendlich unsinn Testet ob Verteilung von M, A, O und I gleich ist
 Fong-Test Vergleich der zwei Haeufigsten-Kategorien gegenueber der Gesammtzahl
 Ergebnis ist entweder ein signifikente oder ein nicht signifikente Verteilung.
 
-
- \subsection{Basis-Faktoren (Mussfaktoren)}{
+\subsection{Basis-Faktoren (Mussfaktoren)}{
  Basis-Merkmale (M...Mustbe) werden vom Kunden Vorausgesetzt schaffen
  unzufriedenheit wenn sie nicht vorhanden sind.
  }

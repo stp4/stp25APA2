@@ -25,6 +25,7 @@
 \alias{rndr_lm}
 \alias{rndr_X}
 \alias{rndr_Chisq}
+\alias{rndr_Chisq_stars}
 \alias{rndr_fischer}
 \alias{rndr_gfi_cfa}
 \alias{rndr_agfi_cfa}
@@ -89,6 +90,8 @@ rndr_lm(F_val, df1, df2, p, r2, ar2)
 rndr_X(x, df1, df2 = NULL, p = NULL)
 
 rndr_Chisq(x, df, p)
+
+rndr_Chisq_stars(x, p)
 
 rndr_fischer(x, p)
 
