@@ -1,15 +1,92 @@
 #' Analyze Kano type items.
 #' 
 #' Transformiert Kano-Fragebogen zu Kano-Kodierung
+#' 
 #' http://www.eric-klopp.de/texte/angewandte-psychologie/18-die-kano-methode
+#' https://de.wikipedia.org/wiki/Kano-Modell
+#' 
+#'  \subsection{M Basis-Faktoren (Mussfaktoren)}{
+#'  Basis-Merkmale (\strong{M}ustbe) werden vom Kunden Vorausgesetzt schaffen
+#'  unzufriedenheit wenn sie nicht vorhanden sind.
+#'  }
+#'   \subsection{O Leistungs- Faktoren}{
+#'  Leistungs-Merkmale (\strong{O}ne-dimensional) werden vom Kunden verlangt
+#'  }
+#'  \subsection{A Begeisterung-Faktoren}{
+#'  Begeisterungs-Merkmale (\strong{A}ttractive) Kunde rechnet nicht damit hebt das
+#'  Produkt vom Konkurenten ab.
+#'  }
+#'  \subsection{I Unerhebliche- Faktoren }{
+#'  Unerhebliche-Merkmale (\strong{I}ndifferent) werden vom Kunden ignoriert.
+#'  }
+#'  \subsection{R Rueckweisende- Faktoren }{
+#'  Ablehnende-Merkmale (\strong{R}) werden vom Kunden abgelehnt. Fuehren bei Vorhandensein zu Unzufriedenheit, bei Fehlen jedoch nicht zu Zufriedenheit.
+#'  }
+
 #' 
 #' 
-#' Das würde mich sehr freuen.
-#' Das setze ich voraus.
-#' Das ist mir egal.
-#' Das könnte ich in Kauf nehmen.
-#' Das würde mich sehr stören.
+#' \strong{Kodierung}
+#' 
+#' Das würde mich sehr freuen (1)
+#' Das setze ich voraus (2)
+#' Das ist mir egal (3)
+#' Das könnte ich in Kauf nehmen (4)
+#' Das würde mich sehr stören (5)
 #'
+#'
+#'
+#'
+#' func=1 & dysf=1 = "Q"
+#' 
+#' func=1 & dysf=2 = "A"
+#' 
+#' func=1 & dysf=3 = "A"
+#' 
+#' func=1 & dysf=4 = "A"
+#' 
+#' func=1 & dysf=5 = "O"
+#' 
+#' func=2 & dysf=1 = "R"
+#' 
+#' func=2 & dysf=2 = "I"
+#' 
+#' func=2 & dysf=3 = "I"
+#' 
+#' func=2 & dysf=4 = "I"
+#' 
+#' func=2 & dysf=5 = "M"
+#' 
+#' func=3 & dysf=1 = "R"
+#' 
+#' func=3 & dysf=2 = "I"
+#' 
+#' func=3 & dysf=3 = "I"
+#' 
+#' func=3 & dysf=4 = "I"
+#' 
+#' func=3 & dysf=5 = "M"
+#' 
+#' func=4 & dysf=1 = "R"
+#' 
+#' func=4 & dysf=2 = "I"
+#' 
+#' func=4 & dysf=3 = "I"
+#' 
+#' func=4 & dysf=4 = "I"
+#' 
+#' func=4 & dysf=5 = "M"
+#' 
+#' func=5 & dysf=1 = "R"
+#' 
+#' func=5 & dysf=2 = "R"
+#' 
+#' func=5 & dysf=3 = "R"
+#' 
+#' func=5 & dysf=4 = "R"
+#' 
+#' func=5 & dysf=5 = "Q"
+#' 
+#' 
 #' M O A I R Q Heufigkeit
 #'
 #' max Category
@@ -34,32 +111,17 @@
 #' Ergebnis ist entweder ein signifikente oder ein nicht signifikente Verteilung.
 #'
 #'
-#'  \subsection{Basis-Faktoren (M Mussfaktoren)}{
-#'  Basis-Merkmale (M...Mustbe) werden vom Kunden Vorausgesetzt schaffen
-#'  unzufriedenheit wenn sie nicht vorhanden sind.
-#'  }
-#'   \subsection{Leistungs- Faktoren}{
-#'  Leistungs-Merkmale (O One-dimensional) werden vom Kunden verlangt
-#'  }
-#'  \subsection{Begeisterung-Faktoren}{
-#'  Begeisterungs-Merkmale (A Attractive) Kunde rechnet nicht damit hebt das
-#'  Produkt vom Konkurenten ab.
-#'  }
-#'  \subsection{Unerhebliche- Faktoren }{
-#'  Unerhebliche-Merkmale (I Indifferent) werden vom Kunden Ignoriert.
-#'  }
-#'
 #' @param x,data Daten mit/oder formula
 #'
 #' @param type Fragetype entwerer vollstaendig (5) oder gekuerzt (3)
 #' @param umcodieren logical False
 #' @param rm_Q Remove Q Kategorien Q enfernen Anzahl an erlaubten Qs
 #' @param rm_I Remove I Kategorien I enfernen Anzahl an erlaubten Is
-#' @param methode eie sind die Items geornet
+#' @param methode weie sind die Items geornet
 #' @param vars_func Welche Items sind die Funktionalen
 #' @param vars_dysfunc Welche Items sind die Dys-Funktionalen
 #' @param X,grouping intern uebergabe der daten parweisen beides sind data.frames
-#' @param ...
+#' @param ... nicht benutzte Argumente
 #' @return Liste mit:
 #' 
 #' data: data mit der Kano-Kodierung
@@ -90,6 +152,10 @@ Kano.data.frame <- function(x, na.action=na.pass, ...){
   
 }
 
+
+#' @param subset  an Formula_Data
+#' @param na.action NA's entfernen odere behalten default ist na.pass()
+#'
 #' @rdname Kano
 #' @export
 Kano.formula <- function(x ,data, subset, na.action=na.pass, ...){
@@ -115,33 +181,34 @@ Kano_default<-function(X,
   #-- Reihenfolge der Items default is func dfunk func dfunc func ....
   n <- ncol(X)
   kano_levels <-  c("M", "O", "A", "I", "R", "Q")
-  if(n %% 2 != 0) return("Die Anzahl dan Functionalen und Dysfunc Items ist ungleich")
+  if(n %% 2 != 0) return("Die Anzahl dan Funktionalen und Dysfunktionalen  Items ist ungleich!")
   if(!is.null(vars_func) & !is.null(vars_dysfunc)){X<- X[,c(rbind(vars_func, vars_dysfunc))]
   }else{if(methode == 2){X <- X[,c(rbind(1:(n/2), (n/2+1):n))]}}
 
-  #-  altlast vorher gab es kein grouping
-  # if(!is.null(grouping) & is.numeric(grouping)){
-  #   if(is.logical(type)) umcodieren <- type
-  #   type <- grouping
-  #   grouping<-NULL
-  # }
-  
   
   ANS <- NULL
   vars <- seq(1, n, by = 2)
   vars_func <- seq(1, n , by = 2)
   vars_dysfunc <- seq(2, n , by = 2)
   
+ # cat("\nfunc:")
+ # print(vars_func)
+ # cat("dysfunc:")
+ # print( vars_dysfunc)
+  
   nams <- Hmisc::label(X[, vars])
   nams <- ifelse(nams == ""
-                 , gsub(" $", "", gsub("[\\._]+", " ", names(nams)), perl =
-                          T)
+                 , gsub(" $", "", gsub("[\\._]+", " ", names(nams)), perl = T)
                  , nams)
   # nams <- GetLabelOrName(X[, vars])
   if (is.factor(X[, 1]))
+  { 
+    cat("\ntransfer to numeric")
+    print(levels(X[,1]))
     X <- sapply(X, as.numeric)
-  Scors <-  X 
+  }
   
+  Scors <-  X 
   Scors[, vars_func] <- sapply(Scors[, vars_func]
                                , function(a)
                                  as.numeric(as.character(factor(
@@ -154,54 +221,55 @@ Kano_default<-function(X,
                                     ))))
   Scors <- as.data.frame(Scors)
   names(Scors) <- paste0(names(Scors), ".s")
-
+cat("\ntransform kano")
   for(i in vars){
-    # cat(i)
-    funk <- X[,i]
-    dysf <- X[,i+1]
+    
+    X_func <- X[,i]
+    X_dysf <- X[,i+1]
+     if (umcodieren) X_dysf <-  type + 1 - X_dysf
     if(type==3){ #-- Kurzversion
-      myrow  <-  ifelse( X[,i]==1 & X[,i+1]==1, "A"
-                ,ifelse( X[,i]==1 & X[,i+1]==2, "A"
-                ,ifelse( X[,i]==1 & X[,i+1]==3, "O"
-                ,ifelse( X[,i]==2 & X[,i+1]==1, "I"
-                ,ifelse( X[,i]==2 & X[,i+1]==2, "I"
-                ,ifelse( X[,i]==2 & X[,i+1]==3, "M"
-                ,ifelse( X[,i]==3 & X[,i+1]==1, "I"
-                ,ifelse( X[,i]==3 & X[,i+1]==2, "I"
-                ,ifelse( X[,i]==3 & X[,i+1]==3, "M" 
+      myrow  <-  ifelse( X_func==1 & X_dysf==1, "A"
+                ,ifelse( X_func==1 & X_dysf==2, "A"
+                ,ifelse( X_func==1 & X_dysf==3, "O"
+                ,ifelse( X_func==2 & X_dysf==1, "I"
+                ,ifelse( X_func==2 & X_dysf==2, "I"
+                ,ifelse( X_func==2 & X_dysf==3, "M"
+                ,ifelse( X_func==3 & X_dysf==1, "I"
+                ,ifelse( X_func==3 & X_dysf==2, "I"
+                ,ifelse( X_func==3 & X_dysf==3, "M" 
                 ,NA)))))))))
     }else if(type==5){
-      x1 <- X[,i]
-      if (umcodieren) x2 <-  type + 1 - X[,i+1]
-      else x2 <-  X[,i+1]
-
-      myrow<-  ifelse(x1==1 & x2==1, "Q"
-             ,ifelse( x1==1 & x2==2, "A"
-             ,ifelse( x1==1 & x2==3, "A"
-             ,ifelse( x1==1 & x2==4, "A"
-             ,ifelse( x1==1 & x2==5, "O"
-             ,ifelse( x1==2 & x2==1, "R"
-             ,ifelse( x1==2 & x2==2, "I"
-             ,ifelse( x1==2 & x2==3, "I"
-             ,ifelse( x1==2 & x2==4, "I"
-             ,ifelse( x1==2 & x2==5, "M"
-             ,ifelse( x1==3 & x2==1, "R"
-             ,ifelse( x1==3 & x2==2, "I"
-             ,ifelse( x1==3 & x2==3, "I"
-             ,ifelse( x1==3 & x2==4, "I"
-             ,ifelse( x1==3 & x2==5, "M"
-             ,ifelse( x1==4 & x2==1, "R"
-             ,ifelse( x1==4 & x2==2, "I"
-             ,ifelse( x1==4 & x2==3, "I"
-             ,ifelse( x1==4 & x2==4, "I"
-             ,ifelse( x1==4 & x2==5, "M"
-             ,ifelse( x1==5 & x2==1, "R"
-             ,ifelse( x1==5 & x2==2, "R"
-             ,ifelse( x1==5 & x2==3, "R"
-             ,ifelse( x1==5 & x2==4, "R"
-             ,ifelse( x1==5 & x2==5, "Q" 
+      
+      myrow<-  ifelse(X_func==1 & X_dysf==1, "Q"
+             ,ifelse( X_func==1 & X_dysf==2, "A"
+             ,ifelse( X_func==1 & X_dysf==3, "A"
+             ,ifelse( X_func==1 & X_dysf==4, "A"
+             ,ifelse( X_func==1 & X_dysf==5, "O"
+             ,ifelse( X_func==2 & X_dysf==1, "R"
+             ,ifelse( X_func==2 & X_dysf==2, "I"
+             ,ifelse( X_func==2 & X_dysf==3, "I"
+             ,ifelse( X_func==2 & X_dysf==4, "I"
+             ,ifelse( X_func==2 & X_dysf==5, "M"
+             ,ifelse( X_func==3 & X_dysf==1, "R"
+             ,ifelse( X_func==3 & X_dysf==2, "I"
+             ,ifelse( X_func==3 & X_dysf==3, "I"
+             ,ifelse( X_func==3 & X_dysf==4, "I"
+             ,ifelse( X_func==3 & X_dysf==5, "M"
+             ,ifelse( X_func==4 & X_dysf==1, "R"
+             ,ifelse( X_func==4 & X_dysf==2, "I"
+             ,ifelse( X_func==4 & X_dysf==3, "I"
+             ,ifelse( X_func==4 & X_dysf==4, "I"
+             ,ifelse( X_func==4 & X_dysf==5, "M"
+             ,ifelse( X_func==5 & X_dysf==1, "R"
+             ,ifelse( X_func==5 & X_dysf==2, "R"
+             ,ifelse( X_func==5 & X_dysf==3, "R"
+             ,ifelse( X_func==5 & X_dysf==4, "R"
+             ,ifelse( X_func==5 & X_dysf==5, "Q" 
              ,NA)))))))))))))))))))))))))
     }
+   n<- sample.int(length(X_func))[1]
+    
+    cat("\nnr:", n,  names(X[i]), "|", names(X[i+1]), X_func[n],"+", X_dysf[n], "=", myrow[n] )
     ANS<-cbind(ANS,myrow)
   }
 
@@ -864,74 +932,3 @@ kano_plot2 <- function(x,
 
 
 
-# kano_plot_bar <- function(x,
-#                           auto.key = list(space = "right"),
-#                           prop.table = TRUE,
-#                           ylab =  if (prop.table) "percent" else "count",
-#                           col = RColorBrewer::brewer.pal(6, "Dark2")[c(4, 1, 2, 3, 5, 6)],
-#                           ...
-#                           ) {
-#  # data <- Kano_Auswertung(x, rnd_output = FALSE)
-#   #geht nur mit einer Gruppe
-#   groups <- all.vars(x$formula[[3L]])
-#   # print(groups)
-#   if (length(groups) > 1)
-#     groups <- groups[1]
-#   else
-#     groups <- NULL
-#   
-#   
-#   if (prop.table)
-#    datatab <-  melt(cbind(
-#       x[1],
-#       dummy = "",
-#       sapply(x[, Cs(M, O, A, I, R, Q)],
-#              function(a)
-#                as.numeric(as.character(a)) / as.numeric(as.character(x$Total)) * 100)
-#     ))
-#   else
-#     datatab <-  melt(cbind(x[1], dummy = "", sapply(x[, Cs(M, O, A, I, R, Q)],
-#                                         function(a)
-#                                           as.numeric(as.character(a)))))
-#   
-#   
-#   
-#   cols <- list(superpose.polygon = list(col = col))      #
-#   #
-#   if (is.null(groups)) {
-#     formulabar <- formula(paste("value~dummy|", names(x)[1]))
-#   } else {
-#     formulabar <-
-#       formula(paste("value~dummy|", names(x)[2], "+", names(x)[1]))
-#     datatab <- cbind(datatab, x[groups])
-#     
-#   }
-#   # print(formulabar)
-#   # print(datatab)
-#   # print(x)
-#   p2 <- barchart(
-#     formulabar,
-#     data = datatab,
-#     groups = variable,
-#     #  horizontal=FALSE, stack = TRUE,
-#     origin = 0,
-#     auto.key = auto.key,
-#     par.settings = cols,
-#     ylab = ylab,
-#     ...
-#     # layout=c(2,nrow(allx))
-#   )
-#   # print(p2)
-#   
-#   if (is.null(groups))
-#     print(p2)
-#   else
-#     print(useOuterStrips(p2))
-#   
-#   
-#   
-# }
-# 
-# 
-# 
-# #kano_plot_Kano(kano_res)

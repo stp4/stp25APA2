@@ -10,9 +10,9 @@
 \usage{
 Kano(x, ...)
 
-\method{Kano}{data.frame}(x, ...)
+\method{Kano}{data.frame}(x, na.action = na.pass, ...)
 
-\method{Kano}{formula}(x, data, subset, na.action, ...)
+\method{Kano}{formula}(x, data, subset, na.action = na.pass, ...)
 
 Kano_Auswertung(x, caption = "", note = "", formula = x$formula,
   data = x$molten[-1], digits = options()$stp4$apa.style$prozent$digits[1],
@@ -32,7 +32,11 @@ kano_plot2(x, main = "", xlim = c(0, 1), ylim = c(0, 1), mar = c(0, 1,
 \arguments{
 \item{x, data}{Daten mit/oder formula}
 
-\item{...}{}
+\item{...}{nicht benutzte Argumente}
+
+\item{na.action}{NA's entfernen odere behalten default ist na.pass()}
+
+\item{subset}{an Formula_Data}
 
 \item{caption, note}{Ueberschrift}
 
@@ -90,7 +94,7 @@ oder I mit in die Labels ausgeben}
 
 \item{rm_I}{Remove I Kategorien I enfernen Anzahl an erlaubten Is}
 
-\item{methode}{eie sind die Items geornet}
+\item{methode}{weie sind die Items geornet}
 
 \item{vars_func}{Welche Items sind die Funktionalen}
 
@@ -98,15 +102,19 @@ oder I mit in die Labels ausgeben}
 
 \item{X, grouping}{intern uebergabe der daten parweisen beides sind data.frames}
 
+\item{...}{}
+
 \item{x}{Kano-Objekt}
 }
 \value{
 Liste mit:
 
-value: data.frame mit der Kano-Kodierung
-scors: Scors,
-data= data,
-molten=molten,
+data: data mit der Kano-Kodierung
+
+scors:  Scors sind eine Alternative Codierung zum zweck der transformierung zu einer metrischen Skala 
+
+molten: Daten-Lang
+
 formula= fm,
 removed=Errorrs,
 N=nrow(data),
@@ -115,9 +123,89 @@ answers
 }
 \description{
 Transformiert Kano-Fragebogen zu Kano-Kodierung
-http://www.eric-klopp.de/texte/angewandte-psychologie/18-die-kano-methode
 }
 \details{
+http://www.eric-klopp.de/texte/angewandte-psychologie/18-die-kano-methode
+https://de.wikipedia.org/wiki/Kano-Modell
+
+\subsection{M Basis-Faktoren (Mussfaktoren)}{
+ Basis-Merkmale (\strong{M}ustbe) werden vom Kunden Vorausgesetzt schaffen
+ unzufriedenheit wenn sie nicht vorhanden sind.
+ }
+  \subsection{O Leistungs- Faktoren}{
+ Leistungs-Merkmale (\strong{O}ne-dimensional) werden vom Kunden verlangt
+ }
+ \subsection{A Begeisterung-Faktoren}{
+ Begeisterungs-Merkmale (\strong{A}ttractive) Kunde rechnet nicht damit hebt das
+ Produkt vom Konkurenten ab.
+ }
+ \subsection{I Unerhebliche- Faktoren }{
+ Unerhebliche-Merkmale (\strong{I}ndifferent) werden vom Kunden ignoriert.
+ }
+ \subsection{R Rueckweisende- Faktoren }{
+ Ablehnende-Merkmale (\strong{R}) werden vom Kunden abgelehnt. Fuehren bei Vorhandensein zu Unzufriedenheit, bei Fehlen jedoch nicht zu Zufriedenheit.
+ }
+
+\strong{Kodierung}
+
+Das würde mich sehr freuen (1)
+Das setze ich voraus (2)
+Das ist mir egal (3)
+Das könnte ich in Kauf nehmen (4)
+Das würde mich sehr stören (5)
+
+
+
+func=1 & dysf=1 = "Q"
+
+func=1 & dysf=2 = "A"
+
+func=1 & dysf=3 = "A"
+
+func=1 & dysf=4 = "A"
+
+func=1 & dysf=5 = "O"
+
+func=2 & dysf=1 = "R"
+
+func=2 & dysf=2 = "I"
+
+func=2 & dysf=3 = "I"
+
+func=2 & dysf=4 = "I"
+
+func=2 & dysf=5 = "M"
+
+func=3 & dysf=1 = "R"
+
+func=3 & dysf=2 = "I"
+
+func=3 & dysf=3 = "I"
+
+func=3 & dysf=4 = "I"
+
+func=3 & dysf=5 = "M"
+
+func=4 & dysf=1 = "R"
+
+func=4 & dysf=2 = "I"
+
+func=4 & dysf=3 = "I"
+
+func=4 & dysf=4 = "I"
+
+func=4 & dysf=5 = "M"
+
+func=5 & dysf=1 = "R"
+
+func=5 & dysf=2 = "R"
+
+func=5 & dysf=3 = "R"
+
+func=5 & dysf=4 = "R"
+
+func=5 & dysf=5 = "Q"
+
 M O A I R Q Heufigkeit
 
 max Category
@@ -140,19 +228,4 @@ Chi-Test	Eigendlich unsinn Testet ob Verteilung von M, A, O und I gleich ist
 
 Fong-Test Vergleich der zwei Haeufigsten-Kategorien gegenueber der Gesammtzahl
 Ergebnis ist entweder ein signifikente oder ein nicht signifikente Verteilung.
-
-\subsection{Basis-Faktoren (Mussfaktoren)}{
- Basis-Merkmale (M...Mustbe) werden vom Kunden Vorausgesetzt schaffen
- unzufriedenheit wenn sie nicht vorhanden sind.
- }
-  \subsection{Leistungs- Faktoren}{
- Leistungs-Merkmale (O...One-dimensional) werden vom Kunden verlangt
- }
- \subsection{Begeisterung-Faktoren}{
- Begeisterungs-Merkmale (A...Attractive) Kunde rechnet nicht damit hebt das
- Produkt vom Konkurenten ab.
- }
- \subsection{Unerhebliche- Faktoren }{
- Unerhebliche-Merkmale (I...Indifferent) werden vom Kunden Ignoriert.
- }
 }
