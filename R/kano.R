@@ -136,6 +136,101 @@
 #' Attributes= c("Must-be","One-dimensional", "Attractive","Indifferent","Reverse", "Questionable"),
 #' answers
 #' @export
+#' @examples 
+#' 
+#' #  require(stpvers)
+#' #   Projekt("html")
+#' 
+#' kano_labels <- c( "I like it that way", 
+#'                   "It must be that way",
+#'                   "I am neutral",
+#'                   "I can live with it that way",
+#'                   "I dislike it that whay")
+#'                   
+#'  
+#' DF<-GetData("   Geschlecht Edu f1 d1 f2 d2 f3 d3 f4 d4 f5  d5  f6  d6  f7  d7  f8  d8  f9  d9  f10 d10
+#'                  1           w  med 1  5  1  2  1  3  1  5  1   5   5   1   3   3   5   2   5   1   5   2
+#'                  2           w  med 1  5  2  5  2  3  1  5  1   5   2   5   3   3   2   5   2   5   5   2
+#'                  3           m  med 1  5  3  5  1  5  3  4  1   5   5   1   3   3   5   2   5   1   5   2
+#'                  4           m  med 1  5  4  2  1  5  4  4  1   5   5   1   3   3   5   2   5   1   5   2
+#'                  5           w  med 1  5  5  5  5  3  1  5  1   5   5   1   3   3   5   2   5   1   5   2
+#'                  6           w  med NA NA NA NA NA NA NA NA NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA
+#'                  7           m  med 1  5  1  5  2  5  1  5  1   5   2   5   3   3   1   5   2   5   5   2
+#'                  8           w  med 1  5  2  5  1  3  1  5  1   5   3   3   3   3   1   4   1   3   5   2
+#'                  9           m  med 1  5  2  5  2  3  1  3  1   5   1   3   3   3   2   4   3   3   5   2
+#'                  10          m  med 1  5  1  5  1  5  1  5  1   5   1   4   3   3   2   5   1   3   5   2
+#'                  11          w  med 1  5  2  5  1  4  1  5  1   5   1   4   3   3   2   5   1   4   5   2
+#'                  12          m  med 1  5  2  5  1  5  2  4  1   5   1   3   3   4   2   5   3   3   5   2
+#'                  13          w  med 1  5  2  5  3  3  1  5  2   5   1   5   3   3   3   3   3   3   5   2
+#'                  14          m  med 1  5  1  5  1  5  2  5  2  NA   1   5   3   3   2   5   1   5   5   2
+#'                  15          w  med 1  5  2  5  1  3  1  5  1   5   1   3   3   3   2   5   1   3   5   2
+#'                  16          w  low 1  5  2  5  2  5  2  5  1   5   1   4   3   3   2   5   1   3   5   2
+#'                  17          w  low 1  5  2  5  1  5  1  5  2   5   1   4   3   3   2   5   1   4   5   2
+#'                  18          w  low 2  5  2  5  2  5  2  5  1   5   1   2   3   3   1   5   3   2   5   2
+#'                  19          m  low 1  5  2  5  1  5  2  5  2   5   1   4   2   3   2   5   1   3   5   2
+#'                  20          w  low 2  5  2  5  2  5  2  5  2   5   1   3   3   3   2   5   1   3   5   2
+#'                  21          w  low 2  5  2  5  1  5  2  5  2   5   1   5   1   3   2   5   1   3   5   2
+#'                  22          m  low 1  3  2  5  1  5  2  5  2   5   1   3   3   3   1   3   1   3   5   2
+#'                  23          w  low 1  5  2  5  3  3  2  5  2   5   1   4   1   3   2   5   1   4   5   2
+#'                  24          w  low 2  4  2  5  2  3  2  4  2   5   3   3   3   4   2   4   1   3   5   2
+#'                  25          m  hig 2  4  1  5  1  5  2  4  1   5   1   3   3   5   2   4   1   3   5   2
+#'                  26          w  hig 1  5  1  5  1  3  1  5  1   5   1   3   1   5   1   5   3   3   5   2
+#'                  27          w  hig 1  5  2  5  3  3  1  4  2   4   1   3   3   5   3   3   5   1   5   2
+#'                  28          w  hig 2  5  2  5  1  4  2  5  1   5   1   3   3   5   2   5   4   1   5   2
+#'                  29          w  hig 2  5  2  5  2  4  2  4  2   5   1   4   1   5   1   5   1   4   5   2
+#'                  30          m  hig 1  5  2  5  1  5  1  3  1   4   1   3   1   5   1   3   1   3   5   2
+#'                  31          m  hig 1  1  2  1  1  5  1  4  3   3   5   2   3   5  NA  NA   1   3   5   2
+#'                  ")
+#' 
+#' 
+#' DF<- upData2(DF,  labels=c(f1="Fahreigenschaften"
+#'                            ,f2="Sicherheit"
+#'                            ,f3="Beschleunigung"
+#'                            ,f4="Verbrauch"
+#'                            ,f5="Lebensdauer"
+#'                            ,f6="Sonderausstattung"
+#'                            ,f7="Schiebedach"
+#'                            ,f8="Rostschutz"
+#'                            ,f9="Design"
+#'                            , f10= "Rostflecken"
+#' ))
+#'  
+#' #  match(DF$f1, 1) & match(DF$f2, 5)
+#' 
+#' DF %>% Tabelle(Geschlecht, Edu)
+#' 
+#' 
+#' kano_res1 <-  Kano( ~ . , DF[-c(1,2)])
+#' APA2(kano_res1, caption = "Einzeln")
+#' stp25APA2:::Kano_Auswertung(kano_res1, rnd_output=FALSE)
+#' # kano_plot(kano_res1)
+#' 
+#' # library(lattice)
+#' # x<-data.frame (xtabs(~ value+variable, kano_res1$molten ))
+#' #   barchart(Freq ~value|variable, x, origin=0)
+#' # 
+#' DF[-c(1,2)] <- dapply2(DF[-c(1,2)], function(x) factor( x, 1:5, kano_labels))
+#' DF %>% Tabelle2(f1,d1)
+#' 
+#' kano_res1 <-  Kano( ~ . , DF[-c(1,2)])
+#' APA2(kano_res1, caption = "Einzeln")
+#' 
+#' 
+#' kano_res <- Kano( .~ Geschlecht, DF[-2])
+#' APA2(kano_res, caption = "Gruppe")
+#' APA2(kano_res, caption = "Gruppe", include.percent=FALSE)
+#' # kano_plot(kano_res,
+#' #           legend.position = list(x = .75, y = 1),
+#' #           #legend.title= "HAllo",
+#' #           cex.legend=1)
+#' 
+#' kano_res <- Kano( .~ Geschlecht + Edu, DF )
+#' stp25APA2:::Kano_Auswertung( kano_res, rnd_output=FALSE)
+#' 
+#' 
+#' 
+#' ## End()
+
 Kano <-   function(x, ...) {
   UseMethod("Kano")
 }
@@ -541,7 +636,6 @@ print.Kano <- function(x, ...) {
 
 #' @param x Kano-Objekt
 #' @param main Header
- 
 #' @param mar,xlim,ylim Plot Limits
 #' @param legend.position,legend.title legend.position = list(x="right", y=NULL) 
 #'  Beim Streudiagram die Legende bei Barplot  scale=list 
@@ -565,7 +659,7 @@ print.Kano <- function(x, ...) {
 #'
 #' @rdname Kano
 #' @export
-kano_plot2 <- function(x,
+kano_plot <- function(x,
                       main = "",
                       xlim = c(0, 1),
                       ylim = c(0, 1),
