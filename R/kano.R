@@ -117,9 +117,9 @@
 #' @param umcodieren logical False
 #' @param rm_Q Remove Q Kategorien Q enfernen Anzahl an erlaubten Qs
 #' @param rm_I Remove I Kategorien I enfernen Anzahl an erlaubten Is
-#' @param methode weie sind die Items geornet
-#' @param vars_func Welche Items sind die Funktionalen
-#' @param vars_dysfunc Welche Items sind die Dys-Funktionalen
+#' @param methode weie sind die Items geornet default = 1  (func dfunk func dfunc func)
+#' @param vars_func,vars_dysfunc Welche Items sind die Funktionalen/Dys-Funktionalen
+#'  
 #' @param X,grouping intern uebergabe der daten parweisen beides sind data.frames
 #' @param ... nicht benutzte Argumente
 #' @return Liste mit:
@@ -130,11 +130,7 @@
 #' 
 #' molten: Daten-Lang
 #' 
-#' formula= fm,
-#' removed=Errorrs,
-#' N=nrow(data),
-#' Attributes= c("Must-be","One-dimensional", "Attractive","Indifferent","Reverse", "Questionable"),
-#' answers
+#' formula, removed=Errorrs, N, attributes, answers
 #' @export
 #' @examples 
 #' 
@@ -271,25 +267,36 @@ Kano_default<-function(X,
                 vars_dysfunc = NULL,
                 ...
 ){
- # print(head(X))
-#  print(grouping)
-  #-- Reihenfolge der Items default is func dfunk func dfunc func ....
+ 
   n <- ncol(X)
   kano_levels <-  c("M", "O", "A", "I", "R", "Q")
-  if(n %% 2 != 0) return("Die Anzahl dan Funktionalen und Dysfunktionalen  Items ist ungleich!")
-  if(!is.null(vars_func) & !is.null(vars_dysfunc)){X<- X[,c(rbind(vars_func, vars_dysfunc))]
-  }else{if(methode == 2){X <- X[,c(rbind(1:(n/2), (n/2+1):n))]}}
-
+  attributes <- c(
+    "Must-be",    "One-dimensional",
+    "Attractive",    "Indifferent",
+    "Reverse",    "Questionable"
+  )
+  answers <- c(
+    "I like it that way",    "It must be that way",
+    "I am neutral",    "I can live with it that way",
+    "I dislike it that whay"
+  )
+  
+  if(n %% 2 != 0) return("Die Anzahl dan Funktionalen und Dysfunktionalen Items ist ungleich!")
+  
+  if (!is.null(vars_func) &
+      !is.null(vars_dysfunc)) {
+    X <- X[, c(rbind(vars_func, vars_dysfunc))]
+  } else{
+    if (methode == 2) {
+      X <- X[, c(rbind(1:(n / 2), (n / 2 + 1):n))]
+    }
+  }
   
   ANS <- NULL
   vars <- seq(1, n, by = 2)
   vars_func <- seq(1, n , by = 2)
   vars_dysfunc <- seq(2, n , by = 2)
   
- # cat("\nfunc:")
- # print(vars_func)
- # cat("dysfunc:")
- # print( vars_dysfunc)
   
   nams <- Hmisc::label(X[, vars])
   nams <- ifelse(nams == ""
@@ -298,10 +305,16 @@ Kano_default<-function(X,
   # nams <- GetLabelOrName(X[, vars])
   if (is.factor(X[, 1]))
   { 
-    cat("\ntransfer to numeric")
+    cat("\nto numeric")
     print(levels(X[,1]))
     X <- sapply(X, as.numeric)
   }
+  
+ 
+  if(any(sapply(X, function(x) min(x) <1 | max(x)>type) )){
+    print(lapply(X, function(x) range(x, na.rm=TRUE)) )
+    stop("Zu viele Levels!")
+  } 
   
   Scors <-  X 
   Scors[, vars_func] <- sapply(Scors[, vars_func]
@@ -316,7 +329,7 @@ Kano_default<-function(X,
                                     ))))
   Scors <- as.data.frame(Scors)
   names(Scors) <- paste0(names(Scors), ".s")
-cat("\ntransform kano")
+cat("\ntransform kano (type",type,")")
   for(i in vars){
     
     X_func <- X[,i]
@@ -389,37 +402,24 @@ cat("\ntransform kano")
   #ANS ##   ANS[which(!Errorrs),]
   if (is.null(grouping)) {
     data <-  cbind(nr = 1:nrow(ANS), ANS)
-    
     molten <- Melt2(data, id.vars=1)
-    
     fm <- value ~ variable
   } else{
     data <- cbind(nr = 1:nrow(ANS), grouping, ANS)
     molten <- Melt2(data, id.vars = 1:(ncol(grouping)+1))
-    
-     
     fm <-
       formula(paste("value~", paste(c(names(grouping), "variable"), collapse ="+")))
   }
 
-molten$value <- factor(molten$value , kano_levels)
- #print(nrow(data))
-  res<-list(data= data, #value=ANS,
-            scors=Scors,
-            
+ molten$value <- factor(molten$value, kano_levels)
+ res<-list(data= data, 
             molten=molten,
+            scors=Scors,
             formula= fm,
             removed=Errorrs,
             N=nrow(data),
-            Attributes= c("Must-be","One-dimensional", "Attractive",
-                          "Indifferent","Reverse", "Questionable"),
-            answers= c( "I like it that way", 
-                        "It must be that way",
-                        "I am neutral",
-                        "I can live with it that way",
-                        "I dislike it that whay")[1:type]
-
-  )
+            attributes=  attributes,
+            answers= answers[1:type])
   class(res)<-"Kano"
   
  res 
@@ -429,8 +429,7 @@ molten$value <- factor(molten$value , kano_levels)
  
 #' @rdname Kano
 #' 
-#' @param include.n Anzahl 
-#' @param include.percent Prozent
+#' @param include.n,include.percent Anzahl, Prozent
 #' @param include.total N und Total
 #' @param include.test Fong und Chie-Test
 #' @param rnd_output Intern fuer Plot bei FALSE ausgabe als Zahl
@@ -452,13 +451,14 @@ Kano_Auswertung <- function(x,
                       rnd_output=TRUE,
                       ...) {
   var_names = c(
-   # "N",
-    "Total",
-    "M",    "O",    "A",    "I",    "R",    "Q",
-    "max Category", "M>O>A>I", "Total Strength", "Category Strength",
-    "CS plus", "CS minus",
-    "Chi-Test", "Fong-Test"
-  )
+    n = "Total",
+    M = "M",    O = "O",    A = "A",    I = "I",    R = "R",    Q = "Q",
+    max.Kat = "max Category",    M.O.A.I = "M>O>A>I",
+    Total.Strength = "Total Strength",
+    Category.Strength = "Category Strength",
+    CS.plus = "CS plus",    CS.minus = "CS minus",
+    Chi = "Chi-squared Test",    Fong = "Fong-Test"
+    )
   
   kano_kategorien <- c("M", "O", "A", "I", "R", "Q")
   
@@ -476,26 +476,21 @@ Kano_Auswertung <- function(x,
     }
   }
   kano_aggregate <- function(x) {
-    x   <-   factor(x, levels = kano_kategorien)
-    tab <-   table(x)
+    x     <-   factor(x, levels = kano_kategorien)
+    tab   <-   table(x)
     proptab <- prop.table(tab)
     
-    
-    
-    
-     
     if (include.percent) {
-      
       if (include.n) {
-        myTab <- rndr_percent(as.vector(proptab* 100), as.vector(tab))
+            myTab <- rndr_percent(as.vector(proptab* 100), as.vector(tab))
       } else{
-        myTab <- rndr_percent(as.vector(proptab* 100))
+            myTab <- rndr_percent(as.vector(proptab* 100))
       }
-    }    else{      myTab <- as.vector(tab)    }
+    } else{ 
+            myTab <- as.vector(tab) 
+      }
     
     names(myTab) <- names(tab)   
-    
-      
     
     Kat <-   names(sort(tab, decreasing = TRUE))
     max.Kat <- Kat[1]
@@ -590,10 +585,17 @@ Kano_Auswertung <- function(x,
   ans <-
     as.data.frame(aggregate(formula, data, FUN = kano_aggregate))
   n_names <- length(names(ans))
+  #result ist eine liste
   ans_value <-  as.data.frame(ans[n_names]$value)
+ 
+  var_names <-var_names[ intersect(names(var_names), names(ans_value) ) ] 
+  # 
+  # cat("\nvar_names\n")
+  # print(names(ans_value))
+  # print(var_names)
+  # cat("\n---------\n")
+  
   names(ans_value) <- var_names
-  
-  
   ans <- cbind(ans[-n_names], ans_value)
   prepare_output(ans, caption = caption, note = note)
   }
@@ -607,9 +609,9 @@ Kano_Auswertung <- function(x,
     
     ans$max.Kat <- as.character(factor(ans$max.Kat, 1:length(kano_kategorien),  kano_kategorien))
     ans$M.O.A.I <- as.character(factor(ans$M.O.A.I, 1:length(kano_kategorien),  kano_kategorien))
+    
     ans
   }
- 
 }
 
 

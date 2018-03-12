@@ -44,9 +44,7 @@ kano_plot(x, main = "", xlim = c(0, 1), ylim = c(0, 1), mar = c(0, 1, 2,
 
 \item{digits}{Nachkommastellen}
 
-\item{include.n}{Anzahl}
-
-\item{include.percent}{Prozent}
+\item{include.n, include.percent}{Anzahl, Prozent}
 
 \item{include.total}{N und Total}
 
@@ -94,11 +92,9 @@ oder I mit in die Labels ausgeben}
 
 \item{rm_I}{Remove I Kategorien I enfernen Anzahl an erlaubten Is}
 
-\item{methode}{weie sind die Items geornet}
+\item{methode}{weie sind die Items geornet default = 1  (func dfunk func dfunc func)}
 
-\item{vars_func}{Welche Items sind die Funktionalen}
-
-\item{vars_dysfunc}{Welche Items sind die Dys-Funktionalen}
+\item{vars_func, vars_dysfunc}{Welche Items sind die Funktionalen/Dys-Funktionalen}
 
 \item{X, grouping}{intern uebergabe der daten parweisen beides sind data.frames}
 
@@ -115,11 +111,7 @@ scors:  Scors sind eine Alternative Codierung zum zweck der transformierung zu e
 
 molten: Daten-Lang
 
-formula= fm,
-removed=Errorrs,
-N=nrow(data),
-Attributes= c("Must-be","One-dimensional", "Attractive","Indifferent","Reverse", "Questionable"),
-answers
+formula, removed=Errorrs, N, attributes, answers
 }
 \description{
 Transformiert Kano-Fragebogen zu Kano-Kodierung
