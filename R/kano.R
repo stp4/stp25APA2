@@ -1,20 +1,20 @@
-#' Analyze Kano type items.
+#' Analyze Kano Type Items.
 #' 
-#' Transformiert Kano-Fragebogen zu Kano-Kodierung
+#' Die Funktion \code{Kano()} transformiert Kano-Fragebogen zur Kano-Kodierung
 #' 
 #' http://www.eric-klopp.de/texte/angewandte-psychologie/18-die-kano-methode
 #' https://de.wikipedia.org/wiki/Kano-Modell
 #' 
 #'  \subsection{M Basis-Faktoren (Mussfaktoren)}{
 #'  Basis-Merkmale (\strong{M}ustbe) werden vom Kunden Vorausgesetzt schaffen
-#'  unzufriedenheit wenn sie nicht vorhanden sind.
+#'  Unzufriedenheit wenn sie nicht vorhanden sind.
 #'  }
 #'   \subsection{O Leistungs- Faktoren}{
 #'  Leistungs-Merkmale (\strong{O}ne-dimensional) werden vom Kunden verlangt
 #'  }
 #'  \subsection{A Begeisterung-Faktoren}{
 #'  Begeisterungs-Merkmale (\strong{A}ttractive) Kunde rechnet nicht damit hebt das
-#'  Produkt vom Konkurenten ab.
+#'  Produkt vom Konkurrenten  ab.
 #'  }
 #'  \subsection{I Unerhebliche- Faktoren }{
 #'  Unerhebliche-Merkmale (\strong{I}ndifferent) werden vom Kunden ignoriert.
@@ -91,8 +91,8 @@
 #'
 #' max Category
 #'
-#' M>O>A>I  max Category mit Hirarchie M Wichtiger als O usw.
-#' also wen der Unterschied zwischen den zwei am hoechsten gelisteten Atributen
+#' M>O>A>I  max Category mit Hierarchie  M Wichtiger als O usw.
+#' also wen der Unterschied zwischen den zwei am hoechsten gelisteten Attributen 
 #' zwei Kategorien gleich ist,  5% Schwelle, dann gilt die Regel M>O>A>I
 #'
 #' Total Strength als zweite Masszahl gibt an wie hoch der Anteil an bedeutenden
@@ -101,34 +101,33 @@
 #' Category Strength ist eine Masszahl die die angibt ob eine Anforderung nur in
 #' eine Kategorie gehoert
 #'
-#' CS plus	Indx Positiv  CS.plus=  (A+O)/(A+O+M+I)
+#' CS plus	Index Positiv  CS.plus=  (A+O)/(A+O+M+I)
 #'
 #' CS minus	Index Negativ CS.minus= (O+M)/(A+O+M+I)
 #'
-#' Chi-Test	Eigendlich unsinn Testet ob Verteilung von M, A, O und I gleich ist
+#' Chi-Test	Eigentlich  Unsinn Testet ob Verteilung von M, A, O und I gleich ist. wird aber in wissenschaftlichen Arebitengerne angegeben.
 #'
-#' Fong-Test Vergleich der zwei Haeufigsten-Kategorien gegenueber der Gesammtzahl
-#' Ergebnis ist entweder ein signifikente oder ein nicht signifikente Verteilung.
+#' Fong-Test Vergleich der zwei Haeufigsten-Kategorien gegenueber der Gesamtzahl Ergebnis ist entweder ein signifikante oder ein nicht signifikante Verteilung.
 #'
 #'
 #' @param x,data Daten mit/oder formula
 #'
-#' @param type Fragetype entwerer vollstaendig (5) oder gekuerzt (3)
+#' @param type Fragetype entweder  vollstaendig (5) oder gekuerzt (3)
 #' @param umcodieren logical False
-#' @param rm_Q Remove Q Kategorien Q enfernen Anzahl an erlaubten Qs
-#' @param rm_I Remove I Kategorien I enfernen Anzahl an erlaubten Is
+#' @param rm_Q Remove Q Kategorien Q entfernen  Anzahl an erlaubten Qs
+#' @param rm_I Remove I Kategorien I entfernen  Anzahl an erlaubten Is
 #' @param methode weie sind die Items geornet default = 1  (func dfunk func dfunc func)
 #' @param vars_func,vars_dysfunc Welche Items sind die Funktionalen/Dys-Funktionalen
 #'  
-#' @param X,grouping intern uebergabe der daten parweisen beides sind data.frames
+#' @param X,grouping uebergabe der Daten paarweisen beides sind data.frames
 #' @param ... nicht benutzte Argumente
 #' @return Liste mit:
 #' 
-#' data: data mit der Kano-Kodierung
-#' 
-#' scors:  Scors sind eine Alternative Codierung zum zweck der transformierung zu einer metrischen Skala 
+#' data: data mit der Kano-Kodierung.
 #' 
 #' molten: Daten-Lang
+#' 
+#' scors:  Scors sind eine Alternative Codierung zum Zweck der Transformierung zu einer metrischen Skala.
 #' 
 #' formula, removed=Errorrs, N, attributes, answers
 #' @export
@@ -644,9 +643,9 @@ print.Kano <- function(x, ...) {
 #' @param my.lines Grafik Element Halbkreis fuer Indiferent
 #'  
 #' @param col Farbe der Punkte 
-#' @param txt.bg,cex.bg,col.bg   Hintergrund mit den Grossen Bchstaben
+#' @param txt.bg,cex.bg,col.bg   Hintergrund mit den Grossen Buchstaben
 #' 
-#' @param jitter Rauschen bei Uberlappung
+#' @param jitter Rauschen bei Ueberlappung
 #' @param cex,cex.items,cex.lab,cex.legend Schriftgroesse
 #' 
 #' @param ylab,xlab x-y Beschrifung
