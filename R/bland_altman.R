@@ -14,9 +14,19 @@ APA.bland_altman <-
 
 #' @rdname APA2
 #' @export
-APA2.bland_altman <- function(x, ...) {
-  Output(x, ...)
+APA2.bland_altman <- function(x,
+                              caption = paste0("Difference (", x$name.diff,
+                                               "), Mean (",  x$name, ")"),
+                              note = "",
+                              ...) {
+  res <-  prepare_output(x$stat, caption = caption)
+  Output(res)
+  invisible(res)
 }
+
+ print.bland_altman <- function(x, ...){ print(x$stat) }
+
+
 
 
 
