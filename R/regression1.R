@@ -38,3 +38,68 @@ APA.glm <- function(x, ...) {
                 lrtst[2, 1],
                 lrtst[2, 5]))
 }
+
+
+
+#' Testing Linear Regression Models
+#'
+#' Durbin-Watson test for autocorrelation of disturbances.
+#' Computes Levene's test for homogeneity of variance across groups.
+#' Bartlett Test of Homogeneity of Variances
+#' Breusch-Pagan test against heteroskedasticity.
+#'
+#' @param x model- fit
+#' @param include.F  Fsratistik
+#' @param include.heteroskedasticity Breusch-Pagan test
+#' @param include.durbin  autocorrelation
+#' @param include.levene  homogeneity of variance across groupssiehe T-Test
+#' @param include.bartlett Homogeneity of Variances siehe T-Test
+#' @param caption 
+#' @export
+test_regression <- function(x,
+                            include.F=TRUE,
+                            include.heteroskedasticity = TRUE,
+                            include.durbin = TRUE,
+                            include.levene = FALSE,
+                            include.bartlett = FALSE,
+                            caption = "Testing Linear Regression Models") {
+  
+  res <- data.frame(Test = as.character(NA), statistic = as.character(NA),
+                    stringsAsFactors=FALSE)
+  if (include.F) {
+    res <-
+      rbind(res,
+            c(Test = "F-Statistic",
+              statistic = APA(x)))
+  }
+  
+  
+  if (include.heteroskedasticity) {
+    res <-
+      rbind(res,
+            c(Test = "Breusch-Pagan (heteroskedasticity)",
+              statistic = APA(lmtest::bptest(x))))
+  }
+  if (include.durbin) {
+    res <-
+      rbind(res,
+            c(Test = "Durbin-Watson (autocorrelation)",
+              statistic = APA(lmtest::dwtest(x))))
+  }
+  if (include.levene) {
+    res <- rbind( res,
+                  c(Test = "Levene's",
+                    statistic = APA(car::leveneTest(x))))
+  }
+  if (include.bartlett) {
+    res <-
+      rbind(res,
+            c(Test = "Breusch",
+              statistic =  APA(bartlett.test(x$call$formula, x$model))))
+    
+  }
+  
+  
+  prepare_output(res[-1,], caption=caption) 
+  
+}

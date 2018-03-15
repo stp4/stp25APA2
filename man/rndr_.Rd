@@ -19,6 +19,8 @@
 \alias{rndr_F}
 \alias{rndr_T}
 \alias{rndr_H}
+\alias{rndr_BP}
+\alias{rndr_DW}
 \alias{rndr_W}
 \alias{rndr_U}
 \alias{rndr_shapiro}
@@ -78,6 +80,10 @@ rndr_F(F_val, df1, df2, p = NULL)
 rndr_T(F_val, df1, p = NULL)
 
 rndr_H(F_val, df1, p = NULL)
+
+rndr_BP(F_val, df1, p = NULL)
+
+rndr_DW(F_val, df1, p = NULL)
 
 rndr_W(F_val, p = NULL)
 
