@@ -63,9 +63,9 @@ Beim Streudiagram die Legende bei Barplot  scale=list}
 
 \item{col}{Farbe der Punkte}
 
-\item{txt.bg, cex.bg, col.bg}{Hintergrund mit den Grossen Bchstaben}
+\item{txt.bg, cex.bg, col.bg}{Hintergrund mit den Grossen Buchstaben}
 
-\item{jitter}{Rauschen bei Uberlappung}
+\item{jitter}{Rauschen bei Ueberlappung}
 
 \item{cex, cex.items, cex.lab, cex.legend}{Schriftgroesse}
 

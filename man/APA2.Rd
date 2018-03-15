@@ -62,7 +62,8 @@ APA2(x, ...)
 
 \method{APA}{bland_altman}(x, ...)
 
-\method{APA2}{bland_altman}(x, ...)
+\method{APA2}{bland_altman}(x, caption = paste0("Difference (", x$name.diff,
+  "), Mean (", x$name, ")"), note = "", ...)
 
 \method{APA2}{formula}(x, data = NULL, caption = "", fun = NULL,
   type = c("auto", "freq", "mean", "median", "ci", "multiresponse", "cohen.d",

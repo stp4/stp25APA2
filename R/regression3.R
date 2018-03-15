@@ -465,7 +465,7 @@ type_stargazer <- function(list, caption, digits) {
   if (is.null(caption))
     caption <- "" #default$caption
   caption <- Tab(caption)
-  Output_info$table <<-  c(Output_info$table, caption)
+#  Output_info$table <<-  c(Output_info$table, caption)
   # if(is.null(note)) note <- "" #default$note
   stp25output:::Output.htmlTable(
     stargazer::stargazer(

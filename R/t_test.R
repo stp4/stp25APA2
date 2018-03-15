@@ -7,13 +7,22 @@
 #' APA(wilcox.test(mpg ~ vs, mtcars))
 #' APA(t.test(mpg ~ vs, mtcars))
 APA.htest <- function(x,  ...) {
-  if (names(x$statistic) == "t")
+  if (names(x$statistic) == "t") {
     rndr_T(x$statistic,
            x$parameter,
            x$p.value)
-  else
+  }
+  else if (names(x$statistic) == "BP"){
+    rndr_BP(x$statistic,
+            x$parameter,
+            x$p.value)}
+  else if (names(x$statistic) == "DW"){
+    rndr_DW(x$statistic,
+            x$parameter,
+            x$p.value)}
+  else{
     rndr_W(x$statistic,
-           x$p.value)
+           x$p.value)}
 }
 
 

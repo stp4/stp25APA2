@@ -424,6 +424,20 @@ rndr_H<- function(F_val, df1, p=NULL){
   else paste0(F_val, symbol_seperator, rndr_P(p))
 }
 
+#' @rdname rndr_
+rndr_BP<- function(F_val, df1, p=NULL){
+  F_val <-paste0("BP", rndr_df(df1), "=", fftest(F_val))
+  if(is.null(p)) F_val
+  else paste0(F_val, symbol_seperator, rndr_P(p))
+}
+
+
+#' @rdname rndr_
+rndr_DW<- function(F_val, df1, p=NULL){
+  F_val <-paste0("DW", rndr_df(df1), "=", fftest(F_val))
+  if(is.null(p)) F_val
+  else paste0(F_val, symbol_seperator, rndr_P(p))
+}
 
 
 
