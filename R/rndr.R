@@ -208,10 +208,12 @@ rndr_percent <- function(
   null_percent_sign = options()$stp25$apa.style$prozent$null_percent_sign
 ) {
   
-
+#cat("\nrndr_percent\n")
+  
  if(is.null(percent)) percent <- style != 0
 
   if (is.vector(x)) {
+   # cat(" vector ")
     if (percent) {
       
         
@@ -245,25 +247,26 @@ rndr_percent <- function(
 
      if(!is.null(null_percent_sign))
       res[which(n==0)] <- null_percent_sign
-
+#print(res)
     return(res)
     
   } else{
+    cat("not a vector ")
     myattr <- attributes(n) #-- colnames and rownames
     nrw <- nrow(n)
     #n <- suppressWarnings(
     #  formatC(n, format = "f", digits = 0))
-   
-    n_char <- apply(n, 2, function(x) formatC(x, format = "f", digits = 0) )
-   
+   # cat("x : ")
+  #  print(str(n) )
+    n_char <- apply(n, 2, function(x) {
+     # cat("\nin fun: \n")
+    #  print(x)
+      formatC(x, format = "f", digits = 0) 
+      })
+   # cat(" nach formatC ")
     #------------------------------------------------
     if (percent) {
-      # x <- suppressWarnings(formatC(
-      #   x,
-      #   format = "f",
-      #   digits = digits,
-      #   decimal.mark = getOption("OutDec")
-      # ))
+     # cat(" percent ")
       x_char <- apply(x, 2, function(y) formatC(
            y,
            format = "f",
@@ -280,9 +283,12 @@ rndr_percent <- function(
     } else
       res <-  n_char
 
+    
+    #print(res)
+    
     res<- data.frame(res, row.names= myattr$row.names,
                      stringsAsFactors = FALSE)
-  
+  #print(res)
     names(res) <- myattr$names
   
     

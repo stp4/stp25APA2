@@ -597,6 +597,7 @@ Prozent2default <-
            n = length(x),
            exclude = NA,
            max_factor_length = 25) {
+   # cat( "\nProzent2default\n" )
     if (!is.factor(x))
       x <- factor(x)
 
@@ -620,7 +621,10 @@ Prozent2default <-
         n <- length(x)
         ans <- table(x)
       }
-      result <- rndr_percent(prop.table(ans) * 100, ans)
+      
+      result <- rndr_percent(as.vector(prop.table(ans) )* 100, as.vector(ans))
+    #  cat("\nnach rendr")
+     # print(result)
     }
     data.frame(
       lev = names(ans),

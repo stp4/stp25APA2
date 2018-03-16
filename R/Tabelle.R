@@ -119,6 +119,8 @@ Tabelle.default <- function(...,
                             normality.test = FALSE) {
   type <-  match.arg(type, several.ok = TRUE)
   if (APA) {
+    
+    cat("\ninAPA=TRUE")
     errate_statistik3(
       ...,
       type = type,
@@ -342,14 +344,20 @@ errate_statistik3 <-
             normality.test = FALSE)
   {
     Mittelwert_Einzel <- function(i, x) {
+     # cat(" Mittelwert_Einzel ")
       # Item|lev|n|m
       x_NA <- x
       N    <- length(x)
       x    <- na.omit(x)
       n    <- length(x)
       rr <- NULL #Result
+    #  cat(" N = ",N, n," ")
+     # print(str(x))
+      
       if (all(is.na(x)))
         X$measure[i] <- "all_NA"
+     # cat("\nmeasure")
+    #  print( X$measure[i])
       res <- switch(
         X$measure[i],
         numeric = Mean2default(x, X$digits[i], n),
@@ -376,7 +384,8 @@ errate_statistik3 <-
       } else
         rr <-
         cbind(Item = c(X$row_name[i], rep("", nrow(res) - 1)), res)
-      
+      cat("\nResult ")
+      print(rr)
       rr
     }
     
@@ -447,11 +456,16 @@ errate_statistik3 <-
     group.vars   <- X$group.vars
     measure.vars <- X$measure.vars
     N            <- nrow(data)
+  #  cat("\ngroup.vars")
+  #  print(group.vars)
+   # cat("\nmeasure.vars")
+   # print(measure.vars)
     
     if (type[1] == "multiresponse")
       X$measure <- rep("multi", length(X$measure))
     #-- Einzelvergleich -------------------------------
     if (is.null(group.vars)) {
+      cat(" Einzelvergleich ")
       if (include.nr)
         ANS <-
           data.frame(
@@ -460,10 +474,12 @@ errate_statistik3 <-
             n = "",
             m = X$N
           )
+     # cat( " nach include.nr")
+     # print(ANS)
       
       for (i in 1:length(measure.vars))
         ANS <- rbind(ANS, Mittelwert_Einzel(i, X$data[[i]]))
-      
+    #  print(ANS)
       ANS$Item <-
         paste(ANS$Item, ANS$lev) # Spalte Characteristics entfernen
       if (include.n)
@@ -495,7 +511,8 @@ errate_statistik3 <-
           for (i in 1:length(measure.vars)) {
             ans <- Mittelwert_Gruppe(i, j, X$data[[measure.vars[i]]])
             # ans: # item|lev|g1_n|g1_m|g2_n|g2_m|g3_n|...
-            #  print(ans)
+           # cat("in schleife", i,"\n")
+            #   print(ans)
             if (include.total) {
               total <- Mittelwert_Einzel(i, X$data[[measure.vars[i]]])[-c(1, 2)]
               names(total)[] <- paste0("Total_", names(total))
