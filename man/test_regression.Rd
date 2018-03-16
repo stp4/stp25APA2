@@ -24,8 +24,9 @@ test_regression(x, include.F = TRUE, include.heteroskedasticity = TRUE,
 \item{caption}{}
 }
 \description{
-Durbin-Watson test for autocorrelation of disturbances.
+Durbin-Watson test for autocorrelation of disturbances. Ist nur bei Zeitreihendaten sinnvoll.
 Computes Levene's test for homogeneity of variance across groups.
 Bartlett Test of Homogeneity of Variances
 Breusch-Pagan test against heteroskedasticity.
+variance inflation factor. VIF values over 5 are troubling, should probably investigate anything over 2.5.
 }
