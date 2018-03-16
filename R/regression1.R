@@ -43,10 +43,11 @@ APA.glm <- function(x, ...) {
 
 #' Testing Linear Regression Models
 #'
-#' Durbin-Watson test for autocorrelation of disturbances.
+#' Durbin-Watson test for autocorrelation of disturbances. Ist nur bei Zeitreihendaten sinnvoll.
 #' Computes Levene's test for homogeneity of variance across groups.
 #' Bartlett Test of Homogeneity of Variances
 #' Breusch-Pagan test against heteroskedasticity.
+#' variance inflation factor. VIF values over 5 are troubling, should probably investigate anything over 2.5.
 #'
 #' @param x model- fit
 #' @param include.F  Fsratistik
@@ -62,6 +63,7 @@ test_regression <- function(x,
                             include.durbin = TRUE,
                             include.levene = FALSE,
                             include.bartlett = FALSE,
+                           # include.vif=TRUE,
                             caption = "Testing Linear Regression Models") {
   
   res <- data.frame(Test = as.character(NA), statistic = as.character(NA),
@@ -70,20 +72,20 @@ test_regression <- function(x,
     res <-
       rbind(res,
             c(Test = "F-Statistic",
-              statistic = APA(x)))
+              statistic = APA(x,include.r = FALSE)))
   }
   
   
   if (include.heteroskedasticity) {
     res <-
       rbind(res,
-            c(Test = "Breusch-Pagan (heteroskedasticity)",
+            c(Test = "Heteroskedasticity (Breusch-Pagan)",
               statistic = APA(lmtest::bptest(x))))
   }
   if (include.durbin) {
     res <-
       rbind(res,
-            c(Test = "Durbin-Watson (autocorrelation)",
+            c(Test = "Autocorrelation (Durbin-Watson )",
               statistic = APA(lmtest::dwtest(x))))
   }
   if (include.levene) {
@@ -94,12 +96,76 @@ test_regression <- function(x,
   if (include.bartlett) {
     res <-
       rbind(res,
-            c(Test = "Breusch",
+            c(Test = "Bartlett",
               statistic =  APA(bartlett.test(x$call$formula, x$model))))
     
   }
-  
+ # if(include.vif) VIF2(x)
   
   prepare_output(res[-1,], caption=caption) 
   
 }
+
+
+
+#' Validation of Linear Models Assumptions
+#' 
+#' Test von Heteroskedasticity und Autocorrelation
+#'
+#' @param ... 
+#' @param include.F 
+#' @param include.heteroskedasticity 
+#' @param include.durbin 
+#' @param include.levene 
+#' @param include.bartlett 
+#' @param caption 
+#' @param note 
+#' @param names 
+#'
+#' @return Output als html und data.frame
+#' @export
+#'
+APA_Validation<- function(...,
+                          include.F=TRUE,
+                          include.heteroskedasticity = TRUE,
+                          include.durbin = TRUE,
+                          include.levene = FALSE,
+                          include.bartlett = FALSE,
+                          # include.vif=TRUE,
+                          caption = "Testing Linear Regression Models",
+                          note="",
+                          names = NULL
+)
+{
+  custom_model_names <- function() {
+    if (length(myfits) == 1) { 
+      ""
+    }else{
+      if (is.null(names)) paste0("(", 1:length(myfits), ")")  else
+        names     
+    }
+  }
+  
+  myfits <- list(...)
+  
+  if (is(myfits[[1]], "list")) {
+    myfits <- myfits[[1]]  # hier kommt ein fit_with-Objekt
+    if (is.null(names))
+      names <- names(myfits)
+  }
+  n<-length(myfits) 
+  
+  custom.model.names <- custom_model_names()
+  
+  res<- test_regression(myfits[[1]])
+  if(n>1){
+    for(i in 2:n){
+      
+      res<- cbind(res,  test_regression(myfits[[i]])[2])
+    }
+    names(res) <- c("Test", custom.model.names)
+    
+  }
+  Output(res)
+  invisible(res) 
+} 
