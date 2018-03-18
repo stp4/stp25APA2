@@ -417,13 +417,14 @@ function (dfr,
 }
 
 
-BAP2<-  function(x, .data, ...,
-                 caption="Bland Altman Methode"){
-  BAP(x, .data, ...) %>% Output(caption=caption)}
+BAP2<-  function(x, .data, ...){
+  APA2.bland_altman(BAP(x, .data, ...))
+ }
 
 
 #--- Helper
 BAP<- function(x, .data, ...){
+ # cat("\n in BAP ")
   X<-Formula_Data(x, .data)
 
   ba.stats <- bland.altman.stats( X$Y_data )
@@ -432,6 +433,8 @@ BAP<- function(x, .data, ...){
   ba.stats$met_A <-X$yname[1]
   ba.stats$met_B <-X$yname[2]
   ba.stats$groups= X$X_data
+  
+ # print(str(ba.stats))
   ba.stats
 }
 
