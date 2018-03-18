@@ -354,8 +354,7 @@ Prozent2APA <- function(x,
   if (!is.factor(x))
     x <- Non_Factor_To_Factor(x)
   
-  x_NA <- x  # --mit nas
-  N    <- length(x)
+  x_NA <- x  # --mit na
   x    <- na.omit(x)
   n    <- length(x)
   
@@ -364,33 +363,32 @@ Prozent2APA <- function(x,
     ans <- rep(NA, nlevels(x_NA))
     names(ans) <- levels(x_NA)
   } else {
-    if (is.null(exclude))
-      x <- x_NA
+    
+    if (is.null(exclude))   x <- x_NA
+    
+    
     ans <- table(x, exclude = exclude)
     
+    # seltener fall das sehr viele levels vorhanden sind
     if (length(ans) > max_factor_length) {
       naLev <- levels(x)[-(1:max_factor_length)]
       Text("NA = ", paste(naLev, collapse = ", "))
       
       x <- factor(x, levels(x)[1:max_factor_length], exclude = NULL)
       x <- addNA(x)  #- addNA modifies a factor by turning NA into an extra level
-      N <- length(x)
       n <- length(x)
       ans <- table(x)
     }
     
-    Freq <- as.data.frame(ans)
-    Precent <- as.data.frame(round(prop.table(ans) * 100, 3))
-    result <- rndr_percent(Precent[, 2], Freq[, 2], digits = digits)
-    # result <- ffprozent.default(Precent[, 2], Freq[, 2])
+    result <- rndr_percent(prop.table(ans) * 100, ans,  digits = digits)
   }
+  
   data.frame(
     Characteristics = names(ans),
     n = c(n, rep("", length(ans) - 1)),
     Statistics = result, 
     stringsAsFactors=FALSE
   )
-  
 }
 
 

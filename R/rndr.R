@@ -198,8 +198,8 @@ rndr_ods <- function(x, digits = 2) {
 #' 
 #' #-- rndr_percent ------------
 #' 
-#' rndr_percent2(c(.2568, 99, 0.02568), c(4, 569, 25), digits = 1)
-#' rndr_percent2(10, 3, F, 2)
+#' rndr_percent(c(.2568, 99, 0.02568), c(4, 569, 25), digits = 1)
+#' rndr_percent(10, 3, F, 2)
 #' x <- c(.2568, 99, 0.02568)
 #' n = c(4, 569, 25)
 #' percent = TRUE
@@ -208,12 +208,12 @@ rndr_ods <- function(x, digits = 2) {
 #' style = options()$stp25$apa.style$prozent$style
 #' null_percent_sign = options()$stp25$apa.style$prozent$null_percent_sign
 #' 
-#' rndr_percent2(x, percentage_str = "Prozent")
+#' rndr_percent(x, percentage_str = "Prozent")
 #' 
 #' x <- xtabs(~ med + g, hyper)
 #' n <- table(x)
 #' x <- prop.table(n)
-#' rndr_percent2(x, n)
+#' rndr_percent(x, n)
 #' 
 #' 
 #' hkarz$LAI <- factor(hkarz$lai, 0:1, c("pos", "neg"))
@@ -223,9 +223,9 @@ rndr_ods <- function(x, digits = 2) {
 #' n <- as.matrix(x)
 #' x <- as.matrix(prop.table(x) * 100)
 #' 
-#' rndr_percent2(x, n)
+#' rndr_percent(x, n)
 #' 
-#' rndr_percent2(data.frame(x), data.frame(n))
+#' rndr_percent(data.frame(x), data.frame(n))
 #' 
 rndr_percent <- function(x,
                           n = NULL, ...) {
@@ -256,20 +256,15 @@ rndr_percent_default <- function(x,
                                  null_percent_sign = options()$stp25$apa.style$prozent$null_percent_sign) {
   if (is.null(percent))
     percent <- style != 0
-  
+ # print(digits)
+  digits<-digits[1]
   if (percent) {
     prz <- ifelse(
       x < 1 / (10 ^ digits),
       paste0("<", 1 / (10 ^ digits), percentage_str),
-      paste0(
-        formatC(
-          x,
-          format = "f",
-          digits = digits,
-          decimal.mark = getOption("OutDec")
-        ),
-        percentage_str
-      )
+      paste0(formatC(x,
+          format = "f",  digits = digits,
+          decimal.mark = getOption("OutDec")),percentage_str)
     )
     if (!is.null(n)) {
       anz <- formatC(n, format = "f", digits =  0)
@@ -304,6 +299,10 @@ rndr_percent_matrix <- function(x,
                                 percentage_str = options()$stp25$apa.style$prozent$percentage_str,
                                 style = options()$stp25$apa.style$prozent$style,
                                 null_percent_sign = options()$stp25$apa.style$prozent$null_percent_sign) {
+  
+  
+ # print(digits)
+  digits<-digits[1]
   myattr <- attributes(n) #-- colnames and rownames
   nrw <- nrow(n)
   n_char <- apply(n, 2, function(x) {

@@ -201,7 +201,7 @@ rndr_(1.234, 3)
   rndr_median_range(1,2,3,4)
   rndr_median(1,2)
 
-# require(stpvers)
+#-- rndr_percent ------------
 
 rndr_percent2(c(.2568, 99, 0.02568), c(4, 569, 25), digits = 1)
 rndr_percent2(10, 3, F, 2)
