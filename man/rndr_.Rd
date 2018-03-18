@@ -53,11 +53,7 @@ rndr_mean_range(m, s, mn, mx, digits = NULL, ...)
 
 rndr_ods(x, digits = 2)
 
-rndr_percent(x, n = NULL, percent = TRUE,
-  digits = options()$stp25$apa.style$prozent$digits[1],
-  percentage_str = options()$stp25$apa.style$prozent$percentage_str,
-  style = options()$stp25$apa.style$prozent$style,
-  null_percent_sign = options()$stp25$apa.style$prozent$null_percent_sign)
+rndr_percent(x, n = NULL, ...)
 
 rndr_P(p, include.symbol = TRUE, include.bracket = FALSE)
 
@@ -130,10 +126,6 @@ symbol_chi2(output = stp25output:::which_output())
 
 \item{n}{Anzahl}
 
-\item{percent, style}{Formatierung als Prozent oder als Prozent(Anzahl)}
-
-\item{percentage_str, null_percent_sign}{Formatierungs Optionen}
-
 \item{p}{p-Wert}
 
 \item{include.symbol, include.bracket}{Formatierungs Optionen}
@@ -147,6 +139,10 @@ symbol_chi2(output = stp25output:::which_output())
 \item{F_val}{Objekt aus einem Test}
 
 \item{output}{nur intern HTML oder Konsole}
+
+\item{percent, style}{Formatierung als Prozent oder als Prozent(Anzahl)}
+
+\item{percentage_str, null_percent_sign}{Formatierungs Optionen}
 }
 \value{
 Character-String
@@ -204,8 +200,38 @@ rndr_(1.234, 3)
   rndr_mean (1,2 )
   rndr_median_range(1,2,3,4)
   rndr_median(1,2)
-rndr_percent(c(.2568, 99, 0.02568), c(4, 569, 25), digits = 1)
-rndr_percent(10, 3, F, 2)
+
+# require(stpvers)
+
+rndr_percent2(c(.2568, 99, 0.02568), c(4, 569, 25), digits = 1)
+rndr_percent2(10, 3, F, 2)
+x <- c(.2568, 99, 0.02568)
+n = c(4, 569, 25)
+percent = TRUE
+digits = options()$stp25$apa.style$prozent$digits[1]
+percentage_str = options()$stp25$apa.style$prozent$percentage_str
+style = options()$stp25$apa.style$prozent$style
+null_percent_sign = options()$stp25$apa.style$prozent$null_percent_sign
+
+rndr_percent2(x, percentage_str = "Prozent")
+
+x <- xtabs(~ med + g, hyper)
+n <- table(x)
+x <- prop.table(n)
+rndr_percent2(x, n)
+
+
+hkarz$LAI <- factor(hkarz$lai, 0:1, c("pos", "neg"))
+hkarz$Tzell <- cut(hkarz$tzell, 3, c("low", "med", "hig"))
+x <- xtabs(~ LAI + Tzell, hkarz)
+
+n <- as.matrix(x)
+x <- as.matrix(prop.table(x) * 100)
+
+rndr_percent2(x, n)
+
+rndr_percent2(data.frame(x), data.frame(n))
+
 
 rndr_P(c(1,.25,.08,0.05,0.01,0.0001))
 rndr_corr(-.548369,0.005896,55)

@@ -195,110 +195,225 @@ rndr_ods <- function(x, digits = 2) {
 #' @export
 #' @description Prozent
 #' @examples
-#' rndr_percent(c(.2568, 99, 0.02568), c(4, 569, 25), digits = 1)
-#' rndr_percent(10, 3, F, 2)
-
-rndr_percent <- function(
-  x,
-  n=NULL,
-  percent = TRUE, # nur die Anzahl zurueckgeben (xtabs)
-  digits = options()$stp25$apa.style$prozent$digits[1],
-  percentage_str = options()$stp25$apa.style$prozent$percentage_str,
-  style = options()$stp25$apa.style$prozent$style,
-  null_percent_sign = options()$stp25$apa.style$prozent$null_percent_sign
-) {
-  
-#cat("\nrndr_percent\n")
-  
- if(is.null(percent)) percent <- style != 0
-
+#' 
+#' #-- rndr_percent ------------
+#' 
+#' rndr_percent2(c(.2568, 99, 0.02568), c(4, 569, 25), digits = 1)
+#' rndr_percent2(10, 3, F, 2)
+#' x <- c(.2568, 99, 0.02568)
+#' n = c(4, 569, 25)
+#' percent = TRUE
+#' digits = options()$stp25$apa.style$prozent$digits[1]
+#' percentage_str = options()$stp25$apa.style$prozent$percentage_str
+#' style = options()$stp25$apa.style$prozent$style
+#' null_percent_sign = options()$stp25$apa.style$prozent$null_percent_sign
+#' 
+#' rndr_percent2(x, percentage_str = "Prozent")
+#' 
+#' x <- xtabs(~ med + g, hyper)
+#' n <- table(x)
+#' x <- prop.table(n)
+#' rndr_percent2(x, n)
+#' 
+#' 
+#' hkarz$LAI <- factor(hkarz$lai, 0:1, c("pos", "neg"))
+#' hkarz$Tzell <- cut(hkarz$tzell, 3, c("low", "med", "hig"))
+#' x <- xtabs(~ LAI + Tzell, hkarz)
+#' 
+#' n <- as.matrix(x)
+#' x <- as.matrix(prop.table(x) * 100)
+#' 
+#' rndr_percent2(x, n)
+#' 
+#' rndr_percent2(data.frame(x), data.frame(n))
+#' 
+rndr_percent <- function(x,
+                          n = NULL, ...) {
   if (is.vector(x)) {
-   # cat(" vector ")
-    if (percent) {
-      
-        
-      prz <- ifelse(
-        x < 1 / (10 ^ digits),
-        paste0("<", 1 / (10 ^ digits), "%"),
-        paste0( formatC(x,
-            format = "f",  digits = digits,
-            decimal.mark = getOption("OutDec")),percentage_str))
-      if(!is.null(n)){
+    rndr_percent_default(x, n, ...)
+  } else if (length(dim(x)) == 1) {
+    rndr_percent_default(as.vector(x), as.vector(n) , ...)
+    
+  } else if (is.matrix(x)) {
+    rndr_percent_matrix(x, n, ...)
+  } else if (is.data.frame(x)) {
+    rndr_percent_matrix(as.matrix(x), as.matrix(n), ...)
+  }
+  else{
+    cat("\not a vector ")
+    print(class(x))
+    stop(" Unbekante Classe in rndr_percent() ")
+  }
+}
+
+rndr_percent_default <- function(x,
+                                 n = NULL,
+                                 percent = TRUE,
+                                 # nur die Anzahl zurueckgeben (xtabs)
+                                 digits = options()$stp25$apa.style$prozent$digits[1],
+                                 percentage_str = options()$stp25$apa.style$prozent$percentage_str,
+                                 style = options()$stp25$apa.style$prozent$style,
+                                 null_percent_sign = options()$stp25$apa.style$prozent$null_percent_sign) {
+  if (is.null(percent))
+    percent <- style != 0
+  
+  if (percent) {
+    prz <- ifelse(
+      x < 1 / (10 ^ digits),
+      paste0("<", 1 / (10 ^ digits), percentage_str),
+      paste0(
+        formatC(
+          x,
+          format = "f",
+          digits = digits,
+          decimal.mark = getOption("OutDec")
+        ),
+        percentage_str
+      )
+    )
+    if (!is.null(n)) {
       anz <- formatC(n, format = "f", digits =  0)
-      
       if (style == 1)
         res <- paste0(prz, " (", anz, ")")
       else
         res <- paste0(anz, " (", prz, ")")
-      
-     
-       
-      } else { # in Kano verwendet
-        null_percent_sign<- NULL #fehler abangen
-        res <-  prz
-      }
-      
-      
+    } else {
+      # in Kano verwendet
+      null_percent_sign <- NULL #fehler abangen
+      res <-  prz
     }
-
-    else{
-      res <- formatC(n, format = "f", digits =  0)
-    }
-
-     if(!is.null(null_percent_sign))
-      res[which(n==0)] <- null_percent_sign
-#print(res)
-    return(res)
-    
-  } else{
-    cat("not a vector ")
-    myattr <- attributes(n) #-- colnames and rownames
-    nrw <- nrow(n)
-    #n <- suppressWarnings(
-    #  formatC(n, format = "f", digits = 0))
-   # cat("x : ")
-  #  print(str(n) )
-    n_char <- apply(n, 2, function(x) {
-     # cat("\nin fun: \n")
-    #  print(x)
-      formatC(x, format = "f", digits = 0) 
-      })
-   # cat(" nach formatC ")
-    #------------------------------------------------
-    if (percent) {
-     # cat(" percent ")
-      x_char <- apply(x, 2, function(y) formatC(
-           y,
-           format = "f",
-           digits = digits,
-           decimal.mark = getOption("OutDec")
-         ))
-      
-      if (style == 1)
-         res <- matrix(paste0(x_char, "% (", n_char, ")"), nrow = nrw)
-       
-      else
-        res <- matrix(paste0(n_char, " (", x_char, "%)"), nrow = nrw)
-
-    } else
-      res <-  n_char
-
-    
-    #print(res)
-    
-    res<- data.frame(res, row.names= myattr$row.names,
-                     stringsAsFactors = FALSE)
-  #print(res)
-    names(res) <- myattr$names
-  
-    
-    
-    if(!is.null(null_percent_sign))
-      res[which(n==0)] <- null_percent_sign
-    
-    return(res)
   }
+  else{
+    res <- formatC(n, format = "f", digits =  0)
+  }
+  
+  if (!is.null(null_percent_sign))
+    res[which(n == 0)] <- null_percent_sign
+  
+  res
 }
+
+
+
+
+
+rndr_percent_matrix <- function(x,
+                                n = NULL,
+                                percent = TRUE,
+                                digits = options()$stp25$apa.style$prozent$digits[1],
+                                percentage_str = options()$stp25$apa.style$prozent$percentage_str,
+                                style = options()$stp25$apa.style$prozent$style,
+                                null_percent_sign = options()$stp25$apa.style$prozent$null_percent_sign) {
+  myattr <- attributes(n) #-- colnames and rownames
+  nrw <- nrow(n)
+  n_char <- apply(n, 2, function(x) {
+    formatC(x, format = "f", digits = 0)
+  })
+  #------------------------------------------------
+  if (percent) {
+    # cat(" percent ")
+    x_char <- apply(x, 2, function(y)
+      formatC(
+        y,
+        format = "f",
+        digits = digits,
+        decimal.mark = getOption("OutDec")
+      ))
+    
+    if (style == 1)
+      res <-
+        matrix(paste0(x_char, percentage_str, " (", n_char, ")"), nrow = nrw)
+    
+    else
+      res <-
+        matrix(paste0(n_char, " (", x_char, percentage_str, ")"), nrow = nrw)
+    
+  } else
+    res <-  n_char
+  
+  res <- data.frame(res,
+                    row.names = myattr$row.names,
+                    stringsAsFactors = FALSE)
+  names(res) <- myattr$names
+  if (!is.null(null_percent_sign))
+    res[which(n == 0)] <- null_percent_sign
+  
+  res
+}
+
+
+
+# rndr_percent <- function(
+#   x,
+#   n=NULL,
+#   percent = TRUE, # nur die Anzahl zurueckgeben (xtabs)
+#   digits = options()$stp25$apa.style$prozent$digits[1],
+#   percentage_str = options()$stp25$apa.style$prozent$percentage_str,
+#   style = options()$stp25$apa.style$prozent$style,
+#   null_percent_sign = options()$stp25$apa.style$prozent$null_percent_sign
+# ) {
+# if(is.null(percent)) percent <- style != 0
+#   if (is.vector(x)) {
+#     if (percent) {
+#       prz <- ifelse(
+#         x < 1 / (10 ^ digits),
+#         paste0("<", 1 / (10 ^ digits), percentage_str),
+#         paste0( formatC(x,
+#             format = "f",  digits = digits,
+#             decimal.mark = getOption("OutDec")),percentage_str))
+#       if(!is.null(n)){
+#       anz <- formatC(n, format = "f", digits =  0)
+#       if (style == 1)
+#         res <- paste0(prz, " (", anz, ")")
+#       else
+#         res <- paste0(anz, " (", prz, ")")
+#       } else { # in Kano verwendet
+#         null_percent_sign<- NULL #fehler abangen
+#         res <-  prz
+#       }
+#     }
+#     else{
+#       res <- formatC(n, format = "f", digits =  0)
+#     }
+# 
+#      if(!is.null(null_percent_sign))
+#       res[which(n==0)] <- null_percent_sign
+#    } else{
+#     cat("\not a vector ")
+#      print(class(x))
+#     myattr <- attributes(n) #-- colnames and rownames
+#     nrw <- nrow(n)
+#     n_char <- apply(n, 2, function(x) {
+#       formatC(x, format = "f", digits = 0) 
+#       })
+#     #------------------------------------------------
+#     if (percent) {
+#      # cat(" percent ")
+#       x_char <- apply(x, 2, function(y) formatC(
+#            y,
+#            format = "f",
+#            digits = digits,
+#            decimal.mark = getOption("OutDec")
+#          ))
+#       
+#       if (style == 1)
+#          res <- matrix(paste0(x_char, percentage_str," (", n_char, ")"), nrow = nrw)
+#        
+#       else
+#         res <- matrix(paste0(n_char, " (", x_char,percentage_str, ")"), nrow = nrw)
+# 
+#     } else
+#       res <-  n_char
+# 
+#     res<- data.frame(res, row.names= myattr$row.names,
+#                      stringsAsFactors = FALSE)
+#     names(res) <- myattr$names
+#       if(!is.null(null_percent_sign))
+#       res[which(n==0)] <- null_percent_sign
+#   }
+# 
+# res
+# }
 
 
 
