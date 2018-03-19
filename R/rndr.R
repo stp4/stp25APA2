@@ -299,9 +299,7 @@ rndr_percent_matrix <- function(x,
                                 percentage_str = options()$stp25$apa.style$prozent$percentage_str,
                                 style = options()$stp25$apa.style$prozent$style,
                                 null_percent_sign = options()$stp25$apa.style$prozent$null_percent_sign) {
-  
-  
- # print(digits)
+ 
   digits<-digits[1]
   myattr <- attributes(n) #-- colnames and rownames
   nrw <- nrow(n)

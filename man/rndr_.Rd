@@ -203,8 +203,8 @@ rndr_(1.234, 3)
 
 #-- rndr_percent ------------
 
-rndr_percent2(c(.2568, 99, 0.02568), c(4, 569, 25), digits = 1)
-rndr_percent2(10, 3, F, 2)
+rndr_percent(c(.2568, 99, 0.02568), c(4, 569, 25), digits = 1)
+rndr_percent(10, 3, F, 2)
 x <- c(.2568, 99, 0.02568)
 n = c(4, 569, 25)
 percent = TRUE
@@ -213,12 +213,12 @@ percentage_str = options()$stp25$apa.style$prozent$percentage_str
 style = options()$stp25$apa.style$prozent$style
 null_percent_sign = options()$stp25$apa.style$prozent$null_percent_sign
 
-rndr_percent2(x, percentage_str = "Prozent")
+rndr_percent(x, percentage_str = "Prozent")
 
 x <- xtabs(~ med + g, hyper)
 n <- table(x)
 x <- prop.table(n)
-rndr_percent2(x, n)
+rndr_percent(x, n)
 
 
 hkarz$LAI <- factor(hkarz$lai, 0:1, c("pos", "neg"))
@@ -228,9 +228,9 @@ x <- xtabs(~ LAI + Tzell, hkarz)
 n <- as.matrix(x)
 x <- as.matrix(prop.table(x) * 100)
 
-rndr_percent2(x, n)
+rndr_percent(x, n)
 
-rndr_percent2(data.frame(x), data.frame(n))
+rndr_percent(data.frame(x), data.frame(n))
 
 
 rndr_P(c(1,.25,.08,0.05,0.01,0.0001))
