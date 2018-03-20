@@ -45,8 +45,7 @@ errate_statistik3(..., type = NULL, caption = "", note = "",
   include.n = TRUE, include.nr = FALSE, include.total = FALSE,
   include.test = test, include.p = TRUE, include.stars = FALSE,
   corr_test = "pearson", cor_diagonale_up = TRUE, max_factor_length = 35,
-  order = FALSE, decreasing = FALSE, useconTest = FALSE,
-  normality.test = FALSE)
+  order = FALSE, decreasing = FALSE, normality.test = FALSE)
 }
 \arguments{
 \item{...}{Die auszuwertenden Variablen  sex, age="mean", usw}
@@ -136,6 +135,15 @@ APA = TRUE,
 include.n = FALSE,
 test = TRUE
 )
+
+ c(
+"wilcox"=Tabelle(alter ~ geschl, varana, APA=TRUE, test="wilcox")[[1]]$statistics[1],
+"h.test"=Tabelle(alter ~ geschl, varana, APA=TRUE, test="h.test")[[1]]$statistics[1],
+"anova"=Tabelle(alter ~ geschl, varana, APA=TRUE, test="anova")[[1]]$statistics[1],
+"t.test"=Tabelle(alter ~ geschl, varana, APA=TRUE, test="t.test")[[1]]$statistics[1],
+"hmisc"=Tabelle(alter ~ geschl, varana, APA=TRUE, test="Hmisc")[[1]]$statistics[1]
+)
+  
 }
 \author{
 Wolfgang Peter

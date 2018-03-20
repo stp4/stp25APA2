@@ -37,9 +37,7 @@ errate_statistik2 <- function(Formula,
                               # auto_wrap = NULL, #-- neu Zeilenumbruch
                               ...)
 {
- # print(Formula)
- 
-  if (!is.logical(include.test)) {
+   if (!is.logical(include.test)) {
     if (include.test == "conTest")
       useconTest <- TRUE
     else if (include.test == "shapiro.test")
@@ -112,7 +110,7 @@ errate_statistik2 <- function(Formula,
       mydf(n, class(x)) # nur eine Zeile ausgeben# Fehler abfangen
     )
     
-  #  print(str(result))
+ 
     
     if (include.all.n)
       result
@@ -122,7 +120,7 @@ errate_statistik2 <- function(Formula,
   
   #-- Liste zu Dataframe -------------------
   return_data_frame <- function(ans, var_vektor = "") {
-    # print(ans)
+    
     ANS <- NULL
     if (class(ans) == "list") {
       for (var in names(ans)) {
@@ -406,6 +404,15 @@ errate_statistik2 <- function(Formula,
 #' include.n = FALSE,
 #' test = TRUE
 #' )
+#' 
+#'  c(
+#' "wilcox"=Tabelle(alter ~ geschl, varana, APA=TRUE, test="wilcox")[[1]]$statistics[1],
+#' "h.test"=Tabelle(alter ~ geschl, varana, APA=TRUE, test="h.test")[[1]]$statistics[1],
+#' "anova"=Tabelle(alter ~ geschl, varana, APA=TRUE, test="anova")[[1]]$statistics[1],
+#' "t.test"=Tabelle(alter ~ geschl, varana, APA=TRUE, test="t.test")[[1]]$statistics[1],
+#' "hmisc"=Tabelle(alter ~ geschl, varana, APA=TRUE, test="Hmisc")[[1]]$statistics[1]
+#' )
+#'   
 errate_statistik3 <-
   function (...,
             type = NULL,
@@ -429,27 +436,22 @@ errate_statistik3 <-
             max_factor_length = 35,
             order = FALSE,
             decreasing = FALSE,
-            useconTest = FALSE,
+           # useconTest = FALSE,
             normality.test = FALSE)
   {
     
-    
-    cat("\n", include.test,"\n")
     Mittelwert_Einzel <- function(i, x) {
-      # cat(" Mittelwert_Einzel ")
-      # Item|lev|n|m
+     
       x_NA <- x
       N    <- length(x)
       x    <- na.omit(x)
       n    <- length(x)
       rr <- NULL #Result
-      #  cat(" N = ",N, n," ")
-      # print(str(x))
+      
       
       if (all(is.na(x)))
         X$measure[i] <- "all_NA"
-      # cat("\nmeasure")
-      #  print( X$measure[i])
+       
       res <- switch(
         X$measure[i],
         numeric = Mean2default(x, X$digits[i], n),
@@ -476,8 +478,7 @@ errate_statistik3 <-
       } else
         rr <-
         cbind(Item = c(X$row_name[i], rep("", nrow(res) - 1)), res)
-      cat("\nResult ")
-      print(rr)
+     
       rr
     }
     
@@ -519,27 +520,23 @@ errate_statistik3 <-
     }
     
     Test <- function(i, j) {
-      
-      # cat("\n", i,"\n")
-      #  print(X$measure.class[i])
-      #  print(X$group.class[j])
-      
-       fm_chi <- formula(paste("~", measure.vars[i], "+",  j))
-       fm_aov <- formula(paste(measure.vars[i], "~", j))
+      fm_chi <- formula(paste("~", measure.vars[i], "+",  j))
+      fm_aov <- formula(paste(measure.vars[i], "~", j))
       # fm_aov <- formula(paste(measure.vars[i], "~", j))
-      if (X$measure.class[i] == "numeric" & X$group.class[j] == "factor") {
-         conTest(fm_aov, X$data, include.test)
-      } else if(X$measure.class[i] == "median" & X$group.class[j] == "factor"){
-        conTest(fm_aov, X$data, include.test)
+      if (X$measure.class[i] == "numeric" &
+          X$group.class[j] == "factor") {
+        conTest(fm_aov, X$data, which_test)
+      } else if (X$measure.class[i] == "median" &
+                 X$group.class[j] == "factor") {
+        conTest(fm_aov, X$data, which_test)
       } else  if (X$measure.class[i] == "factor" &
                   X$group.class[j] == "factor") {
-        if(is.logical(include.test))
-         catTest(fm_chi, X$data, include.test)
-        else{ 
-          X$data[[measure.vars[i]]] <- as.numeric( X$data[[measure.vars[i]]] )
-          conTest(fm_aov, X$data, include.test)
-          
-          }
+        if (is.logical(which_test))
+          catTest(fm_chi, X$data, which_test)
+        else{
+          X$data[[measure.vars[i]]] <- as.numeric(X$data[[measure.vars[i]]])
+          conTest(fm_aov, X$data, which_test)
+        }
       }
       else
         "NA"
@@ -551,10 +548,16 @@ errate_statistik3 <-
     group.vars   <- X$group.vars
     measure.vars <- X$measure.vars
     N            <- nrow(data)
-    #  cat("\ngroup.vars")
-    #  print(group.vars)
-    # cat("\nmeasure.vars")
-    # print(measure.vars)
+    
+    if(is.character(include.test)){
+     which_test <-  match.arg(include.test, c("wilcox.test","u.test",
+                                              "kruskal.test","h.test",
+                                              "chisq.test","t.test", 
+                                              "aov", "anova",
+                                              "SPSS", "Hmisc"))
+     include.test <- TRUE
+      }  else which_test <- TRUE
+ 
     
     if (type[1] == "multiresponse")
       X$measure <- rep("multi", length(X$measure))
@@ -569,12 +572,11 @@ errate_statistik3 <-
             n = "",
             m = X$N
           )
-      # cat( " nach include.nr")
-      # print(ANS)
+   
       
       for (i in 1:length(measure.vars))
         ANS <- rbind(ANS, Mittelwert_Einzel(i, X$data[[i]]))
-      #  print(ANS)
+     
       ANS$Item <-
         paste(ANS$Item, ANS$lev) # Spalte Characteristics entfernen
       if (include.n)
@@ -598,45 +600,41 @@ errate_statistik3 <-
                               "Total_n" = "",
                               "Total_m" = X$N,
                               ans_in[3:ncol(ans_in)])
-            # if ((is.logical(include.test) & include.test) | is.character(include.test) )
-            #     ans_in$statistics <- ""
+            
+           if ( include.test ) ans_in$statistics <- ""
             
             
-            if (is.logical(include.test)) {
-              if (include.test){ ans_in$statistics <- "" }
-            } else if (is.character(include.test)) { ans_in$statistics <- "" }
+            # if (is.logical(include.test)) {
+            #   if (include.test){ ans_in$statistics <- "" }
+            # } else if (is.character(include.test)) { ans_in$statistics <- "" }
             
           }
           
           for (i in 1:length(measure.vars)) {
             ans <- Mittelwert_Gruppe(i, j, X$data[[measure.vars[i]]])
-            # ans: # item|lev|g1_n|g1_m|g2_n|g2_m|g3_n|...
-            # cat("in schleife", i,"\n")
-            #   print(ans)
+           
             if (include.total) {
               total <- Mittelwert_Einzel(i, X$data[[measure.vars[i]]])[-c(1, 2)]
               names(total)[] <- paste0("Total_", names(total))
               ans <- cbind(ans[1:2], total, ans[3:ncol(ans)])
             }
             
-            # if ((is.logical(include.test) ) {
-            #   ans$statistics <- ""
-            #   ans$statistics[1] <- Test(i, j)
-            #   
-            # }
-            
-            
-            if (is.logical(include.test)) {
-              if (include.test){ 
-                ans$statistics <- ""
-                ans$statistics[1] <- Test(i, j) }
-            } else if (is.character(include.test)) { 
+           if (include.test){
                ans$statistics <- ""
                ans$statistics[1] <- Test(i, j)
-              }
+           }
             
             
+            # if (is.logical(include.test)) {
+            #   if (include.test){ 
+            #     ans$statistics <- ""
+            #     ans$statistics[1] <- Test(i, j) }
+            # } else if (is.character(include.test)) { 
+            #    ans$statistics <- ""
+            #    ans$statistics[1] <- Test(i, j)
+            #   }
             
+          
             ans_in <- rbind(ans_in, ans)
           }
           if (!include.n) {

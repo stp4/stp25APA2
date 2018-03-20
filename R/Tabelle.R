@@ -120,7 +120,7 @@ Tabelle.default <- function(...,
   type <-  match.arg(type, several.ok = TRUE)
   if (APA) {
     
-    cat("\ninAPA=TRUE")
+  #  cat("\ninAPA=TRUE")
     errate_statistik3(
       ...,
       type = type,
@@ -142,7 +142,7 @@ Tabelle.default <- function(...,
       max_factor_length = max_factor_length,
       order = order,
       decreasing = decreasing,
-      useconTest = useconTest,
+   #   useconTest = useconTest,
       normality.test = normality.test
     )
   }

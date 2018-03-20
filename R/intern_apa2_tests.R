@@ -52,20 +52,34 @@ conTest = function(fml,
 
 # Begin Funktion ---------------------------
 
-  if(is.logical(test_name))
+  if (is.logical(test_name)) {
     spearmanTest2(fml, data)
-  else{
-    if (test_name == "SPSS"){
-       if (res[1] == "Wilcoxon") WilkoxTest2(fml, data)
-       else KruskalTest2(fml, data)}
-    else if (test_name == "Hmisc") spearmanTest2(fml, data)
-    else if (test_name == "t.test") TTest2(fml, data)
-    else if (test_name == "aov") Aov2(fml, data)
-    else if (test_name == "wilcox.test") WilkoxTest2(fml, data)
-    else if (test_name == "kruskal.test") KruskalTest2(fml, data)
+  } else{
+    if (test_name == "SPSS") {
+      if (res[1] == "Wilcoxon")
+        WilkoxTest2(fml, data)
+      else
+        KruskalTest2(fml, data)
+    }
+    else if (test_name == "wilcox.test")
+      WilkoxTest2(fml, data)
+    else if (test_name == "u.test")
+      WilkoxTest2(fml, data)
+    else if (test_name == "h.test")
+      KruskalTest2(fml, data)
+    else if (test_name == "kruskal.test")
+      KruskalTest2(fml, data)
+    else if (test_name == "t.test")
+      TTest2(fml, data)
+    else if (test_name == "aov")
+      Aov2(fml, data)
+    else if (test_name == "anova")
+      Aov2(fml, data)
+    else if (test_name == "Hmisc")
+      spearmanTest2(fml, data)
     else
       test_name
-
+    
   }
 }
 
