@@ -11,7 +11,7 @@
 \alias{APA.formula}
 \alias{APA.lm}
 \alias{APA.glm}
-\alias{APA.stp25_relibility}
+\alias{APA.stp25_reliability}
 \alias{APA.survfit}
 \alias{APA.survdiff}
 \alias{APA.htest}
@@ -38,7 +38,7 @@ test_APA2(x)
 
 \method{APA}{glm}(x, ...)
 
-\method{APA}{stp25_relibility}(x)
+\method{APA}{stp25_reliability}(x)
 
 \method{APA}{survfit}(fit, ...)
 

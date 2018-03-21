@@ -3,7 +3,7 @@
 \name{Reliability}
 \alias{Reliability}
 \alias{Reliability2}
-\alias{print.stp25_relibility}
+\alias{print.stp25_reliability}
 \alias{Reliability.data.frame}
 \alias{Reliability.formula}
 \alias{Alpha}
@@ -11,11 +11,11 @@
 \alias{Index}
 \title{Reliability und Cronbach-Alpha}
 \usage{
-Reliability(x, data, ...)
+Reliability(x, ...)
 
 Reliability2(...)
 
-\method{print}{stp25_relibility}(x)
+\method{print}{stp25_reliability}(x)
 
 \method{Reliability}{data.frame}(x, name = NULL, ...)
 
@@ -32,11 +32,11 @@ Index(x, revcoded = FALSE, fun = "mean", na.rm = TRUE, digits = 4,
 \arguments{
 \item{x}{Formula-Objekt oder data.frame}
 
-\item{data}{data.frame mit den Daten}
-
 \item{...}{an psych}
 
 \item{name}{Slalen namen}
+
+\item{data}{data.frame mit den Daten}
 
 \item{type}{Aggregatfunktion fuer die Skala (mean, median und trimmed)}
 
@@ -109,11 +109,11 @@ data<- data.frame( x1 = x+rnorm(n),
                    x6 = x+rnorm(n),
                    x7 = x+rnorm(n))
 
-Reliability2(data)
-Reliability2(data, revcoded=TRUE)
-Reliability2(data, check.keys=TRUE)
-Reliability2(data, revcoded=5)
-Reliability2(data, revcoded="x5")
+Reliability(data)
+Reliability(data, revcoded=TRUE)
+Reliability(data, check.keys=TRUE)
+Reliability(data, revcoded=5)
+Reliability(data, revcoded="x5")
 
 library(lavaan)
 population.model <- '
@@ -137,7 +137,7 @@ DF[,3]<- 6-DF[,3]
 
 
 Fachinteresse <- Reliability( DF[ , Cs(F1,F2,F3,F4,F5)], check.keys=TRUE)
-#Reliability2( DF[ , Cs(F1,F2,F3,F4,F5)], check.keys=TRUE)
+# APA_Reliability( DF[ , Cs(F1,F2,F3,F4,F5)], check.keys=TRUE)
 Alpha( Fachinteresse)
 
 
@@ -145,6 +145,7 @@ require(stpvers)
 Reliability(~F3+F2+F10+F11, fkv, check.keys =TRUE)
 
 # ALPHA
+
 Distanz <-  Reliability(~F3+F2+F10+F11, fkv, check.keys =TRUE)
 
 Distanz \%>\% Alpha() \%>\% Output() # gibt den Namen Distanz nicht aus wegen \%>\%

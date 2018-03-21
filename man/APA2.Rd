@@ -33,7 +33,7 @@
 \alias{APA2.lme}
 \alias{APA2.lmerMod}
 \alias{APA2.merModLmerTest}
-\alias{APA2.stp25_relibility}
+\alias{APA2.stp25_reliability}
 \alias{APA2.summary.survfit}
 \alias{APA2.survfit}
 \alias{APA2.survdiff}
@@ -143,7 +143,7 @@ errate_statistik2(Formula, data, caption = "caption", note = "note",
 \method{APA2}{merModLmerTest}(x, caption = "", note = "", anova = TRUE,
   random.effects = TRUE, ...)
 
-\method{APA2}{stp25_relibility}(x, caption = "", note = "")
+\method{APA2}{stp25_reliability}(x, caption = "", note = "")
 
 \method{APA2}{summary.survfit}(fit, digits = NULL, percent = FALSE,
   include = c(time = "time", n.risk = "n.risk", n.event = "n.event", surv =

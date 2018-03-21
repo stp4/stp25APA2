@@ -120,8 +120,8 @@ APA_Correlation(~a+b+c, data, caption="mit Output: ~a+b+c")
  #data(managers)
  #chart.Correlation(managers[,1:8], histogram=TRUE, pch="+")
 
- require(stpvers)
  APA_Reliability(~F3+F2+F10+F11, fkv, check.keys =TRUE)
+ 
 
 fit1<-lm(score ~ grade + treatment, schools)
 fit2<-lm(score ~ grade + treatment + stdTest, schools)

@@ -2,6 +2,7 @@
 #' 
 #' \code{Reliability()} Reliabilitaets Analyse mit Cronbach-Alpha + Mittelwerte
 #' 
+#' @details 
 #' Deutsch
 #' Um die interne Konsistenz zu bestimmen, wurde Cronbachs Alpha für die Subskala positiver Affekt (insgesamt zehn Fragen) berechnet. Die interne Konsistenz war hoch, mit Cronbachs Alpha = .89 für positiven Affekt.
 #' 
@@ -9,7 +10,6 @@
 #' For reliability analysis, Cronbach’s alpha was calculated to assess the internal consistency of the subscale for positive affect, which consists of ten questions. The internal consistency of the questionnaire is satisfying, with Cronbach’s alpha for positive affect = .89.
 #'
 #' @name Reliability
-#' @rdname Reliability 
 #' @param x Formula-Objekt oder data.frame
 #' @param ... an psych
 #' @return \code{Reliability()} gibt eine Liste mit den Resultaten und den transformierten Daten
@@ -38,11 +38,11 @@
 #'                    x6 = x+rnorm(n),
 #'                    x7 = x+rnorm(n))
 #'
-#' Reliability2(data)
-#' Reliability2(data, revcoded=TRUE)
-#' Reliability2(data, check.keys=TRUE)
-#' Reliability2(data, revcoded=5)
-#' Reliability2(data, revcoded="x5")
+#' Reliability(data)
+#' Reliability(data, revcoded=TRUE)
+#' Reliability(data, check.keys=TRUE)
+#' Reliability(data, revcoded=5)
+#' Reliability(data, revcoded="x5")
 #'
 #' library(lavaan)
 #' population.model <- '
@@ -66,10 +66,10 @@
 #'
 #'
 #' Fachinteresse <- Reliability( DF[ , Cs(F1,F2,F3,F4,F5)], check.keys=TRUE)
-#' #Reliability2( DF[ , Cs(F1,F2,F3,F4,F5)], check.keys=TRUE)
+#' # APA_Reliability( DF[ , Cs(F1,F2,F3,F4,F5)], check.keys=TRUE)
 #' Alpha( Fachinteresse)
 #'
-Reliability <- function(x, data, ...) {
+Reliability <- function(x, ...) {
   UseMethod("Reliability")
 }
 
@@ -79,7 +79,7 @@ Reliability <- function(x, data, ...) {
 #' 
 #' APA(Reliability(~F3+F2+F10+F11, fkv, check.keys =TRUE))
 
-APA.stp25_relibility <- function(x) {
+APA.stp25_reliability <- function(x) {
   paste("Alpha = ", Format2(x$Alpha, 2))
 }
 
@@ -100,7 +100,7 @@ Reliability2 <- function(...) {
 #'  APA2(res)
 #'  
 #'  
-APA2.stp25_relibility <- function(x,
+APA2.stp25_reliability <- function(x,
                                   caption = "",
                                   note = "") {
 item <-
@@ -149,12 +149,12 @@ item <-
 #' @export
 #' @examples 
 #' 
-#'  require(stpvers)
 #'  APA_Reliability(~F3+F2+F10+F11, fkv, check.keys =TRUE)
+#'  
 APA_Reliability <- function(...,
                          caption = "",
                          note = "") {
-  APA2.stp25_relibility( Reliability(...), caption, note )
+  APA2.stp25_reliability( Reliability(...), caption, note )
 }
 
 
@@ -163,7 +163,7 @@ APA_Reliability <- function(...,
 
 #' @rdname Reliability
 #' @export
-print.stp25_relibility <- function(x) {
+print.stp25_reliability <- function(x) {
     cat("\nnames: ", paste(names(x), collapse = ", "), "\n")
   cat("\nAlpha: ")
   print(x$Alpha)
@@ -237,6 +237,7 @@ Reliability.formula <- function(x,
 #' @examples 
 #' 
 #' # ALPHA
+#' 
 #' Distanz <-  Reliability(~F3+F2+F10+F11, fkv, check.keys =TRUE)
 #' 
 #' Distanz %>% Alpha() %>% Output() # gibt den Namen Distanz nicht aus wegen %>%
@@ -285,7 +286,8 @@ Reliability.default <- function(x,
   result <-
     skala_statistik(result, type, na.rm)  # list(data, range , label, keys, list(alpha) , Alpha, index, n...schapiro)
   
-  class(result) <- c("stp25_relibility", class(result))
+  class(result) <- c("stp25_reliability", class(result))
+  
   result
 }
 
@@ -473,8 +475,11 @@ item_statistik <- function(data, #Data ist Liste
   
   
   data$Alpha <- as.numeric(data$psych$total$raw_alpha)
-  return(data)
+ 
+  data
 }
+
+
 #-- Helper Funktion
 skala_statistik <- function(data,
                             type = c("mean", "median", "trimmed", "sum"),
@@ -515,12 +520,9 @@ skala_statistik <- function(data,
                          Format2(res_shapiro$statistic, 2),
                          " p=",
                          ffpvalue(res_shapiro$p.value))
-  #  "Shapiro Test" = res_shapiro)
-  # print(data)
-  return(data)
-  
-  
-}
+
+  data
+  }
 
 
 
