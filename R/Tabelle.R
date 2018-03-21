@@ -225,7 +225,8 @@ Tabelle.lm <- function(x,
         if (is.numeric(x))
           round(x, digits)
         else
-          x))
+          x),
+        stringsAsFactors=FALSE)
     res_list[[i]] <- prepare_output(ans,
                                     paste0("AV: ", AV), "",
                                     info$N,  info$labels)
@@ -518,8 +519,10 @@ Describe2 <- function(fml,
                       ...) {
   vars <- which(names(data) %in% all.vars(fml))
   data <- data[vars]
-  result <-  as.data.frame(psych::describe(data))[stat]
-  result[-1] <- Format2(result[-1])
+  result <-  as.data.frame(
+                    psych::describe(data),
+                        stringsAsFactors=FALSE)[stat]
+ result[-1] <- Format2(result[-1])
   prepare_output(cbind(Item = GetLabelOrName(data), result),
                  caption,
                  note,

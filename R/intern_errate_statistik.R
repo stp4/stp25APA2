@@ -89,7 +89,8 @@ errate_statistik2 <- function(Formula,
     mydf <- function(n, m, name = "")
       data.frame(Characteristics = "",
                  n = as.character(n),
-                 Statistics = m)
+                 Statistics = m,
+                 stringsAsFactors=FALSE)
     
     if (all(is.na(x)))
       type_switch <- "all_NA"
@@ -115,14 +116,17 @@ errate_statistik2 <- function(Formula,
     if (include.all.n)
       result
     else
-      result[,-2]
+      result[,-2, drop = FALSE]
   }
   
   #-- Liste zu Dataframe -------------------
-  return_data_frame <- function(ans, var_vektor = "") {
+  return_data_frame <- function(ans
+                                #, var_vektor = ""
+                                ) {
     
+   # cat("\n in return_data_frame", class(ans),"\n")
     ANS <- NULL
-    if (class(ans) == "list") {
+   # if (class(ans) == "list") {
       for (var in names(ans)) {
         var_name <- ifelse(is.null(attr(X$Y_data[, var], "label")),
                            var,
@@ -136,14 +140,14 @@ errate_statistik2 <- function(Formula,
           ANS <- rbind(ANS, ans[[var]])
         }
       }
-    } else {
-      var_name <- ifelse(is.null(attr(X$Y_data[, var_vektor], "label")),
-                         var_vektor,
-                         attr(X$Y_data[, var_vektor], "label"))
-      
-      n_var <- length(ans$Characteristics) - 1
-      ANS <- cbind(Item = c(var_name, rep("", n_var)), ans)
-    }
+    #} else {
+    #   var_name <- ifelse(is.null(attr(X$Y_data[, var_vektor], "label")),
+    #                      var_vektor,
+    #                      attr(X$Y_data[, var_vektor], "label"))
+    #   
+    #   n_var <- length(ans$Characteristics) - 1
+    #   ANS <- cbind(Item = c(var_name, rep("", n_var)), ans)
+    # }
     ANS
   }
   
@@ -182,7 +186,7 @@ errate_statistik2 <- function(Formula,
                             else
                               0)
                       , decreasing = decreasing)
-    X$Y_data <- X$Y_data[, my_order]
+    X$Y_data <- X$Y_data[, my_order, drop = FALSE]
   }
   
   # Einzelvergeich Pruefen ob Gruppe (also ~a+b+c oder a+b+c~d+e) -------------
@@ -191,28 +195,44 @@ errate_statistik2 <- function(Formula,
     index_zaeler <- 0
     # cat("\nerate_statistik2: einzelvergleich\n")
     #  kein X$Y_data und wir werten ueber X$Y_data aus daher
-    if (length(X$yname) == 1) {
-      ANS <- return_data_frame(Stat_Mean_Freq(X$Y_data[, 1]),
-                               var_vektor = X$yname)
-      # Beschriftung mit labels
-      ANS[, 1] <- as.character(ANS[, 1])
-      ANS[1, 1] <- GetLabelOrName(X$Y_data[1])
-      
-      if (include.test & normality.test) {
-        #- kann nur Normalverteilungstest sein
-        if (is.numeric(X$Y_data[, 1])) {
-          shapiro_test <- stats::shapiro.test(X$Y_data[, 1])
-          shapiro_test <- rndr_shapiro(shapiro_test)
-        }
-        else{
-          shapiro_test <- rbind(class(X$Y_data[, 1]),
-                                rep("", nlevels(X$Y_data[, 1]) - 1))
-          
-        }
-        ANS <- cbind(ANS, "shapiro test" = shapiro_test)
-      }
-    } else{
+    # if (length(X$yname) == 1) {
+    #   
+    #   
+    #   print(X$yname)
+    #  print( class(X$Y_data[, 1]) )
+    #   ANS <- return_data_frame(Stat_Mean_Freq(X$Y_data[, 1]),
+    #                            var_vektor = X$yname)
+    #   print(ANS)
+    #   
+    #   # Beschriftung mit labels
+    #   #ANS[, 1] <- as.character(ANS[, 1])
+    #  # ANS[1, 1] <- GetLabelOrName(X$Y_data[1])
+    #   
+    #   print(ANS)
+    #   
+    #   if (include.test & normality.test) {
+    #     #- kann nur Normalverteilungstest sein
+    #     if (is.numeric(X$Y_data[, 1])) {
+    #       shapiro_test <- stats::shapiro.test(X$Y_data[, 1])
+    #       shapiro_test <- rndr_shapiro(shapiro_test)
+    #     }
+    #     else{
+    #       shapiro_test <- rbind(class(X$Y_data[, 1]),
+    #                             rep("", nlevels(X$Y_data[, 1]) - 1))
+    #       
+    #     }
+    #     ANS <- cbind(ANS, "shapiro test" = shapiro_test)
+    #   }
+    # }
+    # 
+    # else 
+    #   {
+    #     
+    #    cat("\nelse")
+    #     
       ANS <- return_data_frame(lapply(X$Y_data, Stat_Mean_Freq))
+      
+    #  print(ANS)
       if (include.test & !normality.test) {
         mycorrtable <- Corr1(X$Y_data,
                              nrow(ANS),
@@ -246,12 +266,17 @@ errate_statistik2 <- function(Formula,
       } else{
         NULL
       }
-    }
+   # }
+     
+     
+     #  end else
     ANS <- prepare_output(ANS, caption, note, N)
     return(ANS)
     
     #- GRUPPENVERGLEICH -
   } else{
+    
+    
     ANS_list <- list() #antwortliste
     for (ix in X$xname) {
       #--  Mehere Gruppenvariablen aufschluesseln
@@ -296,12 +321,14 @@ errate_statistik2 <- function(Formula,
         for ( lev in seq_len(length(my_levels)) ) {
           index_zaeler <- 0
           my_subset <- which(Xi == my_levels[lev])
+         # cat("Gruppen")
+          #print(X$yname)
           
-          if (length(X$yname) == 1)
-            ans <- return_data_frame(Stat_Mean_Freq(X$Y_data[my_subset, 1]),
-                                     var_vektor = X$yname)
-          else
-            ans <- return_data_frame(lapply(X$Y_data[my_subset, ], Stat_Mean_Freq))
+#if (length(X$yname) == 1)
+          #  ans <- return_data_frame(Stat_Mean_Freq(X$Y_data[my_subset, 1]),
+           #                          var_vektor = X$yname)
+         ## else
+            ans <- return_data_frame(lapply(X$Y_data[my_subset, , drop = FALSE], Stat_Mean_Freq))
           
           colnames(ans)[include.all.n + 3] <- tabel_header[lev]
           if (is.null(ANS))
@@ -483,7 +510,7 @@ errate_statistik3 <-
           Item = X$row_name[i],
           lev = "",
           n = res$n[1] ,
-          m = ""
+          m = "",stringsAsFactors=FALSE
         )
         res$n <- ""
         x1 <- cbind(Item = "&nbsp;&nbsp;", res)
@@ -529,7 +556,10 @@ errate_statistik3 <-
                                 "_",
                                 rep(c("n", "m"), length.out = ncol(res)))
       
-      cbind(data.frame(Item = "Total", lev = "(N)"), res_n)
+      cbind(data.frame(Item = "Total", 
+                       lev = "(N)",
+                       stringsAsFactors=FALSE
+                       ), res_n)
     }
     
     Test <- function(i, j) {
@@ -584,7 +614,8 @@ errate_statistik3 <-
             Item = "Total",
             lev = "(N)",
             n = "",
-            m = X$N
+            m = X$N,
+            stringsAsFactors=FALSE
           )
    
       
