@@ -1,7 +1,16 @@
-# Errate korekte Auswertung
-# Extrahieren der Variablen aus Formula.
-
-
+#' @rdname APA2
+#' @description Errate korekte Auswertung und Extrahieren der Variablen aus Formula.
+#' @examples 
+#' 
+#' varana <- varana %>% Label(m1="Mesung1", m2="BMI")
+#' x<-APA2( ~m1,varana)
+#' x<-APA2( ~m1+m2,varana)
+#' 
+#' x<-APA2( m1~geschl,varana)
+#' x<-APA2( m1+m2~alter,varana)
+#' x<-APA2( m1+m2+geschl~alter,varana, include.test = TRUE)
+#' x<-APA2( ~m1+m2+m3+m4,varana, test=TRUE)
+#' 
 errate_statistik2 <- function(Formula,
                               data,
                               caption = "caption",
@@ -37,22 +46,10 @@ errate_statistik2 <- function(Formula,
                               # auto_wrap = NULL, #-- neu Zeilenumbruch
                               ...)
 {
-   if (!is.logical(include.test)) {
-    if (include.test == "conTest")
-      useconTest <- TRUE
-    else if (include.test == "shapiro.test")
-      normality.test <- TRUE
-    else {
-      test_name <- include.test
-      useconTest <- TRUE
-    }
-    include.test <- TRUE
-  }
   
-  #-- Statistik Berechnen------
+  #-- Statistik Berechnen ---------------------------------
   Stat_Mean_Freq <- function(x, ...,
                              default_numeric = "mean") {
-    #  cat("\nin Stat_Mean_Freq include.all.n =", include.all.n, "\n")
     index_zaeler <<- index_zaeler + 1
     if (is.list(digits.mean))
       digits.mean <-
@@ -119,14 +116,9 @@ errate_statistik2 <- function(Formula,
       result[,-2, drop = FALSE]
   }
   
-  #-- Liste zu Dataframe -------------------
-  return_data_frame <- function(ans
-                                #, var_vektor = ""
-                                ) {
-    
-   # cat("\n in return_data_frame", class(ans),"\n")
+  #-- Liste zu Dataframe -----------------
+  return_data_frame <- function(ans) {
     ANS <- NULL
-   # if (class(ans) == "list") {
       for (var in names(ans)) {
         var_name <- ifelse(is.null(attr(X$Y_data[, var], "label")),
                            var,
@@ -140,27 +132,30 @@ errate_statistik2 <- function(Formula,
           ANS <- rbind(ANS, ans[[var]])
         }
       }
-    #} else {
-    #   var_name <- ifelse(is.null(attr(X$Y_data[, var_vektor], "label")),
-    #                      var_vektor,
-    #                      attr(X$Y_data[, var_vektor], "label"))
-    #   
-    #   n_var <- length(ans$Characteristics) - 1
-    #   ANS <- cbind(Item = c(var_name, rep("", n_var)), ans)
-    # }
     ANS
   }
   
+  
+  #- Start der Funktion ------------------------------------
   X      <- Formula_Data(Formula, data, na.action = na.action)
   N      <- nrow(data)
   
-  if (is.null(type))
-    type <- X$type
-  if (is.null(digits.mean))
-    digits.mean <- X$digits
-  if (!is.null(X$condition)) {
-    warning("errate_statistik2: condition weden noch nicht unterstuetzt")
+  
+  if (!is.logical(include.test)) {
+    if (include.test == "conTest")
+      useconTest <- TRUE
+    else if (include.test == "shapiro.test")
+      normality.test <- TRUE
+    else {
+      test_name <- include.test
+      useconTest <- TRUE
+    }
+    include.test <- TRUE
   }
+  
+  if (is.null(type))  type <- X$type
+  if (is.null(digits.mean))  digits.mean <- X$digits
+  if (!is.null(X$condition)) {warning("errate_statistik2: condition weden noch nicht unterstuetzt")}
   
   # Beginn der Auswertung -----------------------------------------------------
   if (is.null(include.all.n)) {
@@ -179,13 +174,10 @@ errate_statistik2 <- function(Formula,
     }
   }
   if (order & (length(X$yname) > 1)) {
-    my_order <- order(apply(X$Y_data, 2,
-                            function(x)
-                              if (is.numeric(x) | is.factor(x))
-                                mean2(x)
-                            else
-                              0)
-                      , decreasing = decreasing)
+    my_order <- order(
+                 apply(X$Y_data, 2,
+                    function(x) if (is.numeric(x) | is.factor(x)) mean2(x) else  0),
+                 decreasing = decreasing)
     X$Y_data <- X$Y_data[, my_order, drop = FALSE]
   }
   
@@ -193,105 +185,41 @@ errate_statistik2 <- function(Formula,
   
   if (is.null(X$xname)) {
     index_zaeler <- 0
-    # cat("\nerate_statistik2: einzelvergleich\n")
-    #  kein X$Y_data und wir werten ueber X$Y_data aus daher
-    # if (length(X$yname) == 1) {
-    #   
-    #   
-    #   print(X$yname)
-    #  print( class(X$Y_data[, 1]) )
-    #   ANS <- return_data_frame(Stat_Mean_Freq(X$Y_data[, 1]),
-    #                            var_vektor = X$yname)
-    #   print(ANS)
-    #   
-    #   # Beschriftung mit labels
-    #   #ANS[, 1] <- as.character(ANS[, 1])
-    #  # ANS[1, 1] <- GetLabelOrName(X$Y_data[1])
-    #   
-    #   print(ANS)
-    #   
-    #   if (include.test & normality.test) {
-    #     #- kann nur Normalverteilungstest sein
-    #     if (is.numeric(X$Y_data[, 1])) {
-    #       shapiro_test <- stats::shapiro.test(X$Y_data[, 1])
-    #       shapiro_test <- rndr_shapiro(shapiro_test)
-    #     }
-    #     else{
-    #       shapiro_test <- rbind(class(X$Y_data[, 1]),
-    #                             rep("", nlevels(X$Y_data[, 1]) - 1))
-    #       
-    #     }
-    #     ANS <- cbind(ANS, "shapiro test" = shapiro_test)
-    #   }
-    # }
-    # 
-    # else 
-    #   {
-    #     
-    #    cat("\nelse")
-    #     
-      ANS <- return_data_frame(lapply(X$Y_data, Stat_Mean_Freq))
-      
-    #  print(ANS)
-      if (include.test & !normality.test) {
-        mycorrtable <- Corr1(X$Y_data,
-                             nrow(ANS),
-                             corr_test,
-                             include.p,
-                             include.stars,
-                             cor_diagonale_up)
+    ANS <- return_data_frame(
+      lapply(X$Y_data, Stat_Mean_Freq))
+    if (include.test & !normality.test) {
+        mycorrtable <- Corr1(X$Y_data, nrow(ANS),
+                             corr_test, include.p, include.stars, cor_diagonale_up)
         note <- paste("Korrelation nach" , Hmisc::upFirst(type))
-        
-        if (nrow(ANS) != nrow(mycorrtable))
-          ANS <-  cbind(ANS, Error = "gemischtes Skalenniveau")
-        else
-          ANS <- cbind(ANS, mycorrtable)
-        
-        
+        if (nrow(ANS) != nrow(mycorrtable)) ANS <-  cbind(ANS, Error = "gemischtes Skalenniveau")
+        else ANS <- cbind(ANS, mycorrtable)
       } else if (include.test & normality.test) {
         ANS <- cbind(ANS,
-                     "shapiro test" = unlist(lapply(X$Y_data,
-                                                    function(x) {
-                                                      if (is.numeric(x)) {
-                                                        APA(shapiro.test(x))
-                                                      } else {
-                                                        rbind(paste(APA(shapiro.test(
-                                                          as_numeric(x)
-                                                        ))
-                                                        ,  class(x)),
-                                                        rep("", nlevels(x) -
-                                                              1))
-                                                      }
-                                                    })))
-      } else{
-        NULL
-      }
-   # }
-     
-     
-     #  end else
+                     "shapiro test" = unlist(
+                                      lapply(X$Y_data,
+                                        function(x) {
+                                            if (is.numeric(x)) {
+                                                APA(shapiro.test(x))
+                                            } else {
+                                                rbind(paste(APA(shapiro.test(as_numeric(x))),  class(x)),
+                                                      rep("", nlevels(x) - 1))
+                                                      }})))
+      } else {NULL}
     ANS <- prepare_output(ANS, caption, note, N)
     return(ANS)
     
-    #- GRUPPENVERGLEICH -
-  } else{
-    
-    
+    #- GRUPPENVERGLEICH ---------------------------------------------------
+  } else {
     ANS_list <- list() #antwortliste
     for (ix in X$xname) {
+       ANS <- NULL
       #--  Mehere Gruppenvariablen aufschluesseln
-      #cat("\nerate_statistik2: Gruppenvergleich aufschluesseln\n")
       caption <- paste(ix, caption)
       Xi <- X$X_data[, ix]  # Gruppe ist X'
-      x_name <-
-        ifelse(is.null(attr(X$X_data, "label")), ix, attr(X$X_data, "label")) ## hmisc::LAbel
-      y_name <-
-        sapply(X$xname, function(y)
-          ifelse(is.null(attr(
-            X$Y_data, "label"
-          )),
-          y, attr(X$Y_data, "label")))
-      ANS <- NULL
+      x_name <- ifelse(is.null(attr(X$X_data, "label")), ix, attr(X$X_data, "label")) ## hmisc::LAbel
+      y_name <-  sapply(X$xname, function(y)
+                                  ifelse(is.null(attr(X$Y_data, "label")),
+                                  y, attr(X$Y_data, "label")))
       my_levels <- levels(Xi)
       #-- Test ob Gruppen cat("\n\nAchtung Gruppe ist kein Factor!\n\n")
       if (is.null(my_levels)) {
@@ -321,13 +249,6 @@ errate_statistik2 <- function(Formula,
         for ( lev in seq_len(length(my_levels)) ) {
           index_zaeler <- 0
           my_subset <- which(Xi == my_levels[lev])
-         # cat("Gruppen")
-          #print(X$yname)
-          
-#if (length(X$yname) == 1)
-          #  ans <- return_data_frame(Stat_Mean_Freq(X$Y_data[my_subset, 1]),
-           #                          var_vektor = X$yname)
-         ## else
             ans <- return_data_frame(lapply(X$Y_data[my_subset, , drop = FALSE], Stat_Mean_Freq))
           
           colnames(ans)[include.all.n + 3] <- tabel_header[lev]
