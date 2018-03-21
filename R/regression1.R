@@ -159,7 +159,7 @@ APA_Validation<- function(...,
   
   res<- test_regression(myfits[[1]])
   if(n>1){
-    for(i in 2:n){
+    for (i in 2:n){
       
       res<- cbind(res,  test_regression(myfits[[i]])[2])
     }

@@ -329,7 +329,7 @@ Formula_Names<- function(x, data=NULL, ... ){
     type<- lapply(1:length(y_names), function(j) type)
 
     # print(stat)
-    for (i in 1:length(pos)){
+    for (i in seq_len(length(pos))){
       digits_pos[[pos[i]]] <- rep(dig[i], 2)
       type[[pos[i]]] <-  stat[i]
     }
@@ -532,7 +532,7 @@ makeNamesNum <- function(measure, data,
 {
   if (sum(meAsNum) == 0) return(measure)
   measure_number <- NULL
-  for (i in 1:length(meAsNum)) {
+  for (i in seq_len(length(meAsNum))) {
     if (meAsNum[i]) {
       if (grepl("[^[:digit:]]", measure[i])) {
         n <- stringr::str_split(measure[i], ":", 2)

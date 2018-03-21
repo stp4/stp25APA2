@@ -77,7 +77,7 @@ APA2.list <-
       custom.model.names <- paste0("Model ", 1:n)
     
     #-- Extrahieren ----------------------------------
-    for (i in 1:n) {
+    for (i in seq_len(n)) {
       model <- texreg:::extract(x[[i]],
                                 include.aic = FALSE,
                                 include.bic = FALSE, ...)
@@ -125,10 +125,10 @@ APA2.list <-
     }
     
     #-- Gof Names -----------------------------------
-    for (i in 1:n) {
+    for (i in  seq_len(n)) {
       gn <- models[[i]]@gof.names
       if (!is.null(gn) && length(gn) > 0) {
-        for (j in 1:length(gn)) {
+        for (j in  seq_len(length(gn))) {
           if (!gn[j] %in% gof.names) {
             gof.names <- append(gof.names, gn[j])
           }
@@ -140,7 +140,7 @@ APA2.list <-
     row.names(gofs) <- gof.names
     
     #-- Coef + Gofs --------------------------------
-    for (i in 1:n) {
+    for (i in seq_len(n)) {
       cf <- models[[i]]@coef
       
       if (length(digits) == 1)
@@ -195,7 +195,7 @@ APA2.list <-
       coefs[[i]] <- coef
       #-- Gof  sortieren
       if (length(models[[i]]@gof) > 0) {
-        for (j in 1:length(models[[i]]@gof)) {
+        for (j in seq_len(length(models[[i]]@gof)) ) {
           rn <- models[[i]]@gof.names[j]
           val <- models[[i]]@gof[j]
           col <- i
@@ -215,8 +215,8 @@ APA2.list <-
     }
     
     #-- Sortieren ----------------------------------
-    for (i in 1:length(coefs)) {
-      for (j in 1:length(rownames(coefs[[i]]))) {
+    for (i in  seq_len(length(coefs))) {
+      for (j in  seq_len(length(rownames(coefs[[i]]))) ) {
         
         if (!rownames(coefs[[i]])[j] %in% coef.order) {
           coef.order <- append(coef.order, rownames(coefs[[i]])[j])
@@ -238,9 +238,9 @@ APA2.list <-
     
     m.temp <- matrix(nrow = nrow(m), ncol = ncol(m))
     
-    for (i in 1:nrow(m)) {
+    for (i in  seq_len(nrow(m)) ) {
       new.row <- which(coef.order == rownames(m)[i])
-      for (j in 1:length(m[i, ])) {
+      for (j in  seq_len(length(m[i, ])) ) {
         m.temp[new.row, j] <- as.character(m[i, j])
       }
     }
@@ -263,7 +263,7 @@ APA2.list <-
     newgofs <-   gsub("[^[:alnum:] :().]", "", rownames(gofs))
     
     if(length(param>1))
-      for (i in 1:n) {
+      for (i in  seq_len(n)) {
         gofs <-
           append(gofs, emptygofs,
                  after = ngofs * (1 + n_param * (i - 1)))

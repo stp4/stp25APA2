@@ -180,7 +180,7 @@ berechne.data.frame <- function(.data,
 
 
   res<- NULL
-  for(i in measure){
+  for (i in measure){
     res<-rbind(res,
                berechneMean(.data, i, by,  na.rm=na.rm,
                             conf.interval=conf.interval, .drop=.drop

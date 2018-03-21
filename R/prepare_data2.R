@@ -101,13 +101,13 @@ prepare_data2.formula <-
                             stringr::str_extract(y_hsd[pos], "\\[.")))
 
       if(!is_empty2(dedect_string)){
-        for(i in 1:length(pos))
+        for (i in  seq_len(length(pos)))
           if(!is_empty2(dedect_string[i]))
             measure[pos[i]] <- dedect_string[i]
           }
 
       if(!is_empty2(dedect_number)){
-        for(i in 1:length(pos))
+        for (i in seq_len(length(pos)))
           if(!is_empty2(dedect_number[i]))
             digits[pos[i]] <- dedect_number[i]
           digits<- as.numeric(digits)

@@ -129,7 +129,7 @@ test_APA2 <- function(x){
     test_res <- test_is_data_frame(x)
   }
   else if(is.list(x)){
-    for(i in 1:length(x)){
+    for(i in seq_len(length(x)) ){
       test_res<-c(test_res, test_is_data_frame(x[[i]]) )
     }
   }

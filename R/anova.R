@@ -86,7 +86,7 @@ APA_Table_Anova <- function(myfits,
                             include.eta)
 {
   result <- NULL
-  for (i in 1:length(myfits)) {
+  for ( i in seq_len(length(myfits)) )  {
     if (length(model_info(myfits[[i]])$x) != 0) {
       res <-
         Ordnen.default(car::Anova(myfits[[i]])) #%>% broom::tidy()# ist das gleiche wie broom::tidy(x)

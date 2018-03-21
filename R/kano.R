@@ -329,7 +329,7 @@ Kano_default<-function(X,
   Scors <- as.data.frame(Scors)
   names(Scors) <- paste0(names(Scors), ".s")
 cat("\ntransform kano (type",type,")")
-  for(i in vars){
+  for (i in vars){
     
     X_func <- X[,i]
     X_dysf <- X[,i+1]

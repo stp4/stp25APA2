@@ -158,7 +158,7 @@ Median2 <- function(x, ...) {
 Median2.formula<-  function(x, data, ...){
     if(length(x) == 2){
         strg<- c(NULL)
-        for(i in all.vars(x) ){
+        for (i in all.vars(x) ){
             strg<- c(strg, Median2(data[,i]))
         }
     } else {

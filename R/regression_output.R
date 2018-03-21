@@ -80,7 +80,7 @@ regression_output  <-
         #Kopie ciforce ohne die Fehlerprüfung
         ci.level<- .95
         note <- "95%-CI based on asymptotic normality"
-        for (i in 1:length(models2)) {
+        for (i in  seq_len(length(models2))) {
           if (length(models2[[i]]@se) > 0) {
             z <- qnorm(1 - ((1 - ci.level)/2))
             upper <- models2[[i]]@coef + (z * models2[[i]]@se)
@@ -196,7 +196,7 @@ regression_output  <-
 
     if (include.CI) {
       ci_vars <- 2:3
-      for (i in 1:length(est_vars)) {
+      for (i in seq_len(length(est_vars))) {
 
         m[, se_vars[i]] <- rndr_CI(m_cis[, ci_vars], digits)
         ci_vars <- ci_vars + 3
@@ -233,7 +233,7 @@ regression_output  <-
     emptygofs <- rep(NA, ngofs * (n_param - 1))
     newgofs <- rownames(gofs)
 
-    for (i in 1:length(modnames))
+    for (i in seq_len(length(modnames)))
       gofs <- append(gofs, emptygofs, after = ngofs * (1 + n_param * (i -
                                                                         1)))
 

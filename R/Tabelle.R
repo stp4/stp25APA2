@@ -267,7 +267,7 @@ calculate_tabelle2 <- function(X,
                                digits = digits) {
   res <- NULL
   
-  for (i in 1:length(X$measure)) {
+  for (i in seq_len(length(X$measure))) {
     # if (X$measure[i] == "default")
     #  X$measure[i] <- X$measure.class[i]
     

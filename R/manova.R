@@ -65,7 +65,7 @@
 APA2.manova <- function(x, test="Wilks", caption="MANOVA", note="", output=c("anova", "manova")) {
   aov_result<-NULL
   res<-summary.aov(x)
-  for(i in names(res)){
+  for (i in names(res)){
     rs<- res[[i]]
     rs<- cbind(
       Source = gsub(".*\\$", "", rownames(rs)),

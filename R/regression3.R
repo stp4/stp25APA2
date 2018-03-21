@@ -194,7 +194,7 @@ APA_Table <- function(...,
   if (type[1] == "default") {
     custom.model.names <- custom_model_names()
     #  print(custom.model.names)
-    for (i in 1:length(myfits)) {
+    for (i in  seq_len(length(myfits)) ) {
       x <- type_default(
         myfits[[i]],
         caption = caption,

@@ -293,7 +293,7 @@ errate_statistik2 <- function(Formula,
           names(table(Xi))
         my_levels <- levels(Xi)
         #-- alle Faktor-Stufen Auswerten mean/Freq
-        for (lev in 1:length(my_levels)) {
+        for ( lev in seq_len(length(my_levels)) ) {
           index_zaeler <- 0
           my_subset <- which(Xi == my_levels[lev])
           
@@ -500,7 +500,7 @@ errate_statistik3 <-
       tabel_header <- paste0("&nbsp;", names(table(groups)))
       
       ans <- NULL
-      for (lev in 1:nlevels(groups)) {
+      for (lev in seq_len(nlevels(groups))) {
         xx <- x[which(groups == levels(groups)[lev])]
         rr <- Mittelwert_Einzel(i, xx)
         
@@ -520,7 +520,7 @@ errate_statistik3 <-
       groups <- droplevels(X$data[[j]])
       res <- t(as.matrix(table(groups)))
       res_n <- NULL
-      for (i in 1:ncol(res)) {
+      for (i in seq_len(ncol(res)) ) {
         res_n <-  cbind(res_n, cbind(n = "", res[, i]))
       }
       
@@ -588,7 +588,7 @@ errate_statistik3 <-
           )
    
       
-      for (i in 1:length(measure.vars))
+      for (i in seq_len(length(measure.vars)))
         ANS <- rbind(ANS, Mittelwert_Einzel(i, X$data[[i]]))
      
       ANS$Item <-
@@ -624,7 +624,7 @@ errate_statistik3 <-
             
           }
           
-          for (i in 1:length(measure.vars)) {
+          for (i in seq_len(length(measure.vars))) {
             ans <- Mittelwert_Gruppe(i, j, X$data[[measure.vars[i]]])
            
             if (include.total) {
