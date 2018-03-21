@@ -393,6 +393,9 @@ errate_statistik2 <- function(Formula,
 
 
 
+
+
+
 #' @rdname Tabelle
 #' 
 #' @examples 
@@ -413,31 +416,41 @@ errate_statistik2 <- function(Formula,
 #' "hmisc"=Tabelle(alter ~ geschl, varana, APA=TRUE, test="Hmisc")[[1]]$statistics[1]
 #' )
 #'   
+#'   
+#'    Tabelle(alter ~ geschl, varana, APA=TRUE)
+#' 
+#' Tabelle(alter ~ geschl, varana, include.n=FALSE, APA=TRUE)
+#' Tabelle(alter ~ geschl, varana, include.nr=TRUE, APA=TRUE)
+#' Tabelle(alter ~ geschl, varana, include.total=TRUE, APA=TRUE)
+#' Tabelle(alter ~ geschl, varana, include.test=TRUE, APA=TRUE)
 errate_statistik3 <-
   function (...,
-            type = NULL,
+            type = NULL, # "muliresponse" "pearson", "spearman"
             caption = "",
             note = "",
-            digits = NULL,
-            test = FALSE,
+          #  digits = NULL,
+         #  test = FALSE,
             na.action = na.pass,
             exclude = NA,
             
-            include.n = TRUE,
-            include.nr = FALSE,
-            include.total = FALSE,
+            include.n = TRUE,     # Anzahl bei Gruppe je Spalte
+            include.nr = FALSE,   # erste zeile Anzahl der Gruppen
+            include.total = FALSE,# Total Anzahl + Statistik bei Gruppe
             
             include.test = test,
             
-            include.p = TRUE,
-            include.stars = FALSE,
-            corr_test = "pearson",
-            cor_diagonale_up = TRUE,
-            max_factor_length = 35,
-            order = FALSE,
-            decreasing = FALSE,
+          #  include.p = TRUE,
+         #   include.stars = FALSE,
+         #   include.mean=FALSE,  # fuer Correlation
+         #   corr_test = "pearson",
+          #  cor_diagonale_up = TRUE,
+         
+            max_factor_length = 35
+         #   order = FALSE,
+         #   decreasing = FALSE,
            # useconTest = FALSE,
-            normality.test = FALSE)
+        #    normality.test = FALSE
+         )
   {
     
     Mittelwert_Einzel <- function(i, x) {
@@ -561,9 +574,10 @@ errate_statistik3 <-
     
     if (type[1] == "multiresponse")
       X$measure <- rep("multi", length(X$measure))
+    
     #-- Einzelvergleich -------------------------------
     if (is.null(group.vars)) {
-      cat(" Einzelvergleich ")
+    #  cat(" Einzelvergleich ")
       if (include.nr)
         ANS <-
           data.frame(
@@ -653,7 +667,8 @@ errate_statistik3 <-
         }
         else {
           # Das geht nicht bzw vieleicht als eigene Funktion
-          ANS <- corr_tabel_X(...)
+          
+          stop("Benutze die Funktion APA_Correlation")
         }
       }
     }

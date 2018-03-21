@@ -7,7 +7,6 @@
 \alias{Tabelle.default}
 \alias{Describe}
 \alias{Tabelle.lm}
-\alias{corr_tabel_X}
 \alias{conTest}
 \alias{catTest}
 \alias{errate_statistik3}
@@ -19,33 +18,25 @@ Tabelle2(...)
 
 \method{Tabelle}{default}(..., formula = NULL, fun = NULL, type = c("2",
   "1", "auto", "freq", "mean", "median", "ci", "multiresponse", "cohen.d",
-  "effsize", "freq.ci", "describe"), caption = "Charakteristik", note = "",
-  digits = NULL, APA = FALSE, test = FALSE, na.action = na.pass,
-  exclude = NA, include.n = TRUE, include.nr = FALSE,
-  include.total = FALSE, include.test = test, include.p = TRUE,
-  include.stars = FALSE, corr_test = "pearson", cor_diagonale_up = TRUE,
-  max_factor_length = 35, order = FALSE, decreasing = FALSE,
-  useconTest = FALSE, normality.test = FALSE)
+  "effsize", "freq.ci", "describe", "correlation"),
+  caption = "Charakteristik", note = "", digits = NULL, APA = FALSE,
+  test = FALSE, na.action = na.pass, exclude = NA, include.n = TRUE,
+  include.nr = FALSE, include.total = FALSE, include.test = test,
+  max_factor_length = 35)
 
 Describe(x, ...)
 
 \method{Tabelle}{lm}(x, digits = 2, fun = function(x) {     c(n = length(x),
   M = mean(x, na.rm = TRUE), SD = sd(x, na.rm = TRUE)) })
 
-corr_tabel_X(..., type = c("pearson", "spearman"), exclude = NA, subset,
-  na.action = na.pass, cor_diagonale_up = TRUE, stars = TRUE,
-  p.value = FALSE, include.mean = FALSE, include.n = TRUE)
-
 conTest(fml, data, test_name = TRUE)
 
 catTest(fml, data, include.test = "chisq.test")
 
 errate_statistik3(..., type = NULL, caption = "", note = "",
-  digits = NULL, test = FALSE, na.action = na.pass, exclude = NA,
-  include.n = TRUE, include.nr = FALSE, include.total = FALSE,
-  include.test = test, include.p = TRUE, include.stars = FALSE,
-  corr_test = "pearson", cor_diagonale_up = TRUE, max_factor_length = 35,
-  order = FALSE, decreasing = FALSE, normality.test = FALSE)
+  na.action = na.pass, exclude = NA, include.n = TRUE,
+  include.nr = FALSE, include.total = FALSE, include.test = test,
+  max_factor_length = 35)
 }
 \arguments{
 \item{...}{Die auszuwertenden Variablen  sex, age="mean", usw}
@@ -62,19 +53,13 @@ errate_statistik3(..., type = NULL, caption = "", note = "",
 
 \item{APA}{APA2 Style TRUE/FALSE}
 
-\item{test, include.test, include.p, include.stars}{Signifikanz Test include.test= c(TRUE, "t.test","aov","wilcox.test","kruskal.test")}
+\item{test, include.test}{Signifikanz Test include.test= c(TRUE, "t.test","aov","wilcox.test","kruskal.test")}
 
 \item{na.action, exclude}{an Formula}
 
 \item{include.n, include.nr, include.total}{Anzahl ausgeben}
 
-\item{corr_test, cor_diagonale_up}{Korrelationen und Format}
-
 \item{max_factor_length}{Fehler bei langen Faktoren abfangen}
-
-\item{order, decreasing}{Sortieren}
-
-\item{useconTest, normality.test}{Auswahl des sig. Tests}
 }
 \value{
 Tabelle: data.frame oder list mit data.frame
@@ -121,13 +106,6 @@ varana \%>\% Tabelle(
 
 varana2 \%>\% Tabelle2(Merkfgk, by=~ Zeit)
 
-\dontrun{
-prepare_data2(m1+m2~m3 , varana)
-corr_tabel_X(~m1+m2, varana)
-corr_tabel_X(m1+m2~m3, varana)
-corr_tabel_X(m1+m2~m3|geschl, varana)
-}
-
  Tabelle(
 m1[median] + m2[median] + m3[median] + m4[median] ~ geschl,
 varana,
@@ -144,6 +122,13 @@ test = TRUE
 "hmisc"=Tabelle(alter ~ geschl, varana, APA=TRUE, test="Hmisc")[[1]]$statistics[1]
 )
   
+  
+   Tabelle(alter ~ geschl, varana, APA=TRUE)
+
+Tabelle(alter ~ geschl, varana, include.n=FALSE, APA=TRUE)
+Tabelle(alter ~ geschl, varana, include.nr=TRUE, APA=TRUE)
+Tabelle(alter ~ geschl, varana, include.total=TRUE, APA=TRUE)
+Tabelle(alter ~ geschl, varana, include.test=TRUE, APA=TRUE)
 }
 \author{
 Wolfgang Peter
