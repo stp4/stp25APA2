@@ -318,6 +318,14 @@ type_default <- function(x,
                          include.odds = FALSE,
                          digits = digits
                                                   ) {
+  
+  
+  
+  if (class(x)== "polr"){
+    APA2(x, caption, note,   include.ci = include.ci,
+         include.odds = include.odds, ...)
+    
+  }else {
   # cat("\n in type_default ")
   res <- NULL
   res <-  Ordnen.default(x) # ist das gleiche wie broom::tidy(x)
@@ -347,9 +355,9 @@ type_default <- function(x,
     caption = paste(custom.model.names, caption),
     note = note
   )
-  # cat("\n ende type_default ")
-  # Output(fix_format(res2), ...)
+  
   res
+  }
 }
 
 

@@ -4,6 +4,7 @@
 \alias{R2}
 \alias{R2.lm}
 \alias{R2.glm}
+\alias{R2.polr}
 \alias{R2.mlm}
 \alias{R2.merMod}
 \alias{R2.lme}
@@ -17,6 +18,8 @@ R2(x, ...)
 \method{R2}{lm}(x, ...)
 
 \method{R2}{glm}(x, ...)
+
+\method{R2}{polr}(x, ...)
 
 \method{R2}{mlm}(x, ...)
 

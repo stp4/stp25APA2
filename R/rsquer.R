@@ -135,6 +135,16 @@ R2.glm <- function(x, ...) {
   rsq
 }
 
+
+#' @rdname R2
+#' @export
+R2.polr <- function(x, ...) {
+  R2.glm(x,...)
+  
+}
+
+
+
 #Type: Manova
 #' @rdname R2
 #' @export
