@@ -69,11 +69,17 @@ APA2.polr <- function(x,
     source.interc<- cbind(source.interc, b.interc)
   }
   if (include.odds){
-    odds <- exp(b.coef)
+    odds <- data.frame(plyr::llply(b.coef , function(x) ifelse(x >4.6, 100,  round(exp(x),2) )))
+      
+    #  cbind(b=ifelse(b.coef[,1]>4.6, 100,  round(exp(b.coef[,1]),2)) ,
+     #             low=ifelse(b.coef[,2]>4.6, 100,  round(exp(b.coef[,2]),2)),
+     #             upr=ifelse(b.coef[,3]>4.6, 100,  round(exp(b.coef[,3]),2)))
+    
     names(odds) <- gsub(".b", "", paste0("OR.", names(odds)))
     
+    print(odds)
     source.coef<- cbind(source.coef, odds)
-    source.interc$OR <- exp(b.interc[,1])
+    source.interc$OR <- ifelse(b.interc[,1]>4.6, 100,  round(exp(b.interc[,1]),2))  #exp(b.interc[,1])
     if(length(names(odds))>1) source.interc<- cbind(source.interc, OR.low=NA, OR.upr=NA)
     
   }
