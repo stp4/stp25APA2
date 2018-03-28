@@ -53,10 +53,12 @@ APA2(x, ...)
 
 \method{APA2}{default}(x, ..., caption = "", output = TRUE)
 
-\method{APA2}{anova}(x, ...)
+\method{APA2}{anova}(x, caption = gsub("\\\\n", "", paste(attr(x, "heading"),
+  collapse = ", ")), note = paste("contrasts: ", paste(options()$contrasts,
+  collapse = ", ")), include.eta = FALSE, ...)
 
-\method{APA2}{aov}(x, ..., note = paste("contrasts: ",
-  paste(options()$contrasts, collapse = ", ")))
+\method{APA2}{aov}(x, caption = NULL, note = paste("contrasts: ",
+  paste(options()$contrasts, collapse = ", ")), ...)
 
 \method{APA2}{summary.aov}(x, caption = "ANOVA", note = "", ...)
 
@@ -137,7 +139,8 @@ errate_statistik2(Formula, data, caption = "caption", note = "note",
   include.bic = include.aic, ci.level = 0.95, rgroup = c("Parameter",
   "Goodness of fit"), output = stp25output:::which_output(), ...)
 
-\method{APA2}{lm}(...)
+\method{APA2}{lm}(x, caption = NULL, note = paste("contrasts: ",
+  paste(options()$contrasts, collapse = ", ")), ...)
 
 \method{APA2}{lme}(x, caption = "", note = "", type = "III",
   anova = TRUE, anova_type = "F", ...)
@@ -299,9 +302,6 @@ https://stats.idre.ucla.edu/r/dae/ordinal-logistic-regression/
 
 Ausgabe von Regressions Tabelle nach der APA-Style vorgabe. Die Funktion
 ist eine Kopie von  texreg:::aggregate.matrix.
-
-A Poisson regression was run to predict the number of publications an academic publishes in the last 12 months based on the experience of the academic and the number of hours an academic spends each week working on research. For every extra hour worked per week on research, 1.044 (95% CI, 1.004 to 1.085) times more publications were published, a statistically significant result, p = .030.
-https://statistics.laerd.com/spss-tutorials/poisson-regression-using-spss-statistics.php
 
 \strong{Kreuztabellen} 
 APA2.xtabs Formatiert xtabs() 2x2 Tabellen werden mit Haufigkeit wahlweise mit Prozent

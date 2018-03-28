@@ -317,6 +317,8 @@ APA_Table <- function(...,
   
   
   if ("anova" %in% type) {
+    
+    #car::ANOVA Type II
     result[["anova"]] <- APA_Table_Anova(
       myfits,
       caption = caption,

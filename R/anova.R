@@ -1,9 +1,13 @@
 #' @rdname APA2
 #' @export
-APA2.anova <- function(x, ...) {
-  Output(fix_format(x), ...)
+APA2.anova <- function(x, 
+                       caption=gsub("\\n", "", paste(attr(x, "heading"), collapse=", ") ),
+                       note=paste("contrasts: ", paste(options()$contrasts, collapse=", ")),
+                       include.eta=FALSE,
+                       ...
+) {
+  APA2.lm(x, caption, note, ...)
 }
-
 #' @rdname APA2
 #' @description anova: APA2.aov(x, include.eta = TRUE) 
 #' @export
@@ -17,12 +21,15 @@ APA2.anova <- function(x, ...) {
 #' 
 #' APA2(npk.aov, include.eta = FALSE)
 #' 
-APA2.aov <- function(x, ...,
-                     note=paste("contrasts: ", paste(options()$contrasts, collapse=", "))
+APA2.aov <- function(x, 
+                     caption=NULL,
+                     note=paste("contrasts: ", paste(options()$contrasts, collapse=", ")),
+                     ...
                      ) {
-APA_Table(x, type="anova", note=note, ...)
+  APA2.lm(x, caption, note, ...)
 }
 
+ 
 
 #' @rdname APA2
 #' @export
@@ -88,20 +95,21 @@ APA_Table_Anova <- function(myfits,
   result <- NULL
   for ( i in seq_len(length(myfits)) )  {
     if (length(model_info(myfits[[i]])$x) != 0) {
-      res <-
-        Ordnen.default(car::Anova(myfits[[i]])) #%>% broom::tidy()# ist das gleiche wie broom::tidy(x)
+      res <- Ordnen(car::Anova(myfits[[i]]),
+                    include.eta=include.eta
+                    )  
       
       if (is.null(caption))
         caption <- attr(res, "caption")##paste(, "Obs: ", attr(res,"N"))
       if (is.null(note))
         note <- attr(res, "note")
       
-      if (include.eta &
-          is(myfits[[i]], "lm")  & !is(myfits[[i]], "glm")) {
-        k <- ncol(res)
-        res <-
-          cbind(res[, -k], etaSquared2(myfits[[i]], 2, FALSE), res[k])
-      }
+      # if (include.eta &
+      #     is(myfits[[i]], "lm")  & !is(myfits[[i]], "glm")) {
+      #   k <- ncol(res)
+      #   res <-
+      #     cbind(res[, -k], etaSquared2(myfits[[i]], 2, FALSE), res[k])
+      # }
       
       if(!is.null(names)) caption <-  names[i]
       fix_format(res)  %>%

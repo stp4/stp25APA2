@@ -3,6 +3,8 @@
 \name{Ordnen}
 \alias{Ordnen}
 \alias{Ordnen.default}
+\alias{Ordnen.anova}
+\alias{Ordnen.aov}
 \alias{Ordnen.lm}
 \alias{Ordnen.polr}
 \title{Ordnen (Tidy)}
@@ -11,10 +13,13 @@ Ordnen(x, ...)
 
 \method{Ordnen}{default}(x, ...)
 
-\method{Ordnen}{lm}(x, digits = 2, include.b = TRUE, include.se = TRUE,
-  include.beta = FALSE, include.eta = TRUE, include.ci = FALSE,
-  include.variance = TRUE, include.r = TRUE, include.ftest = FALSE,
-  include.aic = TRUE, include.bic = include.aic, ci.level = 0.95, ...)
+\method{Ordnen}{anova}(x, ...)
+
+\method{Ordnen}{aov}(x, include.eta = TRUE, include.sumsq = TRUE,
+  include.meansq = FALSE, ...)
+
+\method{Ordnen}{lm}(x, include.b = TRUE, include.se = TRUE,
+  include.beta = FALSE, include.ci = FALSE, ci.level = 0.95, ...)
 
 \method{Ordnen}{polr}(x, digits = 2, include.b = TRUE, include.se = TRUE,
   include.ci = FALSE, include.odds = TRUE, ...)
@@ -23,6 +28,18 @@ Ordnen(x, ...)
 \item{x}{Objekt}
 
 \item{...}{weitere Objekte nicht benutzt}
+
+\item{include.eta}{Eta Quadrat}
+
+\item{include.sumsq, include.meansq}{Quadrat- Summen}
+
+\item{include.b}{Estimate}
+
+\item{include.se}{SE Standardfehler}
+
+\item{include.beta}{standartisiertes beta}
+
+\item{include.ci, ci.level}{95%-CI mit ci-Level}
 }
 \value{
 ein data.frame-Ojekt oder eine Liste von data.frames. Im Attribut N sind die Stichprobengroesse
@@ -30,4 +47,8 @@ und notes
 }
 \description{
 Diese Funktion meine Version von tidy
+
+ANOVA
+
+Regression (linear)
 }

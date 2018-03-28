@@ -47,6 +47,10 @@ Ordnen.default <- function(x, ...) {
 
 
 
+
+
+                                     
+
 # include.b = TRUE,
 # include.se = TRUE,
 # include.beta = FALSE,
@@ -77,9 +81,59 @@ Ordnen.default <- function(x, ...) {
 
 #' @rdname Ordnen
 #' @export
+Ordnen.anova <- function(x, ...) Ordnen.aov(x, ...)
+
+
+
+#' ANOVA 
+#' @param include.eta  Eta Quadrat
+#' @param include.sumsq,include.meansq  Quadrat- Summen
+#'
+#' @rdname Ordnen
+#' @export
+Ordnen.aov <- function(x, 
+                       include.eta = TRUE,
+                       include.sumsq = TRUE,
+                       include.meansq = FALSE, 
+                       ...){
+  info <- model_info(x)
+  AV <-
+    ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
+  res <- broom::tidy(x)
+  
+  if (include.eta ) {
+    if(is(x, "lm")){
+    k <- ncol(res)
+    res <-
+      cbind(res[, -k], etaSquared2(x, 2, FALSE), res[k])
+    }else warning("include.eta geht nur bei aov")
+  }
+  if (!include.sumsq){
+    res <-  res[, names(res) != "sumsq"]
+  }
+  if (!include.meansq){
+    res <-  res[, names(res) != "meansq"]
+  }
+  prepare_output(res,
+                 paste0("AV: ", AV),
+                 paste0("Model: ", info$family[1]),
+                 info$N,
+                 info$labels)
+}
+
+
+ 
+#' Regression (linear)
+#' @param include.b Estimate
+#' @param include.se  SE Standardfehler
+#' @param include.beta  standartisiertes beta
+#' @param include.ci,ci.level  95%-CI mit ci-Level
+#'
+#' @rdname Ordnen
+#' @export
 Ordnen.lm <- function(x,
                       # custom.model.names = NULL,
-                      digits = 2,
+                     # digits = 2,
                       include.b = TRUE,
                       include.se = TRUE,
                       include.beta = FALSE,

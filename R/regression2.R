@@ -302,10 +302,29 @@ APA2.list <-
 
 #' @rdname APA2
 #' @export
-#' @description    A Poisson regression was run to predict the number of publications an academic publishes in the last 12 months based on the experience of the academic and the number of hours an academic spends each week working on research. For every extra hour worked per week on research, 1.044 (95% CI, 1.004 to 1.085) times more publications were published, a statistically significant result, p = .030.
-#' https://statistics.laerd.com/spss-tutorials/poisson-regression-using-spss-statistics.php
-APA2.lm <- function(...)
-  APA_Table(...)
+#' 
+APA2.lm <- function(x, 
+                    caption=NULL,
+                    note=paste("contrasts: ", paste(options()$contrasts, collapse=", ")),
+                    ...)
+ {
+  res <- Ordnen(x, ...)
+ 
+  if (is.null(caption))
+    caption <- paste(attr(res, "caption"),
+                     "Obs: ", attr(res, "N"))
+  
+  Output(
+    fix_format(res),
+    caption =  caption,
+    note = note)
+  
+  invisible(res)
+}
+  
+  
+  #APA2.aov()
+   
 
 #' @rdname APA2
 #' @param anova_type  bei lme:  "F"  F-werte (wie SPSS) oder Chi (car::Anova)
