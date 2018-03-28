@@ -3,11 +3,21 @@
 \name{Ordnen}
 \alias{Ordnen}
 \alias{Ordnen.default}
+\alias{Ordnen.lm}
+\alias{Ordnen.polr}
 \title{Ordnen (Tidy)}
 \usage{
 Ordnen(x, ...)
 
 \method{Ordnen}{default}(x, ...)
+
+\method{Ordnen}{lm}(x, digits = 2, include.b = TRUE, include.se = TRUE,
+  include.beta = FALSE, include.eta = TRUE, include.ci = FALSE,
+  include.variance = TRUE, include.r = TRUE, include.ftest = FALSE,
+  include.aic = TRUE, include.bic = include.aic, ci.level = 0.95, ...)
+
+\method{Ordnen}{polr}(x, digits = 2, include.b = TRUE, include.se = TRUE,
+  include.ci = FALSE, include.odds = TRUE, ...)
 }
 \arguments{
 \item{x}{Objekt}

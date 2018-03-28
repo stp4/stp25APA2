@@ -169,7 +169,7 @@ APA_Table <- function(...,
 {
   
   if(include.ftest) Text("Achtung include.ftest noch nicht fertig!")
-  if(include.beta) Text("Achtung include.beta noch nicht fertig!")
+ # if(include.beta) Text("Achtung include.beta noch nicht fertig!")
    
   result <- NULL
   type <-  match.arg(type, several.ok = TRUE)
@@ -200,9 +200,32 @@ APA_Table <- function(...,
         caption = caption,
         note = note,
         custom.model.names = custom.model.names[i],
-        include.ci = include.ci,
+        include.b = include.b,
+        include.se = include.se,
+        include.beta = include.beta,
+        include.eta = include.eta,
         include.odds = include.odds,
-        digits = digits
+        include.ci = include.ci,
+        
+        
+        #Fehler abfangeb
+        include.p = include.p,
+        include.stars = include.stars,
+        
+        include.variance = include.variance,
+        include.r = include.r,
+        include.pseudo = include.pseudo,
+        # noch nicht fertig
+        include.ftest = include.ftest,
+        include.loglik = include.loglik,
+        # noch nicht fertig
+        
+        include.custom = include.custom,
+        
+        include.aic = include.aic,
+        include.bic = include.bic,
+        
+        ci.level = .95
       )
       result[[i]] <- x
     }
@@ -313,36 +336,9 @@ APA_Table <- function(...,
 type_default <- function(x,
                          caption = NULL,
                          note = NULL,
-                         custom.model.names = "",
-                         include.ci = FALSE,
-                         include.odds = FALSE,
-                         digits = digits
-                                                  ) {
-  
-  
-  
-  if (class(x)== "polr"){
-    APA2(x, caption, note,   include.ci = include.ci,
-         include.odds = include.odds, ...)
-    
-  }else {
-  # cat("\n in type_default ")
-  res <- NULL
-  res <-  Ordnen.default(x) # ist das gleiche wie broom::tidy(x)
-  # cat("\n in type_default ")
-  #default <-default_caption_note(x)
-  if (include.ci) {
-    res <- cbind(res,
-                 confint(x))
-  }
-  if (include.odds) {
-    res <- cbind(res,
-                 round(exp(cbind(
-                   OR = coef(x),
-                   confint(x)
-                 )),
-                 2))
-  }
+                         custom.model.names = NULL,
+                         ...) {
+    res <-  Ordnen(x, ...) # ist das gleiche wie broom::tidy(x)
 
   if (is.null(caption))
     caption <- paste(attr(res, "caption"),
@@ -353,11 +349,9 @@ type_default <- function(x,
   Output(
     fix_format(res),
     caption = paste(custom.model.names, caption),
-    note = note
-  )
+    note = note)
   
   res
-  }
 }
 
 

@@ -125,7 +125,7 @@ errate_statistik2(Formula, data, caption = "caption", note = "note",
 \method{APA2}{principal}(x, caption = "", note = "", digits = 2,
   all = FALSE, cut = 0.3, sort = TRUE, suppress.warnings = TRUE, ...)
 
-\method{APA2}{polr}(x, caption = "", note = "", include.b = TRUE,
+\method{APA2}{polr}(x, caption = NULL, note = NULL, include.b = TRUE,
   include.se = TRUE, include.ci = FALSE, include.odds = TRUE, ...)
 
 \method{APA2}{list}(x, caption = "", note = "", digits = 2,

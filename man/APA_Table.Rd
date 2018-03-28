@@ -23,8 +23,8 @@ APA_Table(..., caption = NULL, note = NULL, type = c("default", "long",
   include.bic = include.aic, ci.level = 0.95, single.row = TRUE,
   rgroup = c("Parameter", "Goodness of fit"))
 
-type_default(x, caption = NULL, note = NULL, custom.model.names = "",
-  include.ci = FALSE, include.odds = FALSE, digits = digits)
+type_default(x, caption = NULL, note = NULL, custom.model.names = NULL,
+  ...)
 
 type_texreg(list, caption = "", note = "", names = NULL, digits = 2,
   single.row = TRUE, include.stars = TRUE, include.p = FALSE,
