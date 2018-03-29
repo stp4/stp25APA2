@@ -536,6 +536,14 @@ K
 ### set up general linear hypothesis
 APA2(glht(lmod, linfct = K))
 
+ 
+ #--- Ordered Logistic or Probit Regression 
+  options(contrasts = c("contr.treatment", "contr.poly"))
+  house.plr <- polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+  # house.plr
+  APA2(house.plr, note= APA(house.plr))
+
+
 library(lmerTest)
 
 fit1 <- lm(chol0 ~  ak + rrs0 + med + g, hyper)

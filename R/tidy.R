@@ -101,7 +101,7 @@ Ordnen.aov <- function(x,
     ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
   res <- broom::tidy(x)
   
-  if (include.eta ) {
+  if (include.eta) {
     if(is(x, "lm")){
     k <- ncol(res)
     res <-
@@ -203,6 +203,11 @@ Ordnen.polr <- function(x,
                         include.ci = FALSE,
                         include.odds = TRUE,
                         ...) {
+  
+  info <- model_info(x)
+  AV <-
+    ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
+  
   res <- summary(x)
   Intercepts <- names(res$zeta)
   ## store table
@@ -271,5 +276,12 @@ Ordnen.polr <- function(x,
       cbind(source.interc, stat.interc[-1, drop = FALSE])
   }
   
-  rbind(source.interc, source.coef)
+  source.interc$Source <- paste0("(",  source.interc$Source, ")")
+  
+  prepare_output(rbind(source.interc, source.coef),
+                 paste0("AV: ", AV),
+                 paste0("Model: ", info$family[1]),
+                 info$N,
+                 info$labels)
+  
 }

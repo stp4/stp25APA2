@@ -20,6 +20,7 @@
 \alias{model_info.coxph}
 \alias{model_info.survdiff}
 \alias{model_info.ICC}
+\alias{model_info.polr}
 \title{model_info}
 \usage{
 model_info(x, ...)
@@ -59,6 +60,8 @@ Infomation(x, ...)
 \method{model_info}{survdiff}(x, ...)
 
 \method{model_info}{ICC}(x, ...)
+
+\method{model_info}{polr}(x)
 }
 \arguments{
 \item{x}{Fit Objekt}

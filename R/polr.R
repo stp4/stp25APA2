@@ -2,7 +2,7 @@
 #' @export
 APA.polr   <- function(x, ...)
  {
-  res <- as.data.frame(lmtest::lrtest(fit_polr))
+  res <- as.data.frame(lmtest::lrtest(x))
   # likelihood ratio tests
   paste0("-LL=" ,
          round(as.numeric(logLik(x)), 1),
@@ -17,8 +17,13 @@ APA.polr   <- function(x, ...)
 #' @description Ordered Logistic or Probit Regression  
 #' https://stats.idre.ucla.edu/r/dae/ordinal-logistic-regression/
 #' @export
-#' 
-#' 
+#' @examples 
+#'  
+#'  #--- Ordered Logistic or Probit Regression 
+#'   options(contrasts = c("contr.treatment", "contr.poly"))
+#'   house.plr <- polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+#'   # house.plr
+#'   APA2(house.plr, note= APA(house.plr))
 #' 
 #' 
 APA2.polr <- function(x,

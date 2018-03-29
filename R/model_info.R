@@ -257,3 +257,16 @@ model_info.ICC <- function(x, ...) {
     labels = NULL,
     N=paste0("obs=", x$n.obs, ", judge=", x$n.judge ))
 }
+
+
+#' @rdname model_info
+#' @export
+model_info.polr<- function(x){
+  list(
+    class = class(x)[1],
+    family = x$method ,
+    y = names(house.plr$model)[1],
+    x = names(house.plr$model)[-1],
+    labels = GetLabelOrName(x$model),
+    N= x$n)
+}
