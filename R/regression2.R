@@ -421,106 +421,68 @@ APA2.lmerMod <- function(...) {
 
 #' @rdname APA2
 #' @export
+#' @examples 
+#' 
+#' fm1 <- lmer(Reaction ~ Days + (Days|Subject), sleepstudy)
+#' APA2(fm1)
+#' 
+#' 
 APA2.merModLmerTest <- function(x,
-                                caption = "" ,
-                                note = "",
-                                anova = TRUE,
-                                random.effects = TRUE,
+                                caption = NULL ,
+                                note = NULL,
+                               # anova = TRUE,
+                               include.random.effects = TRUE,
                                 # anova_type="F",   #  type = "III",
                                 #  F-werte (wie SPSS) oder Chi (car::Anova)
                                 ...) {
-  cat("\nAPA_merModLmerTest noch nicht getestet!\n")
-  Anov <- NULL
-  goodnes <- NULL
-  fit_param <- NULL
-  fit_rand <- list()
-  fit_rand_ll <- list()
-  #     he lmerTest package overloads the lmer function, so you can just
-  #     re-fit the model using exactly the same code, but the summary()
-  #     will now include approximate degrees of freedom and p-values. This
-  #     implementation is extremely easy to use, but can be a little maddening
-  #     if you forget whether your model is a an object of type lmerMod
-  #     or merModLmerTest.
-  
-  # require2(lmerTest)
-  res <- lmerTest::summary(x)
-  Anov <- as.data.frame(anova(x))
-  
-  Anov <- prepare_output(
-    fix_data_frame2(Source = rownames(Anov),
-                    Anov[, c(1, 3:6)]),
-    caption = paste("ANOVA:", caption),
-    note = "Analysis of Variance Table of type III"
-  )
-  
-  
-  
-  goodnes <- cbind(
-    Obs = res$devcomp$dims["N"],
-    round(r.squared.merMod(x)[, 4:6], 2),
-    # BIC = round(res$BIC,2),
-    logLik = round(c(as.numeric(res$logLik)), 2),
-    REML =  round(res$devcomp$cmp["REML"], 2)
-  )
-  
-  
-  goodnes <-  prepare_output(goodnes,
-                             caption = paste("Goodness-of-fit", caption),
-                             note = "R-Quadrat entspricht Marginal und Conditional")
-  
-  fit_param <- prepare_output(
-    fix_data_frame2(
-      Source = rownames(res$coefficients),
-      res$coefficients[, 1:4],
-      p.value = res$coefficients[, 5]
-    ),
-    caption = paste("Regression Model", caption),
-    note = note
-  )
-  
-  Output(fit_param)
-  Output(goodnes)
-  
-  
-  
-  
-  if (random.effects) {
-    myranef <- ranef(x)
-    
-    
-    for (i in  names(myranef)) {
-      ranx <- myranef[[i]]
-      names(x)[1] <- "Intercept"
-      ranx <- fix_data_frame2(Source = rownames(x), ranx)
-      names(ranx)[1] <- i
-      ranx <- prepare_output(ranx, caption = "Random Effect")
-      fit_rand[[i]] <- ranx
-      Output(ranx)
-      
-      
-      chiTest <-  rand(x)$rand.table
-      chiTest <-
-        prepare_output(fix_data_frame2(Source = rownames(chiTest), chiTest)
-                       , caption = "Likelihood Ratio Test")
-      fit_rand_ll[[i]] <- chiTest
-      Output(chiTest)
-    }
-  }
-  
-  
-  if (anova)
-    Output()
-  
+   res <- Ordnen(x)  
+   
+   
+ 
+   if (is.null(caption))
+     caption <- paste(attr(res, "caption"),
+                      "Obs: ", attr(res, "N"))
+   
+   
+   
+   
+   Output(
+     fix_format(res),
+     caption =  caption,
+     note = note)
+   
+   if (include.random.effects){
+     coef_ran <- broom::tidy(x)
+     coef_ran<- coef_ran[(nrow(res)+1):nrow(coef_ran), -c(3:4) ]
+     
+     Output(fix_format(coef_ran), caption="random effects")
+     }
+   
+   
+   
+   invisible(res)
+   
+}
 
+
+
+GOF_LMER <- function(x){
+  
+  res <- lmerTest::summary(x)
+  # goodnes <- cbind(
+  #   Obs = res$devcomp$dims["N"],
+  #   round(r.squared.merMod(x)[, 4:6], 2),
+  #   # BIC = round(res$BIC,2),
+  #   logLik = round(c(as.numeric(res$logLik)), 2),
+  #   REML =  round(res$devcomp$cmp["REML"], 2)
+  # )
   
   
-  invisible(
-    list(
-      param = fit_param,
-      anova = Anov,
-      gof = goodnes,
-      random = fit_rand,
-      random_ll = fit_rand_ll
-    )
-  )
+  # goodnes <-  prepare_output(goodnes,
+  #                            caption = paste("Goodness-of-fit", caption),
+  #                            note = "R-Quadrat entspricht Marginal und Conditional")
+  
+  
+  
+  res
 }

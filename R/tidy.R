@@ -12,6 +12,36 @@ Ordnen <- function(x, ...) {
   UseMethod("Ordnen")
 }
 
+
+ 
+# Ordnen.prototyp <- function(x, 
+#                        include.etwas = TRUE,
+#                        include.column=FALSE,
+#                        ...){
+#   info <- model_info(x)
+#   AV   <- ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
+#   res <-  broom::tidy(x)
+#   k <- ncol(res)
+#   if (include.etwas) {
+#     res <-
+#         cbind(res[, -k], etwas=NA, res[k])
+#     }
+#   if (!include.column){
+#     res <-  res[, names(res) != "name der Spalte"]
+#   }
+#  
+#   
+#   prepare_output(res,
+#                  paste0("AV: ", AV),
+#                  paste0("Model: ", info$family[1]),
+#                  info$N,
+#                  info$labels)
+# }
+
+
+
+
+
 #' @rdname Ordnen
 #' @export
 Ordnen.default <- function(x, ...) {
@@ -187,12 +217,66 @@ Ordnen.lm <- function(x,
   
   colnames(res)[ncol(res)] <- "p.value" 
  
-  prepare_output(data.frame(Source= rownames(res), res),
+  prepare_output(data.frame(Source= rownames(res), res, stringsAsFactors = FALSE),
                  paste0("AV: ", AV),
                  paste0("Model: ", info$family[1]),
                  info$N,
                  info$labels)
 }
+
+
+#' @rdname Ordnen
+#' @export
+Ordnen.merModLmerTest <- function(x,
+                      # custom.model.names = NULL,
+                      # digits = 2,
+                      include.b = TRUE,
+                      include.se = TRUE,
+                      include.beta = FALSE,
+                      # include.eta = TRUE,
+                      include.ci = FALSE,
+                      # include.variance = TRUE,
+                      #  include.r = TRUE,
+                      #  include.ftest = FALSE,
+                      #  include.aic = TRUE,
+                      #  include.bic = include.aic,
+                      ci.level = .95,
+                      ...) {
+  info <- model_info(x)
+  AV <-
+    ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
+  coefs <- lmerTest::summary(x)$coefficients
+  
+  if (include.ci) {
+    cis<-  confint(x, level = ci.level)
+    k <- which(rownames(cis) == "(Intercept)")
+    
+    res <- cbind(coefs[, 1, drop = FALSE],
+                 cis[k:nrow(cis), ],
+                 coefs[,-1, drop = FALSE])
+  } else {
+    res <- coefs
+  }
+  
+  if (include.beta)  cat("\nBeta macht bei ", class(x), "keinen Sinn!\n")
+ 
+   if (!include.se) {
+    res <-  res[, colnames(res) != "Std. Error"]
+  }
+  
+  if (!include.b) {
+    res <-  res[, colnames(res) != "Estimate"]
+  }
+  
+  colnames(res)[ncol(res)] <- "p.value" 
+  
+  prepare_output(data.frame(Source= rownames(res), res, stringsAsFactors = FALSE),
+                 paste0("AV: ", AV),
+                 paste0("Model: ", info$family[1]),
+                 info$N,
+                 info$labels)
+}
+
 
 #' @rdname Ordnen
 #' @export

@@ -147,8 +147,7 @@ errate_statistik2(Formula, data, caption = "caption", note = "note",
 
 \method{APA2}{lmerMod}(...)
 
-\method{APA2}{merModLmerTest}(x, caption = "", note = "", anova = TRUE,
-  random.effects = TRUE, ...)
+\method{APA2}{merModLmerTest}(x, caption = NULL, note = NULL, ...)
 
 \method{APA2}{stp25_reliability}(x, caption = "", note = "")
 
@@ -559,6 +558,11 @@ APA2.list(fits,
           include.custom=list(
                        Wald=c("F(1)=245", "F(2)=245","F(3)=245"),
                        Chi=c("X(4)=2.45", "X(5)=24.5","X(6)=24.5")))
+
+
+
+fm1 <- lmer(Reaction ~ Days + (Days|Subject), sleepstudy)
+APA2(fm1)
 
 
 

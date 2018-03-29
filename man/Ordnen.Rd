@@ -6,6 +6,7 @@
 \alias{Ordnen.anova}
 \alias{Ordnen.aov}
 \alias{Ordnen.lm}
+\alias{Ordnen.merModLmerTest}
 \alias{Ordnen.polr}
 \title{Ordnen (Tidy)}
 \usage{
@@ -19,6 +20,9 @@ Ordnen(x, ...)
   include.meansq = FALSE, ...)
 
 \method{Ordnen}{lm}(x, include.b = TRUE, include.se = TRUE,
+  include.beta = FALSE, include.ci = FALSE, ci.level = 0.95, ...)
+
+\method{Ordnen}{merModLmerTest}(x, include.b = TRUE, include.se = TRUE,
   include.beta = FALSE, include.ci = FALSE, ci.level = 0.95, ...)
 
 \method{Ordnen}{polr}(x, digits = 2, include.b = TRUE, include.se = TRUE,
