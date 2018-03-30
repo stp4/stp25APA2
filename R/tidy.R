@@ -235,6 +235,7 @@ Ordnen.merModLmerTest <- function(x,
                       include.beta = FALSE,
                       # include.eta = TRUE,
                       include.ci = FALSE,
+                      include.odds = FALSE,
                       # include.variance = TRUE,
                       #  include.r = TRUE,
                       #  include.ftest = FALSE,
@@ -242,25 +243,46 @@ Ordnen.merModLmerTest <- function(x,
                       #  include.bic = include.aic,
                       ci.level = .95,
                       ...) {
+  cat("\n In Ordnen.merModLmerTest \n")
   info <- model_info(x)
   AV <-
     ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
   coefs <- lmerTest::summary(x)$coefficients
+  stat.coef <- coefs[,-1, drop = FALSE]
   
   if (include.ci) {
     cis<-  confint(x, level = ci.level)
     k <- which(rownames(cis) == "(Intercept)")
     
-    res <- cbind(coefs[, 1, drop = FALSE],
-                 cis[k:nrow(cis), ],
-                 coefs[,-1, drop = FALSE])
+    b.coef <- cbind(coefs[, 1, drop = FALSE],
+                 cis[k:nrow(cis), ]  
+                 )
   } else {
-    res <- coefs
+    b.coef <- coefs[, 1, drop = FALSE]
   }
+  
+  res<-
+  if (include.odds) {
+    odds <-
+      apply(b.coef, 2, function(x)
+        ifelse(x > 4.6, 100, round(exp(x), 2)))
+    
+    if(ncol(b.coef==1)) 
+    colnames(odds) <-  "OR" 
+    else   colnames(odds) <- c("OR", "low", "upr") 
+    
+    
+  #  print(b.coef)
+  #  print(odds)
+    b.coef <- cbind(b.coef, odds)
+   }
   
   if (include.beta)  cat("\nBeta macht bei ", class(x), "keinen Sinn!\n")
  
-   if (!include.se) {
+  res <- cbind(b.coef, stat.coef)
+    colnames(res)[ncol(res)] <- "p.value" 
+  
+  if (!include.se) {
     res <-  res[, colnames(res) != "Std. Error"]
   }
   
@@ -268,7 +290,6 @@ Ordnen.merModLmerTest <- function(x,
     res <-  res[, colnames(res) != "Estimate"]
   }
   
-  colnames(res)[ncol(res)] <- "p.value" 
   
   prepare_output(data.frame(Source= rownames(res), res, stringsAsFactors = FALSE),
                  paste0("AV: ", AV),
@@ -336,10 +357,12 @@ Ordnen.polr <- function(x,
   }
   if (include.odds) {
     odds <-
-      data.frame(plyr::llply(b.coef , function(x)
-        ifelse(x > 4.6, 100,  round(exp(
-          x
-        ), 2))))
+      apply(b.coef, 2, function(x)
+        ifelse(x > 4.6, 100, round(exp(x), 2)))
+      # data.frame(plyr::llply(b.coef , function(x)
+      #   ifelse(x > 4.6, 100,  round(exp(
+      #     x
+      #   ), 2))))
     
     names(odds) <- gsub(".b", "", paste0("OR.", names(odds)))
     

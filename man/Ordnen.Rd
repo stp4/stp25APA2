@@ -23,7 +23,8 @@ Ordnen(x, ...)
   include.beta = FALSE, include.ci = FALSE, ci.level = 0.95, ...)
 
 \method{Ordnen}{merModLmerTest}(x, include.b = TRUE, include.se = TRUE,
-  include.beta = FALSE, include.ci = FALSE, ci.level = 0.95, ...)
+  include.beta = FALSE, include.ci = FALSE, include.odds = FALSE,
+  ci.level = 0.95, ...)
 
 \method{Ordnen}{polr}(x, digits = 2, include.b = TRUE, include.se = TRUE,
   include.ci = FALSE, include.odds = TRUE, ...)

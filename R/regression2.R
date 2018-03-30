@@ -417,6 +417,22 @@ APA2.lmerMod <- function(...) {
 }
 
 
+#' @rdname APA2
+#' @export
+APA2.glmerMod <- function(x,
+                         caption = NULL ,
+                         note = NULL,
+                         include.random.effects = TRUE,
+                         include.odds=TRUE,
+                         ...){
+  APA2.merModLmerTest(x, 
+                      caption=caption,
+                      note=note,
+                      include.random.effects=include.random.effects,
+                      include.odds= include.odds,
+                      ...
+                      )  
+}
 
 
 #' @rdname APA2
@@ -430,26 +446,19 @@ APA2.lmerMod <- function(...) {
 APA2.merModLmerTest <- function(x,
                                 caption = NULL ,
                                 note = NULL,
-                               # anova = TRUE,
-                               include.random.effects = TRUE,
-                                # anova_type="F",   #  type = "III",
-                                #  F-werte (wie SPSS) oder Chi (car::Anova)
+                                include.random.effects = TRUE,
+                                include.odds=FALSE,
                                 ...) {
-   res <- Ordnen(x)  
-   
-   
- 
+   res <- Ordnen.merModLmerTest(x, 
+                                include.odds=include.odds, 
+                                ...)  
+
    if (is.null(caption))
      caption <- paste(attr(res, "caption"),
                       "Obs: ", attr(res, "N"))
-   
-   
-   
-   
-   Output(
-     fix_format(res),
-     caption =  caption,
-     note = note)
+  
+   Output(fix_format(res),
+     caption =  caption, note = note)
    
    if (include.random.effects){
      coef_ran <- broom::tidy(x)
@@ -458,10 +467,7 @@ APA2.merModLmerTest <- function(x,
      Output(fix_format(coef_ran), caption="random effects")
      }
    
-   
-   
    invisible(res)
-   
 }
 
 

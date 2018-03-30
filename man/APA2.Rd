@@ -33,6 +33,7 @@
 \alias{APA2.lm}
 \alias{APA2.lme}
 \alias{APA2.lmerMod}
+\alias{APA2.glmerMod}
 \alias{APA2.merModLmerTest}
 \alias{APA2.stp25_reliability}
 \alias{APA2.summary.survfit}
@@ -147,7 +148,11 @@ errate_statistik2(Formula, data, caption = "caption", note = "note",
 
 \method{APA2}{lmerMod}(...)
 
-\method{APA2}{merModLmerTest}(x, caption = NULL, note = NULL, ...)
+\method{APA2}{glmerMod}(x, caption = NULL, note = NULL,
+  include.random.effects = TRUE, include.odds = TRUE, ...)
+
+\method{APA2}{merModLmerTest}(x, caption = NULL, note = NULL,
+  include.random.effects = TRUE, include.odds = FALSE, ...)
 
 \method{APA2}{stp25_reliability}(x, caption = "", note = "")
 
