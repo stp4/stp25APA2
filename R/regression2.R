@@ -306,6 +306,8 @@ APA2.list <-
 APA2.lm <- function(x, 
                     caption=NULL,
                     note=paste("contrasts: ", paste(options()$contrasts, collapse=", ")),
+                    output = which_output(),
+                    col_names = NULL,
                     ...)
  {
   res <- Ordnen(x, ...)
@@ -317,7 +319,8 @@ APA2.lm <- function(x,
   Output(
     fix_format(res),
     caption =  caption,
-    note = note)
+    note = note, 
+    output=output, col_names=col_names)
   
   invisible(res)
 }
@@ -332,6 +335,8 @@ APA2.lm <- function(x,
 APA2.lme <- function(x,
                      caption = "" ,
                      note = "",
+                     output = which_output(),
+                     col_names = NULL,
                      type = "III",
                      anova = TRUE,
                      anova_type = "F",
@@ -387,10 +392,11 @@ APA2.lme <- function(x,
                    caption = paste("Goodness-of-fit", caption),
                    note = "R-Quadrat entspricht Marginal und Conditional")
   
-  Output(fit_param)
-  Output(goodnes)
+  Output(fit_param, output=output)
+  Output(goodnes, output=output)
+  
   if (anova)
-    Output(fit_param)
+    Output(fit_param, output=output)
   
   invisible(list(
     param = fit_param,
@@ -422,12 +428,15 @@ APA2.lmerMod <- function(...) {
 APA2.glmerMod <- function(x,
                          caption = NULL ,
                          note = NULL,
+                         output = which_output(),
+                         col_names = NULL,
                          include.random.effects = TRUE,
                          include.odds=TRUE,
                          ...){
   APA2.merModLmerTest(x, 
                       caption=caption,
-                      note=note,
+                      note=note, output = output ,
+                      col_names = col_names,
                       include.random.effects=include.random.effects,
                       include.odds= include.odds,
                       ...
@@ -446,8 +455,11 @@ APA2.glmerMod <- function(x,
 APA2.merModLmerTest <- function(x,
                                 caption = NULL ,
                                 note = NULL,
+                                output = which_output(),
+                                col_names = NULL,
                                 include.random.effects = TRUE,
                                 include.odds=FALSE,
+                                
                                 ...) {
    res <- Ordnen.merModLmerTest(x, 
                                 include.odds=include.odds, 
@@ -458,13 +470,13 @@ APA2.merModLmerTest <- function(x,
                       "Obs: ", attr(res, "N"))
   
    Output(fix_format(res),
-     caption =  caption, note = note)
+     caption =  caption, note = note, output=output, col_names=col_names)
    
    if (include.random.effects){
      coef_ran <- broom::tidy(x)
      coef_ran<- coef_ran[(nrow(res)+1):nrow(coef_ran), -c(3:4) ]
      
-     Output(fix_format(coef_ran), caption="random effects")
+     Output(fix_format(coef_ran), caption="random effects", output=output)
      }
    
    invisible(res)

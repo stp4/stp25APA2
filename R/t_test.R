@@ -179,8 +179,7 @@ APA2.htest <- function(x, caption = "", ...) {
         df = x$parameter,
         p.value = x$p.value
       ),
-      caption = paste(x$method, caption)
-      ,
+      caption = paste(x$method, caption),
       ...
     )
   else
@@ -212,8 +211,7 @@ APA2.pairwise.htest <-
           lead.zero = FALSE
         )
       ),
-      caption = paste(x$data.name, x$method, "(p-Value)", caption)
-      ,
+      caption = paste(x$data.name, x$method, "(p-Value)", caption),
       ...
     )
   }

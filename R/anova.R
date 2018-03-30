@@ -3,10 +3,15 @@
 APA2.anova <- function(x, 
                        caption=gsub("\\n", "", paste(attr(x, "heading"), collapse=", ") ),
                        note=paste("contrasts: ", paste(options()$contrasts, collapse=", ")),
+                       output = which_output(),
+                       col_names = NULL,
                        include.eta=FALSE,
                        ...
 ) {
-  APA2.lm(x, caption, note, ...)
+  APA2.lm(x, caption, note, 
+          output =  output ,
+          col_names = col_names,
+          ...)
 }
 #' @rdname APA2
 #' @description anova: APA2.aov(x, include.eta = TRUE) 
@@ -24,9 +29,13 @@ APA2.anova <- function(x,
 APA2.aov <- function(x, 
                      caption=NULL,
                      note=paste("contrasts: ", paste(options()$contrasts, collapse=", ")),
+                     output = which_output(),
+                     col_names = NULL,
                      ...
                      ) {
-  APA2.lm(x, caption, note, ...)
+  APA2.lm(x, caption, note, output =  output ,
+          col_names = col_names,
+          ...)
 }
 
  
@@ -36,12 +45,16 @@ APA2.aov <- function(x,
 APA2.summary.aov <- function(x,
                         caption = "ANOVA",
                         note = "",
+                        output = which_output(),
+                        col_names = NULL,
                         ...) {
   res <- fix_format(broom::tidy(x[[1]]))
   res <- prepare_output(cbind(Source = rownames(res), res),
                         caption = caption,
                         note = note)
-  Output(res)
+  Output(res,
+         output =  output ,
+         col_names = col_names)
   
   invisible(res)
 }
@@ -62,7 +75,9 @@ APA2.summary.aov <- function(x,
 #' 
 #' APA2(aov.ex3)
 #' 
-APA2.aovlist <- function(x, ...) {
+APA2.aovlist <- function(x, output = which_output(),
+                         col_names = NULL,
+                         ...) {
 
   x<-summary(x)
   
@@ -70,12 +85,12 @@ APA2.aovlist <- function(x, ...) {
     fix_data_frame2(x[[1]][[1]])
   x1<- cbind(Source=rownames(x1), x1)
   #APA_Table(npk.aov, type="anova")
-  Output(x1 , caption=names(x[1]))
+  Output(x1 , caption=names(x[1]), output=output)
   
   x2 <- 
     fix_data_frame2(x[[2]][[1]])
   x2<- cbind(Source=rownames(x2), xr)
-  Output(x2 , caption=names(x[2]))
+  Output(x2 , caption=names(x[2]), output=output)
   
   invisible(x)
 }

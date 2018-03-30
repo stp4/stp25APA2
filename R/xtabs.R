@@ -112,6 +112,8 @@ APA2.table <- function(x,
 APA2.xtabs  <- function(x,
                       caption = "" ,
                       note = "",
+                      output = which_output(),
+                      col_names = NULL,
                       digits = NULL,
                       test = FALSE,
                       type = c("fischer", "odds",
@@ -181,7 +183,7 @@ APA2.xtabs  <- function(x,
       if(include.total.sub) add.margins <- c(2, add.margins)
             res$xtab <- Format_xtabs(x, margin,
                                add.margins, include.percent, digits)
-      Output(res$xtab, caption, note)
+      Output(res$xtab, caption, note, output=output)
 
       if(test!=0)
          Text("Funktion noch nicht fertig. eventuell summary oder likelihood.test")
@@ -200,7 +202,11 @@ APA2.xtabs  <- function(x,
 #' @rdname APA_
 #' @description APA_Xtabs Kreuztabellen
 #' @export
-APA_Xtabs <- function(x, data, ...) {
+APA_Xtabs <- function(x, data, caption = "" ,
+                      note = "",
+                      output = which_output(),
+                      col_names = NULL,
+                      ...) {
   #is_formula2()
   if (stpvers::is_formula2(x))
     x <- stats::xtabs(x, data) #- altlast abfangen
@@ -209,7 +215,7 @@ APA_Xtabs <- function(x, data, ...) {
    x<- Klassifikation(x, ...)$xtab
   }
   
-  APA2(x)
+  APA2(x, caption, note, output=output)
   invisible(x)
 }
 
@@ -303,6 +309,8 @@ chisq_Statistik <- function(xtabs, type,
 APA2.loglm <- function(x,
                        caption = "Likelihood",
                        note = "",
+                       output = which_output(),
+                       col_names = NULL,
                        ...) {
   #-- Orginal MASS::print.loglm
   ts.array <- rbind(c(x$lrt, x$df,
@@ -321,7 +329,7 @@ APA2.loglm <- function(x,
   res <-
     prepare_output(fix_data_frame2(Test = rownames(ts.array), ts.array), caption, note)
   
-  Output(res)
+  Output(res, output=output)
   invisible(res)
 }
 

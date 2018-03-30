@@ -53,7 +53,9 @@ APA.biVar <- function(x, ...) {
 
 APA_Correlation <-
   function(x, ...,
-           caption = "Korrelation", note = NULL) {
+           caption = "Korrelation", note = NULL,
+           output = which_output(),
+           col_names = NULL) {
     res <- corr_tabel2(x, ...)
     note <- if (is.null(note))
       attr(res, "note")
@@ -62,7 +64,7 @@ APA_Correlation <-
       caption = caption, note = note, N = attr(res, "N"),
       labels = NA
     )
-    Output(fix_format(res))
+    Output(fix_format(res), output=output)
     invisible(res)
   }
 
