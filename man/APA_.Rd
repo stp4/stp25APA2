@@ -20,7 +20,8 @@
 \usage{
 APA_NULL(x, ...)
 
-APA_Correlation(x, ..., caption = "Korrelation", note = NULL)
+APA_Correlation(x, ..., caption = "Korrelation", note = NULL,
+  output = which_output(), col_names = NULL)
 
 APA_ICC(x, ..., caption = "ICC", type = c(1, 4))
 
@@ -48,7 +49,8 @@ APA_Ttest(x, data, var.equal = FALSE, paired = FALSE,
 
 APA_vif(..., caption = "VIF", notes = "")
 
-APA_Xtabs(x, data, ...)
+APA_Xtabs(x, data, caption = "", note = "", output = which_output(),
+  col_names = NULL, ...)
 }
 \arguments{
 \item{x}{An object to be converted into a tidy data.frame or Formula}

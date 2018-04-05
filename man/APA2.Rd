@@ -2,7 +2,7 @@
 % Please edit documentation in R/APA.R, R/anova.R, R/bland_altman.R,
 %   R/default_formula.R, R/effsize.R, R/icc.R, R/intern_errate_statistik.R,
 %   R/kano.R, R/likert.R, R/manova.R, R/multcomp.R, R/pca.R, R/polr.R,
-%   R/regression2.R, R/reliability.R, R/surv.R, R/t_test.R, R/xtabs.R
+%   R/regression2.R, R/reliability.R, R/step.R, R/surv.R, R/t_test.R, R/xtabs.R
 \name{APA2}
 \alias{APA2}
 \alias{APA2.NULL}
@@ -36,6 +36,7 @@
 \alias{APA2.glmerMod}
 \alias{APA2.merModLmerTest}
 \alias{APA2.stp25_reliability}
+\alias{APA2.step}
 \alias{APA2.summary.survfit}
 \alias{APA2.survfit}
 \alias{APA2.survdiff}
@@ -56,14 +57,17 @@ APA2(x, ...)
 
 \method{APA2}{anova}(x, caption = gsub("\\\\n", "", paste(attr(x, "heading"),
   collapse = ", ")), note = paste("contrasts: ", paste(options()$contrasts,
-  collapse = ", ")), include.eta = FALSE, ...)
+  collapse = ", ")), output = which_output(), col_names = NULL,
+  include.eta = FALSE, ...)
 
 \method{APA2}{aov}(x, caption = NULL, note = paste("contrasts: ",
-  paste(options()$contrasts, collapse = ", ")), ...)
+  paste(options()$contrasts, collapse = ", ")), output = which_output(),
+  col_names = NULL, ...)
 
-\method{APA2}{summary.aov}(x, caption = "ANOVA", note = "", ...)
+\method{APA2}{summary.aov}(x, caption = "ANOVA", note = "",
+  output = which_output(), col_names = NULL, ...)
 
-\method{APA2}{aovlist}(x, ...)
+\method{APA2}{aovlist}(x, output = which_output(), col_names = NULL, ...)
 
 \method{APA}{bland_altman}(x, ...)
 
@@ -141,20 +145,27 @@ errate_statistik2(Formula, data, caption = "caption", note = "note",
   "Goodness of fit"), output = stp25output:::which_output(), ...)
 
 \method{APA2}{lm}(x, caption = NULL, note = paste("contrasts: ",
-  paste(options()$contrasts, collapse = ", ")), ...)
+  paste(options()$contrasts, collapse = ", ")), output = which_output(),
+  col_names = NULL, ...)
 
-\method{APA2}{lme}(x, caption = "", note = "", type = "III",
-  anova = TRUE, anova_type = "F", ...)
+\method{APA2}{lme}(x, caption = "", note = "", output = which_output(),
+  col_names = NULL, type = "III", anova = TRUE, anova_type = "F", ...)
 
 \method{APA2}{lmerMod}(...)
 
 \method{APA2}{glmerMod}(x, caption = NULL, note = NULL,
+  output = which_output(), col_names = NULL,
   include.random.effects = TRUE, include.odds = TRUE, ...)
 
 \method{APA2}{merModLmerTest}(x, caption = NULL, note = NULL,
+  output = which_output(), col_names = NULL,
   include.random.effects = TRUE, include.odds = FALSE, ...)
 
 \method{APA2}{stp25_reliability}(x, caption = "", note = "")
+
+\method{APA2}{step}(x,
+  caption = "Backward elimination of non-significant effects of linear mixed effects model",
+  note = "", include.se = FALSE, include.df = FALSE, ...)
 
 \method{APA2}{summary.survfit}(fit, digits = NULL, percent = FALSE,
   include = c(time = "time", n.risk = "n.risk", n.event = "n.event", surv =
@@ -182,14 +193,16 @@ errate_statistik2(Formula, data, caption = "caption", note = "note",
   include.total.rows = include.total, include.percent = TRUE,
   margin = NULL, add.margins = seq_along(dim(x)), ...)
 
-\method{APA2}{xtabs}(x, caption = "", note = "", digits = NULL,
-  test = FALSE, type = c("fischer", "odds", "sensitivity", "chisquare",
-  "correlation", "r"), include.total = FALSE,
-  include.total.columns = include.total, include.total.sub = include.total,
-  include.total.rows = include.total, include.percent = TRUE,
-  margin = NULL, add.margins = seq_along(dim(x)), ...)
+\method{APA2}{xtabs}(x, caption = "", note = "", output = which_output(),
+  col_names = NULL, digits = NULL, test = FALSE, type = c("fischer",
+  "odds", "sensitivity", "chisquare", "correlation", "r"),
+  include.total = FALSE, include.total.columns = include.total,
+  include.total.sub = include.total, include.total.rows = include.total,
+  include.percent = TRUE, margin = NULL, add.margins = seq_along(dim(x)),
+  ...)
 
-\method{APA2}{loglm}(x, caption = "Likelihood", note = "", ...)
+\method{APA2}{loglm}(x, caption = "Likelihood", note = "",
+  output = which_output(), col_names = NULL, ...)
 }
 \arguments{
 \item{x}{Ein R Objekt oder eine Formel oder ein data.frame
@@ -259,6 +272,8 @@ labels = c("low", "neutral", "high")}
 \item{rgroup}{Zwischen Beschriftung}
 
 \item{anova_type}{bei lme:  "F"  F-werte (wie SPSS) oder Chi (car::Anova)}
+
+\item{include.df}{df mit ausgeben}
 
 \item{include.total.columns, include.total.sub, include.total.rows}{xtabs: default = FALSE total/sum}
 
@@ -576,6 +591,22 @@ APA2(fm1)
  APA2(res)
  
  
+# require(stpvers)
+require(lmerTest)
+summary(lm1 <- lm(Fertility ~ ., data = swiss))
+slm1 <- stats::step(lm1)
+APA2(slm1)
+
+m <- lmerTest::lmer(
+  Informed.liking ~ Product * Information * Gender +  
+  (1 | Consumer) + (1 | Product:Consumer),
+  data = ham
+)
+#elimination of non-significant effects
+s <- lmerTest::step(m)
+
+APA2(s)
+
 #-- APA2.summary.table
 
 a <- letters[1:3]

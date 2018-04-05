@@ -23,7 +23,7 @@
 #' @examples
 #'
 #'
-#' ##library(stp25)
+#'  
 #' ##library(stp25data)
 #' ##Projekt("html")
 #' summary(schools)
