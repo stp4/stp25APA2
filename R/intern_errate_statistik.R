@@ -518,10 +518,16 @@ errate_statistik3 <-
                                               "kruskal.test","h.test",
                                               "chisq.test","t.test", 
                                               "aov", "anova",
-                                              "SPSS", "Hmisc"))
-     include.test <- TRUE
-      }  else which_test <- TRUE
- 
+                                              "SPSS", "Hmisc",
+                                              "shapiro.test", "ks.test" #Kolmogorov-Smirnov-Anpassungstest mit SPSS
+                                              ))
+     if (any(which_test %in% c("shapiro.test", "KS.test"))) {
+       include.test <- FALSE # Einzeltest
+     } else {
+       include.test <- TRUE
+     }
+    }  else {
+      which_test <- TRUE}
     
     if (type[1] == "multiresponse")
       X$measure <- rep("multi", length(X$measure))
@@ -541,7 +547,23 @@ errate_statistik3 <-
    
       
       for (i in seq_len(length(measure.vars)))
-        ANS <- rbind(ANS, Mittelwert_Einzel(i, X$data[[i]]))
+      { 
+        mymeans<- Mittelwert_Einzel(i, X$data[[i]])
+        if( which_test == "shapiro.test" ) mymeans$shapiro.test <- APA(shapiro.test(
+                                                                  na.omit(as_numeric(X$data[[i]]))))
+        if( which_test == "ks.test" ){ 
+          x<- na.omit(as_numeric(X$data[[i]]))
+       #   x<- hyper$chol0 
+       #    APA( ks.test(x,"pnorm",mean(x),sd(x)) )
+       #   str(ks.test(x,"pnorm",mean(x),sd(x)))
+          
+          mymeans$ks.test <- APA( ks.test(x,"pnorm",mean(x),sd(x)))
+        
+        
+        }
+        ANS <- rbind(ANS, mymeans)
+        
+      }
      
       ANS$Item <-
         paste(ANS$Item, ANS$lev) # Spalte Characteristics entfernen

@@ -133,7 +133,9 @@ Tabelle.default <- function(...,
       include.total = include.total,
       include.test = include.test, # "wilcox.test","u.test",  "kruskal.test","h.test",  
                                    # "chisq.test","t.test",  "aov", "anova", 
-                                   # "SPSS", "Hmisc"
+                                   # "SPSS", "Hmisc" 
+                                   #         "shapiro.test" "KS.test"
+                                  #  Kolmogorov-Smirnov-Anpassungstest mit SPSS
    #   include.p = include.p,
    #   include.stars = include.stars,
     #  include.mean=include.mean,
