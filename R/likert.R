@@ -149,7 +149,7 @@ APA_Likert <- function(...){
 #' APA2(Res1)
 #' APA2(Res2 <- Likert(.~ Geschlecht, DF2 ))
 #'
-#' require(HH)# ?likertplot
+#' require(HH)  # ?likertplot
 #'
 #' windows(7,3)
 #'  likertplot( Item   ~ .| Geschlecht , data=Res2$results,
@@ -196,13 +196,14 @@ Likert <- function(x, ...) {
 #' brewer_pal_likert( ) #Default 5 Stufen mit Grau in der Mitte
 #' #  HH::brewer.pal.likert(5, "RdBu", "gray80")
 #'
-#' @importFrom HH brewer.pal.likert
+
 brewer_pal_likert <- function(n=5,
                               name="RdBu",
                               middle.color="gray80",
                               min_gray=10,
                               max_gray=60
                               ){
+  # importFrom HH brewer.pal.likert
 if(tolower(name)=="gray"){
   min_gray<- 1- min_gray/100
   max_gray<- 1- max_gray/100

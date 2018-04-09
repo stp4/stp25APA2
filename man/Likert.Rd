@@ -78,7 +78,7 @@ Res1 <- Likert(~., DF2 )
 APA2(Res1)
 APA2(Res2 <- Likert(.~ Geschlecht, DF2 ))
 
-require(HH)# ?likertplot
+require(HH)  # ?likertplot
 
 windows(7,3)
  likertplot( Item   ~ .| Geschlecht , data=Res2$results,

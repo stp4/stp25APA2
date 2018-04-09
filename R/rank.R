@@ -19,8 +19,8 @@
 #' 
 #' \dontrun{
 #' #require(HH)
-#' #library(stp5)
-#' #Start("html")
+#' 
+#' 
 #' DF <-structure(list(
 #'         Geschlecht = structure(c(1L, 2L, 2L, 1L, 1L, 2L, 2L, 1L, 2L, 2L, 1L, 2L, 1L, 1L, 2L, 2L, 1L, 1L, 2L, 1L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 1L, 2L, 2L, 1L, 2L, 2L, 2L, 2L, 2L, 1L, 1L, 1L, 1L, 1L, 2L, 1L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 1L, 2L, 1L, 2L, 1L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 2L, 1L, 2L),
 #'                                .Label = c("Maennlich", "Weiblich"), class = "factor"),
