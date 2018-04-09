@@ -55,8 +55,25 @@ APA_Correlation <-
   function(x, ...,
            caption = "Korrelation", note = NULL,
            output = which_output(),
-           col_names = NULL) {
-    res <- corr_tabel2(x, ...)
+           col_names = NULL,
+           cor_diagonale_up = TRUE,
+           stars = TRUE,
+           p.value = FALSE,
+ 
+           include.mean = FALSE,
+           include.n = TRUE
+           
+           ) {
+    print(include.n)
+    res <- corr_tabel2(x, ...,
+                       cor_diagonale_up = cor_diagonale_up,
+                       stars = stars,
+                       p.value = p.value,
+                       # mean = FALSE, # Veraltet
+                       include.mean = include.mean,
+                       include.n = include.n
+                       
+                       )
     note <- if (is.null(note))
       attr(res, "note")
     res <- prepare_output(
@@ -118,6 +135,7 @@ corr_tabel.data.frame <- function(.data,
       Formula <- formula(paste(paste(vars, collapse = "+"), "~",
                                paste(by, collapse = "+")))
   }
+  
   corr_tabel.formula(
     Formula, .data, groups,
     type,
@@ -232,6 +250,15 @@ corr_tabel.formula <-
       
       ans$row_name <- row_name
     }
+    
+      if(!include.n){
+    
+    #  cat("\n", include.n, "\n\n-----\n")
+    # grep("_N", c("jdhdz", "hdgdt_N", "sfsg_N"))
+    #  print( grep("_N", names(ans)) )
+     ans<- ans[, - grep("_N", names(ans))]
+      }
+    
     ans
   }
 
@@ -252,7 +279,11 @@ corr_tabel2 <- function(...,
                         include.mean = FALSE,
                         include.n = TRUE)
 {
-  ans <- corr_tabel(...)
+  cat("incorr_tabel2:\n")
+  print(include.n)
+  ans <- corr_tabel(..., include.n=include.n)
+  print(class(ans))
+  print(ans)
   #cat("\ninclude.mean =", include.mean, "\n")
   res <- data.frame()
   if (class(ans) == "rcorr") {
@@ -303,12 +334,13 @@ corr_tabel2 <- function(...,
       factor(res[, 1], names(ans$row_name), paste(my_num, ans$row_name)) # Labels
     colnames(res)[2:ncol(res)] <- my_num
 
-    if(!include.n){
+   # if(!include.n){
 
-      cat("\n", include.n, "\n\n-----\n")
-      # grep("_N", c("jdhdz", "hdgdt_N", "sfsg_"))
-      #ans<- ans[- grep("_N", names(ans))]
-    }
+    #  cat("\n", include.n, "\n\n-----\n")
+      # grep("_N", c("jdhdz", "hdgdt_N", "sfsg_N"))
+    #  print( grep("_N", names(ans)) )
+    #  ans<- ans[, - grep("_N", names(ans))]
+   # }
 
     if (include.mean)
       res <- cbind(res[1], "M (SD)" = ans$mean, res[2:ncol(res)])
