@@ -314,6 +314,7 @@ Ordnen.polr <- function(x,
     ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
   
   res <- summary(x)
+  
   Intercepts <- names(res$zeta)
   ## store table
   ctable <- coef(res)
@@ -328,6 +329,7 @@ Ordnen.polr <- function(x,
     "p.value" = p,
     stringsAsFactors = FALSE
   )
+
   
   n1 <- nrow(ctable)
   n2 <- length(Intercepts)
@@ -340,7 +342,7 @@ Ordnen.polr <- function(x,
   b.interc <- intercepts[, 2, drop = FALSE]
   stat.coef <- coefficients[, 3:5, drop = FALSE]
   stat.interc <- intercepts[, 3:5, drop = FALSE]
-  
+
   
   if (include.ci) {
     x <- update(x, Hess = TRUE)
@@ -350,29 +352,34 @@ Ordnen.polr <- function(x,
     b.coef <- cbind(b.coef, ci)
     b.interc <- cbind(b.interc,  low = NA, upr = NA)
   }
+
   
   if (include.b) {
     source.coef <- cbind(source.coef, b.coef)
     source.interc <- cbind(source.interc, b.interc)
   }
+
   if (include.odds) {
-    odds <-
-      apply(b.coef, 2, function(x)
-        ifelse(x > 4.6, 100, round(exp(x), 2)))
-      # data.frame(plyr::llply(b.coef , function(x)
-      #   ifelse(x > 4.6, 100,  round(exp(
-      #     x
-      #   ), 2))))
-    
-    names(odds) <- gsub(".b", "", paste0("OR.", names(odds)))
-    
-    source.coef <- cbind(source.coef, odds)
-    source.interc$OR <-
-      ifelse(b.interc[, 1] > 4.6, 100,  round(exp(b.interc[, 1]), 2))
-    if (length(names(odds)) > 1)
-      source.interc <- cbind(source.interc, OR.low = NA, OR.upr = NA)
-    
+    if(include.ci){
+      source.coef$OR <-
+        ifelse(source.coef$b > 4.6, 100,  round(exp(source.coef$b), 2))
+      source.coef$OR.low <-
+        ifelse(source.coef$low > 4.6, 100,  round(exp(source.coef$low), 2))
+      source.coef$OR.upr <-
+        ifelse(source.coef$upr > 4.6, 100,  round(exp(source.coef$upr), 2))
+      
+      source.interc$OR <-
+        ifelse(source.interc$b > 4.6, 100,  round(exp(source.interc$b), 2))
+      source.interc$OR.low <- NA
+      source.interc$OR.upr <- NA
+    }
+    else{
+      source.coef$OR <- ifelse(source.coef$b > 4.6, 100,  round(exp(source.coef$b), 2))
+      source.interc$OR <- ifelse(source.interc$b > 4.6, 100,  round(exp(source.interc$b), 2))
+    }
   }
+  
+
   
   if (include.se) {
     source.coef <- cbind(source.coef, stat.coef)
@@ -384,7 +391,7 @@ Ordnen.polr <- function(x,
   }
   
   source.interc$Source <- paste0("(",  source.interc$Source, ")")
-  
+   
   prepare_output(rbind(source.interc, source.coef),
                  paste0("AV: ", AV),
                  paste0("Model: ", info$family[1]),
