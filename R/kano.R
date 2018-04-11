@@ -232,29 +232,29 @@ Kano <-   function(x, ...) {
 
 #' @rdname Kano
 #' @export
-Kano.data.frame <- function(x, na.action=na.pass, ...){
-  
-  Data <- Formula_Data(~., x, subset, na.action)
+Kano.data.frame <- function(x, na.action = na.omit, ...) {
+  Data <- Formula_Data( ~ ., x, subset, na.action)
   X <- Data$Y_data
   grouping <- Data$X_data
-  
   Kano_default(X, grouping, ...)
   
 }
 
 
 #' @param subset  an Formula_Data
-#' @param na.action NA's entfernen odere behalten default ist na.pass()
+#' @param na.action NA's entfernen odere behalten default ist na.omit()
 #'
 #' @rdname Kano
 #' @export
-Kano.formula <- function(x ,data, subset, na.action=na.pass, ...){
-    Data <- Formula_Data(x, data, subset, na.action)
-    X <- Data$Y_data
-    grouping <- Data$X_data
-    Kano_default(X, grouping, ...)
-    
-}
+Kano.formula <- function(x , data, subset, na.action = na.omit, ...) {
+  Data <- Formula_Data(x, data, subset, na.action)
+  X <- Data$Y_data
+  grouping <- Data$X_data
+  
+  Kano_default(X, grouping, ...)
+  }
+
+
 Kano_default<-function(X,
                 grouping  = NULL, 
                 type = 5, # langversion oder Kurzversion
@@ -266,7 +266,6 @@ Kano_default<-function(X,
                 vars_dysfunc = NULL,
                 ...
 ){
- 
   n <- ncol(X)
   kano_levels <-  c("M", "O", "A", "I", "R", "Q")
   attributes <- c(
@@ -298,6 +297,7 @@ Kano_default<-function(X,
   
   
   nams <- Hmisc::label(X[, vars])
+  
   nams <- ifelse(nams == ""
                  , gsub(" $", "", gsub("[\\._]+", " ", names(nams)), perl = T)
                  , nams)
@@ -310,9 +310,10 @@ Kano_default<-function(X,
   }
   
  
-  if(any(sapply(X, function(x) min(x) <1 | max(x)>type) )){
+  
+  if(any(sapply(X, function(x) min(x, na.rm=TRUE) <1 | max(x, na.rm=TRUE)>type) )){
     print(lapply(X, function(x) range(x, na.rm=TRUE)) )
-    stop("Zu viele Levels!")
+    stop("Zu viele Levels! Nur 5 oder 3 sind bei Kano erlaubt.")
   } 
   
   Scors <-  X 

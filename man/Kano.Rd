@@ -12,7 +12,7 @@ Kano(x, ...)
 
 \method{Kano}{data.frame}(x, na.action = na.pass, ...)
 
-\method{Kano}{formula}(x, data, subset, na.action = na.pass, ...)
+\method{Kano}{formula}(x, data, subset, na.action = na.omit, ...)
 
 Kano_Auswertung(x, caption = "", note = "", formula = x$formula,
   data = x$molten[-1], digits = options()$stp4$apa.style$prozent$digits[1],
@@ -34,7 +34,7 @@ kano_plot(x, main = "", xlim = c(0, 1), ylim = c(0, 1), mar = c(0, 1, 2,
 
 \item{...}{nicht benutzte Argumente}
 
-\item{na.action}{NA's entfernen odere behalten default ist na.pass()}
+\item{na.action}{NA's entfernen odere behalten default ist na.omit()}
 
 \item{subset}{an Formula_Data}
 
