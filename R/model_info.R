@@ -265,8 +265,8 @@ model_info.polr<- function(x){
   list(
     class = class(x)[1],
     family = x$method ,
-    y = names(house.plr$model)[1],
-    x = names(house.plr$model)[-1],
+    y = names(x$model)[1],
+    x = names(x$model)[-1],
     labels = GetLabelOrName(x$model),
     N= x$n)
 }
