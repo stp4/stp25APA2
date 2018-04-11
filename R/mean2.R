@@ -646,7 +646,7 @@ Multi2default<- function(x,
     x<- as.factor(x, c(TRUE, FALSE))
   }
   else if(is.numeric(x) & is.integer(x)) {
-    x <- facror( ifelse(x == 1, 1, 0), 1:0)
+    x <- factor( ifelse(x == 1, 1, 0), 1:0)
 
   } else {
     return( data.frame(
