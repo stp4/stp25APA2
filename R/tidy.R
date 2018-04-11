@@ -390,7 +390,7 @@ Ordnen.polr <- function(x,
       cbind(source.interc, stat.interc[-1, drop = FALSE])
   }
   
-  source.interc$Source <- paste0("(",  source.interc$Source, ")")
+  source.interc$Source <- paste0("Intercept(",  source.interc$Source, ")")
    
   prepare_output(rbind(source.interc, source.coef),
                  paste0("AV: ", AV),
