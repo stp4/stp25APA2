@@ -267,6 +267,7 @@ Kano_default<-function(X,
                 ...
 ){
   n <- ncol(X)
+  note<- ""
   kano_levels <-  c("M", "O", "A", "I", "R", "Q")
   attributes <- c(
     "Must-be",    "One-dimensional",
@@ -383,6 +384,10 @@ cat("\ntransform kano (type",type,")")
 
   Errorrs <- rep(FALSE, n)
   if (rm_Q < 10000 | rm_I < 10000) {
+    note <- "Filter: "
+    if (rm_Q < 10000) note<-  paste(note, "Entferne Fälle die mehr als", rm_Q, "(Q)-Antworten geben. ")
+    if (rm_I < 10000) note<-  paste(note, "Entferne Fälle die mehr als", rm_I, "(I)-Antworten geben.")
+    
     Errorrs <- apply(ANS, 1,
                      function(x)
                        any(c(
@@ -419,7 +424,8 @@ cat("\ntransform kano (type",type,")")
             removed=Errorrs,
             N=nrow(data),
             attributes=  attributes,
-            answers= answers[1:type])
+            answers= answers[1:type],
+            note=note)
   class(res)<-"Kano"
   
  res 
@@ -597,6 +603,7 @@ Kano_Auswertung <- function(x,
   
   names(ans_value) <- var_names
   ans <- cbind(ans[-n_names], ans_value)
+  
   prepare_output(ans, caption = caption, note = note)
   }
   else{
@@ -618,8 +625,8 @@ Kano_Auswertung <- function(x,
 
 #' @rdname APA2
 #' @export
-APA2.Kano <- function(x, caption="", note="", ...) {
-  
+APA2.Kano <- function(x, caption="", note=NULL, ...) {
+  if(is.null(note)) note <- x$note
  ans <- Kano_Auswertung(x, caption=caption, note=note, ...)
  Output(ans)
  invisible(ans) 
