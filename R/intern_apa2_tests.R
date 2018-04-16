@@ -5,9 +5,8 @@
 
 # Correlation -------------------------------------------------------------
 # in Dokument APA2_Correlation.R
-#corr_1
-#corr_2
-#Corr2
+ 
+ 
 
 
 

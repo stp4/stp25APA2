@@ -14,7 +14,8 @@ berechne<- function(...){UseMethod("berechne")}
 #' @param fm formel
 #' @param x Namen der  measure.vars
 #' @param type mean, median
-#' @param measure.name,measure,by Variablen name des Ergebnisses. In corr_tabel() und Tabelle() measure.name  ="value"
+#' @param measure.name,measure,by Variablen name des Ergebnisses. 
+#' In Tabelle() measure.name  ="value"
 #' @param digits Nachkommastellen
 #' @param fun Function an plyr::ddply
 #' @export
