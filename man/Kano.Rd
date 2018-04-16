@@ -10,7 +10,7 @@
 \usage{
 Kano(x, ...)
 
-\method{Kano}{data.frame}(x, na.action = na.pass, ...)
+\method{Kano}{data.frame}(x, na.action = na.omit, ...)
 
 \method{Kano}{formula}(x, data, subset, na.action = na.omit, ...)
 

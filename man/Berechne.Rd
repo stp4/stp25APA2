@@ -85,7 +85,8 @@ Prozent2default(x, digits = 0, n = length(x), exclude = NA,
 
 \item{digits}{Nachkommastellen}
 
-\item{measure.name, measure, by}{Variablen name des Ergebnisses. In corr_tabel() und Tabelle() measure.name  ="value"}
+\item{measure.name, measure, by}{Variablen name des Ergebnisses. 
+In Tabelle() measure.name  ="value"}
 
 \item{.data}{Daten}
 

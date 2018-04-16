@@ -20,8 +20,11 @@
 \usage{
 APA_NULL(x, ...)
 
-APA_Correlation(x, ..., caption = "Korrelation", note = NULL,
-  output = which_output(), col_names = NULL)
+APA_Correlation(..., caption = "Korrelation", note = NULL,
+  output = which_output(), col_names = NULL, cor_diagonale_up = TRUE,
+  type = c("pearson", "spearman"), include.mean = FALSE, include.n = TRUE,
+  stars = TRUE, p.value = FALSE, include.stars = stars,
+  include.p = p.value)
 
 APA_ICC(x, ..., caption = "ICC", type = c(1, 4))
 
@@ -59,6 +62,8 @@ APA_Xtabs(x, data, caption = "", note = "", output = which_output(),
 
 \item{caption, note}{Ueberschrift an Output}
 
+\item{include.mean}{Mittelwerte mit SD}
+
 \item{data}{data.frame wenn x eine Formel ist}
 
 \item{include.pca, include.plot, include.kmo}{type=c("pca", "plot", "kmo")}
@@ -66,8 +71,6 @@ APA_Xtabs(x, data, caption = "", note = "", output = which_output(),
 \item{w, h, main}{Grafik Fenster w=5 h=5 Ueberschrift}
 
 \item{var.equal, paired, alternative}{an t.Test var.equal = FALSE  "two.sided"}
-
-\item{include.mean}{Mittelwerte mit SD}
 
 \item{include.d}{Cohens d}
 
@@ -84,8 +87,8 @@ a data.frame or list with data.frame
 All functions in stringr start with APA_ and take a Object (formula, data.frame, lm, ...) 
 as the first argument.
 
-APA_Correlation: Korrelationstabelle (Interkorrelationen mit hilfe
-der Funktion \code{\link[Hmisc]{rcorr}}. Erlaubt ist die getrennte Auswertung ueber groups bzw mit by.
+APA_Correlation: Korrelationstabelle (Interkorrelationen mit der Hilfe
+der Funktion  Hmisc::rcorr. Erlaubt ist die getrennte Auswertung ueber by=~b
 
 APA_ICC  Intra-Klassen-Korrelation ( mit psych ).
 
@@ -100,16 +103,31 @@ APA_vif:  variance inflation factor, aka VIF
 APA_Xtabs Kreuztabellen
 }
 \examples{
-n<- 2*8
-e<- rnorm(n)*10
-data<- data.frame(a=rnorm(n) + e,
-                  b=rnorm(n), c=rnorm(n), d=rnorm(n) + e,
-                  g=gl(2, 8, labels = c("Control", "Treat")))
-#
-APA_Correlation(~a+b+c, data, caption="~a+b+c")
 
-APA_Correlation(~a+b+c, data, caption="mit Output: ~a+b+c")
+n <- 2 * 20
+e <- rnorm(n)
+dat <- Label(
+  data.frame(
+    a = rnorm(n) + e / 2,
+    b = rnorm(n) + e,
+    c = rnorm(n),
+    d = rnorm(n) + e * 10,
+    g = gl(2, 20, labels = c("Control", "Treat"))
+  ),
+  a = "Alpha",
+  b = "Beta",
+  c = "Gamma"
+)
 
+
+APA_Correlation( ~ a + b + c, dat)
+APA_Correlation(a ~ c, dat)
+APA_Correlation(a + b + c ~ d, dat)
+APA_Correlation(a + b ~ c +  d, dat)
+APA_Correlation(a + b + c ~ d, dat, groups = ~ g)
+APA_Correlation( ~ a + b + c, dat)
+APA_Correlation( ~ a + b + c, dat, include.p = TRUE)
+APA_Correlation( ~ a + b + c, dat, include.p = TRUE, include.stars = FALSE)
 
  # library(arm)
  # windows(7,7)

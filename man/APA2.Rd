@@ -105,7 +105,7 @@ errate_statistik2(Formula, data, caption = "caption", note = "note",
   digits.percent = options()$stp25$apa.style$prozent$digits[1],
   test_name = "Hmisc", ...)
 
-\method{APA2}{Kano}(x, caption = "", note = "", ...)
+\method{APA2}{Kano}(x, caption = "", note = NULL, ...)
 
 \method{print}{Kano}(x, ...)
 

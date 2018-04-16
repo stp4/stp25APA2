@@ -35,7 +35,8 @@ makeNamesNum(measure, data, meAsNum = grepl("^[[:digit:]]", measure))
 
 prepare_data2(...)
 
-\method{prepare_data2}{formula}(x, data, subset, na.action = na.pass)
+\method{prepare_data2}{formula}(x, data, subset, na.action = na.pass,
+  groups = NULL)
 
 \method{prepare_data2}{data.frame}(.data, ..., by = "1", groups = NULL,
   subset, na.action = na.pass)
