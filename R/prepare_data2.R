@@ -50,8 +50,16 @@ prepare_data2.formula <-
   function(x,
            data,
            subset,
-           na.action = na.pass) {
+           na.action = na.pass,
+           groups = NULL) {
 
+if(!is.null(groups)){
+  #is_formula2(x)
+      x<- formula(
+        paste(
+        deparse(x), "|", gsub("~", "", deparse(groups))))
+      }
+    
  if(!tibble::is_tibble(data))
       data <- tibble::as_tibble(data)
 
@@ -432,7 +440,8 @@ print.stp25data<- function(x){
   cat("\nrow_name: ", paste(x$row_name, collapse=", "))
 cat("\nby: ")
 print(x$by)
-  cat("\ngroup.vars: ", paste(x$group.vars, collapse=", "))
+  cat("\ngroup.vars: ", paste(x$group.vars, collapse=", "), "\n")
+  
 #  cat("\ncol_name: ", paste(x$col_name, collapse=", "),"\n")
   print(head(x$data))
 }
