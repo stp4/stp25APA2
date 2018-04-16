@@ -1,8 +1,8 @@
 Package: stp25APA2
 Type: Package
 Title: Resultate Formatiern
-Version: 0.2.3
-Date: 2018-02-18
+Version: 0.2.4
+Date: 2018-04-13
 Author: Wolfgang Peter
 Maintainer: Wolfgang Peter <w.peter@statistik-peter.at>
 Description: APA-Style Tabellen
