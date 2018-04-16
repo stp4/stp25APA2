@@ -385,14 +385,16 @@ cat("\ntransform kano (type",type,")")
   Errorrs <- rep(FALSE, n)
   if (rm_Q < 10000 | rm_I < 10000) {
     note <- "Filter: "
-    if (rm_Q < 10000) note<-  paste(note, "Entferne Fälle die mehr als", rm_Q, "(Q)-Antworten geben. ")
-    if (rm_I < 10000) note<-  paste(note, "Entferne Fälle die mehr als", rm_I, "(I)-Antworten geben.")
+    if (rm_Q < 10000) note<-  paste(note, "Entferne Fälle die mehr als", rm_Q, "(Q)-Antworten haben ")
+    if (rm_I < 10000) note<-  paste(note, "Entferne Fälle die mehr als", rm_I, "(I)-Antworten haben")
     
     Errorrs <- apply(ANS, 1,
                      function(x)
                        any(c(
                          sum(x == "Q", na.rm = TRUE) > rm_Q , sum(x == "I", na.rm = TRUE) > rm_I
                        )))
+    n_rm <- sum(Errorrs)
+    note<- paste(note, "(N =", length(Errorrs) - n_rm, ", removed =", n_rm, ")")
     
     ANS[which(Errorrs), ] <-  NA
     Scors[which(Errorrs), ] <- NA
