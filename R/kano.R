@@ -22,7 +22,18 @@
 #'  \subsection{R Rueckweisende- Faktoren }{
 #'  Ablehnende-Merkmale (\strong{R}) werden vom Kunden abgelehnt. Fuehren bei Vorhandensein zu Unzufriedenheit, bei Fehlen jedoch nicht zu Zufriedenheit.
 #'  }
-
+#'  
+#'  
+#'  
+#'  \tabular{lrrrrr}{
+#'  \strong{Func/Dyfunc} \tab like (1) \tab must-be (2) \tab neutral (3) \tab live with (4)  \tab dislike (5) \cr
+#'    like (1) \tab O \tab A \tab A \tab A \tab O \cr
+#'    must-be (2) \tab R \tab I \tab I \tab I \tab M \cr
+#'    neutral (3) \tab R \tab I \tab I \tab I \tab M \cr
+#'    live with (4) \tab R \tab I \tab I \tab I \tab M \cr
+#'    dislike (5) \tab R \tab R \tab R \tab R \tab Q 
+#'    
+#'      }
 #' 
 #' 
 #' \strong{Kodierung}
@@ -35,57 +46,6 @@
 #'
 #'
 #'
-#'
-#' func=1 & dysf=1 = "Q"
-#' 
-#' func=1 & dysf=2 = "A"
-#' 
-#' func=1 & dysf=3 = "A"
-#' 
-#' func=1 & dysf=4 = "A"
-#' 
-#' func=1 & dysf=5 = "O"
-#' 
-#' func=2 & dysf=1 = "R"
-#' 
-#' func=2 & dysf=2 = "I"
-#' 
-#' func=2 & dysf=3 = "I"
-#' 
-#' func=2 & dysf=4 = "I"
-#' 
-#' func=2 & dysf=5 = "M"
-#' 
-#' func=3 & dysf=1 = "R"
-#' 
-#' func=3 & dysf=2 = "I"
-#' 
-#' func=3 & dysf=3 = "I"
-#' 
-#' func=3 & dysf=4 = "I"
-#' 
-#' func=3 & dysf=5 = "M"
-#' 
-#' func=4 & dysf=1 = "R"
-#' 
-#' func=4 & dysf=2 = "I"
-#' 
-#' func=4 & dysf=3 = "I"
-#' 
-#' func=4 & dysf=4 = "I"
-#' 
-#' func=4 & dysf=5 = "M"
-#' 
-#' func=5 & dysf=1 = "R"
-#' 
-#' func=5 & dysf=2 = "R"
-#' 
-#' func=5 & dysf=3 = "R"
-#' 
-#' func=5 & dysf=4 = "R"
-#' 
-#' func=5 & dysf=5 = "Q"
-#' 
 #' 
 #' M O A I R Q Heufigkeit
 #'
@@ -135,47 +95,47 @@
 #' 
 #' #  require(stpvers)
 #' #   Projekt("html")
-#' 
-#' kano_labels <- c( "I like it that way", 
-#'                   "It must be that way",
-#'                   "I am neutral",
-#'                   "I can live with it that way",
-#'                   "I dislike it that whay")
-#'                   
 #'  
+#' kano_labels <- c( "like",
+#'                   "must be",
+#'                   "neutral",
+#'                   "live with",
+#'                   "dislike")
+#' 
+#' 
 #' DF<-GetData("   Geschlecht Edu f1 d1 f2 d2 f3 d3 f4 d4 f5  d5  f6  d6  f7  d7  f8  d8  f9  d9  f10 d10
-#'                  1           w  med 1  5  1  2  1  3  1  5  1   5   5   1   3   3   5   2   5   1   5   2
-#'                  2           w  med 1  5  2  5  2  3  1  5  1   5   2   5   3   3   2   5   2   5   5   2
-#'                  3           m  med 1  5  3  5  1  5  3  4  1   5   5   1   3   3   5   2   5   1   5   2
-#'                  4           m  med 1  5  4  2  1  5  4  4  1   5   5   1   3   3   5   2   5   1   5   2
-#'                  5           w  med 1  5  5  5  5  3  1  5  1   5   5   1   3   3   5   2   5   1   5   2
-#'                  6           w  med NA NA NA NA NA NA NA NA NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA
-#'                  7           m  med 1  5  1  5  2  5  1  5  1   5   2   5   3   3   1   5   2   5   5   2
-#'                  8           w  med 1  5  2  5  1  3  1  5  1   5   3   3   3   3   1   4   1   3   5   2
-#'                  9           m  med 1  5  2  5  2  3  1  3  1   5   1   3   3   3   2   4   3   3   5   2
-#'                  10          m  med 1  5  1  5  1  5  1  5  1   5   1   4   3   3   2   5   1   3   5   2
-#'                  11          w  med 1  5  2  5  1  4  1  5  1   5   1   4   3   3   2   5   1   4   5   2
-#'                  12          m  med 1  5  2  5  1  5  2  4  1   5   1   3   3   4   2   5   3   3   5   2
-#'                  13          w  med 1  5  2  5  3  3  1  5  2   5   1   5   3   3   3   3   3   3   5   2
-#'                  14          m  med 1  5  1  5  1  5  2  5  2  NA   1   5   3   3   2   5   1   5   5   2
-#'                  15          w  med 1  5  2  5  1  3  1  5  1   5   1   3   3   3   2   5   1   3   5   2
-#'                  16          w  low 1  5  2  5  2  5  2  5  1   5   1   4   3   3   2   5   1   3   5   2
-#'                  17          w  low 1  5  2  5  1  5  1  5  2   5   1   4   3   3   2   5   1   4   5   2
-#'                  18          w  low 2  5  2  5  2  5  2  5  1   5   1   2   3   3   1   5   3   2   5   2
-#'                  19          m  low 1  5  2  5  1  5  2  5  2   5   1   4   2   3   2   5   1   3   5   2
-#'                  20          w  low 2  5  2  5  2  5  2  5  2   5   1   3   3   3   2   5   1   3   5   2
-#'                  21          w  low 2  5  2  5  1  5  2  5  2   5   1   5   1   3   2   5   1   3   5   2
-#'                  22          m  low 1  3  2  5  1  5  2  5  2   5   1   3   3   3   1   3   1   3   5   2
-#'                  23          w  low 1  5  2  5  3  3  2  5  2   5   1   4   1   3   2   5   1   4   5   2
-#'                  24          w  low 2  4  2  5  2  3  2  4  2   5   3   3   3   4   2   4   1   3   5   2
-#'                  25          m  hig 2  4  1  5  1  5  2  4  1   5   1   3   3   5   2   4   1   3   5   2
-#'                  26          w  hig 1  5  1  5  1  3  1  5  1   5   1   3   1   5   1   5   3   3   5   2
-#'                  27          w  hig 1  5  2  5  3  3  1  4  2   4   1   3   3   5   3   3   5   1   5   2
-#'                  28          w  hig 2  5  2  5  1  4  2  5  1   5   1   3   3   5   2   5   4   1   5   2
-#'                  29          w  hig 2  5  2  5  2  4  2  4  2   5   1   4   1   5   1   5   1   4   5   2
-#'                  30          m  hig 1  5  2  5  1  5  1  3  1   4   1   3   1   5   1   3   1   3   5   2
-#'                  31          m  hig 1  1  2  1  1  5  1  4  3   3   5   2   3   5  NA  NA   1   3   5   2
-#'                  ")
+#'             1           w  med 1  1  1  2  1  3  1  5  1   5   5   1   3   3   5   2   5   1   5   2
+#'             2           w  med 1  2  2  5  2  3  1  5  1   5   2   5   3   3   2   5   2   5   5   2
+#'             3           m  med 1  3  3  5  1  5  3  4  1   5   5   1   3   3   5   2   5   1   5   2
+#'             4           m  med 1  4  4  2  1  5  4  4  1   5   5   1   3   3   5   2   5   1   5   2
+#'             5           w  med 1  5  5  5  5  3  1  5  1   5   5   1   3   3   5   2   5   1   5   2
+#'             6           w  med NA NA NA NA NA NA NA NA NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA
+#'             7           m  med 2  1  1  5  2  5  1  5  1   5   2   5   3   3   1   5   2   5   5   2
+#'             8           w  med 2  2  2  5  1  3  1  5  1   5   3   3   3   3   1   4   1   3   5   2
+#'             9           m  med 2  3  2  5  2  3  1  3  1   5   1   3   3   3   2   4   3   3   5   2
+#'             10          m  med 2  4  1  5  1  5  1  5  1   5   1   4   3   3   2   5   1   3   5   2
+#'             11          w  med 2  5  2  5  1  4  1  5  1   5   1   4   3   3   2   5   1   4   5   2
+#'             12          m  med NA NA NA NA NA NA NA NA NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA
+#'             13          w  med 3  1  2  5  3  3  1  5  2   5   1   5   3   3   3   3   3   3   5   2
+#'             14          m  med 3  2  1  5  1  5  2  5  2  NA   1   5   3   3   2   5   1   5   5   2
+#'             15          w  med 3  3  2  5  1  3  1  5  1   5   1   3   3   3   2   5   1   3   5   2
+#'             16          w  low 3  4  2  5  2  5  2  5  1   5   1   4   3   3   2   5   1   3   5   2
+#'             17          w  low 3  5  2  5  1  5  1  5  2   5   1   4   3   3   2   5   1   4   5   2
+#'             18          w  low NA NA NA NA NA NA NA NA NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA
+#'             19          m  low 4  1  2  5  1  5  2  5  2   5   1   4   2   3   2   5   1   3   5   2
+#'             20          w  low 4  2  2  5  2  5  2  5  2   5   1   3   3   3   2   5   1   3   5   2
+#'             21          w  low 4  3  2  5  1  5  2  5  2   5   1   5   1   3   2   5   1   3   5   2
+#'             22          m  low 4  4  2  5  1  5  2  5  2   5   1   3   3   3   1   3   1   3   5   2
+#'             23          w  low 4  5  2  5  3  3  2  5  2   5   1   4   1   3   2   5   1   4   5   2
+#'             24          w  low NA NA NA NA NA NA NA NA NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA
+#'             25          m  hig 5  1  1  5  1  5  2  4  1   5   1   3   3   5   2   4   1   3   5   2
+#'             26          w  hig 5  2  1  5  1  3  1  5  1   5   1   3   1   5   1   5   3   3   5   2
+#'             27          w  hig 5  3  2  5  3  3  1  4  2   4   1   3   3   5   3   3   5   1   5   2
+#'             28          w  hig 5  4  2  5  1  4  2  5  1   5   1   3   3   5   2   5   4   1   5   2
+#'             29          w  hig 5  5  2  5  2  4  2  4  2   5   1   4   1   5   1   5   1   4   5   2
+#'             30          m  hig NA NA 2  5  1  5  1  3  1   4   1   3   1   5   1   3   1   3   5   2
+#'             31          m  hig NA NA 2  1  1  5  1  4  3   3   5   2   3   5  NA  NA   1   3   5   2
+#'             ")
 #' 
 #' 
 #' DF<- upData2(DF,  labels=c(f1="Fahreigenschaften"
@@ -223,6 +183,12 @@
 #' stp25APA2:::Kano_Auswertung( kano_res, rnd_output=FALSE)
 #' 
 #' 
+#' # Kontrolle der Logik
+#' 
+#'   kano_res1 <-  Kano( ~ . , DF[-c(1,2)], na.action = na.pass)
+#' 
+#' dat<- na.omit(cbind(DF[c("f1", "d1")], kano_res1$data[2]))
+#' tidyr::spread(dat , d1, Fahreigenschaften)
 #' 
 #' ## End()
 
@@ -232,7 +198,7 @@ Kano <-   function(x, ...) {
 
 #' @rdname Kano
 #' @export
-Kano.data.frame <- function(x, na.action = na.omit, ...) {
+Kano.data.frame <- function(x, na.action = na.pass, ...) {
   Data <- Formula_Data( ~ ., x, subset, na.action)
   X <- Data$Y_data
   grouping <- Data$X_data
@@ -242,11 +208,11 @@ Kano.data.frame <- function(x, na.action = na.omit, ...) {
 
 
 #' @param subset  an Formula_Data
-#' @param na.action NA's entfernen odere behalten default ist na.omit()
+#' @param na.action NA's entfernen odere behalten default ist na.pass Option ist na.omit()
 #'
 #' @rdname Kano
 #' @export
-Kano.formula <- function(x , data, subset, na.action = na.omit, ...) {
+Kano.formula <- function(x , data, subset, na.action = na.pass, ...) {
   Data <- Formula_Data(x, data, subset, na.action)
   X <- Data$Y_data
   grouping <- Data$X_data
