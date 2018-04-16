@@ -458,7 +458,7 @@ rndr_corr <- function(x, p, df){
 #' @rdname rndr_
 #' @export
 rndr_r <- function(x, include.symbol=TRUE) {
-  if(include.symbol)  paste0("r=", ffreta(p_val))
+  if(include.symbol)  paste0("r=", ffreta(x))
   else ffreta(x)
 }
 
