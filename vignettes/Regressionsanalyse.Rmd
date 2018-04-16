@@ -1,0 +1,232 @@
+---
+title: "Regressionsanalyse"
+subtitle: "Beispiele"
+author: "JJ Allaire, Yihui Xie, Dirk Eddelbuettel"
+date: "`r Sys.Date()`"
+output: tint::tintHtml
+bibliography: skeleton.bib
+link-citations: yes
+---
+
+```{r setup, include=FALSE}
+library(tint)
+require(stpvers)
+# invalidate cache when the package version changes
+knitr::opts_chunk$set(tidy = FALSE, cache.extra = packageVersion('tint'))
+options(htmltools.dir.version = FALSE)
+```
+
+
+
+# Regressionsanalyse
+
+
+## Linear Regression
+Outcome: kontinuierlich
+
+Assumptions of linear regression: 
+
+Linearität, keie Aussreiser
+keine heteroscedasticity multicollinearity and auto-correlation
+Fehler sollte normallverteilt mit einem Mittelwert von 0 und constanter Varianz
+### Quantile Regression
+Quantile regression is the extension of linear regression
+```
+ lm(Fertility ~ .,data = swiss)
+```
+
+
+## Logistic Regression
+glm(Lung.Cancer..Y.~Smoking..X.,data = data, family = “binomial”
+
+
+## Ridge Regression und Lasso Regression
+shrinkage regression, ElasticNet Regression
+Both ridge regression and lasso regression are addressed to deal with multicollinearity
+Least Absolute Shrinkage and Selection Operator
+
+
+
+Principal Component Regression
+Partial Least Square Regression
+Support Vector Regression
+
+## Poisson Regression
+
+when dependent variable has count data
+Negative Binomial Regression
+Quasi-Poisson Regression
+Cox Regression
+
+
+## Ordinal Regression
+### Logit, Probit und Multinomial Logit Modelle
+
+Outcome:
+
+0/1 => Logit, Probit
+
+glm(y_bin ~ x1 + x2 + x3, family=binomial(link="logit"),
+
+‘Low’, ‘Middle’, ‘High’=>  ordered logit or ordered probit models.
+polr(opinion ~ x1 + x2 + x3, data=mydata, Hess=TRUE)
+Hess=fuer die Berechnung der SE
+
+
+Kategorien=> Multinomial logit model
+library(nnet)
+
+ multinom(ses2 ~ science + socst + female, data=mydata)
+
+
+
+Quelle: https://www.princeton.edu/~otorres/LogitR101.pdf
+
+
+### Ordinale Daten
+
+
+ 
+
+ordinalen Auswahlvariable (wo die Auswahlkategorien
+eine naturliche Anordnung besitzen) und einer kardinalen Auswahlvariable (wo die Anwortkategorien ungeordnet sind).
+
+’proportional odds’ als implizite Annahme im Logit-Mode
+proportional odds assumption bedeutet alle Stufen sind gleich
+
+
+
+Es existiert noch die Bibliothek VGAM aber ich habe dazu keine APA-Methode.
+
+```
+require(VGAM)
+ 
+dat$apply<- ordered(dat$apply)
+ 
+ (fit <- vglm( apply~ pared + institution + gpa, propodds, data = dat))
+
+```
+
+
+```{r daten, echo=FALSE, message=FALSE, results="hide"}
+require(MASS)
+require(foreign)
+#require(broom)
+dat <- read.dta("https://stats.idre.ucla.edu/stat/data/ologit.dta")
+
+dat<- transform(dat,
+                
+                apply.num = as.numeric(dat$apply),
+
+                pared=factor(pared, 0:1, c("not graduate", "graduate")),
+                institution=factor(public, 0:1, c("private","public")))
+
+dat$apply.logistic <- psych::logistic(dat$apply.num) 
+
+dat <- Label(dat,  apply="apply to graduate school",
+pared="parental educational status",
+public="undergraduate institution",
+institution="undergraduate institution",
+gpa="student’s grade point average.")
+
+
+```
+
+
+Beispiel:  https://stats.idre.ucla.edu/r/dae/ordinal-logistic-regression/
+
+
+```{r tab-demogr, echo=FALSE, results='asis'}
+dat %>% Tabelle2( apply, pared, institution,  gpa)
+ 
+```
+
+
+
+```{r tab-reg-lm, echo=FALSE, results='asis'}
+
+fit_lm <- lm(apply.num ~ pared + institution + gpa, data = dat )
+fit_poisson <- glm(apply.num ~ pared + institution + gpa, data = dat, family = poisson)
+fit_logistic <- lm(apply.logistic ~ pared + institution + gpa, data = dat )
+fit_polr <- polr(apply ~ pared + institution + gpa, data = dat )
+ 
+APA_Table(fit_lm,fit_logistic,fit_poisson, fit_polr,
+          names= c("OLS","OLS logistic", "Poisson",  "polr"),
+                   type="long", caption="vergleich verschiedener Modell")
+```
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+```{r tab-reg-orl, echo=FALSE, results='asis'}
+ fit_polr_logistic <- update(fit_polr,  Hess = TRUE) 
+fit_polr_probit <- update(fit_polr,method =  "probit" ,  Hess = TRUE) 
+fit_polr_loglog <-update(fit_polr, method="loglog",  Hess = TRUE) 
+ 
+APA_Table(#fit_polr,
+          fit_polr_logistic,
+          fit_polr_probit ,
+          fit_polr_loglog ,
+          names= c(#"fit_polr",
+                   "logistic", "probit", "loglog"),
+          type="long")
+
+
+```
+
+```{r tab-reg-logistic, echo=FALSE, results='asis'}
+
+APA2(fit_polr_logistic)
+
+
+```
+
+
+
+```{r}
+
+APA(fit_polr_logistic)
+round(R2(fit_polr_logistic),2)
+
+```
+ 
+ 
+### COX
+
+Art der Problemstellung
+ + Die zu erklaerende Variable y ist eine Verweildauer T (ein time to event), z.B.
+ 
+  Bio-Medizin: Dauer bis zum Tod , zur Gesundung, zum Krankheitsausbruch, ...
+  
+  Okonomie : Dauer der Arbeitslosigkeit, des Streiks, bis zum Eintritt des Versicherungsfalls, Ausfall der Maschine, Ausfall des Unternehmens, Rating-Upgrade, ...
+
+ Demographie, Soziologie: Dauer bis zur Heirat, zur Geburt, zur Scheidung, zur Migration, zum Terroranschlag ...
+ 
+### Tobit
+ 
+ qUELLE.https://www.uni-marburg.de/fb02/statistik/studium/vorl/mikoeko/tobit1.pdf
+ Mit einem Tobit-I Regressionsmodell adressiert man eine Intervall-Zensierung in der erkl¨arten
+Variable y, im Standardfall eine Linkszensierung bei y = 0. (Beispiel: y = w¨ochentliche
+Arbeitszeit von Arbeitnehmern; sie ist = 0 fur Arbeitslose.) Man hat dabei gewissermaßen ¨
+eine Mischung aus linearer und bin¨arer Regression:
+ 
+```{r}
+require(AER)
+data("Affairs")
+fm.tobit <- tobit(affairs ~ age + yearsmarried + religiousness + occupation + rating,
+                  data = Affairs, x=TRUE)
+#summary(fm.tobit)
+APA_Table(fm.tobit, type="long")
+```
+ 
+ 
+ 
+
+```{r bib, include=FALSE}
+# create a bib file for the R packages used in this document
+knitr::write_bib(c('base', 'rmarkdown'), file = 'skeleton.bib')
+```
