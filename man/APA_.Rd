@@ -6,6 +6,7 @@
 \alias{APA_}
 \alias{APA_NULL}
 \alias{APA_Correlation}
+\alias{Hmisc_rcorr}
 \alias{APA_ICC}
 \alias{ICC2}
 \alias{APA_Likert}
@@ -25,6 +26,10 @@ APA_Correlation(..., caption = "Korrelation", note = NULL,
   type = c("pearson", "spearman"), include.mean = FALSE, include.n = TRUE,
   stars = TRUE, p.value = FALSE, include.stars = stars,
   include.p = p.value)
+
+Hmisc_rcorr(..., cor_diagonale_up = TRUE, include.stars = TRUE,
+  include.p = FALSE, include.mean = FALSE, include.n = TRUE,
+  type = c("pearson", "spearman"))
 
 APA_ICC(x, ..., caption = "ICC", type = c(1, 4))
 
@@ -62,7 +67,21 @@ APA_Xtabs(x, data, caption = "", note = "", output = which_output(),
 
 \item{caption, note}{Ueberschrift an Output}
 
-\item{include.mean}{Mittelwerte mit SD}
+\item{output}{Html oder Text}
+
+\item{col_names}{nicht benutzt}
+
+\item{cor_diagonale_up}{Diagonale oben oder unter}
+
+\item{type}{enweder "pearson" oder "spearman"}
+
+\item{include.mean}{Mittelwerte}
+
+\item{include.n}{Anzahl an gueltigen Werten}
+
+\item{include.stars}{Sternchen als p-Werte}
+
+\item{include.p}{Explizite p-Werte}
 
 \item{data}{data.frame wenn x eine Formel ist}
 
@@ -79,6 +98,12 @@ APA_Xtabs(x, data, caption = "", note = "", output = which_output(),
 \item{include.se}{Standardfehler noch nicht Fertig}
 
 \item{digits}{Nachkommastellen}
+
+\item{...}{Formel mit Daten wird von prepare_data2()aufgedroeselt}
+
+\item{caption, note}{Ueberschrift}
+
+\item{include.mean}{Mittelwerte mit SD}
 }
 \value{
 a data.frame or list with data.frame

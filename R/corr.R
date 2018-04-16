@@ -23,6 +23,12 @@ APA.biVar <- function(x, ...) {
 
 
 
+#' @param ... Formel mit Daten wird von prepare_data2()aufgedroeselt
+#'
+#' @param caption,note Ueberschrift
+#' @param output Html oder Text
+#' @param col_names nicht benutzt
+#'
 #' @rdname APA_
 #' @description APA_Correlation: Korrelationstabelle (Interkorrelationen mit der Hilfe
 #' der Funktion  Hmisc::rcorr. Erlaubt ist die getrennte Auswertung ueber by=~b
@@ -121,6 +127,16 @@ APA_Correlation <-
 
 
 
+
+#' @param cor_diagonale_up Diagonale oben oder unter
+#' @param include.stars Sternchen als p-Werte
+#' @param include.p  Explizite p-Werte
+#' @param include.mean Mittelwerte
+#' @param include.n  Anzahl an gueltigen Werten
+#' @param type enweder "pearson" oder "spearman"
+#' 
+#' @rdname APA_
+#'
 Hmisc_rcorr <- function(...,
                      cor_diagonale_up = TRUE,
                      include.stars = TRUE,
@@ -301,7 +317,7 @@ format_diagonale <- function(mycorrtable,
 
 
 
-#' @rdname corr_tabel
+#' @rdname APA2
 #' @description  Corr1() wird in in APA2 beim Einzelvergeich verwendet.
 #' @examples
 #'
@@ -356,8 +372,8 @@ Corr1<- function(y,
 
 
 
-#' @rdname corr_tabel
-#' @description Die Interne Fznction  Corr2  wird in APA2 verwendete um Korrelation zu berechnen.
+#' @rdname APA2
+#' @description Die Interne Funktion  Corr2()  wird in APA2 verwendete um Korrelation zu berechnen.
 #' @examples
 #'
 #' #-- Corr2
