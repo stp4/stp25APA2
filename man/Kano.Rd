@@ -17,7 +17,7 @@ Kano(x, ...)
 Kano_Auswertung(x, caption = "", note = "", formula = x$formula,
   data = x$molten[-1], digits = options()$stp4$apa.style$prozent$digits[1],
   include.n = TRUE, include.percent = TRUE, include.total = TRUE,
-  include.test = TRUE, rnd_output = TRUE, ...)
+  include.test = TRUE, include.fong = TRUE, rnd_output = TRUE, ...)
 
 kano_plot(x, main = "", xlim = c(0, 1), ylim = c(0, 1), mar = c(0, 1, 2,
   1), legend.position = list(x = "right", y = NULL), legend.title = NULL,
@@ -48,7 +48,7 @@ kano_plot(x, main = "", xlim = c(0, 1), ylim = c(0, 1), mar = c(0, 1, 2,
 
 \item{include.total}{N und Total}
 
-\item{include.test}{Fong und Chie-Test}
+\item{include.test, include.fong}{Fong und Chie-Test}
 
 \item{rnd_output}{Intern fuer Plot bei FALSE ausgabe als Zahl}
 
@@ -178,9 +178,12 @@ CS plus	Index Positiv  CS.plus=  (A+O)/(A+O+M+I)
 
 CS minus	Index Negativ CS.minus= (O+M)/(A+O+M+I)
 
-Chi-Test	Eigentlich  Unsinn Testet ob Verteilung von M, A, O und I gleich ist. wird aber in wissenschaftlichen Arebitengerne angegeben.
+Chi-Test	ist eigentlich Unsinn, Testet ob die Verteilung von M, A, O und I gleich ist. 
+Wird aber in wissenschaftlichen Arebitengerne angegeben.
 
-Fong-Test Vergleich der zwei Haeufigsten-Kategorien gegenueber der Gesamtzahl Ergebnis ist entweder ein signifikante oder ein nicht signifikante Verteilung.
+Fong-Test Vergleich der zwei Haeufigsten-Kategorien gegenueber der Gesamtzahl 
+Ergebnis ist entweder ein signifikante oder ein nicht signifikante Verteilung.
+Ich verwende zur Berechnung die Kategorien A,O,M,I und R. Q verwende ich nur für die Gesamtsumme
 }
 \examples{
 

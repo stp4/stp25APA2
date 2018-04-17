@@ -65,9 +65,12 @@
 #'
 #' CS minus	Index Negativ CS.minus= (O+M)/(A+O+M+I)
 #'
-#' Chi-Test	Eigentlich  Unsinn Testet ob Verteilung von M, A, O und I gleich ist. wird aber in wissenschaftlichen Arebitengerne angegeben.
+#' Chi-Test	ist eigentlich Unsinn, Testet ob die Verteilung von M, A, O und I gleich ist. 
+#' Wird aber in wissenschaftlichen Arebitengerne angegeben.
 #'
-#' Fong-Test Vergleich der zwei Haeufigsten-Kategorien gegenueber der Gesamtzahl Ergebnis ist entweder ein signifikante oder ein nicht signifikante Verteilung.
+#' Fong-Test Vergleich der zwei Haeufigsten-Kategorien gegenueber der Gesamtzahl 
+#' Ergebnis ist entweder ein signifikante oder ein nicht signifikante Verteilung.
+#' Ich verwende zur Berechnung die Kategorien A,O,M,I und R. Q verwende ich nur für die Gesamtsumme
 #'
 #'
 #' @param x,data Daten mit/oder formula
@@ -405,7 +408,7 @@ cat("\ntransform kano (type",type,")")
 #' 
 #' @param include.n,include.percent Anzahl, Prozent
 #' @param include.total N und Total
-#' @param include.test Fong und Chie-Test
+#' @param include.test,include.fong Fong und Chie-Test
 #' @param rnd_output Intern fuer Plot bei FALSE ausgabe als Zahl
 #' @param caption,note Ueberschrift
 #' @param formula,data intern daten aus Kano-Objekt
@@ -422,6 +425,7 @@ Kano_Auswertung <- function(x,
                       include.percent=TRUE,
                       include.total=TRUE,
                       include.test=TRUE,
+                      include.fong=TRUE,
                       rnd_output=TRUE,
                       ...) {
   var_names = c(
@@ -441,13 +445,22 @@ Kano_Auswertung <- function(x,
       "ns"
     }
     else{
-      x <- as.numeric(x)
-      a <- sort(x)[4]
-      b <- sort(x)[3]
+    #  "Tue Apr 17 09:04:02 2018" Fehler   
       n <- sum(x)
-      ifelse(abs(a - b) < 1.65 * sqrt(((a + b) * (2 * n - a - b)) / (2 *
-                                                                       n)), "sig.", "ns")
+      x <- sort(as.numeric(x[1:5]), decreasing=TRUE)
+      a <- x[1]
+      b <-  x[2]
+   
+      lhs <- abs(a - b)
+      rhs <- round(1.65 * sqrt(((a + b) * (2 * n - a - b)) / (2 *
+                                                                n)), 1)
+      fm <- paste(lhs, "<", rhs) 
+
+      ifelse(lhs < rhs , paste(fm, "ns") , paste(fm,"sig."))
     }
+    
+    
+     
   }
   kano_aggregate <- function(x) {
     x     <-   factor(x, levels = kano_kategorien)
@@ -504,13 +517,24 @@ Kano_Auswertung <- function(x,
     )
     if(include.test) {
       if (length(x) == 0 | sum(tab[1:4])<12){
-        res<- c(res, Chi= "n.a.", Fong = "n.a.")
+        res<- c(res, Chi= "n.a." )
         }else{
         chi <- chisq.test(tab[1:4])  
-        res<- c(res, Chi = rndr_Chisq_stars(chi$statistic, chi$p.value),
-                      Fong = Fong(tab))
+        res<- c(res, Chi = rndr_Chisq_stars(chi$statistic, chi$p.value) )
         }
     }
+    
+    if(include.fong) {
+      if (length(x) == 0 | sum(tab[1:4])<12){
+        res<- c(res,   Fong = "n.a.")
+      }else{
+        
+        res<- c(res,  
+                Fong = Fong(tab))
+      }
+    }
+    
+    
     
     if(include.total) res  else res[-1]
       
