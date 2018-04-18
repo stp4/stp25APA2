@@ -392,6 +392,9 @@ cat("\ntransform kano (type",type,")")
             molten=molten,
             scors=Scors,
             formula= fm,
+            func=vars_func,
+            dysfunc= vars_dysfunc,
+            groups=names(grouping),
             removed=Errorrs,
             N=nrow(data),
             attributes=  attributes,
@@ -1027,3 +1030,97 @@ kano_plot <- function(x,
 
 
 
+#' @param data in kano_barchart molten data
+#' @param groups in kano_barchart geht nicht
+#' @param auto.key Kea auf der rechten Seite
+#' @param prop.table Prozent oder Anzahl
+#' @param ylab Beschriftung Prozent/Anzahl
+#' @param col Farben RColorBrewer::brewer.pal(6, "Dark2")[c(4, 1, 2, 3, 5, 6)]
+#' @param include.Q,include.R Q und R anzeigen
+#' @param  main,include.n Ueberschrift mit N=
+#' @param levels Levels haendisch anordnen
+#' @param ... an lattice
+#'
+#' @return Tabelle als data.frame
+#' @rdname Kano
+#' @export
+#'
+#' @examples
+#' #' 
+#' graphics.off()
+#' 
+#' # res1 <-  Kano( ~ . , DF[-c(1,2)])
+#' res1$dysfunc
+#' windows(9, 7)
+#' kano_plot_del_bar(kano_res)
+kano_barchart  <- function(x,
+                              # fm =  ~ variable + value,
+                              data = x$molten,
+                              groups = x$groups[1], # geht noch nicht
+                              main="Kano-Analyse",
+                           #    if(is.null(groups))print(p2)
+                           #   else  print(useOuterStrips(p2))
+                           
+                              auto.key = list(space = "right"),
+                              prop.table = TRUE,
+                              ylab =  if (prop.table)
+                                "Prozent"
+                              else
+                                "Anzahl",
+                              
+                              col = RColorBrewer::brewer.pal(6, "Dark2")[c(4, 1, 2, 3, 5, 6)],
+                              include.Q = TRUE,
+                              include.R = TRUE,
+                              include.n=TRUE,
+                              levels = c("M", "O", "A", "I", "R", "Q"),
+                              ...) {
+  
+  if(!is.null(groups)) warnings("Gruppen sind nicht Implementiert!")
+  
+  if (!include.Q & include.R)
+    data$value <- factor(data$value, c("M", "O", "A", "I", "R"))
+  else if (!include.Q &  !include.R)
+    data$value <- factor(data$value, c("M", "O", "A", "I"))
+  else if (include.Q & !include.R)
+    data$value <- factor(data$value, c("M", "O", "A", "I", "Q"))
+  else {data$value <- factor(data$value, levels)  }#
+  
+  
+  data <- na.omit(data)
+ 
+  fm1 <-  "~variable+value"
+  # fm2<- Freq ~ value|variable
+  # if(!is.null(groups)){ fm1 <-paste(fm1, " + " , groups)}
+  
+  
+ datatab <- xtabs(formula(fm1), data)
+ N<- addmargins(datatab,2)[,"Sum"]
+ 
+  if(include.n) main<- paste0(main, " (N = ",  max(N, na.rm=TRUE), ")")
+  
+  if (prop.table)  
+    dat  <- data.frame(prop.table(datatab , 1) * 100)
+   else  dat  <- data.frame(datatab)
+  #  print(datatab)
+  
+  dat$dummy <- ""
+  cols <- list(superpose.polygon = list(col = col))
+  
+  
+  
+  p1 <- lattice::barchart(
+    Freq ~ dummy | variable,
+    data = dat,
+    ylab = ylab,main=main,
+    groups = value,
+    #  horizontal=FALSE, stack = TRUE,
+    origin = 0,
+    auto.key = auto.key,
+    par.settings = cols ,
+    ...
+    )
+  
+  print(p1)
+  
+  invisible(addmargins(datatab,2))
+}

@@ -6,6 +6,7 @@
 \alias{Kano.formula}
 \alias{Kano_Auswertung}
 \alias{kano_plot}
+\alias{kano_barchart}
 \title{Analyze Kano Type Items.}
 \usage{
 Kano(x, ...)
@@ -28,6 +29,13 @@ kano_plot(x, main = "", xlim = c(0, 1), ylim = c(0, 1), mar = c(0, 1, 2,
   xlab = "Unzufriedenheitsstiftung (CS-)", center.axis = FALSE,
   use.labels = TRUE, use.total.strength = TRUE, use.categorie = TRUE,
   use.points = FALSE, ...)
+
+kano_barchart(x, data = x$molten, groups = x$groups[1],
+  main = "Kano-Analyse", auto.key = list(space = "right"),
+  prop.table = TRUE, ylab = if (prop.table) "Prozent" else "Anzahl",
+  col = RColorBrewer::brewer.pal(6, "Dark2")[c(4, 1, 2, 3, 5, 6)],
+  include.Q = TRUE, include.R = TRUE, include.n = TRUE, levels = c("M",
+  "O", "A", "I", "R", "Q"), ...)
 }
 \arguments{
 \item{x, data}{Daten mit/oder formula}
@@ -35,6 +43,8 @@ kano_plot(x, main = "", xlim = c(0, 1), ylim = c(0, 1), mar = c(0, 1, 2,
 \item{...}{nicht benutzte Argumente}
 
 \item{na.action}{NA's entfernen odere behalten default ist na.pass Option ist na.omit()}
+
+\item{data}{in kano_barchart molten data}
 
 \item{subset}{an Formula_Data}
 
@@ -84,6 +94,16 @@ oder I mit in die Labels ausgeben}
 
 \item{use.points}{use.points = FALSE Punkte statt Text}
 
+\item{groups}{in kano_barchart geht nicht}
+
+\item{auto.key}{Kea auf der rechten Seite}
+
+\item{prop.table}{Prozent oder Anzahl}
+
+\item{include.Q, include.R}{Q und R anzeigen}
+
+\item{levels}{Levels haendisch anordnen}
+
 \item{type}{Fragetype entweder  vollstaendig (5) oder gekuerzt (3)}
 
 \item{umcodieren}{logical False}
@@ -101,6 +121,14 @@ oder I mit in die Labels ausgeben}
 \item{...}{}
 
 \item{x}{Kano-Objekt}
+
+\item{ylab}{Beschriftung Prozent/Anzahl}
+
+\item{col}{Farben RColorBrewer::brewer.pal(6, "Dark2")[c(4, 1, 2, 3, 5, 6)]}
+
+\item{main, include.n}{Ueberschrift mit N=}
+
+\item{...}{an lattice}
 }
 \value{
 Liste mit:
@@ -112,6 +140,8 @@ molten: Daten-Lang
 scors:  Scors sind eine Alternative Codierung zum Zweck der Transformierung zu einer metrischen Skala.
 
 formula, removed=Errorrs, N, attributes, answers
+
+Tabelle als data.frame
 }
 \description{
 Die Funktion \code{Kano()} transformiert Kano-Fragebogen zur Kano-Kodierung
@@ -285,4 +315,11 @@ dat<- na.omit(cbind(DF[c("f1", "d1")], kano_res1$data[2]))
 tidyr::spread(dat , d1, Fahreigenschaften)
 
 ## End()
+#' 
+graphics.off()
+
+# res1 <-  Kano( ~ . , DF[-c(1,2)])
+res1$dysfunc
+windows(9, 7)
+kano_plot_del_bar(kano_res)
 }
