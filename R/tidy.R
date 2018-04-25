@@ -248,6 +248,7 @@ Ordnen.merModLmerTest <- function(x,
   AV <-
     ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
   coefs <- lmerTest::summary(x)$coefficients
+  #lmerTest:::summary.lmerModLmerTest(x)
   stat.coef <- coefs[,-1, drop = FALSE]
   
   if (include.ci) {
@@ -297,6 +298,84 @@ Ordnen.merModLmerTest <- function(x,
                  info$N,
                  info$labels)
 }
+
+
+
+#' @rdname Ordnen
+#' @export
+Ordnen.lmerModLmerTest<- function(x,
+                                  # custom.model.names = NULL,
+                                  # digits = 2,
+                                  include.b = TRUE,
+                                  include.se = TRUE,
+                                  include.beta = FALSE,
+                                  # include.eta = TRUE,
+                                  include.ci = FALSE,
+                                  include.odds = FALSE,
+                                  # include.variance = TRUE,
+                                  #  include.r = TRUE,
+                                  #  include.ftest = FALSE,
+                                  #  include.aic = TRUE,
+                                  #  include.bic = include.aic,
+                                  ci.level = .95,
+                                  ...) {
+  cat("\n In Ordnen.lmerModLmerTest \n")
+  info <- model_info(x)
+  AV <-
+    ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
+  coefs <- lmerTest:::summary.lmerModLmerTest(x)$coefficients
+  #
+  stat.coef <- coefs[,-1, drop = FALSE]
+  
+  if (include.ci) {
+    cis<-  confint(x, level = ci.level)
+    k <- which(rownames(cis) == "(Intercept)")
+    
+    b.coef <- cbind(coefs[, 1, drop = FALSE],
+                    cis[k:nrow(cis), ]  
+    )
+  } else {
+    b.coef <- coefs[, 1, drop = FALSE]
+  }
+  
+  res<-
+    if (include.odds) {
+      odds <-
+        apply(b.coef, 2, function(x)
+          ifelse(x > 4.6, 100, round(exp(x), 2)))
+      
+      if(ncol(b.coef==1)) 
+        colnames(odds) <-  "OR" 
+      else   colnames(odds) <- c("OR", "low", "upr") 
+      
+      
+      #  print(b.coef)
+      #  print(odds)
+      b.coef <- cbind(b.coef, odds)
+    }
+  
+  if (include.beta)  cat("\nBeta macht bei ", class(x), "keinen Sinn!\n")
+  
+  res <- cbind(b.coef, stat.coef)
+  colnames(res)[ncol(res)] <- "p.value" 
+  
+  if (!include.se) {
+    res <-  res[, colnames(res) != "Std. Error"]
+  }
+  
+  if (!include.b) {
+    res <-  res[, colnames(res) != "Estimate"]
+  }
+  
+  
+  prepare_output(data.frame(Source= rownames(res), res, stringsAsFactors = FALSE),
+                 paste0("AV: ", AV),
+                 paste0("Model: ", info$family[1]),
+                 info$N,
+                 info$labels)
+}
+
+
 
 
 #' @rdname Ordnen

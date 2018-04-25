@@ -340,8 +340,11 @@ type_default <- function(x,
                          note = NULL,
                          custom.model.names = NULL,
                          ...) {
+  #cat("\n In type_default ")
     res <-  Ordnen(x, ...) # ist das gleiche wie broom::tidy(x)
-
+  #  cat("\n nach Ordnen ")
+  #  print(names(res))
+  #  print(res)
   if (is.null(caption))
     caption <- paste(attr(res, "caption"),
                      "Obs: ", attr(res, "N"))
