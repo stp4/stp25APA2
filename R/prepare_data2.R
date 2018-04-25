@@ -86,11 +86,20 @@ if(!is.null(groups)){
   condition.vars <- all.vars(frml$condition)
   #- Formel vom Type 'a+b[2]~c' kann auch 'a+b[2,median] ~ . ' sein
   if (any(all.names(formula[[2L]]) %in% '[')) {
+#cat("\in drösl\n")
       #  bei var[2,median] kommt der Median durch, error wegen  width.cutoff = 60L
-      y_hsd <-
-        strsplit(deparse(formula[[2L]], width.cutoff = 500L), " \\+ ")[[1]]
-
+    
+    
+    y_hsd <- gsub(" ", "", paste(deparse(formula[[2L]]), collapse=""))
+    
+    y_hsd <- strsplit(rhs, "\\+")[[1]]
+    
+    #  y_hsd <-
+    #    strsplit(deparse(formula[[2L]], width.cutoff = 500L), " \\+ ")[[1]]
+#print(y_hsd)
       measure.vars <- gsub("\\[.+\\]", "", y_hsd) # bereinigen von Klammern
+      
+#print(measure.vars)
       #- die länge hat sich geändert
       measure.class <- get_classes(data[measure.vars])
       measure <- measure.class
@@ -195,7 +204,7 @@ if(!is.null(groups)){
 #' @param groups Block codition
 #' @export
 #' @examples
-#' # require(stp25vers)
+#' 
 #' prepare_data2(varana, m1, m2, m3, m4)
 #' prepare_data2(varana, 4:7)
 #' prepare_data2(varana, m1[1], m2, m3, m4)
@@ -451,7 +460,7 @@ print(x$by)
 
 # #test_prepare_data2 <- function()
 #  # {
-# require(stp25vers)
+#  
 #
 # prepare_data2(varana, m1, m2, m3, m4)
 # prepare_data2(~ m1 + m2 + m3 + m4, varana)
