@@ -88,11 +88,8 @@ if(!is.null(groups)){
   if (any(all.names(formula[[2L]]) %in% '[')) {
 #cat("\in drösl\n")
       #  bei var[2,median] kommt der Median durch, error wegen  width.cutoff = 60L
-    
-    
     y_hsd <- gsub(" ", "", paste(deparse(formula[[2L]]), collapse=""))
-    
-    y_hsd <- strsplit(rhs, "\\+")[[1]]
+    y_hsd <- strsplit(y_hsd, "\\+")[[1]]
     
     #  y_hsd <-
     #    strsplit(deparse(formula[[2L]], width.cutoff = 500L), " \\+ ")[[1]]
