@@ -62,8 +62,8 @@ APA.survdiff <- function(fit) {
 #' @param ... weitere Objekte nicht benutzt
 #' @return A \code{\link[tibble]{tibble}} with counted tagged NA values.
 #' @examples
-#' require(survival)
-#' require(stp25vers)
+#' #require(survival)
+#'  
 #' #Projekt("html")
 #' ### Magenkarzinom ###
 #' mkarz <- GetData("C:/Users/wpete/Dropbox/3_Forschung/1 Statistik/BspDaten/SPSS/_Buehl/MKARZ.SAV")
