@@ -396,7 +396,9 @@ cat("\ntransform kano (type",type,")")
             dysfunc= vars_dysfunc,
             groups=names(grouping),
             removed=Errorrs,
-            N=nrow(data),
+            N =c(  total=nrow(data), 
+                   N=nrow(data)-sum(Errorrs), 
+                   removed=sum(Errorrs)), 
             attributes=  attributes,
             answers= answers[1:type],
             note=note)
@@ -465,6 +467,8 @@ Kano_Auswertung <- function(x,
     
      
   }
+ 
+  
   kano_aggregate <- function(x) {
     x     <-   factor(x, levels = kano_kategorien)
     tab   <-   table(x)
@@ -599,7 +603,10 @@ Kano_Auswertung <- function(x,
   names(ans_value) <- var_names
   ans <- cbind(ans[-n_names], ans_value)
   
-  prepare_output(ans, caption = caption, note = note)
+  prepare_output(ans, 
+                 caption = caption, 
+                 note = note, 
+                 N=x$N["N"])
   }
   else{
     ans <-
@@ -1069,6 +1076,7 @@ kano_barchart  <- function(x,
                                 "Anzahl",
                               
                               col = RColorBrewer::brewer.pal(6, "Dark2")[c(4, 1, 2, 3, 5, 6)],
+                              par.settings = list(superpose.polygon = list(col = col)),
                               include.Q = TRUE,
                               include.R = TRUE,
                               include.n=TRUE,
@@ -1104,7 +1112,7 @@ kano_barchart  <- function(x,
   #  print(datatab)
   
   dat$dummy <- ""
-  cols <- list(superpose.polygon = list(col = col))
+
   
   
   
@@ -1116,7 +1124,7 @@ kano_barchart  <- function(x,
     #  horizontal=FALSE, stack = TRUE,
     origin = 0,
     auto.key = auto.key,
-    par.settings = cols ,
+    par.settings = par.settings ,
     ...
     )
   
