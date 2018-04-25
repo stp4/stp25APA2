@@ -69,7 +69,7 @@ xtabs-Objekt
 ##https://www.hranalytics101.com/how-to-assess-model-accuracy-the-basics/
 
 
-require(stp25vers)
+
 Kappa2(x<-xtabs(~gruppe+lai, hkarz))
 head(hkarz)
 

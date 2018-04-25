@@ -7,6 +7,7 @@
 \alias{Ordnen.aov}
 \alias{Ordnen.lm}
 \alias{Ordnen.merModLmerTest}
+\alias{Ordnen.lmerModLmerTest}
 \alias{Ordnen.polr}
 \title{Ordnen (Tidy)}
 \usage{
@@ -23,6 +24,10 @@ Ordnen(x, ...)
   include.beta = FALSE, include.ci = FALSE, ci.level = 0.95, ...)
 
 \method{Ordnen}{merModLmerTest}(x, include.b = TRUE, include.se = TRUE,
+  include.beta = FALSE, include.ci = FALSE, include.odds = FALSE,
+  ci.level = 0.95, ...)
+
+\method{Ordnen}{lmerModLmerTest}(x, include.b = TRUE, include.se = TRUE,
   include.beta = FALSE, include.ci = FALSE, include.odds = FALSE,
   ci.level = 0.95, ...)
 

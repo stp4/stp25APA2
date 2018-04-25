@@ -28,8 +28,8 @@ Beispiel unter
 }
 }
 \examples{
-require(survival)
-require(stp25vers)
+#require(survival)
+ 
 #Projekt("html")
 ### Magenkarzinom ###
 mkarz <- GetData("C:/Users/wpete/Dropbox/3_Forschung/1 Statistik/BspDaten/SPSS/_Buehl/MKARZ.SAV")

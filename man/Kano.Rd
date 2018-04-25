@@ -34,6 +34,7 @@ kano_barchart(x, data = x$molten, groups = x$groups[1],
   main = "Kano-Analyse", auto.key = list(space = "right"),
   prop.table = TRUE, ylab = if (prop.table) "Prozent" else "Anzahl",
   col = RColorBrewer::brewer.pal(6, "Dark2")[c(4, 1, 2, 3, 5, 6)],
+  par.settings = list(superpose.polygon = list(col = col)),
   include.Q = TRUE, include.R = TRUE, include.n = TRUE, levels = c("M",
   "O", "A", "I", "R", "Q"), ...)
 }

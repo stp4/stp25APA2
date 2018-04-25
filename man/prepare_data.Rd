@@ -225,7 +225,7 @@ stp25APA2:::clean_dots_formula(. ~ x + y, data)
 stp25APA2:::clean_dots_formula(x + y ~ ., data)
 stp25APA2:::clean_dots_formula(~., data)
 stp25APA2:::formula_split(a+b~x|y)
-# require(stp25vers)
+
 prepare_data2(varana, m1, m2, m3, m4)
 prepare_data2(varana, 4:7)
 prepare_data2(varana, m1[1], m2, m3, m4)
