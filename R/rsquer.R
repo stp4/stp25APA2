@@ -27,6 +27,7 @@ APA_R2 <- function(..., caption, note) {
 #' @title R2
 #' @name R2
 #' @description Berechnung der R-Quadrats
+#' Achtung es gibt noch die Funktion caret::R2 die Probleme macht
 #' 
 #'  Cox und Snell R2: [ 0.2 = akzeptabel, 0.4 = gut ]
 #'  Nagelkerke R2: [ 0.2 = akzeptabel, 0.4 = gut, 0.5 = sehr gut]
