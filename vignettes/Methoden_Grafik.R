@@ -1,6 +1,5 @@
 ## ----setup, include=FALSE------------------------------------------------
-library(stp25data)
-library(stp25plot)
+library(stpvers)
 library(lattice)
 library(RColorBrewer)
 library(effects)
@@ -116,4 +115,21 @@ CpT
 anova(fit<-aov(Sodium ~ Calories*Type, data=hotdog))
 
 plot(allEffects(fit))
+
+## ----fig.height=3.4, fig.width=6-----------------------------------------
+set.seed(1)
+x <- runif(1000, 0, 100)
+z <- cut(x, c(10,20,30))
+table(z)
+#windows(8,5)
+par(mfrow=c(1,2))
+boxplot(x~z, main="cut")
+abline(h=c(10,20,30))
+set.seed(1)
+x <- runif(1000, 0, 100)
+z <- Hmisc::cut2(x, c(10,20,30))
+table(z)
+boxplot(x~z, main="cut2")
+abline(h=c(10,20,30))
+
 

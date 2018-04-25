@@ -417,7 +417,7 @@ APA_Table(fit1, fit2, fit3, fit4, type="tex")
 #                    header=TRUE)
 summary(schools)
 fit<-lmerTest::lmer(score ~  grade +treatment  + stdTest + (1|classroom), schools)
-APA_Table(fit)
+#APA_Table(fit)
 
 
 ```

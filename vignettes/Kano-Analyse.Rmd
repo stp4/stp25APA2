@@ -1,0 +1,285 @@
+---
+title: "Kano Analyse"
+author: "Wolfgang Peter"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+  md_document:
+    variant: markdown_github
+vignette: >
+  %\VignetteIndexEntry{Kano Analyse}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+
+
+
+
+```{r, echo=FALSE, cache=TRUE, results='hide', message=FALSE}
+require(stpvers)     ##  R version 3.1.2 (2014-10-31)
+ 
+set.seed(2)
+#-- Demo Data
+DF<- data.frame(  f1 =  c(rep(2,32), rep(1,42), rep(1,15), rep(2,11)  ) 
+                 ,f2 =  c(rep(5,32), rep(5,42), rep(2,15), rep(2,11) ) 
+                 
+                 ,f3 =  c(rep(2,34), rep(1,18), rep(1,19), rep(2,27)  , rep(2,1)  , rep(1,1)) 
+                 ,f4 =  c(rep(5,34), rep(5,18), rep(2,19), rep(2,27)  , rep(1,1)  , rep(1,1)) 
+                 
+                 ,f5 =  c(rep(2,5), rep(1,8), rep(1,41), rep(2,42)  , rep(2,2), rep(1,2)) 
+                 ,f6 =  c(rep(5,5), rep(5,8), rep(2,41), rep(2,42) , rep(1,2), rep(1,2)) 
+                 
+                 ,f7 =  c(rep(2,22), rep(1,29), rep(1,32), rep(2,17)  ) 
+                 ,f8 =  c(rep(5,22), rep(5,29), rep(2,32), rep(2,17) ) 
+                 
+                 ,f9 =  c(rep(2,3), rep(1,6), rep(1,28), rep(2,60) , rep(2,2), rep(1,1) ) 
+                 ,f10 = c(rep(5,3), rep(5,6), rep(2,28), rep(2,60) , rep(1,2), rep(1,1)) 
+                 
+                 )
+
+set.seed(0815)
+DF<- rbind(DF,DF,DF)[sample.int(300,296),]
+
+lvl <- c("1. like",  "2. must be",  "3. neutral",  "4. live with",  "5. dislike")         
+
+Labels<- c("Service app","Excellent service","Hotline","Loan machine","Ready-to-use return")
+
+
+#Labels<- c("24h availability","Tag der offenen Tuer","Tracking","Hotline","Service App")
+
+
+DF<- Hmisc::upData(DF, f1  = factor(f1 , 1:5, lvl), 
+            f2  = factor(f2 , 1:5, lvl),
+            f3  = factor(f3 , 1:5, lvl),
+            f4  = factor(f4 , 1:5, lvl),
+            f5  = factor(f5 , 1:5, lvl),
+            f6  = factor(f6 , 1:5, lvl),
+            f7  = factor(f7 , 1:5, lvl),
+            f8  = factor(f8 , 1:5, lvl),
+            f9  = factor(f9 , 1:5, lvl),
+            f10  = factor(f10 , 1:5, lvl),
+            labels=c(f1=Labels[1], f2=Labels[1]
+                          ,f3=Labels[2],f4=Labels[2]
+                          ,f5=Labels[3],f6=Labels[3]
+                          ,f7=Labels[4],f8=Labels[4]
+                          ,f9=Labels[5],f10=Labels[5])
+            )
+
+
+kano_res <- Kano( ~.  , DF)
+res<-APA2(kano_res) 
+
+```
+
+Die Kano-Methode ist eine Mehr-Faktor-Analyse der Kundenzufriedenheit.
+Das Kano-Modell wurde von Noriaki Kano in den 70ern fuer die Firma Konica 
+(Minolta Kameras) entwickelt. Die Marketingabteilung stellte damals fest, 
+dass Kunden bei einer direkten Befragung nur geringfuegige Aenderungen am 
+Produkt wuenschten. Ein tief greifendes Verstaendnis der unausgesprochenen 
+Beduerfnisse des Kunden konnte nicht abgeleitet werden.
+Kano entwickelte daraufhin eine Methode die Wuensche und Erwartungen 
+von Kunden zu erfassen.
+
+
+
+
+## Kano Fragebogen
+Das Kano-Modell unterscheidet vier Ebenen der Qualitaet der Kundenzufriedenheit:
+
+- **M** Basis-Merkmale, selbstverstaendlich Eigenschaft (Must-be)
+- **O** Leistungs-Merkmale, bewusste Eigenschaften (One-dimensional)
+- **A** Begeisterungs-Merkmale, nutzen stiftende Merkmale (Attractive)
+- **I** Unerhebliche Merkmale (Indifferent) 
+ 
+
+Der Kano-Fragebogen besteht aus zwei hypothetischen Fragen, 
+die funktionale Frage und die dysfunktionale Frage. Fuer die 
+Beantwortung steht eine sechsteilige Antwortskala bzw. eine 
+dreiteilige modifizierte Antwortskala zur Verfuegung.
+Die funktionale Frage bezieht sich auf vorhandene Attribute 
+eines Produkts und die dysfunktionale Frage auf die Nicht-Existenz 
+des Attributs.
+
+
+Wenn Sie Ihren Schadensfall ueber eine Firma-X Service App im 
+Smartphone melden koennten, wie denken Sie darueber?
+
+  - Das wuerde mich sehr freuen.
+  - Das setze ich voraus.
+  - Das ist mir egal.
+  - Das koennte ich eventuell in Kauf nehmen.
+  - Das wuerde mich sehr stoeren.
+
+Wenn Sie Ihren Schadensfall **nicht** ueber eine Firma-X Service 
+App im Smartphone melden koennten, wie denken Sie darueber?
+
+  - Das wuerde mich sehr freuen.
+  - Das setze ich voraus.
+  - Das ist mir egal.
+  - Das koennte ich eventuell in Kauf nehmen.
+  - Das wuerde mich sehr stoeren.
+
+```{r, echo=FALSE, results='asis', message=FALSE}
+# knitr::kable(head(DF[, 1:4],3)
+#              , format = "pandoc"
+#              , caption = "Auszug aus der Datentabelle: f1 = funktionale-Excellent service,  f2 = dysfunktionale-Excellent service, f3= funktionale-Hotline f4= dysfunktionale-Hotline")
+
+# # 
+#   Output(head(DF ) , caption = "Auszug aus der Datentabelle: f1 = funktionale-Excellent service,  f2 = dysfunktionale-Excellent service, f3= funktionale-Hotline f4= dysfunktionale-Hotline")
+
+1+1
+
+```
+
+ 
+
+
+
+
+
+## Evaluation 
+Die Auswertung erfolgt in drei Schritten: erstens anhand der Evaluations Tabelle 
+werden die die funktionale Frage und die dysfunktionale Frage kombiniert, 
+zweiter Schrit ist die Berechnung der Hueufigkeiten, und dritter Schritt ist 
+die Berechnung der Masszahlen max Kategory, M>O>A>I , Total Strength, sowie 
+CS+ und CS- sowie die Berechnung der statistischen Tests.
+
+```{r, echo=FALSE, results='asis'}
+ 
+
+tab1<-GetData("  'like'  'must be'	'neutral'	'live with'	'dislike'
+'like'	Q	A	A	A	O
+'must be'	R	I	I	I	M
+'neutral'	R	I	I	I	M
+'live with'	R	I	I	I	M
+'dislike'	R	R	R	R	Q
+")
+
+knitr::kable(tab1
+             , format = "pandoc"
+             , align='c'
+             , caption = "Evaluations Tabelle (Disfunktional = Spalten, Funktional = Zeilen)" )
+```
+
+
+In den nachfolgende Tabellen und Grafiken sind die Ergebnisse einer Evaluation eines eines Herstellers von Reinigungsanwendungen dargestellt. Die Forschungsfrage war welche Produktverbesserungen fuer einen Kunden einen Mehwert darstellen. Das verwendete Messinstrument hatte einen Umfang von ueber 20 Attributen. Hier sind zufaellig fuenf Attribute ausgewaehlt und mit simmuliten Zufallszahlen dargestellet.
+
+Hier Schrittweise die Berechnung der einzelnen Masszahlen.
+Die Einfachste Betrachtung ist das Auszaehlen nach **relativen Haeufigkeit** und 
+die Bewertung der **max Category** die Ergebnisse lassen sich am besten als Balkendiagramm Darstelle (siehe Abbildung 1).
+
+```{r, echo=FALSE, results='asis'}
+
+#APA2(kano_res, caption = "Ueber Objekt")
+ 
+
+# # knitr::kable(res[,c(1,4:7, 10:11)]
+# #              , format = "pandoc"
+# #              , align= c('l', 'c', 'c', 'c', 'c', 'c', 'c')
+# #              , caption = "Absolute Haeufigkeit in Prozent")
+# 
+#res[,c(1,4:7, 10:11)]
+
+1+1
+```
+
+
+
+ 
+```{r Kano_Bar, message=FALSE, echo=FALSE, cache=TRUE, cache.path = 'DocumentName_cache/',fig.path='figure/', fig.width = 7, fig.height = 4}
+#windows(7,4)
+
+# ##-- 
+#  trellis.par.set(ggplot2like(n = 4, h.start = 180))
+#  trellis.par.set(axis.text = list(cex = 0.8, lineheight = 0.9, col = "grey20"))
+# 
+#  
+#  Kano_plot(value ~ variable , kano_res,
+#  main = "",
+#  ylab = "Prozent",
+#  type = 2,# col = 2:7,
+#  prop.table = TRUE)
+
+
+plot(1)
+```
+
+In unserem Beispiel ergibt sich aber die Situation dass bei Loan machine die Kategorien A und I sehr nahe beieinander liegen. Hier kann die Evaluations-Regel nach M > O > A > I [Matzler et al. 1996] angewendet werden. In der vorliegenden Analyse wurde eine statistische Schwankungsbreite von 2.5% postuliert das Heizt das der Abstand von 5 Prozentpunkten zwischen den Attributen wird als gleiche Bewertung angesehen.
+
+Einer Ergaenzung der Haeufigkeiten sind die Masszahlen category strength und total strength. Category strength ist definiert als Prozent-Differenz der hoechsten Kategorie zur zweit haechsten Kategorie. Total strength ist definiert als totale Prozent der Attribute Attractive, One-dimensional und Must-be. [Lee and Newcomb 1997].
+
+Die Zufriedenheitskoeffizienten (Customer Satisfaction Index) CS+ (Better) und CS- (Worse)sind als Durchschnittswerte der Dimensionen Attractive, One-dimensional und Must-be aufzufassen [Berger et al. 1993]. Der positive Index CS+ beschreibt Zufriedenheit stiftende Attribute, der negative Index CS- beschreibt Unzufriedenheit stiftende Attribute fuer den Kunden
+
+ 
+$$Better = \frac{O+A}{M+O+A+I}$$
+
+$$Worse = \frac{M+O}{M+O+A+I}* -1$$
+
+Der Wertebereich reicht von eins bis null bei CS+ und von null bis minus eins bei CS-. Werte ab 0.5 bzw.-0.5 werden koennen als bedeutsam betrachtet werden.
+
+
+
+
+### Fong-Test
+  Fong-Test Vergleich der zwei Haeufigsten-Kategorien gegenueber der Gesamtzahl 
+  Ergebnis ist entweder ein signifikante oder ein nicht signifikante Verteilung.
+  
+  $$ |m1-m2|  < 1.65 \cdot \sqrt{ \frac{(m1+m2)(2 \cdot n-m1-m2)}{2 \cdot n}}$$
+  
+  m1 .. max Kategorie  (Hauufigkeit der Antwortkategorie mit der groessten Anzahl exclusive Q)
+  m2 .. zweit groessten Antwortkategorie
+  n .. Summe aus A,O,M,I, R und Q
+  
+  Formel habe ich aus http://eric-klopp.de/texte/die-kano-methode.php kopiert.
+  
+  Fong, D. (1996). Using the self-stated importance questionnaire to interpret Kano questionnaire results.The Center for Quality Management Journal, 5, 21 – 24.
+  
+```{r, echo=FALSE, results='asis'}
+
+# knitr::kable(res[,c(1,4:7,12:15 )]
+#              , format = "pandoc"
+#              , align=c('l', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c')
+#              , caption = "Absolute Haeufigkeit und die Masszahlen")
+
+1+1
+```
+
+ 
+
+
+
+ Die Darstellung als Importance-Grid beinhaltet  vier Informationen zu den
+ Attributen die Position des Items wird durch die zwei 
+ Zufriedenheitskoeffizienten festgelegt, die Wichtigkeit (total strength) 
+ des Attributs durch die Schriftgroee visualisiert je groeer desdo wichtiger 
+ ist das Attribut und als weitere Information sind die Bedeutendste Kategorie
+ (ueber die M>O>I>A Regel) bei jedem Attribut mit angefuehrt.
+
+
+
+
+
+
+```{r Importance_Grid ,  fig.cap = "Importance-Grid", message=FALSE, echo=FALSE, cache=TRUE, cache.path = 'DocumentName_cache/', fig.path='figure/', fig.width = 5, fig.height = 5}
+#windows(8,8)
+kano_plot(  kano_res )
+
+```
+
+
+
+### Literatur
+Berger, C., R. Blauth, D. Boger, C. Bolster, G. Burchill, W. DuMouchel,
+F. Pouliot, R. Richter, A. Rubinoff, D. Shen, M. Timko, and D. Walden.
+1993. Kano's methods for understanding customer-defined quality.
+The Center for Quality Management Journal 2, no. 4.
+
+Matzler, K., H. H. Hinterhuber, F. Bailom, and E. Sauerwein.
+1996. How to delight your customers.  Journal of Product and
+Brand Management 5, no. 2:6-18.
+
+
