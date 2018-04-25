@@ -225,6 +225,8 @@ Ordnen.lm <- function(x,
 }
 
 
+
+# Alte Version kommentar siehe unten
 #' @rdname Ordnen
 #' @export
 Ordnen.merModLmerTest <- function(x,
@@ -302,6 +304,9 @@ Ordnen.merModLmerTest <- function(x,
 
 
 #' @rdname Ordnen
+#' @description lmerTest::lmer returns an object of class 'lmerModLmerTest' (previously 'merModLmerTest') 
+#' to clarify that 'lmerModLmerTest' extends  'lmerMod' – not 'merMod'. The merMod class includes generalized 
+#' and nonlinear mixed models and lmerTest is only designed for linear mixed models.
 #' @export
 Ordnen.lmerModLmerTest<- function(x,
                                   # custom.model.names = NULL,
