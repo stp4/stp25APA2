@@ -231,7 +231,8 @@ rndr_percent <- function(x,
                           n = NULL, ...) {
   if (is.vector(x)) {
     rndr_percent_default(x, n, ...)
-  } else if (length(dim(x)) == 1) {
+  } 
+  else if (length(dim(x)) == 1) {
     rndr_percent_default(as.vector(x), as.vector(n) , ...)
     
   } else if (is.matrix(x)) {
@@ -240,7 +241,7 @@ rndr_percent <- function(x,
     rndr_percent_matrix(as.matrix(x), as.matrix(n), ...)
   }
   else{
-    cat("\not a vector ")
+    cat("\n else not a vector !!!!!!\n")
     print(class(x))
     stop(" Unbekante Classe in rndr_percent() ")
   }
