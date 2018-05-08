@@ -783,6 +783,30 @@ Whereas R-squared is a relative measure of fit, RMSE is an absolute measure of f
 * **Beta-Werte** in Regressionsanalysen sind vereinfacht gesagt die standardisierten Koeffizienten und nur in theoretischen Fragestellungen interpretierbar. Besser sind meist die Koeffizienten (b). Ich verwende nach Möglichkeit immer die Koeffizienten da diese einfacher zu interpretieren sind.
 
  
+Die library(psycho) kann ueber analyze() Betas recht einfach ausgeben. Das geht sowohl bei lm als auch bei lmer.
+
+```{r}
+
+ library(psycho)
+ df <- psycho::affective  # Load a dataset from the psycho package
+  #df <- standardize(df)  # Standardize all numeric variables
+ fit <- lm(Age ~ Salary, data=df)  # Fit a Bayesian linear model
+ results <- analyze(fit)  # Format the output
+ APA2(results )
+   
+#  library(lmerTest)
+#  fit <- lmerTest::lmer(Sepal.Length ~ Sepal.Width + (1|Species), data=iris)
+#  results <- analyze(fit)
+#  APA2(results)
+
+
+```
+
+ 
+ 
+ 
+ 
+ 
 ### Logistische Regression Logit-Modell
 Das Logit-Modell ist eine Gruppe von Regressionsverfahren die als Klassifikationsverfahren verwendet werden. Zähldaten.
 
@@ -1511,6 +1535,7 @@ Weitere Info unter: https://stats.stackexchange.com/questions/60511/weibull-dist
 
 
 ```{r, fig.width=8, fig.height=4}
+
 
 
 #Beispiel: Sachs Seite 337

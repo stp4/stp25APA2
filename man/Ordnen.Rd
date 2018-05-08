@@ -61,4 +61,8 @@ Diese Funktion meine Version von tidy
 ANOVA
 
 Regression (linear)
+
+lmerTest::lmer returns an object of class 'lmerModLmerTest' (previously 'merModLmerTest') 
+to clarify that 'lmerModLmerTest' extends  'lmerMod' – not 'merMod'. The merMod class includes generalized 
+and nonlinear mixed models and lmerTest is only designed for linear mixed models.
 }
