@@ -409,9 +409,9 @@ errate_statistik3 <-
       n    <- length(x)
       rr <- NULL #Result
       
-      
-      if (all(is.na(x)))
-        X$measure[i] <- "all_NA"
+      # gelöscht wegen Fehler bei NAs
+     # if (all(is.na(x)))
+    #    X$measure[i] <- "all_NA"
        
       res <- switch(
         X$measure[i],
@@ -426,6 +426,9 @@ errate_statistik3 <-
         
         "NA"
       )
+    #  cat("\nin Mittelwert_Einzel")
+    #  print(res)
+      
       if (X$measure[i] == "factor") {
         x0 <- data.frame(
           Item = X$row_name[i],

@@ -595,10 +595,14 @@ Prozent2default <-
            n = length(x),
            exclude = NA,
            max_factor_length = 25) {
-   # cat( "\nProzent2default\n" )
+ # cat( "\nProzent2default\n Levels: " )
     if (!is.factor(x))
       x <- factor(x)
-
+#print(levels(x))
+#cat("\n data: ")
+   # print(x[1:5])
+    
+    
     x_NA <- x  #  x mit nas
     N    <- length(x)
     if (n == 0) {
