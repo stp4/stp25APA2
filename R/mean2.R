@@ -647,7 +647,10 @@ Multi2default<- function(x,
     x<- factor(ifelse(x == firstLevel, firstLevel, 0), c(firstLevel,0))
   }
   else if(is.logical(x)){
-    x<- as.factor(x, c(TRUE, FALSE))
+    x<-  factor(x)
+   ## xyz <- c(TRUE, FALSE, TRUE,TRUE, FALSE)
+   ## factor(xyz)
+    
   }
   else if(is.numeric(x) & is.integer(x)) {
     x <- factor( ifelse(x == 1, 1, 0), 1:0)
