@@ -136,7 +136,7 @@ Ordnen.aov <- function(x,
     k <- ncol(res)
     res <-
       cbind(res[, -k], etaSquared2(x, 2, FALSE), res[k])
-    }else warning("include.eta geht nur bei aov")
+    }else cat("\nWarnung: include.eta geht nur bei aov\n")
   }
   if (!include.sumsq){
     res <-  res[, names(res) != "sumsq"]

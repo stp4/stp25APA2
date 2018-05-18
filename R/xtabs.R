@@ -8,9 +8,11 @@ APA.xtabs <- function(x, ... ) {
   rndr_Chisq(x$statistic, x$parameter, x$p.value)
 }
 
+
 #' @rdname APA
 #' @export
 APA.table <- function(x, ...) APA.xtabs(x, ...)
+
 
 #' @rdname APA2
 #' @export
@@ -29,6 +31,7 @@ APA2.summary.table <- function(x, ...) {
     ffpvalue(x$p.value)
   ))
 }
+
 
 #' @rdname APA2
 #' @export
@@ -68,6 +71,7 @@ APA2.table <- function(x,
     ...
   )
 }
+
 
 #' @rdname APA2
 #' @description \strong{Kreuztabellen} 
@@ -189,17 +193,9 @@ APA2.xtabs  <- function(x,
         ...
       )
     }
-    
-    #  cat("\n Output?? str:")
-    #  print(class(res$xtab))
-    
-    #  print(str(res$xtab))
-    
-    #  Output(res$xtab, caption, note, output=output)
-    #cat("\n Output??")
+
   } else if (dimension == 3) {
-   # cat("\n in dim=3 Zeilen/Spalten-Summen")
-    if (include.total |
+  if (include.total |
         (include.total.columns & include.total.rows))
       add.margins <- seq_along(dim(x))
     else if (include.total.columns) {
@@ -242,20 +238,21 @@ APA2.xtabs  <- function(x,
 #' @rdname APA_
 #' @description APA_Xtabs Kreuztabellen
 #' @export
-APA_Xtabs <- function(x, data, caption = "" ,
+APA_Xtabs <- function(x,
+                      data,
+                      caption = "" ,
                       note = "",
                       output = which_output(),
                       col_names = NULL,
                       ...) {
-  #is_formula2()
   if (stpvers::is_formula2(x))
     x <- stats::xtabs(x, data) #- altlast abfangen
   
-  if( class(x)[1]=="glm"  ){
-   x<- Klassifikation(x, ...)$xtab
+  if (class(x)[1] == "glm") {
+    x <- Klassifikation(x, ...)$xtab
   }
   
-  APA2(x, caption, note, output=output)
+  APA2(x, caption, note, output = output)
   invisible(x)
 }
 
@@ -294,12 +291,12 @@ Format_xtabs <- function(x,
                                  add.margins) * 100)
   }
   
-  
   res <-  rndr_percent_matrix(prozent, anzahl, percent, digits)
   
   colnames(res) <- dimnames(x)[[2]]
   res <- cbind(Item = dimnames(x)[[1]], res)
   names(res)[1] <- paste(names(dimnames(x)), collapse = "/")
+  
   res
 }
 
@@ -316,6 +313,7 @@ fisher_Statistik <- function(x, digits = 2) {
     p   = ffpvalue(fisher$p.value)
   )
   names(res) <- c("OR", "95% CI" , "p-Value")
+  
   res
 }
 
@@ -420,6 +418,7 @@ xtabl_NxM <- function (xtab,
       #Error in if (translate) nms <- Names2Language(nms)
       Output(ans[[i]], caption = paste(i, caption), fix_colnames = FALSE)}
   }
+  
   res
 }
 
