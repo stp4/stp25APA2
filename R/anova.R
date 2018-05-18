@@ -75,22 +75,21 @@ APA2.summary.aov <- function(x,
 #' 
 #' APA2(aov.ex3)
 #' 
-APA2.aovlist <- function(x, output = which_output(),
+APA2.aovlist <- function(x,
+                         output = which_output(),
                          col_names = NULL,
                          ...) {
-
-  x<-summary(x)
+  x <- summary(x)
   
-  x1 <- 
+  x1 <-
     fix_data_frame2(x[[1]][[1]])
-  x1<- cbind(Source=rownames(x1), x1)
+  x1 <- cbind(Source = rownames(x1), x1)
   #APA_Table(npk.aov, type="anova")
-  Output(x1 , caption=names(x[1]), output=output)
+  Output(x1 , caption = names(x[1]), output = output)
   
-  x2 <- 
-    fix_data_frame2(x[[2]][[1]])
-  x2<- cbind(Source=rownames(x2), xr)
-  Output(x2 , caption=names(x[2]), output=output)
+  x2 <- fix_data_frame2(x[[2]][[1]])
+  x2 <- cbind(Source = rownames(x2), x2)
+  Output(x2 , caption = names(x[2]), output = output)
   
   invisible(x)
 }
