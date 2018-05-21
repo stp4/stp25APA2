@@ -431,7 +431,7 @@ Nagelkerke<- R2(fit1)[3]
 
 # Interpreztation
 
- paste("Eine logistische Regressionsanalyse zeigt, dass sowohl das Modell als Ganzes (",
+txt_log_reg <-  paste("Eine logistische Regressionsanalyse zeigt, dass sowohl das Modell als Ganzes (",
  APA(fit1), 
  ") als auch die einzelnen Koeffizienten der Variablen signifikant sind.",
  "Steigen die T-Zelltypisierung  um jeweils eine Einheit, 
@@ -440,6 +440,31 @@ Nagelkerke<- R2(fit1)[3]
  "Das R-Quadrat nach Nagelkerke beträgt",round(Nagelkerke,2), 
 " was nach Cohen (1992) einem starken Effekt entspricht."  )
 # 
+
+
+
+
+
+
+
+
+
+## ------------------------------------------------------------------------
+
+# Wahrscheinlichkeiten T-Zell
+fit1 <- glm(gruppe ~ tzell , hkarz, family = binomial)
+t.zell<-    c(50,55,60,65,70,75,80) #seq(50,80, by=1)  
+
+i<- coef(fit1)["(Intercept)"]
+b<-coef(fit1)["tzell"]
+
+z <- i + b*t.zell
+p<- 1/(1+exp(z)) 
+
+cbind(t.zell, p=round(p,2))
+
+ 
+#xyplot(p~t.zell)
 
 
 

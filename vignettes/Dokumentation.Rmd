@@ -932,6 +932,25 @@ Das Logit-Modell ist eine Gruppe von Regressionsverfahren die als Klassifikation
 Die binomiale logistische Regression wird angewendet, wenn geprüft werden soll, ob ein Zusammenhang zwischen einer  binären Ziel-Variable und einer oder mehreren Einfluss-Variablen besteht.
 Die folgenden Punkte stammen von Backhaus Seite 456.
  
+ 
+ 
+ 
+Anmerkung zu SPSS: bei SPSS gibt es den Wald-Test der bei R mit
+car::Anova(fit, type = "III", test.statistic = "Wald") 
+ durchgefuehrt werden kann. 
+ 
+ Bei SPSS gibt es zwei verschiedene Methoden klassisch und ueber GLM
+ Klassisch  kann SPSS aber keine Faktoren ins Model aufnehmen und beherscht nur den Wald-Test.
+ Bei GLM rechnet SPSS die Intercept anderst kann aber Faktoren berechnen und es koennen versch Tests gewählt werden. 
+ Bei SPSS sind die Ergebnisse der Parameter identisch aber das Intercept ist unterschiedlich.
+ 
+ 
+Bei SPSS wird quasi die ANOVA bei den Koefizienten ausgegeben und die Inercepts nicht konsistent was problematisch wird wenn man aus den Parametern die zugehörigen Wahrscheinlischkeiten rechnen will.
+ Bei R wird der Parameter b mit den LR-Test getestet und Factoren werden automatisch erkannt und das Intercept wird immer gleich berechnet.  
+ 
+ Zusammenfassend: bei R und SPSS werden zwei verschiedene Hypotesen getestet - Bei SPSS werden quasi kreativ die Intercepts berechnet.
+ 
+ 
 
 Beispiel Harnblasenkarzinom
 ```{r, results='asis', warning=FALSE}
@@ -1033,7 +1052,7 @@ Nagelkerke<- R2(fit1)[3]
 
 # Interpreztation
 
- paste("Eine logistische Regressionsanalyse zeigt, dass sowohl das Modell als Ganzes (",
+txt_log_reg <-  paste("Eine logistische Regressionsanalyse zeigt, dass sowohl das Modell als Ganzes (",
  APA(fit1), 
  ") als auch die einzelnen Koeffizienten der Variablen signifikant sind.",
  "Steigen die T-Zelltypisierung  um jeweils eine Einheit, 
@@ -1045,11 +1064,43 @@ Nagelkerke<- R2(fit1)[3]
 
 
 
+
+
+
+
+
 ```
   
   
   
-  
+  `r txt_log_reg`
+
+
+
+
+```{r}
+
+# Wahrscheinlichkeiten T-Zell
+fit1 <- glm(gruppe ~ tzell , hkarz, family = binomial)
+t.zell<-    c(50,55,60,65,70,75,80) #seq(50,80, by=1)  
+
+i<- coef(fit1)["(Intercept)"]
+b<-coef(fit1)["tzell"]
+
+z <- i + b*t.zell
+p<- 1/(1+exp(z)) 
+
+cbind(t.zell, p=round(p,2))
+
+ 
+#xyplot(p~t.zell)
+
+
+
+```
+
+
+
 
 
 ### Poisson Regression
