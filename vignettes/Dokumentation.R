@@ -123,6 +123,25 @@ require(pROC)
    Blutzucker=c(blz.diab, blz.cntr))
 
 
+## ----fig-roc1, fig.cap = "ROC-Kurve zu den Blutzuckerwerten",  fig.width=4, fig.height=4, cache=TRUE----
+# require(pROC)
+# data %>% Tabelle(Blutzucker, by=~Gruppe) 
+
+roc_curve <- roc(data$Gruppe, data$Blutzucker)
+plot(roc_curve, print.thres = "best",
+     print.auc=TRUE)
+
+# das selbe aber mit Regression daher sind die cut off -Werte nur indirekt interpretierbar
+# fit1  <- glm(Gruppe~Blutzucker, data, family = binomial)
+# x1 <- Klassifikation(fit1)
+# roc_curve   <- roc(x1$response, x1$predictor)
+# windows(8,8)
+# plot(roc_curve, print.thres = "best",
+#      print.auc=TRUE)
+# abline(v = 1, lty = 2)
+# abline(h = 1, lty = 2)
+
+
 ## ----roc2----------------------------------------------------------------
 fit1<- glm(gruppe~lai, hkarz, family = binomial)
 x1 <- Klassifikation(fit1)
@@ -135,6 +154,33 @@ auc(roc_curve)
 #abline(h = 1, lty = 2)
 #text(.90, .97, labels = "Ideal Model")
 #points(1,1, pch = "O", cex = 0.5)
+
+## ----fig-roc2, fig.cap = "ROC-Kurve zu den Harnblasenkarzinom",  fig.width=4, fig.height=4, cache=TRUE----
+fit1<- glm(gruppe~lai, hkarz, family = binomial)
+fit2<- glm(gruppe~lai+tzell, hkarz, family = binomial)
+#thkarz <- as.data.frame(xtabs(~gruppe+lai, hkarz))
+#fit2<- glm(Freq ~ gruppe*lai, thkarz, family = poisson())
+x1 <- Klassifikation(fit1)
+x2 <- Klassifikation(fit2) 
+#require(pROC)
+roc1   <- roc(x1$response, x1$predictor)
+roc2   <- roc(x2$response, x2$predictor)
+
+plot(roc1, print.auc = TRUE, print.auc.y = 0.6) 
+plot(roc2, lty = 2, col = "blue", print.auc.y = 0.7, print.auc = TRUE, add = TRUE)
+legend("bottomright",  legend = c("Lai", "Lai + T-Zell"),
+  col = c(par("fg"), "blue"), lty = 1:2, lwd = 2
+)
+roc.test(roc1, roc2)
+
+### Not run: 
+# The latter used Delong's test. To use bootstrap test:
+#roc.test(roc1, roc2, method="bootstrap")
+# Increase boot.n for a more precise p-value:
+#roc.test(roc1, roc2, method="bootstrap", boot.n=10000)
+
+#ciobj <- ci.se(roc2)
+#plot(ciobj, type = "shape", col="#D3D3D3", alpha = .5) 
 
 ## ---- results='asis', warning=FALSE--------------------------------------
 # APA2(tzell~gruppe,hkarz, type="cohen.d")  # APA_Effsize ist das gleiche
@@ -278,6 +324,14 @@ Giavarina <- transform(Giavarina, C = round( A + rnorm(30,0,20)),
 ICC2(~A+E, Giavarina, caption="ICC (Korrelationen)")
  
 
+## ----fig-BlandAltman3, fig.cap = "Bland Altman",  fig.width=8, fig.height=3, cache=TRUE----
+# A - Goldstandart
+
+x <- BlandAltman(~A+B+E, Giavarina)
+# x %>% Output("BA-Analyse der Messwertreihe")
+plot(x)
+
+
 ## ----fig-BlandAltman4, fig.cap = "Bland Altman",  fig.width=8, fig.height=3, cache=TRUE----
 x <- BlandAltman(~A+E+B, Giavarina)
 # x %>% Output("BA-Analyse der Messwertreihe")
@@ -305,6 +359,90 @@ DF <- transform(DF, C = round( A + rnorm(n, -5, 20)),
 ## ----fig-BAx1, fig.cap = "A und C Messen das gleiche mit SD=20",  fig.width=8, fig.height=3, cache=TRUE----
 x<- BlandAltman(~A+C, DF)
 plot(x)
+
+
+## ----fig-BAx2, fig.cap = "A und B Messen unterschiedliche Parameter",  fig.width=8, fig.height=3, cache=TRUE----
+x<- BlandAltman(~A+B, DF)
+plot(x)
+
+
+## ----fig-BAx3, fig.cap = "A und D Messen das unterschiedlich D hat im unteren Wertevereich deutlich geringere Werte",  fig.width=8, fig.height=3, cache=TRUE----
+x<- BlandAltman(~A+D, DF)
+plot(x)
+
+
+## ----fig-BAx4, fig.cap = "A und E Messen das unterschiedlich es esistiert ein Knick im Wertebereich 100",  fig.width=8, fig.height=3, cache=TRUE----
+x<- BlandAltman(~A+E, DF)
+plot(x)
+
+
+## ---- results='asis', warning=FALSE--------------------------------------
+#-- breaks ~ wool + tension ----------------------
+#warpbreaks %>% Tabelle2(breaks, by= ~ wool + tension)
+fm1 <- aov(breaks ~ wool + tension, data = warpbreaks)
+
+#  ANOVA
+APA2(fm1, caption="ANOVA")
+
+## ---- results='asis', warning=FALSE--------------------------------------
+TukeyHSD(fm1, "tension", ordered = TRUE) %>%
+  APA_Table(caption="TukeyHSD" )
+
+#plot(TukeyHSD(fm1, "tension"))
+#levels(warpbreaks$tension)
+
+# Lm Split
+fm1_split <-  summary(fm1,
+                      split=list(tension=list( M=1,  H=3, L=2)),
+                      expand.split=FALSE)
+APA2(fm1_split)
+
+
+## ---- results='asis', warning=FALSE--------------------------------------
+
+require(multcomp)
+
+fit_Tukey <-glht(fm1,
+                 linfct=mcp(tension="Tukey"),
+                 alternative = "less"
+)
+
+APA_Table(fit_Tukey, caption="APA_Table: multcomp mcp Tukey")
+
+APA2(fit_Tukey, caption="APA2: multcomp mcp Tukey")
+
+
+## ---- results='asis', warning=FALSE--------------------------------------
+
+### contrasts for `tension'
+K <- rbind("L - M" = c( 1, -1,  0),
+           "M - L" = c(-1,  1,  0),
+           "L - H" = c( 1,  0, -1),
+           "M - H" = c( 0,  1, -1))
+
+warpbreaks.mc <- glht(fm1,
+                      linfct = mcp(tension = K),
+                      alternative = "less")
+APA2(warpbreaks.mc, caption="APA2: multcomp mcp mit Contrasten")
+### correlation of first two tests is -1
+#cov2cor(vcov(fm1))
+
+### use smallest of the two one-sided
+### p-value as two-sided p-value -> 0.0232
+#summary(fm1)
+
+
+## ---- results='asis', warning=FALSE--------------------------------------
+
+fm2 <- aov(breaks ~ wool * tension, data = warpbreaks)
+APA_Table(fm2)
+x <- TukeyHSD(fm2, "tension",
+              ordered = TRUE)
+APA2(x, caption="Interaction: TukeyHSD" )
+
+warpbreaks$WW<-interaction(warpbreaks$wool,warpbreaks$tension )
+mod2<-aov(breaks~WW, warpbreaks)
+APA2(mod2, caption="ANOVA interaction haendich zu den Daten hinzugefuehgt")
 
 
 ## ---- results='asis', warning=FALSE--------------------------------------
@@ -358,6 +496,34 @@ fit1 %>% Goodness %>% Output()
 
 ## ---- results='asis', warning=FALSE--------------------------------------
 Klassifikation2(fit1)
+
+## ----results='asis', warning=FALSE---------------------------------------
+
+
+fit1 <- glm(gruppe~tzell+factor(lai), hkarz, family = binomial)
+
+x<- APA2(fit1, include.odds=TRUE )
+
+Nagelkerke<- R2(fit1)[2]
+ 
+
+
+
+# Interpreztation
+
+ paste("Eine logistische Regressionsanalyse zeigt, dass sowohl das Modell als Ganzes (",
+ APA(fit1), 
+ ") als auch die einzelnen Koeffizienten der Variablen signifikant sind.",
+ "Steigen die T-Zelltypisierung  um jeweils eine Einheit, 
+ so nimmt die relative Wahrscheinlichkeit eines Krank/Gesund um OR =",  x$OR[2], 
+ "Ist die  T-Zelltypisierung positiv so nimmt die 
+ relative Wahrscheinlichkeit um OR= ", x$OR[2],
+ "Das R-Quadrat nach Nagelkerke beträgt",round(Nagelkerke,2), 
+" was nach Cohen (1992) einem starken Effekt entspricht."  )
+# 
+
+
+
 
 ## ---- warning=FALSE------------------------------------------------------
 #-- SPSS kodiert die Gruppe 3 als Referenz

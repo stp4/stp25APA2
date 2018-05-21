@@ -226,6 +226,100 @@ Ordnen.lm <- function(x,
 
 
 
+#' @rdname Ordnen
+#' @export
+
+Ordnen.glm <- function(x,
+                       digits = 2,
+                       include.b = TRUE,
+                       include.se = TRUE,
+                       include.b.ci = FALSE,
+                       include.ci = TRUE,
+                       include.odds = TRUE,
+                       include.odds.ci= include.odds,
+                       include.test = "lrt",
+                       #"wald"  bei SPSS wird der Wald-Test verwendet, ich verwende den LRT
+                       ci.level = .95,
+                       ...) {
+  info <- model_info(x)
+  AV <-
+    ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
+  
+  coefs <- data.frame(summary(x)$coef)
+  names(coefs) <- c("b", "SE", "LR.Test", "p.value")
+  
+  if ( include.test == "lrt"){
+    coefs$LR.Test <- (coefs$b/coefs$SE)^2
+    names(coefs)[3]<- "Wald"
+  }
+  
+  include.intercept <- rownames(coefs)[1] == "(Intercept)"
+  
+  if (include.ci) {
+    # likelihood ratio test  oder  Wald test
+    if (include.test == "lrt")
+      cis <- confint(x, level = ci.level)
+    else
+      cis <- confint.default(x, level = ci.level)
+    
+    if (!is.matrix(cis))  
+      cis <- matrix(cis, ncol = 2)
+    
+  }
+  
+  # SPSS gibt keine CIs hier aus
+  if (include.b & include.b.ci ) {
+    coefs <- cbind(coefs[, 1, drop = FALSE],
+                   CI = rndr_CI(cis),
+                   coefs[,-1, drop = FALSE])
+    
+    if (include.intercept)
+      coefs$CI[1] <- ""
+  } else {
+    coefs <- coefs
+  }
+  
+  if (include.odds) {
+    if (include.odds.ci) {
+      coefs$OR <-
+        as.vector(ifelse(coefs[, 1] > 4.6, 100,  round(exp(coefs[, 1]), 2)))
+      coefs$OR.CI <- rndr_CI(exp(cis))
+      
+      if (include.intercept)  {
+        coefs$OR[1] <- NA
+        coefs$OR.CI[1] <- ""
+      }
+    }
+    else{
+      coefs$OR <-
+        as.vector(ifelse(coefs[, 1] > 4.6, 100,  round(exp(coefs[, 1]), 2)))
+      if (include.intercept)
+        coefs$OR[1] <- NA
+    }
+  }
+  
+  if (!include.se) {
+    coefs <-  coefs[, colnames(coefs) != "SE"]
+  }
+  
+  if (!include.b) {
+    coefs <-  coefs[,  colnames(coefs) != "b"]
+  }
+  
+  prepare_output(
+    fix_format(cbind(source = rownames(coefs), coefs)),
+    paste0("AV: ", AV),
+    paste0("Model: ", info$family[1]),
+    info$N,
+    info$labels
+  )
+}
+
+
+
+
+
+
 # Alte Version kommentar siehe unten
 #' @rdname Ordnen
 #' @export

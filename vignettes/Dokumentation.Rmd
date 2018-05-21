@@ -729,6 +729,124 @@ ANOVA/Regression: f, η², η²part und d, Δ, Hedge’s g (bei Vergleich der St
 
 
 
+### ANOVA und multiple Vergleiche
+Die  ANOVA kann als Erweiterung des t-Tests betrachtet werden und ist fast das gleiche wie die lineare Regression. 
+
+ Quelle: http://www.uni-koeln.de/~a0032/statistik/texte/mult-comp.pdf
+ 
+#### Kontraste
+
+ + Kontraste: Dummy Coding / Indikator / Einfach bzw. Simple (SPSS)/ contr.treatment (R)
+ + Effekt-Kodierung / Abweichung bzw. Deviation (SPSS) / contr.sum (R)
+ + Helmert-Kodierung / Differenz bzw. Difference (SPSS) / contr.helmert (R) 
+
+R bietet die o.a. Standard-Kontraste, die über die folgenden Funktionen erreichbar sind: contr.treatment(k,base=j) (j=Nummer der Vergleichsgruppe)contr.sum(k), contr.helmert(k), contr.poly(k)
+
+#### α-Adjustierungen
+R bietet α-Adjustierungen sowohl unabhängig von irgendwelchen Vergleichsverfahren an:
+p.adjust die Standard-Adjustierungen (Bonferroni, Holm, Hochberg und Bejamini),
+multcomp die Verfahren von Westfall und Shaffer,
+
+
+```{r, results='asis', warning=FALSE}
+#-- breaks ~ wool + tension ----------------------
+#warpbreaks %>% Tabelle2(breaks, by= ~ wool + tension)
+fm1 <- aov(breaks ~ wool + tension, data = warpbreaks)
+
+#  ANOVA
+APA2(fm1, caption="ANOVA")
+```
+
+
+
+#### Tukey HSD (honestly significant differnce)
+
+Das wohl bekannteste Verfahren ist das von Tukey (für gleiche ni) bzw. von Tukey & Kramer(für ungleiche ni). Geprüft wird wie bei der Varianzanalyse: alle k Mittelwerte sind gleich. 
+
+
+```{r, results='asis', warning=FALSE}
+TukeyHSD(fm1, "tension", ordered = TRUE) %>%
+  APA_Table(caption="TukeyHSD" )
+
+#plot(TukeyHSD(fm1, "tension"))
+#levels(warpbreaks$tension)
+
+# Lm Split
+fm1_split <-  summary(fm1,
+                      split=list(tension=list( M=1,  H=3, L=2)),
+                      expand.split=FALSE)
+APA2(fm1_split)
+
+```
+
+das gleiche mit multcomp
+
+
+```{r, results='asis', warning=FALSE}
+
+require(multcomp)
+
+fit_Tukey <-glht(fm1,
+                 linfct=mcp(tension="Tukey"),
+                 alternative = "less"
+)
+
+APA_Table(fit_Tukey, caption="APA_Table: multcomp mcp Tukey")
+
+APA2(fit_Tukey, caption="APA2: multcomp mcp Tukey")
+
+```
+
+
+ 
+Kontraste
+
+```{r, results='asis', warning=FALSE}
+
+### contrasts for `tension'
+K <- rbind("L - M" = c( 1, -1,  0),
+           "M - L" = c(-1,  1,  0),
+           "L - H" = c( 1,  0, -1),
+           "M - H" = c( 0,  1, -1))
+
+warpbreaks.mc <- glht(fm1,
+                      linfct = mcp(tension = K),
+                      alternative = "less")
+APA2(warpbreaks.mc, caption="APA2: multcomp mcp mit Contrasten")
+### correlation of first two tests is -1
+#cov2cor(vcov(fm1))
+
+### use smallest of the two one-sided
+### p-value as two-sided p-value -> 0.0232
+#summary(fm1)
+
+```
+
+
+
+
+Interaction
+
+
+```{r, results='asis', warning=FALSE}
+
+fm2 <- aov(breaks ~ wool * tension, data = warpbreaks)
+APA_Table(fm2)
+x <- TukeyHSD(fm2, "tension",
+              ordered = TRUE)
+APA2(x, caption="Interaction: TukeyHSD" )
+
+warpbreaks$WW<-interaction(warpbreaks$wool,warpbreaks$tension )
+mod2<-aov(breaks~WW, warpbreaks)
+APA2(mod2, caption="ANOVA interaction haendich zu den Daten hinzugefuehgt")
+
+```
+
+
+
+
+
+
 ### Lineare Regressionsanalyse (lm)
 Die Bezeichnung Regression stammte historisch gesehen von Francis Galton, er untersuchte den Zusammenhang der Körpergröße von Eltern und Kindern (Regression to the Mean). Ziel der Regressionsanalyse ist eine funktionale Beziehung zwischen zwei Größen zu finden.[1] Mathematisch lässt sich das folgend formulieren   ($\hat{Y} = c + bX + e$), dabei ist $X$ die unabhängige und $\hat{Y}$ die abhängige Variable und $e$ der statistische Fehler. Gesucht wird, die “Formel” der Gerade, die in der graphischen Darstellung durch den Mittelwert verläuft. Die Regression ist quasi die Erweiterung der Korrelationsanalyse die ja die Stärke des Zusammenhangs ermittelt.
 
@@ -877,6 +995,12 @@ Goodness <- function(x) {
 fit1 %>% Goodness %>% Output()
 ```
    
+ 
+   
+   
+   
+   
+   
     
 Weitere Betrachtung ist über Klassifikationstabelle und dazu gibt es die Tests Hosmer Lemeschow-Test und Press Q-Test.
  
@@ -885,6 +1009,42 @@ Weitere Betrachtung ist über Klassifikationstabelle und dazu gibt es die Tests 
 ```{r, results='asis', warning=FALSE}
 Klassifikation2(fit1)
 ```
+  
+  
+  
+  
+  
+  
+```{r,results='asis', warning=FALSE}
+
+
+fit1 <- glm(gruppe~tzell+factor(lai), hkarz, family = binomial)
+
+x<- APA2(fit1, include.odds=TRUE )
+
+Nagelkerke<- R2(fit1)[2]
+ 
+
+
+
+# Interpreztation
+
+ paste("Eine logistische Regressionsanalyse zeigt, dass sowohl das Modell als Ganzes (",
+ APA(fit1), 
+ ") als auch die einzelnen Koeffizienten der Variablen signifikant sind.",
+ "Steigen die T-Zelltypisierung  um jeweils eine Einheit, 
+ so nimmt die relative Wahrscheinlichkeit eines Krank/Gesund um OR =",  x$OR[2], 
+ "zu. Ist die  T-Zelltypisierung positiv so nimmt die  relative Wahrscheinlichkeit um OR= ", x$OR[2],
+ "Das R-Quadrat nach Nagelkerke beträgt",round(Nagelkerke,2), 
+" was nach Cohen (1992) einem starken Effekt entspricht."  )
+# 
+
+
+
+```
+  
+  
+  
   
 
 
