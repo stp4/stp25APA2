@@ -340,10 +340,10 @@ type_default <- function(x,
                          note = NULL,
                          custom.model.names = NULL,
                          ...) {
-  cat("\n In type_default ", class(x) )
+ # cat("\n In type_default ", class(x) )
  
     res <-  Ordnen(x, ...) # ist das gleiche wie broom::tidy(x)
-    cat("\n nach Ordnen ")
+  #  cat("\n nach Ordnen ")
   #  print(names(res))
   #  print(res)
   if (is.null(caption))

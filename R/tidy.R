@@ -418,7 +418,7 @@ Ordnen.lmerModLmerTest<- function(x,
                                   #  include.bic = include.aic,
                                   ci.level = .95,
                                   ...) {
-  cat("\n In Ordnen.lmerModLmerTest \n")
+#  cat("\n In Ordnen.lmerModLmerTest \n")
   info <- model_info(x)
   AV <-
     ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
