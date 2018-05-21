@@ -176,6 +176,7 @@ Ordnen.lm <- function(x,
                       #  include.bic = include.aic,
                       ci.level = .95,
                       ...) {
+  cat("\n In Ordnen.lm " )
   info <- model_info(x)
   AV <-
     ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
@@ -228,7 +229,6 @@ Ordnen.lm <- function(x,
 
 #' @rdname Ordnen
 #' @export
-
 Ordnen.glm <- function(x,
                        digits = 2,
                        include.b = TRUE,
@@ -236,11 +236,13 @@ Ordnen.glm <- function(x,
                        include.b.ci = FALSE,
                        include.ci = TRUE,
                        include.odds = TRUE,
-                       include.odds.ci= include.odds,
+                       include.odds.ci= include.ci,
                        include.test = "lrt",
                        #"wald"  bei SPSS wird der Wald-Test verwendet, ich verwende den LRT
                        ci.level = .95,
                        ...) {
+  
+  cat("\n In Ordnen.glm " )
   info <- model_info(x)
   AV <-
     ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])

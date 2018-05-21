@@ -977,11 +977,15 @@ Analysis of Deviance Table = Wald-Test (Type II), Anova
 ```
 
 **Pseudo-R-Quadrat**   
-   + Cox und Snell R2: [ 0.2 = akzeptabel, 0.4 = gut ] 
-   
-   + Nagelkerke R2: [ 0.2 = akzeptabel, 0.4 = gut, 0.5 = sehr gut] 
-   
-   + McFaddens R2: [ 0.2 = akzeptabel, 0.4 = gut ] (see pR2)
+ 
++ McFaddens R2: [ 0.2 = akzeptabel, 0.4 = gut ] (see pR2) 
+   McFadden:  McFadden's pseudo r-squared
+ 
++ Cox und Snell R2: [ 0.2 = akzeptabel, 0.4 = gut ]  
+  r2ML: Cox & Snell, Maximum likelihood pseudo r-squared
+    
++ Nagelkerke R2: [ 0.2 = akzeptabel, 0.4 = gut, 0.5 = sehr gut] 
+   r2CU: Nagelkerke Cragg and Uhler's pseudo r-squared
 
 
 
@@ -1015,14 +1019,14 @@ Klassifikation2(fit1)
   
   
   
-```{r,results='asis', warning=FALSE}
+```{r,results='hide', warning=FALSE}
 
 
 fit1 <- glm(gruppe~tzell+factor(lai), hkarz, family = binomial)
 
 x<- APA2(fit1, include.odds=TRUE )
 
-Nagelkerke<- R2(fit1)[2]
+Nagelkerke<- R2(fit1)[3]
  
 
 

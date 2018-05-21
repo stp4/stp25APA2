@@ -94,6 +94,14 @@ corresponding class to get varF, varRand and the family from the specific object
 
  return A data frame with "Class", "Family", "Marginal", "Conditional", and "AIC" columns
 
+glm:   
+
+McFadden:  McFadden's pseudo r-squared
+ 
+ r2ML: Cox & Snell, Maximum likelihood pseudo r-squared
+ 
+ r2CU: Nagelkerke Cragg and Uhler's pseudo r-squared
+
 R2: The RMSE is the square root of the variance of the residuals.
 Compute the root mean squared error
 (see \code{\link{sigma}})

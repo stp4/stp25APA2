@@ -104,6 +104,14 @@ R2.lm <- function(x, ...) {
 
 #' @rdname R2
 #' @export
+#' @description glm:   
+#' 
+#' McFadden:  McFadden's pseudo r-squared
+#'  
+#'  r2ML: Cox & Snell, Maximum likelihood pseudo r-squared
+#'  
+#'  r2CU: Nagelkerke Cragg and Uhler's pseudo r-squared
+#'  
 R2.glm <- function(x, ...) {
 
   # Daniel Wollschläger Grundlagen der Datenanalyse mit R
