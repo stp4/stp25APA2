@@ -15,6 +15,7 @@
 \alias{rndr_r}
 \alias{rndr_df}
 \alias{rndr_CI}
+\alias{rndr_ods_CI}
 \alias{rndr_mean_CI}
 \alias{rndr_F}
 \alias{rndr_T}
@@ -66,6 +67,10 @@ rndr_r(x, include.symbol = TRUE)
 rndr_df(df1, df2 = NULL)
 
 rndr_CI(ci, digits = 2, sep = options()$stp25$apa.style$sep_element,
+  sep_1 = options()$stp25$apa.style$brackets[1],
+  sep_2 = options()$stp25$apa.style$brackets[2])
+
+rndr_ods_CI(ci, digits = 2, sep = options()$stp25$apa.style$sep_element,
   sep_1 = options()$stp25$apa.style$brackets[1],
   sep_2 = options()$stp25$apa.style$brackets[2])
 

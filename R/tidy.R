@@ -283,9 +283,8 @@ Ordnen.glm <- function(x,
   
   if (include.odds) {
     if (include.odds.ci) {
-      coefs$OR <-
-        as.vector(ifelse(coefs[, 1] > 4.6, 100,  round(exp(coefs[, 1]), 2)))
-      coefs$OR.CI <- rndr_CI(exp(cis))
+      coefs$OR <- rndr_ods(as.vector(exp(coefs[, 1])))
+      coefs$OR.CI <- rndr_ods_CI(exp(cis))
       
       if (include.intercept)  {
         coefs$OR[1] <- NA
@@ -293,8 +292,7 @@ Ordnen.glm <- function(x,
       }
     }
     else{
-      coefs$OR <-
-        as.vector(ifelse(coefs[, 1] > 4.6, 100,  round(exp(coefs[, 1]), 2)))
+      coefs$OR <- rndr_ods(as.vector(exp(coefs[, 1])))
       if (include.intercept)
         coefs$OR[1] <- NA
     }
@@ -541,21 +539,25 @@ Ordnen.polr <- function(x,
 
   if (include.odds) {
     if(include.ci){
-      source.coef$OR <-
-        ifelse(source.coef$b > 4.6, 100,  round(exp(source.coef$b), 2))
-      source.coef$OR.low <-
-        ifelse(source.coef$low > 4.6, 100,  round(exp(source.coef$low), 2))
-      source.coef$OR.upr <-
-        ifelse(source.coef$upr > 4.6, 100,  round(exp(source.coef$upr), 2))
+      source.coef$OR <- rndr_ods(source.coef$b )
+      #  ifelse(> 4.6, 100,  round(exp(source.coef$b), 2))
+      source.coef$OR.low <-rndr_ods(source.coef$low)
+      #  ifelse(source.coef$low > 4.6, 100,  round(exp(source.coef$low), 2))
+      source.coef$OR.upr <-rndr_ods(source.coef$upr)
+      #  ifelse(source.coef$upr > 4.6, 100,  round(exp(source.coef$upr), 2))
       
-      source.interc$OR <-
-        ifelse(source.interc$b > 4.6, 100,  round(exp(source.interc$b), 2))
+      source.interc$OR <-rndr_ods(source.interc$b)
+     #   ifelse(source.interc$b > 4.6, 100,  round(exp(source.interc$b), 2))
       source.interc$OR.low <- NA
       source.interc$OR.upr <- NA
     }
     else{
-      source.coef$OR <- ifelse(source.coef$b > 4.6, 100,  round(exp(source.coef$b), 2))
-      source.interc$OR <- ifelse(source.interc$b > 4.6, 100,  round(exp(source.interc$b), 2))
+      source.coef$OR <-  rndr_ods(source.coef$b)
+        
+       # ifelse(source.coef$b > 4.6, 100,  round(exp(source.coef$b), 2))
+      source.interc$OR <- rndr_ods(source.interc$b)
+        
+      #  ifelse(source.interc$b > 4.6, 100,  round(exp(source.interc$b), 2))
     }
   }
   

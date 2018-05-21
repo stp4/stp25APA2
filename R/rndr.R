@@ -496,6 +496,30 @@ res[which(is.na(ci[,1]))]<-NA
 res
 }
 
+
+
+#' @rdname rndr_
+#' @export
+
+rndr_ods_CI<- function(ci, digits = 2,
+                       #lead.zero = options()$stp25$apa.style$mittelwert$lead.zero,
+                       sep=options()$stp25$apa.style$sep_element,
+                       sep_1=options()$stp25$apa.style$brackets[1],
+                       sep_2=options()$stp25$apa.style$brackets[2] ){
+  
+  #Format2.matrix kann verschiedene digits aufloesen
+  res<- paste0(sep_1,
+               rndr_ods(ci[,1], digits),
+               sep, " ",
+               rndr_ods(ci[,2], digits),
+               sep_2)
+  
+  res[which(is.na(ci[,1]))] <- NA
+  res
+}
+
+
+
 #' @rdname rndr_
 #' @export
 rndr_mean_CI <- function(m, ci, digits) {
