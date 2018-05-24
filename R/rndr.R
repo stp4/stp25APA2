@@ -465,6 +465,28 @@ rndr_r <- function(x, include.symbol=TRUE) {
 
 
 #' @rdname rndr_
+#' @export
+rndr_r2 <- function(x, ...) {
+  r2 <- Format2(x, 2)
+  paste(paste(c("R<sup>2</sup>", "adj.R<sup>2</sup>"), "=", r2), collapse = ", ")
+}
+
+
+#' @rdname rndr_
+#' @export
+rndr_r2pseudo <- function(x, ...) {
+  r2 <- Format2(x, 2)
+  paste(paste(names(r2), "=", r2), collapse = ", ")
+}
+
+
+
+
+
+
+
+
+#' @rdname rndr_
 #' @param df,df1,df2 Freiheitsgrade
 #' @export
 rndr_df<- function(df1, df2=NULL) {
