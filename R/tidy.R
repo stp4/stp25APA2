@@ -170,16 +170,31 @@ Ordnen.lm <- function(x,
                       # include.eta = TRUE,
                       include.ci = FALSE,
                       # include.variance = TRUE,
-                      #  include.r = TRUE,
-                      #  include.ftest = FALSE,
+                        include.r = TRUE,
+                        include.ftest = FALSE,
                       #  include.aic = TRUE,
                       #  include.bic = include.aic,
                       ci.level = .95,
                       ...) {
-  cat("\n In Ordnen.lm " )
+  #cat("\n In Ordnen.lm " )
   info <- model_info(x)
   AV <-
     ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
+  
+  
+  
+  note <-  paste0("Model: ", info$family[1])
+  if (include.ftest)
+    note <- paste(note, APA(x, FALSE))
+  if (include.r) {
+    r2 <- R2(x)
+    note <-
+      paste(note, "\nr-squared:", rndr_r2(r2))
+  }
+  
+  
+  
+  
   
   # res <- broom::tidy(x)
   coefs <- summary(x)$coef
@@ -220,7 +235,7 @@ Ordnen.lm <- function(x,
  
   prepare_output(data.frame(Source= rownames(res), res, stringsAsFactors = FALSE),
                  paste0("AV: ", AV),
-                 paste0("Model: ", info$family[1]),
+                 note=note,    #  paste0("Model: ", info$family[1]),
                  info$N,
                  info$labels)
 }
@@ -239,11 +254,38 @@ Ordnen.glm <- function(x,
                        include.odds.ci= include.ci,
                        include.test = "lrt",
                        #"wald"  bei SPSS wird der Wald-Test verwendet, ich verwende den LRT
+                      
+                       
+                      # include.p = TRUE,
+                      # include.stars = FALSE,
+                       
+                      # include.variance = FALSE,
+                       include.r = TRUE,
+                       include.pseudo = include.r,
+                       # noch nicht fertig
+                     #  include.ftest = FALSE,
+                       include.loglik = TRUE,
+                       # noch nicht fertig
+                     #  include.custom = FALSE,
+                      # include.aic = FALSE,
+                     #  include.bic = FALSE, 
                        ci.level = .95,
-                       ...) {
+                        ...) {
   
-  cat("\n In Ordnen.glm " )
+ # cat("\n In Ordnen.glm " )
   info <- model_info(x)
+  
+  note <-  paste0("Model: ", info$family[1])
+  if (include.loglik)
+    note <- paste(note, APA(x))
+  if (include.pseudo) {
+    r2 <- R2(x)
+    note <-
+      paste(note, "\npseudo r-squared:", rndr_r2pseudo(r2))
+  }
+  
+   
+   
   AV <-
     ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
   
@@ -309,7 +351,7 @@ Ordnen.glm <- function(x,
   prepare_output(
     fix_format(cbind(source = rownames(coefs), coefs)),
     paste0("AV: ", AV),
-    paste0("Model: ", info$family[1]),
+    note=note,
     info$N,
     info$labels
   )
