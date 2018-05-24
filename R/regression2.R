@@ -372,7 +372,7 @@ APA2.psychobject <- function(x,
 #' 
 APA2.lm <- function(x, 
                     caption=NULL,
-                    note=paste("contrasts: ", paste(options()$contrasts, collapse=", ")),
+                    note=NULL,   #paste("contrasts: ", paste(options()$contrasts, collapse=", ")),
                     output = which_output(),
                     col_names = NULL,
                     ...)
@@ -382,6 +382,10 @@ APA2.lm <- function(x,
   if (is.null(caption))
     caption <- paste(attr(res, "caption"),
                      "Obs: ", attr(res, "N"))
+  
+  if (is.null(note))
+    note <- attr(res, "note") 
+                     
   
   Output(
     fix_format(res),

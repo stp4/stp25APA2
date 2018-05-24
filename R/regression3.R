@@ -15,6 +15,7 @@
 #' @param include.ftest,include.loglik noch nicht fertig
 #' @param include.custom Liste mit eigenen Einträgen
 #' @param include.aic,include.bic AIC BIC
+#' @param include.anova    Explizite ANOVA Tabelle  include.anova=TRUE
 #' @param single.row Agrument texreg = TRUE
 #' 
 #' @return invisible data.frame und Output mit html/knit oder Text.
@@ -161,6 +162,8 @@ APA_Table <- function(...,
                       include.aic = TRUE,
                       include.bic = include.aic,
                       
+                      include.anova = TRUE,
+                      
                       ci.level = .95,
                       single.row = TRUE,
                       #  col_names = NULL, #c("b", "SE", "p"),
@@ -206,9 +209,7 @@ APA_Table <- function(...,
         include.eta = include.eta,
         include.odds = include.odds,
         include.ci = include.ci,
-        
-        
-        #Fehler abfangeb
+                #Fehler abfangeb
         include.p = include.p,
         include.stars = include.stars,
         
@@ -219,9 +220,7 @@ APA_Table <- function(...,
         include.ftest = include.ftest,
         include.loglik = include.loglik,
         # noch nicht fertig
-        
         include.custom = include.custom,
-        
         include.aic = include.aic,
         include.bic = include.bic,
         
@@ -316,7 +315,7 @@ APA_Table <- function(...,
   }
   
   
-  if ("anova" %in% type) {
+  if (include.anova & ( "anova" %in% type) ) {
     
     #car::ANOVA Type II
     result[["anova"]] <- APA_Table_Anova(
@@ -340,12 +339,8 @@ type_default <- function(x,
                          note = NULL,
                          custom.model.names = NULL,
                          ...) {
- # cat("\n In type_default ", class(x) )
- 
-    res <-  Ordnen(x, ...) # ist das gleiche wie broom::tidy(x)
-  #  cat("\n nach Ordnen ")
-  #  print(names(res))
-  #  print(res)
+  res <-  Ordnen(x, ...) # ist das gleiche wie broom::tidy(x)
+
   if (is.null(caption))
     caption <- paste(attr(res, "caption"),
                      "Obs: ", attr(res, "N"))
