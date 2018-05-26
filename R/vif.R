@@ -24,7 +24,14 @@ VIF <- function(x, ...) {
 #' @description VIF.default lm Methode aus car::vif
 #' @export
 VIF.default <- function(fit, ...) {
-  car::vif(fit)
+  
+  
+ # terms <- labels(terms(fit))
+ # n.terms <- length(terms)
+ # if(n.terms < 2) 
+ # else  
+    
+    car::vif(fit)
 }
 
 
@@ -38,18 +45,18 @@ APA_vif <- function(...,
   res <- list()
   i <- 1
   for (x in fits) {
-    res <- data.frame(VIF(x, ...))
-    names(res) <- "VIF"
-    res <- prepare_output(
-      cbind(Source = rownames(res), res),
-      caption = paste(caption, model_info(x)$y)
-      ,
+    res_vif <-  VIF(x, ...) 
+  
+    res_vif <- prepare_output(
+      data.frame(Source =  names(res_vif),  
+                 VIF= Format2(as.vector(res_vif), 2) ),
+      caption = paste(caption, model_info(x)$y),
       notes = notes
     )
     
-    res[[i]] <- res
+    res[[i]] <- res_vif
     i <- i + 1
-    Output(res)
+    Output(res_vif)
   }
   invisible(res)
 }
@@ -199,3 +206,5 @@ maxcorr.mer <- function (fit,
     zapsmall(minCor)
   }
 }
+
+
