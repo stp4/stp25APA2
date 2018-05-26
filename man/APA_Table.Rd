@@ -20,8 +20,8 @@ APA_Table(..., caption = NULL, note = NULL, type = c("default", "long",
   include.stars = if (include.p) FALSE else TRUE, include.variance = TRUE,
   include.r = TRUE, include.pseudo = FALSE, include.ftest = FALSE,
   include.loglik = FALSE, include.custom = NULL, include.aic = TRUE,
-  include.bic = include.aic, ci.level = 0.95, single.row = TRUE,
-  rgroup = c("Parameter", "Goodness of fit"))
+  include.bic = include.aic, include.anova = TRUE, ci.level = 0.95,
+  single.row = TRUE, rgroup = c("Parameter", "Goodness of fit"))
 
 type_default(x, caption = NULL, note = NULL, custom.model.names = NULL,
   ...)
@@ -71,6 +71,8 @@ regression_output(fits, caption = "", note = "",
 \item{include.custom}{Liste mit eigenen Einträgen}
 
 \item{include.aic, include.bic}{AIC BIC}
+
+\item{include.anova}{Explizite ANOVA Tabelle  include.anova=TRUE}
 
 \item{single.row}{Agrument texreg = TRUE}
 }

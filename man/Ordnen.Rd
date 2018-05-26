@@ -22,12 +22,13 @@ Ordnen(x, ...)
   include.meansq = FALSE, ...)
 
 \method{Ordnen}{lm}(x, include.b = TRUE, include.se = TRUE,
-  include.beta = FALSE, include.ci = FALSE, ci.level = 0.95, ...)
+  include.beta = FALSE, include.ci = FALSE, include.r = TRUE,
+  include.ftest = FALSE, ci.level = 0.95, ...)
 
 \method{Ordnen}{glm}(x, digits = 2, include.b = TRUE, include.se = TRUE,
   include.b.ci = FALSE, include.ci = TRUE, include.odds = TRUE,
-  include.odds.ci = include.ci, include.test = "lrt", ci.level = 0.95,
-  ...)
+  include.odds.ci = include.ci, include.test = "lrt", include.r = TRUE,
+  include.pseudo = include.r, include.loglik = TRUE, ci.level = 0.95, ...)
 
 \method{Ordnen}{merModLmerTest}(x, include.b = TRUE, include.se = TRUE,
   include.beta = FALSE, include.ci = FALSE, include.odds = FALSE,

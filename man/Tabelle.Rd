@@ -53,7 +53,11 @@ errate_statistik3(..., type = NULL, caption = "", note = "",
 
 \item{APA}{APA2 Style TRUE/FALSE}
 
-\item{test, include.test}{Signifikanz Test include.test= c(TRUE, "t.test","aov","wilcox.test","kruskal.test")}
+\item{test, include.test}{Signifikanz Test include.test
+"wilcox.test","u.test",  "kruskal.test","h.test",  
+"chisq.test","t.test",  "aov", "anova", 
+"SPSS", "Hmisc" 
+"shapiro.test" "KS.test"}
 
 \item{na.action, exclude}{an Formula}
 

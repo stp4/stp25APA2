@@ -13,6 +13,8 @@
 \alias{rndr_Stars}
 \alias{rndr_corr}
 \alias{rndr_r}
+\alias{rndr_r2}
+\alias{rndr_r2pseudo}
 \alias{rndr_df}
 \alias{rndr_CI}
 \alias{rndr_ods_CI}
@@ -63,6 +65,10 @@ rndr_Stars(p)
 rndr_corr(x, p, df)
 
 rndr_r(x, include.symbol = TRUE)
+
+rndr_r2(x, ...)
+
+rndr_r2pseudo(x, ...)
 
 rndr_df(df1, df2 = NULL)
 

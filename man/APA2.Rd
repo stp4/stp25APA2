@@ -2,7 +2,8 @@
 % Please edit documentation in R/APA.R, R/anova.R, R/bland_altman.R, R/corr.R,
 %   R/default_formula.R, R/effsize.R, R/icc.R, R/intern_errate_statistik.R,
 %   R/kano.R, R/likert.R, R/manova.R, R/multcomp.R, R/pca.R, R/polr.R,
-%   R/regression2.R, R/reliability.R, R/step.R, R/surv.R, R/t_test.R, R/xtabs.R
+%   R/regression1.R, R/regression2.R, R/reliability.R, R/step.R, R/surv.R,
+%   R/t_test.R, R/xtabs.R
 \name{APA2}
 \alias{APA2}
 \alias{APA2.NULL}
@@ -31,6 +32,7 @@
 \alias{APA2.fa}
 \alias{APA2.principal}
 \alias{APA2.polr}
+\alias{APA2.durbinWatsonTest}
 \alias{APA2.list}
 \alias{APA2.lm}
 \alias{APA2.lme}
@@ -142,6 +144,10 @@ errate_statistik2(Formula, data, caption = "caption", note = "note",
 \method{APA2}{polr}(x, caption = NULL, note = NULL, include.b = TRUE,
   include.se = TRUE, include.ci = FALSE, include.odds = TRUE, ...)
 
+\method{APA2}{durbinWatsonTest}(x,
+  caption = "Durbin-Watson Test for Autocorrelated Errors", note = NULL,
+  ...)
+
 \method{APA2}{list}(x, caption = "", note = "", digits = 2,
   custom.model.names = NULL, include.custom = NULL, include.b = TRUE,
   include.ci = FALSE, include.odds = FALSE, include.se = if (include.ci)
@@ -151,8 +157,7 @@ errate_statistik2(Formula, data, caption = "caption", note = "note",
   include.bic = include.aic, ci.level = 0.95, rgroup = c("Parameter",
   "Goodness of fit"), output = stp25output:::which_output(), ...)
 
-\method{APA2}{lm}(x, caption = NULL, note = paste("contrasts: ",
-  paste(options()$contrasts, collapse = ", ")), output = which_output(),
+\method{APA2}{lm}(x, caption = NULL, note = NULL, output = which_output(),
   col_names = NULL, ...)
 
 \method{APA2}{lme}(x, caption = "", note = "", output = which_output(),
@@ -329,6 +334,8 @@ APA2.glht  multcomp::glht
 
 Ordered Logistic or Probit Regression  
 https://stats.idre.ucla.edu/r/dae/ordinal-logistic-regression/
+
+Methode für car::durbinWatsonTest Kopie von car:::print.durbinWatsonTest
 
 Ausgabe von Regressions Tabelle nach der APA-Style vorgabe. Die Funktion
 ist eine Kopie von  texreg:::aggregate.matrix.

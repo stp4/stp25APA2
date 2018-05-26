@@ -929,27 +929,38 @@ Die library(psycho) kann ueber analyze() Betas recht einfach ausgeben. Das geht 
 Das Logit-Modell ist eine Gruppe von Regressionsverfahren die als Klassifikationsverfahren verwendet werden. Zähldaten.
 
 ### Binomiale Regressionsanalyse
-Die binomiale logistische Regression wird angewendet, wenn geprüft werden soll, ob ein Zusammenhang zwischen einer  binären Ziel-Variable und einer oder mehreren Einfluss-Variablen besteht.
-Die folgenden Punkte stammen von Backhaus Seite 456.
+
+Die binomiale logistische Regression wird angewendet, wenn geprueft werden soll, ob ein Zusammenhang zwischen einer binaeren Ziel-Variable und einer oder mehreren Einfluss-Variablen besteht. Die folgenden Beispiele stammen von Backhaus Seite 456.
+
+
+Anmerkung zu SPSS - warum sind die Ergebnisse von R und SPSS so verscheieden?
+
+
+Bei SPSS gibt es zwei verschiedene Methoden klassisch und ueber GLM Klassisch kann SPSS aber keine Faktoren ins Model aufnehmen und beherrscht nur den Wald-Test. Bei GLM rechnet SPSS die Intercept anderst kann aber Faktoren berechnen und es kounnen verschiedene Tests gewaehlt werden. Bei SPSS sind die Ergebnisse der Parameter identisch aber das Intercept ist unterschiedlich.
+Bei SPSS wird quasi die ANOVA bei den Koeffizienten ausgegeben und die Inercepts werden je nach Einstellung unterschiedlich berechnet - was problematisch wird wenn man aus den Parametern die zugehourigen Wahrscheinlichkeiten errechnen will. Bei R wird der Parameter b mit dem LR-Test getestet und Faktoren werden automatisch erkannt und das Intercept wird immer gleich berechnet.
+Zusammenfassend: R und SPSS werden zwei verschiedene Hypothesen  um die p-Werte zu bestimmen. Und bei SPSS werden die Intercepts quasi kreativ berechnet.
+
+Ergebnisse von SPSS ueber Regression
+
+Parameter|B|S.E.|Wald|df|Sig.|Exp(B)
+---------|-|----|-----|--|---|-----
+tzell|0.2|0.094|4.57|1|0.032|1.222
+lai|2.21|0.877|6.3|1|0.012|9.075
+Constant|-14.64|6.329|5.37|1|0.021|0
+
+Ergebnisse von SPSS ueber GML
+
+Parameter|B|Std. Error|Lower|Upper|Wald Chi-Square|df|Sig.
+---------|-|----------|-----|-----|---------------|--|----
+Threshold [gruppe=1.00]|12.44|6.52|-0.35|25.2|3.63|1|0.057
+tzell|0.2|0.09|0.01|0.34|4.5|1|0.032
+[lai=.00]|-2.2|0.88|-3.9|-0.48|6.3|1|0.012	
+
  
- 
- 
- 
-Anmerkung zu SPSS: bei SPSS gibt es den Wald-Test der bei R mit
-car::Anova(fit, type = "III", test.statistic = "Wald") 
- durchgefuehrt werden kann. 
- 
- Bei SPSS gibt es zwei verschiedene Methoden klassisch und ueber GLM
- Klassisch  kann SPSS aber keine Faktoren ins Model aufnehmen und beherscht nur den Wald-Test.
- Bei GLM rechnet SPSS die Intercept anderst kann aber Faktoren berechnen und es koennen versch Tests gewählt werden. 
- Bei SPSS sind die Ergebnisse der Parameter identisch aber das Intercept ist unterschiedlich.
- 
- 
-Bei SPSS wird quasi die ANOVA bei den Koefizienten ausgegeben und die Inercepts nicht konsistent was problematisch wird wenn man aus den Parametern die zugehörigen Wahrscheinlischkeiten rechnen will.
- Bei R wird der Parameter b mit den LR-Test getestet und Factoren werden automatisch erkannt und das Intercept wird immer gleich berechnet.  
- 
- Zusammenfassend: bei R und SPSS werden zwei verschiedene Hypotesen getestet - Bei SPSS werden quasi kreativ die Intercepts berechnet.
- 
+
+
+
+Der Wald-Test  bei R kann mit  car::Anova(fit, type = “III”, test.statistic = “Wald”) aufgerufen werden. Voraussetzung  ist dass das Modell streng linear ist. 
  
 
 Beispiel Harnblasenkarzinom
