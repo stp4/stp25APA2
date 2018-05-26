@@ -396,6 +396,9 @@ RMSE<- function(x, ...){
 #' @export
 RMSE.default <- function(x,...)
 {
+  
+  # Residual standard error
+  # Root Mean Square Error
   data.frame(sigma=sigma(x),
              RMSE = sqrt(mean(x$residuals^2)))
 }
