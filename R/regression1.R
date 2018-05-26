@@ -39,133 +39,58 @@ APA.glm <- function(x, ...) {
                 lrtst[2, 5]))
 }
 
-
-
-#' Testing Linear Regression Models
-#'
-#' Durbin-Watson test for autocorrelation of disturbances. Ist nur bei Zeitreihendaten sinnvoll.
-#' Computes Levene's test for homogeneity of variance across groups.
-#' Bartlett Test of Homogeneity of Variances
-#' Breusch-Pagan test against heteroskedasticity.
-#' variance inflation factor. VIF values over 5 are troubling, should probably investigate anything over 2.5.
-#'
-#' @param x model- fit
-#' @param include.F  Fsratistik
-#' @param include.heteroskedasticity Breusch-Pagan test
-#' @param include.durbin  autocorrelation
-#' @param include.levene  homogeneity of variance across groupssiehe T-Test
-#' @param include.bartlett Homogeneity of Variances siehe T-Test
-#' @param caption 
+ 
+#' @rdname APA_
+#' @description  APA_Durbin_Watson(fit, max.lag=1, simulate=TRUE, reps=1000,
+#' method=c("resample","normal"),
+#' alternative=c("two.sided", "positive", "negative")): Durbin-Watson Test for Autocorrelated Errors. 
+#'   Kopie der Funktion car::durbinWatsonTest
+#'   
 #' @export
-test_regression <- function(x,
-                            include.F=TRUE,
-                            include.heteroskedasticity = TRUE,
-                            include.durbin = TRUE,
-                            include.levene = FALSE,
-                            include.bartlett = FALSE,
-                           # include.vif=TRUE,
-                            caption = "Testing Linear Regression Models") {
-  
-  res <- data.frame(Test = as.character(NA), statistic = as.character(NA),
-                    stringsAsFactors=FALSE)
-  if (include.F) {
-    res <-
-      rbind(res,
-            c(Test = "F-Statistic",
-              statistic = APA(x,include.r = FALSE)))
-  }
-  
-  
-  if (include.heteroskedasticity) {
-    res <-
-      rbind(res,
-            c(Test = "Heteroskedasticity (Breusch-Pagan)",
-              statistic = APA(lmtest::bptest(x))))
-  }
-  if (include.durbin) {
-    res <-
-      rbind(res,
-            c(Test = "Autocorrelation (Durbin-Watson )",
-              statistic = APA(lmtest::dwtest(x))))
-  }
-  if (include.levene) {
-    res <- rbind( res,
-                  c(Test = "Levene's",
-                    statistic = APA(car::leveneTest(x))))
-  }
-  if (include.bartlett) {
-    res <-
-      rbind(res,
-            c(Test = "Bartlett",
-              statistic =  APA(bartlett.test(x$call$formula, x$model))))
-    
-  }
- # if(include.vif) VIF2(x)
-  
-  prepare_output(res[-1,], caption=caption) 
-  
+#'
+#' @examples
+#' x<-lm(score ~ grade + treatment + stdTest, schools)
+#' APA2(car::durbinWatsonTest(x))
+#' DW_Test2(x)
+#' 
+#' lmtest::dwtest(x)
+#' car::durbinWatsonTest(x)
+#' 
+APA_Durbin_Watson<- function(x,
+                             caption = "Durbin-Watson Test for Autocorrelated Errors",
+                             note =NULL, ...){
+  dw<-car::durbinWatsonTest(x,...) 
+  APA2.durbinWatsonTest(dw, caption=caption, note=note)
 }
 
 
-
-#' Validation of Linear Models Assumptions
-#' 
-#' Test von Heteroskedasticity und Autocorrelation
-#'
-#' @param ... 
-#' @param include.F 
-#' @param include.heteroskedasticity 
-#' @param include.durbin 
-#' @param include.levene 
-#' @param include.bartlett 
-#' @param caption 
-#' @param note 
-#' @param names 
-#'
-#' @return Output als html und data.frame
+#' @rdname APA2
+#' @description Methode für car::durbinWatsonTest Kopie von car:::print.durbinWatsonTest
 #' @export
-#'
-APA_Validation<- function(...,
-                          include.F=TRUE,
-                          include.heteroskedasticity = TRUE,
-                          include.durbin = TRUE,
-                          include.levene = FALSE,
-                          include.bartlett = FALSE,
-                          # include.vif=TRUE,
-                          caption = "Testing Linear Regression Models",
-                          note="",
-                          names = NULL
-)
-{
-  custom_model_names <- function() {
-    if (length(myfits) == 1) { 
-      ""
-    }else{
-      if (is.null(names)) paste0("(", 1:length(myfits), ")")  else
-        names     
-    }
-  }
-  
-  myfits <- list(...)
-  
-  if (is(myfits[[1]], "list")) {
-    myfits <- myfits[[1]]  # hier kommt ein fit_with-Objekt
-    if (is.null(names))
-      names <- names(myfits)
-  }
-  n<-length(myfits) 
-  
-  custom.model.names <- custom_model_names()
-  
-  res<- test_regression(myfits[[1]])
-  if(n>1){
-    for (i in 2:n){
-      
-      res<- cbind(res,  test_regression(myfits[[i]])[2])
-    }
-    names(res) <- c("Test", custom.model.names)
+
+APA2.durbinWatsonTest <-
+  function(x,
+           caption = "Durbin-Watson Test for Autocorrelated Errors",
+           note =NULL,
+           ...) {
+    max.lag <- length(x$dw)
+    result <- if (is.null(x$p))
+      cbind(
+        lag = 1:max.lag,
+        Autocorrelation = x$r,
+        `D-W Statistic` = x$dw
+      )
+    else cbind(lag = 1:max.lag, Autocorrelation = x$r, `D-W Statistic` = x$dw, 
+               `p-value` = x$p)
+    rownames(result) <- rep("", max.lag)
     
+    note <- paste(" Alternative hypothesis: rho", 
+                  if (max.lag > 1) "[lag]"
+                  else "", 
+                  c(" != ", " > ", " < ")[which(x$alternative == c("two.sided", "positive", "negative"))], "0", sep = "")
+    
+    result <- prepare_output(fix_format(data.frame(result)),
+                             caption = caption, note = note)
+    Output(result, ...)
+    invisible(result)
   }
-  Output(res)
-  invisible(res) 
-} 
