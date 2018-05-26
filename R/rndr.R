@@ -468,7 +468,7 @@ rndr_r <- function(x, include.symbol=TRUE) {
 #' @export
 rndr_r2 <- function(x, ...) {
   r2 <- Format2(x, 2)
-  paste(paste(c("R<sup>2</sup>", "adj.R<sup>2</sup>"), "=", r2), collapse = ", ")
+  paste(paste0(c("R<sup>2</sup>", "adj.R<sup>2</sup>"), "=", r2), collapse = ", ")
 }
 
 
@@ -476,7 +476,7 @@ rndr_r2 <- function(x, ...) {
 #' @export
 rndr_r2pseudo <- function(x, ...) {
   r2 <- Format2(x, 2)
-  paste(paste(names(r2), "=", r2), collapse = ", ")
+  paste(paste0(names(r2), "=", r2), collapse = ", ")
 }
 
 
@@ -599,7 +599,8 @@ rndr_BP<- function(F_val, df1, p=NULL){
 
 #' @rdname rndr_
 rndr_DW<- function(F_val, df1, p=NULL){
-  F_val <-paste0("DW", rndr_df(df1), "=", fftest(F_val))
+  F_val <-paste0("DW", #rndr_df(df1), 
+                 "=", fftest(F_val))
   if(is.null(p)) F_val
   else paste0(F_val, symbol_seperator, rndr_P(p))
 }
