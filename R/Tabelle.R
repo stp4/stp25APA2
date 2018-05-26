@@ -61,7 +61,12 @@ Tabelle2 <- function(...) {
 #' @param digits Kommastellen
 #' @param caption,note Uberschrift an Output
 #'  
-#' @param test,include.test  Signifikanz Test include.test= c(TRUE, "t.test","aov","wilcox.test","kruskal.test")
+#' @param test,include.test  Signifikanz Test include.test
+#'   "wilcox.test","u.test",  "kruskal.test","h.test",  
+#'   "chisq.test","t.test",  "aov", "anova", 
+#'   "SPSS", "Hmisc" 
+#'   "shapiro.test" "KS.test"
+#  Kolmogorov-Smirnov-Anpassungstest mit SPSS
 #' @param na.action,exclude an Formula
 #'   
 #' @param include.n,include.nr,include.total Anzahl ausgeben
