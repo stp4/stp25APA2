@@ -27,7 +27,8 @@ Ordnen(x, ...)
 
 \method{Ordnen}{glm}(x, digits = 2, include.b = TRUE, include.se = TRUE,
   include.b.ci = FALSE, include.ci = TRUE, include.odds = TRUE,
-  include.odds.ci = include.ci, include.test = "lrt", include.r = TRUE,
+  include.odds.ci = include.ci, include.rr = FALSE,
+  include.rr.ci = include.ci, include.test = "lrt", include.r = TRUE,
   include.pseudo = include.r, include.loglik = TRUE, ci.level = 0.95, ...)
 
 \method{Ordnen}{merModLmerTest}(x, include.b = TRUE, include.se = TRUE,
@@ -57,6 +58,10 @@ Ordnen(x, ...)
 \item{include.beta}{standartisiertes beta}
 
 \item{include.ci, ci.level}{95%-CI mit ci-Level}
+
+\item{include.b.ci, include.odds, include.rr.ci}{95 % Konfidenzintervalle}
+
+\item{rr}{RR Relatives Risiko}
 }
 \value{
 ein data.frame-Ojekt oder eine Liste von data.frames. Im Attribut N sind die Stichprobengroesse

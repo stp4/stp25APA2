@@ -37,6 +37,13 @@ APA_R2 <- function(..., caption, note) {
 #' Marginal and conditional r-squared for lme objects
 #'
 #'
+#'For mixed-effects models, R2 can be categorized into two types. Marginal R2  represents the 
+#'variance explained by fixed factors
+#'
+#'Conditional R2is interpreted as variance explained by both fixed and
+#' random factors (i.e. the entire model).
+#' 
+#'
 #' for R2.lme an lme model (usually fit using \code{lme}
 #' This method extracts the variance for fixed and random effects,
 #' as well as residuals, and calls \code{rsquared.glmm}
@@ -408,11 +415,19 @@ RMSE.default <- function(x,...)
 RMSE.mlm <- function(x,...)
 {
   broom::fix_data_frame(
-    data.frame(sigma=sigma(fit1),
-               RMSE= apply(fit1$residuals, 2 ,
+    data.frame(sigma=sigma(x),
+               RMSE= apply(x$residuals, 2 ,
                            FUN=function(rr) sqrt(mean(rr^2)))))
 }
 
- 
 
+ 
+#' @rdname R2
+#' @export
+RMSE.lmerModLmerTest <- function(x,...)
+{
+
+    data.frame(sigma=sigma(x),
+               RMSE= sjstats::rmse(x))
+}
  

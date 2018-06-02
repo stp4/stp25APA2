@@ -4,7 +4,7 @@
  
 test_regression <- function(x,
                             include.ftest=TRUE, include.loglik=FALSE, include.minus.LL=include.loglik,
-                            include.r=FALSE, include.pseudo=FALSE,
+                            include.r=FALSE, #include.pseudo=FALSE,
                             include.heteroskedasticity = TRUE,
                             include.durbin = TRUE,
                             include.levene = FALSE,
@@ -13,21 +13,38 @@ test_regression <- function(x,
                             include.sigma=FALSE,
                             include.rmse=FALSE,
                             include.aic=TRUE, include.bic = TRUE,
-                              
+                            include.residual=TRUE,
+                            include.normality=TRUE,
+                            include.multicollin=include.vif,
+                            
+                            include.deviance=TRUE,
+                            
+                            #include.obs=TRUE,
                             ...
                             ) {
+ # cat(("\n in test_regression\n"))
+  mdlnf <- model_info(x)
+  type_glm  <- inherits(x, "glm")
+  type_lm   <- inherits(x, "lm") & (!type_glm)
+  type_lmer <- inherits(x, "lmerModLmerTest")
   
-  mdlnf <- model_info(fit1)
- 
+  #print(c(type_lm, type_glm, type_lmer))
+  #print(mdlnf)
+ # print(mdlnf$N)
+  xs <- if(type_lmer) summary(x) else NULL
+  
+  
   res <- data.frame(Test ="Obs.", 
                     statistic = Format2(mdlnf$N, 0),
                     stringsAsFactors=FALSE)
+  
+  #print(res)
   
   if (include.ftest) {
     res <-
       rbind(res,
             c(Test = "F-Statistic",
-              statistic = ifelse(inherits(x, "lm")  & (!inherits(x, "glm")),
+              statistic = ifelse(type_lm,
                                  APA(x,include.r = FALSE), NA)))
   }
   
@@ -64,49 +81,51 @@ test_regression <- function(x,
     }
     }
   
+  
+  if (include.deviance) {
+    res <- rbind(res,
+                 c(Test = "Deviance Residuals",
+                   statistic =   Format2(deviance(x,REML=FALSE), 1)))
+    
+  }
+  
+  
+  
   if (include.r) {
     res <-rbind(res,
             c(Test = "R-Squared",
-              statistic =  ifelse(inherits(x, "lm")  & (!inherits(x, "glm")),
-                                  rndr_r2(R2(x)), NA)))
+              statistic = ifelse( type_lm, 
+                                 rndr_r2(R2(x)), 
+                          ifelse( type_glm | type_lmer,
+                                   rndr_r2pseudo(R2(x)),      
+                                   NA))))
   
   }
   
-  if (include.pseudo) {
-    res <- rbind(res,
-            c(Test = "Pseudo R-Squared",
-              statistic =  ifelse( inherits(x, "glm" ),
-                                   rndr_r2pseudo(R2(x)),NA)))
-  }
+  # if (include.pseudo) {
+  #   res <- rbind(res,
+  #           c(Test = "Pseudo R-Squared",
+  #             statistic =  ifelse( type_glm | type_lmer,
+  #                                  rndr_r2pseudo(R2(x)),
+  #                                  NA)))
+  # }
   
-  if (include.sigma) {
-    res <-
-      rbind(res,
-            c(Test = "Sigma",
-              statistic = Format2(RMSE(x)[1,1],2)
-            ))
-  }
-  
-  if (include.rmse) {
-    res <-
-      rbind(res,
-            c(Test = "RMSE",
-              statistic = Format2(RMSE(x)[1,2],2)
-            ))
-  }
+
   
   if (include.heteroskedasticity) {
     res <-
       rbind(res,
             c(Test = "Heteroskedasticity (Breusch-Pagan)",
-              statistic = APA(lmtest::bptest(x))))
+              statistic = ifelse( type_lm |type_glm, APA(lmtest::bptest(x)), NA )
+              ))
   }
   
   if (include.durbin) {
     res <-
       rbind(res,
             c(Test = "Autocorrelation (Durbin-Watson)",
-              statistic = APA(lmtest::dwtest(x))))
+              statistic = ifelse( type_lm |type_glm, APA(lmtest::dwtest(x)), NA )
+              ))
   }
   
   if (include.levene) {
@@ -127,6 +146,22 @@ test_regression <- function(x,
   }
   
   
+  if (include.normality) {
+    res <-
+      rbind(res,
+            c(Test = "Shapiro-Wilk normality test",
+              statistic =  test_normality(x)))
+  }
+  
+  
+  if (include.multicollin) {
+    res <-
+      rbind(res,
+            c(Test = "Autocorrelation (VIF)",
+              statistic =  test_multicollin(x)))
+  }
+  
+  
   if (include.aic) {
     res <-
       rbind(res,
@@ -144,12 +179,91 @@ test_regression <- function(x,
     
   }
   
+
+  
+  if (include.rmse) {
+    res <-
+      rbind(res,
+            c(Test =  "RMSE",
+              statistic = Format2(RMSE(x)[1,2],2)
+            ))
+  }
+  
+    if (include.sigma) {
+    res <-
+      rbind(res,
+            c(Test = "Sigma",
+              statistic = ifelse( type_lm |type_glm, Format2(RMSE(x)[1,1],2),
+                                  ifelse( type_lmer,  Format2(xs$sigma, 2)))
+              
+            ))
+  }
+  
+  
+  if (include.residual) {
+    res <-
+      rbind(res,
+            c(Test = "Var: Residual",
+              statistic = ifelse( type_lm |type_glm, Format2(RMSE(x)[1,1]^2,2),
+                                  ifelse( type_lmer,  Format2(xs$sigma^2, 2)))
+              
+            ))
+  }
+  
+  
   # if(include.vif) VIF2(x)
- 
+ #cat("\n end \n")
   rbind(res[-1,],  
         res[1,]) 
   
 }
+
+
+
+
+## Kopien von require(sjstats)
+#  p.val < 0.05 => "Non-normality
+test_normality <- function(x) {
+  # bei  sjstats ist im orginal stats::rstandard ich verwende aber resid
+  APA( stats::shapiro.test(stats::resid(x)) )
+}
+
+
+
+test_multicollin <- function(x) {
+  
+  res<-""
+
+    # check for autocorrelation
+    ts <- sqrt(car::vif(x)) > 2
+    
+    if (any(ts)) {
+      mp <- paste(sprintf("%s", names(ts)), collapse = ", ")
+      res<-  paste0("Multicollinearity detected for following predictors: ", mp)
+    } else {
+      res <- "No multicollinearity detected."
+    }
+    
+
+  res
+}
+
+test_nonconstvar <- function(model) {
+  sumry <- summary(model)
+  
+  residuals <- stats::residuals(model, type = "pearson")
+  S.sq <- stats::df.residual(model) * (sumry$sigma) ^ 2 / sum(!is.na(residuals))
+  
+  .U <- (residuals ^ 2) / S.sq
+  mod <- lm(.U ~ fitted.values(model))
+  
+  SS <- stats::anova(mod)$"Sum Sq"
+  RegSS <- sum(SS) - SS[length(SS)]
+  Chisq <- RegSS / 2
+  
+  stats::pchisq(Chisq, df = 1, lower.tail = FALSE)
+}
+
 
 
 #' @rdname APA_
@@ -204,7 +318,7 @@ test_regression <- function(x,
 
 APA_Validation<- function(...,
                           include.ftest=TRUE,include.loglik=FALSE,include.minus.LL = include.loglik,
-                          include.r=FALSE, include.pseudo=FALSE,
+                          include.pseudo=TRUE, include.r=include.pseudo, #R_qsuared
                           include.heteroskedasticity = TRUE,
                           include.durbin = TRUE,
                           include.levene = FALSE,
@@ -212,7 +326,12 @@ APA_Validation<- function(...,
                           include.vif=FALSE,
                           include.sigma=FALSE,
                           include.rmse=FALSE,
-                          include.aic=TRUE, include.bic=include.aic,
+                          include.aic=TRUE, include.bic=include.aic,include.residual=TRUE,
+                          include.normality=TRUE,
+                          include.multicollin=include.vif,
+                          
+                          include.deviance=TRUE,
+                          
                           caption = "Testing Regression Models",
                           note="",
                           names = NULL
@@ -240,14 +359,18 @@ APA_Validation<- function(...,
   
   res <- test_regression(myfits[[1]],
                          include.ftest,include.loglik,include.minus.LL,
-                         include.r,include.pseudo,
+                         include.r, 
                          include.heteroskedasticity,  
                          include.durbin,
                          include.levene,
                          include.bartlett,
                          include.vif,
                          include.sigma, include.rmse,include.aic,
-                         include.bic)
+                         include.bic,include.residual,
+                         include.normality,
+                         include.multicollin
+                         ,include.deviance
+                         )
   
   if (n > 1) {
     for (i in 2:n) {
@@ -256,12 +379,16 @@ APA_Validation<- function(...,
         test_regression(
           myfits[[i]],
           include.ftest,include.loglik,include.minus.LL,
-          include.r,include.pseudo,
+          include.r,
           include.heteroskedasticity,  
           include.durbin,
           include.levene,
           include.bartlett,
-          include.vif,include.sigma, include.rmse
+          include.vif,include.sigma, include.rmse,include.aic,
+          include.bic,include.residual,
+          include.normality,
+          include.multicollin
+          ,include.deviance
         )[2]
       )
     }

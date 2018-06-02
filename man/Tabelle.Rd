@@ -6,6 +6,8 @@
 \alias{Tabelle2}
 \alias{Tabelle.default}
 \alias{Describe}
+\alias{Tabelle.lmerModLmerTest}
+\alias{Tabelle.glm}
 \alias{Tabelle.lm}
 \alias{conTest}
 \alias{catTest}
@@ -25,6 +27,12 @@ Tabelle2(...)
   max_factor_length = 35)
 
 Describe(x, ...)
+
+\method{Tabelle}{lmerModLmerTest}(x, digits = 2, fun = function(x) {     c(n
+  = length(x), M = mean(x, na.rm = TRUE), SD = sd(x, na.rm = TRUE)) })
+
+\method{Tabelle}{glm}(x, digits = 2, fun = function(x) {     c(n =
+  length(x), M = mean(x, na.rm = TRUE)) })
 
 \method{Tabelle}{lm}(x, digits = 2, fun = function(x) {     c(n = length(x),
   M = mean(x, na.rm = TRUE), SD = sd(x, na.rm = TRUE)) })

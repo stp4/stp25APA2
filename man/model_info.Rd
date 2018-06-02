@@ -11,6 +11,7 @@
 \alias{model_info.lm}
 \alias{model_info.glm}
 \alias{model_info.anova}
+\alias{model_info.lmerModLmerTest}
 \alias{model_info.merModLmerTest}
 \alias{model_info.lmerTest}
 \alias{model_info.glmerMod}
@@ -42,6 +43,8 @@ Infomation(x, ...)
 \method{model_info}{glm}(x, ...)
 
 \method{model_info}{anova}(x, ...)
+
+\method{model_info}{lmerModLmerTest}(x, ...)
 
 \method{model_info}{merModLmerTest}(x, ...)
 

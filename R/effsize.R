@@ -75,7 +75,10 @@ APA2.efflist <- function(x,
                        note = note)
   for (i in names(res)) {
     spalte = which(names(res[[i]]) %in% type)
-    Output(fix_format(res[[i]][-spalte], digits = digits))
+   
+    
+    Output(fix_format(res[[i]][-spalte], digits = digits), 
+           caption=caption)
   }
   invisible(res)
 }

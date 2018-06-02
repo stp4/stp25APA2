@@ -11,6 +11,7 @@
 \alias{RMSE}
 \alias{RMSE.default}
 \alias{RMSE.mlm}
+\alias{RMSE.lmerModLmerTest}
 \title{R2}
 \usage{
 R2(x, ...)
@@ -32,6 +33,8 @@ RMSE(x, ...)
 \method{RMSE}{default}(x, ...)
 
 \method{RMSE}{mlm}(x, ...)
+
+\method{RMSE}{lmerModLmerTest}(x, ...)
 }
 \arguments{
 \item{x}{fit-Objekt lm glm}
@@ -69,6 +72,13 @@ Achtung es gibt noch die Funktion caret::R2 die Probleme macht
 (see \code{\link[pscl]{pR2}})
 
 Marginal and conditional r-squared for lme objects
+
+
+For mixed-effects models, R2 can be categorized into two types. Marginal R2  represents the 
+variance explained by fixed factors
+
+Conditional R2is interpreted as variance explained by both fixed and
+random factors (i.e. the entire model).
 
 
 for R2.lme an lme model (usually fit using \code{lme}

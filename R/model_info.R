@@ -152,15 +152,28 @@ list(
       N=nrow(x$model))
 }
 
+
+
+
 #' @rdname model_info
 #' @export
-model_info.merModLmerTest  <- function(x, ...)  model_info_lmer(x, ...)
+model_info.lmerModLmerTest <- function(x, ...)
+    model_info_lmer(x, ...)
+
 #' @rdname model_info
 #' @export
-model_info.lmerTest  <- function(x, ...)  model_info_lmer(x, ...)
+model_info.merModLmerTest <- function(x, ...)
+    model_info_lmer(x, ...)
+
 #' @rdname model_info
 #' @export
-model_info.glmerMod  <- function(x, ...)  model_info_lmer(x, ...)
+model_info.lmerTest <- function(x, ...)
+  model_info_lmer(x, ...)
+
+#' @rdname model_info
+#' @export
+model_info.glmerMod <- function(x, ...)
+  model_info_lmer(x, ...)
 
 #--   "merModLmerTest"  "lmerTest" "glmerMod"
 model_info_lmer <- function(x, ...) {
