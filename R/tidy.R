@@ -243,6 +243,8 @@ Ordnen.lm <- function(x,
 
 
 #' @rdname Ordnen
+#' @param rr RR Relatives Risiko
+#' @param include.b.ci,include.odds,include.rr.ci 95 % Konfidenzintervalle
 #' @export
 Ordnen.glm <- function(x,
                        digits = 2,
@@ -252,6 +254,8 @@ Ordnen.glm <- function(x,
                        include.ci = TRUE,
                        include.odds = TRUE,
                        include.odds.ci= include.ci,
+                       include.rr=FALSE,
+                       include.rr.ci=include.ci,
                        include.test = "lrt",
                        #"wald"  bei SPSS wird der Wald-Test verwendet, ich verwende den LRT
                       
@@ -339,6 +343,25 @@ Ordnen.glm <- function(x,
         coefs$OR[1] <- NA
     }
   }
+  
+  
+  
+  # Relaltv-Risk   include.rr
+  if (include.rr) {
+    rr <-  sjstats::odds_to_rr(x)
+    rr <- data.frame(RR = rndr_ods(rr[, 1]),
+                     RR.CI = rndr_ods_CI(rr[, 2:3]))
+    
+    if (include.intercept)
+      rr[1, 1:2] <- NA
+    
+    if (include.rr.ci)
+      coefs <- cbind(coefs, rr)
+    else
+      coefs <- cbind(coefs, rr[, 1])
+  }
+  
+  
   
   if (!include.se) {
     coefs <-  coefs[, colnames(coefs) != "SE"]
