@@ -208,6 +208,34 @@ Describe <-  function(x, ...) {
 
 #' @rdname Tabelle
 #' @export
+Tabelle.lmerModLmerTest <- function(x,
+                                    digits = 2,
+                                    fun = function(x) {
+                                      c(
+                                        n = length(x),
+                                        M = mean(x, na.rm = TRUE),
+                                        SD = sd(x, na.rm = TRUE)
+                                      )
+                                    }) {
+  Tabelle.lm(x, digits, fun)
+}
+
+
+
+#' @rdname Tabelle
+#' @export
+Tabelle.glm <- function(x,
+                        digits = 2,
+                        fun = function(x) {
+                          c(n = length(x),
+                            M = mean(x, na.rm = TRUE))
+                        })
+{
+  Tabelle.lm(x, digits, fun)
+}
+
+#' @rdname Tabelle
+#' @export
 Tabelle.lm <- function(x,
                        digits = 2,
                        fun = function(x) {
@@ -216,7 +244,8 @@ Tabelle.lm <- function(x,
                            M = mean(x, na.rm = TRUE),
                            SD = sd(x, na.rm = TRUE)
                          )
-                       }) {
+                       }
+                       ) {
   res_list <- NULL
   myeff <- effects::allEffects(x)
   
@@ -233,7 +262,9 @@ Tabelle.lm <- function(x,
           round(x, digits)
         else
           x),
-        stringsAsFactors=FALSE)
+        stringsAsFactors = FALSE)
+    
+   
     res_list[[i]] <- prepare_output(ans,
                                     paste0("AV: ", AV), "",
                                     info$N,  info$labels)
