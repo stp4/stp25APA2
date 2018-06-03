@@ -43,7 +43,8 @@ Pearson's r correlation Small 0.2,  Medium 0.5, Large 0.8
 r2 coefficient of determination Small 0.04, Medium 0.25, Large 0.64
 Quelle: http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3444174/pdf/i1949-8357-4-3-279.pdf
 
-Eta-Quadrat Kopie von lsr::etaSquared
+Eta-Quadrat Kopie von lsr::etaSquared.
+Die Ergebnisse entsprechen denen von SPSS (Univariat-Partial Eta Squared)
 
 Cohen's d and Hedges g effect size
 Between groups
