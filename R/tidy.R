@@ -132,7 +132,7 @@ Ordnen.aov <- function(x,
   res <- broom::tidy(x)
   
   if (include.eta) {
-    if(is(x, "lm")){
+    if( is(x, "lm") | is(x, "anova") ){
     k <- ncol(res)
     res <-
       cbind(res[, -k], etaSquared2(x, 2, FALSE), res[k])

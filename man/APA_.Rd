@@ -52,11 +52,11 @@ APA_Durbin_Watson(x, caption = "Durbin-Watson Test for Autocorrelated Errors",
   note = NULL, ...)
 
 APA_Validation(..., include.ftest = TRUE, include.loglik = FALSE,
-  include.minus.LL = include.loglik, include.r = FALSE,
-  include.heteroskedasticity = TRUE, include.durbin = TRUE,
-  include.levene = FALSE, include.bartlett = FALSE, include.vif = FALSE,
-  include.sigma = FALSE, include.rmse = FALSE, include.aic = TRUE,
-  include.bic = include.aic, include.residual = TRUE,
+  include.minus.LL = include.loglik, include.pseudo = TRUE,
+  include.r = include.pseudo, include.heteroskedasticity = TRUE,
+  include.durbin = TRUE, include.levene = FALSE, include.bartlett = FALSE,
+  include.vif = FALSE, include.sigma = FALSE, include.rmse = FALSE,
+  include.aic = TRUE, include.bic = include.aic, include.residual = TRUE,
   include.normality = TRUE, include.multicollin = include.vif,
   include.deviance = TRUE, caption = "Testing Regression Models",
   note = "", names = NULL)
