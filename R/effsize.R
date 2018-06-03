@@ -119,7 +119,8 @@ fix_eff_to_df <- function(x, caption, note ) {
 
  
 #' @rdname Effsize
-#' @description Eta-Quadrat Kopie von lsr::etaSquared
+#' @description Eta-Quadrat Kopie von lsr::etaSquared.
+#' Die Ergebnisse entsprechen denen von SPSS (Univariat-Partial Eta Squared)
 #' @param type etaSquared2: Anova Type default ist 2
 #' @param anova  etaSquared2: Ausgabe der ANOVA Tabelle
 #' @return Vector
@@ -141,7 +142,23 @@ etaSquared2 <-
       stop("\"anova\" must be a single logical value")
     }
     if (!is(x, "lm")) {
-      stop("\"x\" must be a linear model object")
+      if (is(x, "anova")) {
+        #etaSquared2(fit1)
+        eta <- sjstats::eta_sq(x)
+        eta_p <-  sjstats::eta_sq(x, partial = TRUE)
+        res <- rbind(cbind(eta[-nrow(eta), 2],
+                           eta_p[-nrow(eta), 2]), NA)
+        colnames(res) <-  c("eta.sq", "eta.sq.part")
+        
+        rownames(res)  <- c(unlist(eta[-1, 1]), "Residuals")
+        
+        
+        
+        return(res)
+        
+      } else {
+        stop("\"x\" must be a linear model object")
+      }
     }
     if (!is(type, "numeric") | length(type) != 1) {
       stop("type must be equal to 1,2 or 3")
