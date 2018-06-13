@@ -15,12 +15,12 @@ APA_Table_Anova(myfits, caption, note, names, include.eta)
 APA_Table(..., caption = NULL, note = NULL, type = c("default", "long",
   "broom", "texreg", "stargazer", "sjPlot", "anova"), names = NULL,
   custom.model.names = NULL, digits = 2, include.b = TRUE,
-  include.se = TRUE, include.beta = FALSE, include.eta = TRUE,
+  include.se = TRUE, include.beta = FALSE, include.eta = FALSE,
   include.odds = FALSE, include.ci = FALSE, include.p = FALSE,
   include.stars = if (include.p) FALSE else TRUE, include.variance = TRUE,
   include.r = TRUE, include.pseudo = FALSE, include.ftest = FALSE,
   include.loglik = FALSE, include.custom = NULL, include.aic = TRUE,
-  include.bic = include.aic, include.anova = TRUE, ci.level = 0.95,
+  include.bic = include.aic, include.anova = FALSE, ci.level = 0.95,
   single.row = TRUE, rgroup = c("Parameter", "Goodness of fit"))
 
 type_default(x, caption = NULL, note = NULL, custom.model.names = NULL,

@@ -57,9 +57,9 @@ Ordnen(x, ...)
 
 \item{include.beta}{standartisiertes beta}
 
-\item{include.ci, ci.level}{95%-CI mit ci-Level}
+\item{include.ci, ci.level}{95-CI mit ci-Level}
 
-\item{include.b.ci, include.odds, include.rr.ci}{95 % Konfidenzintervalle}
+\item{include.b.ci, include.odds, include.rr.ci}{95 Konfidenzintervalle}
 
 \item{rr}{RR Relatives Risiko}
 }
@@ -68,11 +68,11 @@ ein data.frame-Ojekt oder eine Liste von data.frames. Im Attribut N sind die Sti
 und notes
 }
 \description{
-Diese Funktion meine Version von tidy
+Diese Funktion meine Version von tidy.
 
-ANOVA
+ANOVA - Methode ueber broom::tidy
 
-Regression (linear)
+Regression - Methode ueber basr::summary (lm und glm)
 
 lmerTest::lmer returns an object of class 'lmerModLmerTest' (previously 'merModLmerTest') 
 to clarify that 'lmerModLmerTest' extends  'lmerMod' – not 'merMod'. The merMod class includes generalized 

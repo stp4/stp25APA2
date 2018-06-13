@@ -47,10 +47,10 @@
 \alias{APA2.coxph}
 \alias{APA2.htest}
 \alias{APA2.pairwise.htest}
+\alias{APA2.loglm}
 \alias{APA2.summary.table}
 \alias{APA2.table}
 \alias{APA2.xtabs}
-\alias{APA2.loglm}
 \title{APA Style HTML-Tabellen-Ausgabe}
 \usage{
 APA2(x, ...)
@@ -196,25 +196,19 @@ errate_statistik2(Formula, data, caption = "caption", note = "note",
 
 \method{APA2}{pairwise.htest}(x, caption = "", ...)
 
+\method{APA2}{loglm}(x, caption = "Likelihood", note = "",
+  output = which_output(), col_names = NULL, ...)
+
 \method{APA2}{summary.table}(x, ...)
 
-\method{APA2}{table}(x, caption = "", note = "", digits = NULL,
-  test = FALSE, type = c("fischer", "odds", "sensitivity", "chisquare",
-  "correlation", "r"), include.total = FALSE,
-  include.total.columns = include.total, include.total.sub = include.total,
-  include.total.rows = include.total, include.percent = TRUE,
-  margin = NULL, add.margins = seq_along(dim(x)), ...)
+\method{APA2}{table}(...)
 
 \method{APA2}{xtabs}(x, caption = "", note = "", output = which_output(),
   col_names = NULL, digits = NULL, test = FALSE, type = c("fischer",
   "odds", "sensitivity", "chisquare", "correlation", "r"),
   include.total = FALSE, include.total.columns = include.total,
   include.total.sub = include.total, include.total.rows = include.total,
-  include.percent = TRUE, margin = NULL, add.margins = seq_along(dim(x)),
-  ...)
-
-\method{APA2}{loglm}(x, caption = "Likelihood", note = "",
-  output = which_output(), col_names = NULL, ...)
+  include.percent = TRUE, margin = NULL, add.margins = FALSE)
 }
 \arguments{
 \item{x}{Ein R Objekt oder eine Formel oder ein data.frame
@@ -635,6 +629,12 @@ s <- lmerTest::step(m)
 
 APA2(s)
 
+
+# Fit Log-Linear Models by Iterative Proportional Scaling
+library(MASS)
+
+fit<-loglm(~ Type + Origin, xtabs(~ Type + Origin, Cars93))
+APA2(fit)
 #-- APA2.summary.table
 
 a <- letters[1:3]
@@ -647,25 +647,26 @@ hkarz$Tzell<- cut(hkarz$tzell, 3, c("low", "med", "hig"))
 
 
 xtab <- xtabs(~ gruppe+LAI, hkarz)
-APA2(xtab, caption="Harnblasenkarzinom", test=FALSE)
-APA2(xtab, type="sens", test=TRUE, caption = "type=sens")
-APA2(xtab, type="sens", caption = "geht nur mit teat=TRUE +  type=sens")
-APA2(xtabs(~ gruppe+Tzell, hkarz), caption="APA_Xtabs: 2x3 Tabelle", test=FALSE)
-APA2(xtabs(~ gruppe+LAI+Tzell, hkarz), caption="APA_Xtabs: 2x2x3 Tabelle", test=FALSE)
+APA2(xtab, 
+caption="Harnblasenkarzinom", test=FALSE)
+APA2(xtab, type="sens", 
+test=TRUE, caption = "type=sens")
+APA2(xtab, type="sens", 
+caption = "geht nur mit teat=TRUE +  type=sens")
+APA2(xtabs(~ gruppe+Tzell, hkarz), 
+caption="APA_Xtabs: 2x3 Tabelle", test=FALSE)
+APA2(xtabs(~ gruppe+LAI+Tzell, hkarz), 
+caption="APA_Xtabs: 2x2x3 Tabelle", test=FALSE)
 
 
-APA2(xtab, include.total.columns=TRUE, caption = "include.total.columns")
-APA2(xtab, include.total.sub=TRUE, caption = "include.total.sub")
+APA2(xtab, 
+include.total.columns=TRUE, caption = "include.total.columns")
+APA2(xtab, 
+include.total.sub=TRUE, caption = "include.total.sub")
 
 
 
 
 xtab <- xtabs(~ gruppe+Tzell, hkarz)
 APA2(xtab, test=FALSE, caption="APA2: 2x3 Tabelle")
-
-# Fit Log-Linear Models by Iterative Proportional Scaling
-library(MASS)
-
-fit<-loglm(~ Type + Origin, xtabs(~ Type + Origin, Cars93))
-APA2(fit)
 }

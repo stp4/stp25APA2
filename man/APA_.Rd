@@ -72,8 +72,12 @@ APA_Ttest(x, data, var.equal = FALSE, paired = FALSE,
 
 APA_vif(..., caption = "VIF", notes = "")
 
-APA_Xtabs(x, data, caption = "", note = "", output = which_output(),
-  col_names = NULL, ...)
+APA_Xtabs(x, data, caption = "", note = "", col_names = NULL,
+  digits = NULL, test = FALSE, type = c("fischer", "odds", "sensitivity",
+  "chisquare", "correlation", "r"), include.total = FALSE,
+  include.total.columns = include.total, include.total.sub = include.total,
+  include.total.rows = include.total, include.percent = TRUE,
+  margin = NULL, add.margins = FALSE, thresh = 0.5)
 }
 \arguments{
 \item{x}{An object to be converted into a tidy data.frame or Formula}
@@ -188,7 +192,9 @@ APA_Ttest: Berechnung von Mittelwerten und Mittelwertdifferenzen und des T-Test
 
 APA_vif:  variance inflation factor, aka VIF
 
-APA_Xtabs Kreuztabellen
+APA_Xtabs Kreuztabellen : 
+   include.total,  include.total.columns, include.total.sub,include.total.rows
+   Die Prozent werden ueber include.percent mit margin erstellt. Der Parameter  add.margins wird automatisch vergeben.
 }
 \examples{
 
