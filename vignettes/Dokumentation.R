@@ -305,6 +305,36 @@ fm1 <- aov(breaks ~ wool + tension, data = warpbreaks)
 APA2(fm1, caption="ANOVA")
 
 ## ---- results='asis', warning=FALSE--------------------------------------
+# a. R Squared = .43 (Adjusted R Squared = .43)
+# Levene's Test of Equality of Error Variances F=1.8, df1=3,df2=486, p=.146
+# 
+
+
+
+
+
+
+schools2<-  transform(schools,
+                     
+                     classroom=factor(classroom),
+                     grade=factor(grade),
+                     treatment=factor(treatment),
+                     score10=score>10,
+                     score2 =  round((log( (score + 20))- 1.78)/.023 )
+                     
+                     )
+
+fit<- aov(score ~ grade + treatment + stdTest, schools2)
+ 
+APA2(fit, include.eta=TRUE)
+
+#APA_Validation(fit, include.levene = TRUE,
+#               include.aic = FALSE, include.ftest = FALSE,include.deviance = FALSE,
+#               include.heteroskedasticity = FALSE,
+#               include.durbin = FALSE, include.normality = FALSE)
+
+
+## ---- results='asis', warning=FALSE--------------------------------------
 TukeyHSD(fm1, "tension", ordered = TRUE) %>%
   APA_Table(caption="TukeyHSD" )
 
@@ -441,7 +471,7 @@ txt_log_reg <-  paste("Eine logistische Regressionsanalyse zeigt, dass sowohl da
 " was nach Cohen (1992) einem starken Effekt entspricht."  )
 # 
 
-
+#  Quelle Text: http://www.methodenberatung.uzh.ch/de/datenanalyse/zusammenhaenge/lreg.html
 
 
 

@@ -759,6 +759,64 @@ APA2(fm1, caption="ANOVA")
 
 
 
+
+#### SPSS vs R
+
+
+Vergleich der Ergebnisse mit SPSS dort heit die ANOVA auch Tests of Between-Subjects Effects und wird über den Button Univariat aufgerufen.
+
+
+Source|Type III Sum of Squares|df|Mean Square|F|Sig.|Partial Eta Squared
+------|-----------------------|--|-----------|-|----|-------------------
+Corrected Model|12587|3|4196|124|0.000|0.43
+Intercept|3827|1|3827|113|0.000|0.19
+grade|3329|1|3329|98|0.000|0.17
+treatment|241|1|241|7|0.008|0.01
+stdTest|6971|1|6971|206|0.000|0.30
+Error|16468|486|34|||
+Total|65279|490||||
+Corrected Total|29056|489||||
+
+
+
+
+
+```{r, results='asis', warning=FALSE}
+# a. R Squared = .43 (Adjusted R Squared = .43)
+# Levene's Test of Equality of Error Variances F=1.8, df1=3,df2=486, p=.146
+# 
+
+
+
+
+
+
+schools2<-  transform(schools,
+                     
+                     classroom=factor(classroom),
+                     grade=factor(grade),
+                     treatment=factor(treatment),
+                     score10=score>10,
+                     score2 =  round((log( (score + 20))- 1.78)/.023 )
+                     
+                     )
+
+fit<- aov(score ~ grade + treatment + stdTest, schools2)
+ 
+APA2(fit, include.eta=TRUE)
+
+#APA_Validation(fit, include.levene = TRUE,
+#               include.aic = FALSE, include.ftest = FALSE,include.deviance = FALSE,
+#               include.heteroskedasticity = FALSE,
+#               include.durbin = FALSE, include.normality = FALSE)
+
+```
+
+
+
+
+
+
 #### Tukey HSD (honestly significant differnce)
 
 Das wohl bekannteste Verfahren ist das von Tukey (für gleiche ni) bzw. von Tukey & Kramer(für ungleiche ni). Geprüft wird wie bei der Varianzanalyse: alle k Mittelwerte sind gleich. 
@@ -1073,7 +1131,7 @@ txt_log_reg <-  paste("Eine logistische Regressionsanalyse zeigt, dass sowohl da
 " was nach Cohen (1992) einem starken Effekt entspricht."  )
 # 
 
-
+#  Quelle Text: http://www.methodenberatung.uzh.ch/de/datenanalyse/zusammenhaenge/lreg.html
 
 
 
@@ -1381,8 +1439,36 @@ backward elimination: prüft ob auf eine Variable verzichtet werden kann
 Ich verwende immer beide Varianten  (forward und backward)
 
 ### Regressionsdiagnostik
+
 Überprüft die Linearität, Independence of error, Equal variance of errors usw.
 Die Regressionsdiagnostik untersucht die Eigenschaften der Residuen. Die Residuen sind dabei die Abweichungen vom Model.  Die Untersuchung erfolgt dabei über Grafik zu den Residuen.
+
+Heteroskedasticity Breusch-Pagan test against heteroskedasticity.
+
+Durbin-Watson Test for Autocorrelated Errors. car::durbinWatsonTest
+Autocorrelation Durbin-Watson test for autocorrelation of disturbances. Ist nur bei Zeitreihendaten sinnvoll.
+
+
+
+
+loglik Likelihood Ratio Test The log-likelihood from the intercept-only restricted model
+-2LL: The LL (log-likelihood from the fitted model) llhNull	(The log-likelihood from the intercept-only restricted model), G2	(Minus two times the difference in the log-likelihoods)
+
+
+
+Homogeneity of Variances Levene Computes Levene's test for homogeneity of variance across groups. Bartlett Test of Homogeneity of Variances
+
+
+
+VIF variance inflation factor. VIF values over 5 are troubling, should probably investigate anything over 2.5.
+
+Residual RMSE values should be low (<0.5 and <0.3, respectively). SigmaResidual standard error When the residual standard error is exactly 0 then the model fits the data perfectly (likely due to overfitting) R-Quadrats Cox und Snell R2: [ 0.2 = akzeptabel, 0.4 = gut ] Nagelkerke R2: [ 0.2 = akzeptabel, 0.4 = gut, 0.5 = sehr gut] McFaddens R2: [ 0.2 = akzeptabel, 0.4 = gut ] (see pR2)
+
+
+
+
+
+
 
 
 
