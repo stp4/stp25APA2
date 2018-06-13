@@ -1,13 +1,16 @@
+ 
+#' Ordnen (Tidy)
+#' 
+#' Diese Funktion meine Version von tidy.
 #' @rdname Ordnen
-#' @title Ordnen (Tidy)
 #' @name Ordnen
-#' @description Diese Funktion meine Version von tidy
+#' 
 #' @param x Objekt
 #' @param ... weitere Objekte nicht benutzt
 #' @return ein data.frame-Ojekt oder eine Liste von data.frames. Im Attribut N sind die Stichprobengroesse
 #' und notes
 #' @export
-#Tidy#
+#' 
 Ordnen <- function(x, ...) {
   UseMethod("Ordnen")
 }
@@ -115,7 +118,7 @@ Ordnen.anova <- function(x, ...) Ordnen.aov(x, ...)
 
 
 
-#' ANOVA 
+#' @description ANOVA - Methode ueber broom::tidy
 #' @param include.eta  Eta Quadrat
 #' @param include.sumsq,include.meansq  Quadrat- Summen
 #'
@@ -152,12 +155,11 @@ Ordnen.aov <- function(x,
 }
 
 
- 
-#' Regression (linear)
+#' @description Regression - Methode ueber basr::summary (lm und glm)
 #' @param include.b Estimate
 #' @param include.se  SE Standardfehler
 #' @param include.beta  standartisiertes beta
-#' @param include.ci,ci.level  95%-CI mit ci-Level
+#' @param include.ci,ci.level  95-CI mit ci-Level
 #'
 #' @rdname Ordnen
 #' @export
@@ -244,7 +246,7 @@ Ordnen.lm <- function(x,
 
 #' @rdname Ordnen
 #' @param rr RR Relatives Risiko
-#' @param include.b.ci,include.odds,include.rr.ci 95 % Konfidenzintervalle
+#' @param include.b.ci,include.odds,include.rr.ci 95 Konfidenzintervalle
 #' @export
 Ordnen.glm <- function(x,
                        digits = 2,
@@ -386,6 +388,7 @@ Ordnen.glm <- function(x,
 
 
 # Alte Version kommentar siehe unten
+
 #' @rdname Ordnen
 #' @export
 Ordnen.merModLmerTest <- function(x,
