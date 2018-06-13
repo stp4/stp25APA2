@@ -140,7 +140,7 @@ APA_Table <- function(...,
                       include.b = TRUE,
                       include.se = TRUE,
                       include.beta = FALSE,
-                      include.eta = TRUE,
+                      include.eta = FALSE,
                       include.odds = FALSE,
                       include.ci = FALSE,
                       
@@ -162,7 +162,7 @@ APA_Table <- function(...,
                       include.aic = TRUE,
                       include.bic = include.aic,
                       
-                      include.anova = TRUE,
+                      include.anova = FALSE,
                       
                       ci.level = .95,
                       single.row = TRUE,
@@ -310,12 +310,13 @@ APA_Table <- function(...,
       Text("sjPlot ist noch nicht implementiert")
     }
     else{
-      cat("\nanova\n")
+      cat("\n in else eventuell \n")
+      
     }
   }
   
   
-  if (include.anova & ( "anova" %in% type) ) {
+  if ( include.anova | ("anova" %in% type)) {
     
     #car::ANOVA Type II
     result[["anova"]] <- APA_Table_Anova(
@@ -339,6 +340,8 @@ type_default <- function(x,
                          note = NULL,
                          custom.model.names = NULL,
                          ...) {
+ # print(class(x))
+ # print(list(...))
   res <-  Ordnen(x, ...) # ist das gleiche wie broom::tidy(x)
 
   if (is.null(caption))
