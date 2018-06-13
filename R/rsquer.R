@@ -32,7 +32,7 @@ APA_R2 <- function(..., caption, note) {
 #'  Cox und Snell R2: [ 0.2 = akzeptabel, 0.4 = gut ]
 #'  Nagelkerke R2: [ 0.2 = akzeptabel, 0.4 = gut, 0.5 = sehr gut]
 #'  McFaddens R2: [ 0.2 = akzeptabel, 0.4 = gut ]
-#' (see \code{\link[pscl]{pR2}})
+#' (see pscl::pR2)
 #'
 #' Marginal and conditional r-squared for lme objects
 #'
@@ -54,9 +54,9 @@ APA_R2 <- function(..., caption, note) {
 #' and the fixed effects for the null model (in the case of Poisson family),
 #' and calls \code{rsquared.glmm}
 #'
-#' an merMod model (usually fit using \code{\link{lme4::lmer}},
-#'        \code{\link{lme4::glmer}}, \code{\link{lmerTest::lmer}},
-#'        \code{\link{blme::blmer}}, \code{\link{blme::bglmer}}, etc)
+#' an merMod model (usually fit using lme4::lmer,
+#'     lme4::glmer,lmerTest::lmer,
+#'      blme::blmer, blme::bglmer, etc)
 #'
 #' Marginal and conditional r-squared for glmm given fixed and random variances
 #'
