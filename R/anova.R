@@ -107,14 +107,30 @@ APA_Table_Anova <- function(myfits,
                             include.eta)
 {
   result <- NULL
-  for ( i in seq_len(length(myfits)) )  {
-    if (length(model_info(myfits[[i]])$x) != 0) {
+  
+ # cat("\n in APA_Table_Anova\n")
+  for (i in seq_len(length(myfits)))  {
+  #  print(class(myfits[[i]]))
+    
+    if (is(myfits[[i]], "aov") |
+        length(model_info(myfits[[i]])$x) == 0) {
+      res <- "Null-Model"
+      result[[i]] <- res
+    }
+    else{
       res <- Ordnen(car::Anova(myfits[[i]]),
-                    include.eta=include.eta
-                    )  
+                    include.eta = FALSE)
+      
+      
+      #ändern 
+     # auf 
+    if( include.eta  & is(myfits[[i]], "lm") ) 
+      res<- cbind(res, etaSquared2(myfits[[i]]))
+      
       
       if (is.null(caption))
-        caption <- attr(res, "caption")##paste(, "Obs: ", attr(res,"N"))
+        caption <-
+          attr(res, "caption")##paste(, "Obs: ", attr(res,"N"))
       if (is.null(note))
         note <- attr(res, "note")
       
@@ -125,13 +141,15 @@ APA_Table_Anova <- function(myfits,
       #     cbind(res[, -k], etaSquared2(myfits[[i]], 2, FALSE), res[k])
       # }
       
-      if(!is.null(names)) caption <-  names[i]
+      if (!is.null(names))
+        caption <-  names[i]
       fix_format(res)  %>%
         Output(caption = caption, note = note)
       
-    } else
-      res <- "Null-Model"
-    result[[i]] <- res
+    }
+    
   }
+  
   result
 }
+  
