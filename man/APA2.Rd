@@ -204,11 +204,12 @@ errate_statistik2(Formula, data, caption = "caption", note = "note",
 \method{APA2}{table}(...)
 
 \method{APA2}{xtabs}(x, caption = "", note = "", output = which_output(),
-  col_names = NULL, digits = NULL, test = FALSE, type = c("fischer",
-  "odds", "sensitivity", "chisquare", "correlation", "r"),
-  include.total = FALSE, include.total.columns = include.total,
+  col_names = NULL, print_col = NULL, digits = NULL, test = FALSE,
+  type = c("0", "fischer", "odds", "sensitivity", "chisquare", "correlation",
+  "r"), include.total = FALSE, include.total.columns = include.total,
   include.total.sub = include.total, include.total.rows = include.total,
-  include.percent = TRUE, margin = NULL, add.margins = FALSE)
+  include.percent = TRUE, include.count = TRUE, margin = NA,
+  add.margins = NA, labels = NULL, ...)
 }
 \arguments{
 \item{x}{Ein R Objekt oder eine Formel oder ein data.frame
@@ -238,6 +239,8 @@ corr_test-ddefault ist  "pearson" c("pearson","spearman")}
 \item{use.level}{Benutzter level in Multi zB ja/nein}
 
 \item{include.n, include.all.n, include.header.n, include.total}{N mit ausgeben}
+
+\item{include.total, include.total.columns, include.total.sub, include.total.rows}{Zeilen Prozenz usw}
 
 \item{include.names, include.labels}{Beschriftung der zeilen}
 
@@ -281,11 +284,15 @@ labels = c("low", "neutral", "high")}
 
 \item{include.df}{df mit ausgeben}
 
-\item{include.total.columns, include.total.sub, include.total.rows}{xtabs: default = FALSE total/sum}
+\item{include.percent, include.count}{ausgabe}
 
-\item{include.percent}{Prozent TRUE/FALSE}
+\item{margin, add.margins}{alternative zu include.total}
 
-\item{margin, add.margins}{Zeilenprozent, Spaltenprozent}
+\item{caption, note, output, col_names, print_col, labels}{an Output}
+
+\item{digits}{Nachkommastellen}
+
+\item{test, type}{fischer chi usw}
 }
 \value{
 html-String ueber cat sowi einen data.frame
@@ -295,6 +302,8 @@ liste mit data.frames
 dataframe mit p.werte
 
 invisible data.frame und Output mit html/knit oder Text.
+
+list(xtab, test)
 }
 \description{
 APA2 erstellt fertigen HTML-Tabellen Output.
@@ -642,6 +651,36 @@ APA2(summary(table(a, sample(a))))
 
 # library(stp25data)
 # Projekt("html")
+
+ dat<-GetData("
+sex treatment  neg  pos
+f   KG         10	   9
+f   UG         14	   5
+m   KG         23	   7
+m   UG         18	  14",Tabel_Expand = TRUE, id.vars = 1:2, value="befund")
+
+x1<-xtabs( ~ sex + treatment , dat)
+x2<-xtabs( ~ sex + befund + treatment , dat)
+APA2(x1)
+APA2(x1, include.total=TRUE, percent=F)
+APA2(x2, include.total=TRUE)
+
+APA2(x1, include.total.columns=T)
+APA2(x2, include.total.columns=T)
+
+APA2(x1, include.total.rows=T)
+APA2(x2,include.total.rows=T)
+APA2(x2,include.total.sub=T)
+APA2(x2,include.total.sub=T, include.total.rows=T)
+APA2(x2,
+include.total.columns = T,
+include.total.rows = T)
+
+
+
+
+
+
 hkarz$LAI<- factor(hkarz$lai, 0:1, c("pos", "neg"))
 hkarz$Tzell<- cut(hkarz$tzell, 3, c("low", "med", "hig"))
 
@@ -669,4 +708,5 @@ include.total.sub=TRUE, caption = "include.total.sub")
 
 xtab <- xtabs(~ gruppe+Tzell, hkarz)
 APA2(xtab, test=FALSE, caption="APA2: 2x3 Tabelle")
+
 }

@@ -72,12 +72,8 @@ APA_Ttest(x, data, var.equal = FALSE, paired = FALSE,
 
 APA_vif(..., caption = "VIF", notes = "")
 
-APA_Xtabs(x, data, caption = "", note = "", col_names = NULL,
-  digits = NULL, test = FALSE, type = c("fischer", "odds", "sensitivity",
-  "chisquare", "correlation", "r"), include.total = FALSE,
-  include.total.columns = include.total, include.total.sub = include.total,
-  include.total.rows = include.total, include.percent = TRUE,
-  margin = NULL, add.margins = FALSE, thresh = 0.5)
+APA_Xtabs(x, data = NULL, caption = "", output = which_output(),
+  thresh = 0.5, labels = NULL, ...)
 }
 \arguments{
 \item{x}{An object to be converted into a tidy data.frame or Formula}
