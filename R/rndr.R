@@ -290,8 +290,66 @@ rndr_percent_default <- function(x,
 }
 
 
+rndr_percent_ftable <- function(x,
+                                count = NULL,
+                                digits = options()$stp25$apa.style$prozent$digits[1],
+                                percentage_str = options()$stp25$apa.style$prozent$percentage_str,
+                                style = options()$stp25$apa.style$prozent$style,
+                                null_percent_sign = options()$stp25$apa.style$prozent$null_percent_sign) {
+  
+  
+  x_char <- apply(x, 2, function(y)
+    paste0(
+      formatC(
+        y,
+        format = "f",
+        digits = digits,
+        decimal.mark = getOption("OutDec")
+      ),
+      percentage_str
+    ))
+  
+  
+  if (!is.null(count)) {
+    if (style == 1)
+      res <-
+        matrix(paste0(x_char, " (", count, ")"),
+               nrow =  nrow(count),
+               ncol = ncol(count))
+    else
+      res <-
+        matrix(
+          paste0(count, " (", x_char, percentage_str, ")"),
+          nrow =  nrow(count),
+          ncol = ncol(count)
+        )
+    
+    if (!is.null(null_percent_sign))
+      res[which(n == 0)] <- null_percent_sign
+    
+    ans <- stp25output::fix_to_data_frame(count)
+    n <- ncol(ans)
+    ans[, (n - ncol(res) + 1):n] <- res
+  }
+  
+  else  {
+    if (!is.null(null_percent_sign))
+      res[which(n == 0)] <- null_percent_sign
+    ans <- stp25output::fix_to_data_frame(x_char)
+  }
+  ans
+  
+}
 
 
+
+
+
+
+
+### Warnung irgendwas ist faul!!!!! sollte überarbeitet werden sieh oben rndr_percent_ftable
+### Die funktion war bei APA.xtabs in gebrauch
+### Und ist implizid in Tabelle und APA usw für Prozent in verwendung
 
 rndr_percent_matrix <- function(x,
                                 n = NULL,
