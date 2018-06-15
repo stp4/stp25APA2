@@ -388,32 +388,71 @@ APA2.xtabs  <- function(x,
 #'    include.total,  include.total.columns, include.total.sub,include.total.rows
 #'    Die Prozent werden ueber include.percent mit margin erstellt. Der Parameter  add.margins wird automatisch vergeben.
 #' @export
-APA_Xtabs <- function(x, data=NULL, 
-                      caption="", 
-                      
-                      output = which_output(), 
-                      thresh = 0.5, 
-                      labels=NULL, 
-                      ...  # alles an APA2.xtabs
-                      ) {
-  
-  if (stpvers::is_formula2(x))
-    x <- stats::xtabs(x, data) #- altlast abfangen
-  
-  if (class(x)[1] == "glm") {
-    x <- Klassifikation(x, thresh, caption)$xtab
-    APA2(x, output = output)
-    
-  }
-  
-  APA2(x, caption=caption, output=output, labels=labels, ...)
- 
+APA_Xtabs <-   function(x, ...) {
+  UseMethod("APA_Xtabs")
 }
 
 
+#' @rdname APA_
+#' @export
+APA_Xtabs.glm <- function(x,
+                          caption = "",
+                          output = which_output(),
+                          thresh = 0.5,
+                          ...) {
+  x <- Klassifikation(x, thresh, caption)$xtab
+  APA2(x, output = output, ...)
+  
+}
+  
 
- 
 
+#' @rdname APA_
+#' @export
+APA_Xtabs.formula <- function(x,
+                              data = NULL,
+                              caption = "",
+                              output = which_output(),
+                              labels = FALSE,
+                              ...) {
+  fm_x <- x
+  x <- stats::xtabs(x, data)
+  
+  if (is.logical(labels)) {
+    if (labels) {
+      dnn <- dimnames(x)
+      names(dnn) <-
+        GetLabelOrName(data[all.vars(fm_x)])
+      dimnames(x) <- dnn
+    }
+  } else if (is.character(labels)) {
+    dnn <- dimnames(x)
+    names(dnn)[1:length(labels)] <-
+      labels
+    dimnames(x) <- dnn
+  }else if(is.list(labels)){
+    dimnames(x) <- labels
+  }
+  
+  APA2(x, caption = caption, output = output, ...)
+}
+
+#' @rdname APA_
+#' @export
+APA_Xtabs.data.frame <- function(data = NULL,
+                                 formula,
+                                 caption = "",
+                                 output = which_output(),
+                                 labels = FALSE,
+                                 ...) {
+  APA_Xtabs.formula(formula, data, caption, output, labels, ...)
+}
+
+#' @rdname APA_
+#' @export
+APA_Xtabs.default <- function(x, ...) {
+  Text("Keine Methode fuer", class(x), "vorhanden.")
+}
  
 
 
@@ -558,58 +597,6 @@ Xtabelle <- function(x,
   }
  
 }
-rndr_percent_ftable <- function(x,
-                                count = NULL,
-                                digits = options()$stp25$apa.style$prozent$digits[1],
-                                percentage_str = options()$stp25$apa.style$prozent$percentage_str,
-                                style = options()$stp25$apa.style$prozent$style,
-                                null_percent_sign = options()$stp25$apa.style$prozent$null_percent_sign) {
-
- 
-    x_char <- apply(x, 2, function(y)
-    paste0(
-      formatC(
-        y,
-        format = "f",
-        digits = digits,
-        decimal.mark = getOption("OutDec")
-      ),
-      percentage_str
-    ))
-  
-  
-  if (!is.null(count)) {
-    if (style == 1)
-      res <-
-        matrix(paste0(x_char, " (", count, ")"),
-               nrow =  nrow(count),
-               ncol = ncol(count))
-    else
-      res <-
-        matrix(
-          paste0(count, " (", x_char, percentage_str, ")"),
-          nrow =  nrow(count),
-          ncol = ncol(count)
-        )
-    
-    if (!is.null(null_percent_sign))
-      res[which(n == 0)] <- null_percent_sign
-    
-    ans <- stp25output::fix_to_data_frame(count)
-    n <- ncol(ans)
-    ans[, (n - ncol(res) + 1):n] <- res
-  }
-  
-  else  {
-    if (!is.null(null_percent_sign))
-      res[which(n == 0)] <- null_percent_sign
-    ans <- stp25output::fix_to_data_frame(x_char)
-  }
-  ans
-}
-
-
-
 
 
 
