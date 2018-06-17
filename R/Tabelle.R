@@ -154,7 +154,6 @@ Tabelle.default <- function(...,
     )
   }
   else if(type=="correlation"){
-    
     stop("Benutze Bitte die Funktion APA_Correlation()!")
   }
   else

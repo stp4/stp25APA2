@@ -1,3 +1,9 @@
+
+# Einfacher Mittelwerte ---------------------------------------------------
+
+
+
+
 #' @rdname Berechne
 #' @param x Objekt Vector oder auch Formel
 #' @param data bei verwendung von Formeln
@@ -93,6 +99,9 @@ StdErr <- function (x, ...) {
 
 
 
+
+
+# Formatierte Mittelwerte aus data.frames ---------------------------------
 
 
 
@@ -272,7 +281,7 @@ Prozent<-function (x, digits = 1,
 
 
 if (length(x)<=0) return("NaN") #-- fuer Melt2
-#--------------------------------------------
+ 
 calc_factor <- function(x) {
       if (length(x)<=0) {
 
@@ -286,7 +295,7 @@ calc_factor <- function(x) {
       }
       ans
     }
-#--------------------------------------------
+ 
 
 if (is.factor(x)) { calc_factor(x) }
 else  if (is.logical(x) | is_all_0_1((x))) {  ffprozent.default( mean(x, na.rm = TRUE) * 100,  sum(x, na.rm=T)) }
@@ -517,7 +526,7 @@ Prozent2APA <- function(x,
 
 
 
-#-- Neuen Apa Tabellen
+ 
 stp25_stat_methode <- function(x,
                                mymet = c("freq",  # , "mean.ci", "median.ci","freq.ci", "cohen.d", "effsize"))
                                          "mean", "median",
@@ -539,44 +548,128 @@ stp25_stat_methode <- function(x,
 
 #' @rdname Berechne
 #' @export
-Mean2default <- function(x, digits = 2, n = length(x)) {
+Mean2default <- function(x,
+                          digits = 2,
+                          n = length(x),
+                          mean.style = get_my_options()$apa.style$mittelwert$mean.style) {
   calc_mean <-
     function(x) {
-      rndr_mean(mean(x), ifelse(n > 2, sd (x), NA), digits)
+      if (is.null(mean.style)) {
+        rndr_mean(mean(x), ifelse(n > 2, sd (x), NA), digits)
+      }
+      else if (mean.style == "1") {
+        rndr_mean(mean(x), ifelse(n > 2, sd (x), NA), digits)
+      }
+      else if (mean.style == "2" |
+               mean.style == "long") {
+        rndr_mean_range(
+          mean(x, na.rm = TRUE),
+          ifelse(n > 2, sd (x), NA),
+          min(x, na.rm = TRUE),
+          max(x, na.rm = TRUE),
+          digits = digits
+        )
+      } else {
+        rndr_mean(mean(x), ifelse(n > 2, sd (x), NA), digits)
+      }
     }
+
   m <- if (is.numeric(x))
     calc_mean(x)
   else
     calc_mean(as.numeric(x))
-  data.frame(lev = "(mean)",
-             n = as.character(n),
-             m = m, 
-             stringsAsFactors=FALSE)
+  
+  data.frame(
+    lev = "(mean)",
+    n = as.character(n),
+    m = m,
+    stringsAsFactors = FALSE
+  )
 }
+
+
+
+# Mean2default <- function(x, digits = 2, n = length(x)) {
+#   calc_mean <-
+#     function(x) {
+#       rndr_mean(mean(x), ifelse(n > 2, sd (x), NA), digits)
+#     }
+#   m <- if (is.numeric(x))
+#     calc_mean(x)
+#   else
+#     calc_mean(as.numeric(x))
+#   data.frame(lev = "(mean)",
+#              n = as.character(n),
+#              m = m, 
+#              stringsAsFactors=FALSE)
+# }
 
 #' @rdname Berechne
 #' @export
-Median2default <- function(x, 
-                           digits = 2, 
-                           n = length(x),
-                           median.style=get_my_options()$apa.style$mittelwert$median.style
-                           ) {
-    #style=IQR  quantile rndr_median_range
+ Median2default <- function(x,
+                            digits = 2,
+                            n = length(x),
+                            median.style = get_my_options()$apa.style$mittelwert$median.style) {
+  #style=IQR  quantile rndr_median_range
   calc_median <-
     function(x) {
-      if (median.style == "IQR") {
+      if (is.null(median.style)) {
+        rndr_median_quant(quantile(x, na.rm = TRUE), digits)
+      }
+      else if (median.style == 1) {
+        rndr_median_quant(quantile(x, na.rm = TRUE), digits)
+      }
+      else if (median.style == "IQR") {
         rndr_median(median(x), ifelse(n > 2, IQR(x), NA), digits)
-      } else {
+      }
+      else if (median.style == "2" | median.style == "long") {
+        rndr_median_range(
+          median(x, na.rm = TRUE),
+          IQR(x, na.rm = TRUE),
+          min(x, na.rm = TRUE),
+          max(x, na.rm = TRUE),
+          digits = digits
+        )
+      }
+      else {
         rndr_median_quant(quantile(x, na.rm = TRUE), digits)
       }
     }
-    m <- if (is.numeric(x)) calc_median(x) else calc_median(as.numeric(x))
-
-  data.frame(lev = "(median)",
-             n = as.character(n),
-             m = m, 
-             stringsAsFactors=FALSE)
-}
+  m <-
+    if (is.numeric(x))
+      calc_median(x)
+  else
+    calc_median(as.numeric(x))
+  
+  data.frame(
+    lev = "(median)",
+    n = as.character(n),
+    m = m,
+    stringsAsFactors = FALSE
+  )
+ }
+ 
+# Median2default <- function(x, 
+#                            digits = 2, 
+#                            n = length(x),
+#                            median.style=get_my_options()$apa.style$mittelwert$median.style
+#                            ) {
+#     #style=IQR  quantile rndr_median_range
+#   calc_median <-
+#     function(x) {
+#       if (median.style == "IQR") {
+#         rndr_median(median(x), ifelse(n > 2, IQR(x), NA), digits)
+#       } else {
+#         rndr_median_quant(quantile(x, na.rm = TRUE), digits)
+#       }
+#     }
+#     m <- if (is.numeric(x)) calc_median(x) else calc_median(as.numeric(x))
+# 
+#   data.frame(lev = "(median)",
+#              n = as.character(n),
+#              m = m, 
+#              stringsAsFactors=FALSE)
+# }
 
 
 
