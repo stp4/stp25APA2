@@ -47,9 +47,9 @@ APA2.eff <- function(x, ...) {
 #'  APA2(eff)
 APA2.efflist <- function(x,
                          caption = "Effekte: ",
-                         type = NULL,
+                         type = NULL, 
                          ##c("fit", "lower",  "upper" ),
-                         note = "",
+                         note = "",  output = which_output(),
                          digits = 2,
                          include.fit = TRUE,
                          include.n = FALSE,
@@ -78,7 +78,7 @@ APA2.efflist <- function(x,
    
     
     Output(fix_format(res[[i]][-spalte], digits = digits), 
-           caption=caption)
+           caption=caption, output=output)
   }
   invisible(res)
 }
