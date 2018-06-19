@@ -99,8 +99,8 @@ Corr2(x, y = NULL, type = "pearson", stars, ...)
 \method{APA2}{eff}(x, ...)
 
 \method{APA2}{efflist}(x, caption = "Effekte: ", type = NULL, note = "",
-  digits = 2, include.fit = TRUE, include.n = FALSE, include.ci = TRUE,
-  include.se = FALSE, ...)
+  output = which_output(), digits = 2, include.fit = TRUE,
+  include.n = FALSE, include.ci = TRUE, include.se = FALSE, ...)
 
 \method{APA2}{ICC}(x, caption = "ICC", type = c(1, 4))
 
@@ -342,17 +342,6 @@ Methode für car::durbinWatsonTest Kopie von car:::print.durbinWatsonTest
 
 Ausgabe von Regressions Tabelle nach der APA-Style vorgabe. Die Funktion
 ist eine Kopie von  texreg:::aggregate.matrix.
-
-\strong{Kreuztabellen} 
-APA2.xtabs Formatiert xtabs() 2x2 Tabellen werden mit Haufigkeit wahlweise mit Prozent
-(verhalten wird ueber \code{margin = 2}) geseuert. Berechnet werden mittels
- \link{fisher.test} die Odds-Ratio mit 95%CI und die p-Werte. Alternatibe ist die Funktion
- \link{oddsratio} aus dem Paket \code{vcd}. Weiters laesst sich mit der Option \code{type = 2}
- eine sensitivitaetsanalyse erstellen.
- Bei NxM-Tabellen wird als Test-Statistik Pearson und der
- Kontingentkoeffizient berechnet alternativ steht auch  der Phi-Coefficient zur verf?gung
- auch hier mit \code{type = 2}. die Berechnung erfolgt hier mit \link{assocstats}
- aus dem Packet \code{vcd}.
 }
 \examples{
 
@@ -648,65 +637,4 @@ APA2(fit)
 
 a <- letters[1:3]
 APA2(summary(table(a, sample(a))))
-
-# library(stp25data)
-# Projekt("html")
-
- dat<-GetData("
-sex treatment  neg  pos
-f   KG         10	   9
-f   UG         14	   5
-m   KG         23	   7
-m   UG         18	  14",Tabel_Expand = TRUE, id.vars = 1:2, value="befund")
-
-x1<-xtabs( ~ sex + treatment , dat)
-x2<-xtabs( ~ sex + befund + treatment , dat)
-APA2(x1)
-APA2(x1, include.total=TRUE, percent=F)
-APA2(x2, include.total=TRUE)
-
-APA2(x1, include.total.columns=T)
-APA2(x2, include.total.columns=T)
-
-APA2(x1, include.total.rows=T)
-APA2(x2,include.total.rows=T)
-APA2(x2,include.total.sub=T)
-APA2(x2,include.total.sub=T, include.total.rows=T)
-APA2(x2,
-include.total.columns = T,
-include.total.rows = T)
-
-
-
-
-
-
-hkarz$LAI<- factor(hkarz$lai, 0:1, c("pos", "neg"))
-hkarz$Tzell<- cut(hkarz$tzell, 3, c("low", "med", "hig"))
-
-
-xtab <- xtabs(~ gruppe+LAI, hkarz)
-APA2(xtab, 
-caption="Harnblasenkarzinom", test=FALSE)
-APA2(xtab, type="sens", 
-test=TRUE, caption = "type=sens")
-APA2(xtab, type="sens", 
-caption = "geht nur mit teat=TRUE +  type=sens")
-APA2(xtabs(~ gruppe+Tzell, hkarz), 
-caption="APA_Xtabs: 2x3 Tabelle", test=FALSE)
-APA2(xtabs(~ gruppe+LAI+Tzell, hkarz), 
-caption="APA_Xtabs: 2x2x3 Tabelle", test=FALSE)
-
-
-APA2(xtab, 
-include.total.columns=TRUE, caption = "include.total.columns")
-APA2(xtab, 
-include.total.sub=TRUE, caption = "include.total.sub")
-
-
-
-
-xtab <- xtabs(~ gruppe+Tzell, hkarz)
-APA2(xtab, test=FALSE, caption="APA2: 2x3 Tabelle")
-
 }

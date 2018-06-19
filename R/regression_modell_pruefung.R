@@ -268,31 +268,31 @@ test_nonconstvar <- function(model) {
 
 #' @rdname APA_
 #' @description 
+#' \strong{APA_Validation}
 #' Validation of Linear Models Assumptions
+#' (Testing Linear Regression Models)
 #' 
-#' Testing Linear Regression Models
-#'
-#' \strong{loglik} Likelihood Ratio Test The log-likelihood from the intercept-only restricted model
-#'
+#' \itemize{
+#' \item{loglik} Likelihood Ratio Test The log-likelihood from the intercept-only restricted model.
 #' -2LL: The LL (log-likelihood from the fitted model)
 #' llhNull	(The log-likelihood from the intercept-only restricted model),
 #' G2	(Minus two times the difference in the log-likelihoods)
 #'
-#' \strong{Autocorrelation} Durbin-Watson test for autocorrelation of disturbances. Ist nur bei Zeitreihendaten sinnvoll.
+#' \item{Autocorrelation} Durbin-Watson test for autocorrelation of disturbances. Ist nur bei Zeitreihendaten sinnvoll.
 #' 
-#' \strong{Homogeneity of Variances} Levene Computes Levene's test for homogeneity of variance across groups.
+#' \item{Homogeneity of Variances} Levene Computes Levene's test for homogeneity of variance across groups.
 #'  Bartlett Test of Homogeneity of Variances
 #' 
-#' \strong{Heteroskedasticity} Breusch-Pagan test against heteroskedasticity.
+#' \item{Heteroskedasticity} Breusch-Pagan test against heteroskedasticity.
 #' 
-#' \strong{VIF} variance inflation factor. VIF values over 5 are troubling, should probably investigate anything over 2.5.
+#' \item{VIF} variance inflation factor. VIF values over 5 are troubling, should probably investigate anything over 2.5.
 #' 
-#' \strong{Residual} RMSE values should be low (<0.5 and <0.3, respectively).
+#' \item{Residual} RMSE values should be low (<0.5 and <0.3, respectively).
 #'  SigmaResidual standard error  When the residual standard error is exactly 0 then the model fits the data perfectly (likely due to overfitting)
-#' \strong{ R-Quadrats } Cox und Snell R2: [ 0.2 = akzeptabel, 0.4 = gut ] 
+#' \item{ R-Quadrats } Cox und Snell R2: [ 0.2 = akzeptabel, 0.4 = gut ] 
 #' Nagelkerke R2: [ 0.2 = akzeptabel, 0.4 = gut, 0.5 = sehr gut] 
 #' McFaddens R2: [ 0.2 = akzeptabel, 0.4 = gut ] (see pR2)
-#' 
+#' }
 #' @param x model- fit
 #' @param include.ftest,include.loglik  F-sratistik
 #' @param include.heteroskedasticity Breusch-Pagan test

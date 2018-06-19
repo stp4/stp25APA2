@@ -37,7 +37,9 @@ APA.ScalarIndependenceTest <- function(x, ...) {
 
 
 #' @rdname APA_
-#' @description APA_Ttest: Berechnung von Mittelwerten und Mittelwertdifferenzen und des T-Test
+#' @description \strong{APA_Ttest}:
+#'  Berechnung von Mittelwerten und Mittelwertdifferenzen und des T-Test.
+#'  
 #' @param var.equal,paired,alternative an t.Test var.equal = FALSE  "two.sided"
 #' @param include.mean Mittelwerte mit SD
 #' @param include.d Cohens d

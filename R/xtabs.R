@@ -117,16 +117,6 @@ APA2.table <- function(...) APA2.xtabs(...)
 
 
 #' @rdname APA2
-#' @description \strong{Kreuztabellen} 
-#' APA2.xtabs Formatiert xtabs() 2x2 Tabellen werden mit Haufigkeit wahlweise mit Prozent
-#' (verhalten wird ueber \code{margin = 2}) geseuert. Berechnet werden mittels
-#'  \link{fisher.test} die Odds-Ratio mit 95%CI und die p-Werte. Alternatibe ist die Funktion
-#'  \link{oddsratio} aus dem Paket \code{vcd}. Weiters laesst sich mit der Option \code{type = 2}
-#'  eine sensitivitaetsanalyse erstellen.
-#'  Bei NxM-Tabellen wird als Test-Statistik Pearson und der
-#'  Kontingentkoeffizient berechnet alternativ steht auch  der Phi-Coefficient zur verf?gung
-#'  auch hier mit \code{type = 2}. die Berechnung erfolgt hier mit \link{assocstats}
-#'  aus dem Packet \code{vcd}.
 #'
 #' @param caption,note,output,col_names,print_col,labels an Output
 #' @param digits Nachkommastellen 
@@ -138,71 +128,6 @@ APA2.table <- function(...) APA2.xtabs(...)
 #'
 #' @return list(xtab, test)
 #' @export
-#' @examples
-#' 
-#' # library(stp25data)
-#' # Projekt("html")
-#' 
-#'  dat<-GetData("
-#' sex treatment  neg  pos
-#' f   KG         10	   9
-#' f   UG         14	   5
-#' m   KG         23	   7
-#' m   UG         18	  14",Tabel_Expand = TRUE, id.vars = 1:2, value="befund")
-#' 
-#' x1<-xtabs( ~ sex + treatment , dat)
-#' x2<-xtabs( ~ sex + befund + treatment , dat)
-#' APA2(x1)
-#' APA2(x1, include.total=TRUE, percent=F)
-#' APA2(x2, include.total=TRUE)
-#' 
-#' APA2(x1, include.total.columns=T)
-#' APA2(x2, include.total.columns=T)
-#' 
-#' APA2(x1, include.total.rows=T)
-#' APA2(x2,include.total.rows=T)
-#' APA2(x2,include.total.sub=T)
-#' APA2(x2,include.total.sub=T, include.total.rows=T)
-#' APA2(x2,
-#' include.total.columns = T,
-#' include.total.rows = T)
-#' 
-#' 
-#' 
-#' 
-#' 
-#' 
-#' hkarz$LAI<- factor(hkarz$lai, 0:1, c("pos", "neg"))
-#' hkarz$Tzell<- cut(hkarz$tzell, 3, c("low", "med", "hig"))
-#'
-#'
-#' xtab <- xtabs(~ gruppe+LAI, hkarz)
-#' APA2(xtab, 
-#' caption="Harnblasenkarzinom", test=FALSE)
-#' APA2(xtab, type="sens", 
-#' test=TRUE, caption = "type=sens")
-#' APA2(xtab, type="sens", 
-#' caption = "geht nur mit teat=TRUE +  type=sens")
-#' APA2(xtabs(~ gruppe+Tzell, hkarz), 
-#' caption="APA_Xtabs: 2x3 Tabelle", test=FALSE)
-#' APA2(xtabs(~ gruppe+LAI+Tzell, hkarz), 
-#' caption="APA_Xtabs: 2x2x3 Tabelle", test=FALSE)
-#'
-#'
-#' APA2(xtab, 
-#' include.total.columns=TRUE, caption = "include.total.columns")
-#' APA2(xtab, 
-#' include.total.sub=TRUE, caption = "include.total.sub")
-#'
-#'
-#'
-#'
-#' xtab <- xtabs(~ gruppe+Tzell, hkarz)
-#' APA2(xtab, test=FALSE, caption="APA2: 2x3 Tabelle")
-#' 
- 
-
-
 APA2.xtabs  <- function(x,
                         caption = "" ,
                         note = "",
@@ -384,10 +309,94 @@ APA2.xtabs  <- function(x,
 
 
 #' @rdname APA_
-#' @description APA_Xtabs Kreuztabellen : 
-#'    include.total,  include.total.columns, include.total.sub,include.total.rows
-#'    Die Prozent werden ueber include.percent mit margin erstellt. Der Parameter  add.margins wird automatisch vergeben.
+#' @description \strong{Kreuztabellen} APA_Xtabs, APA2.xtabs : 
+#' Die Funktion Formatiert xtabs() mit NxM und NxMxO Tabellen.
+#' 
+#' \itemize{
+#'  \item{"Haufigkeit/Prozent 1"}{
+#'    Die Prozent werden ueber include.percent mit margin erstellt. Der Parameter  
+#'    add.margins wird automatisch vergeben.
+#'    include.total, include.total.columns, include.total.sub, include.total.rows, include.percent,
+#'    include.count.
+#'    Feineinstellungen erfolgt ueber \code{margin = 2}).
+#'    }
+#'  \item{"Sensitivitaets Analyse"}{Nur bei 2x" Tabellen ueber test=TRUE}
+#'  \item{"Sig.-Tests"}{Bei 2x" Tabellen Fischer sonst Chi-test.
+#'  Die Berechnung erfolgt hier mit \link{assocstats}. 
+#'  Weiter Einstellungen sind Correlationen, Pearson, Kontingentkoeffizient 
+#'  berechnet alternativ steht auch  der Phi-Coefficient}
+#'  
+#' }
+#' 
+
+#'    
 #' @export
+#' @examples
+#' 
+#' #  APA_Xtabs ################################
+#' # Projekt("html")
+#' 
+#'  dat<-GetData("
+#' sex treatment  neg  pos
+#' f   KG         10	   9
+#' f   UG         14	   5
+#' m   KG         23	   7
+#' m   UG         18	  14",Tabel_Expand = TRUE, id.vars = 1:2, value="befund")
+#' 
+#' x1<-xtabs( ~ sex + treatment , dat)
+#' x2<-xtabs( ~ sex + befund + treatment , dat)
+#' APA2(x1)
+#' APA2(x1, include.total=TRUE, percent=F)
+#' APA2(x2, include.total=TRUE)
+#' 
+#' APA2(x1, include.total.columns=T)
+#' APA2(x2, include.total.columns=T)
+#' 
+#' APA2(x1, include.total.rows=T)
+#' APA2(x2,include.total.rows=T)
+#' APA2(x2,include.total.sub=T)
+#' APA2(x2,include.total.sub=T, include.total.rows=T)
+#' APA2(x2,
+#' include.total.columns = T,
+#' include.total.rows = T)
+#' 
+#' 
+#' 
+#' 
+#' 
+#' 
+#' hkarz$LAI<- factor(hkarz$lai, 0:1, c("pos", "neg"))
+#' hkarz$Tzell<- cut(hkarz$tzell, 3, c("low", "med", "hig"))
+#'
+#'
+#' xtab <- xtabs(~ gruppe+LAI, hkarz)
+#' APA2(xtab, 
+#' caption="Harnblasenkarzinom", test=FALSE)
+#' APA2(xtab, type="sens", 
+#' test=TRUE, caption = "type=sens")
+#' APA2(xtab, type="sens", 
+#' caption = "geht nur mit teat=TRUE +  type=sens")
+#' APA2(xtabs(~ gruppe+Tzell, hkarz), 
+#' caption="APA_Xtabs: 2x3 Tabelle", test=FALSE)
+#' APA2(xtabs(~ gruppe+LAI+Tzell, hkarz), 
+#' caption="APA_Xtabs: 2x2x3 Tabelle", test=FALSE)
+#'
+#'
+#' APA2(xtab, 
+#' include.total.columns=TRUE, caption = "include.total.columns")
+#' APA2(xtab, 
+#' include.total.sub=TRUE, caption = "include.total.sub")
+#'
+#'
+#'
+#'
+#' xtab <- xtabs(~ gruppe+Tzell, hkarz)
+#' APA2(xtab, test=FALSE, caption="APA2: 2x3 Tabelle")
+#' 
+#' 
+#'  #################################
+#'  
+#'  
 APA_Xtabs <-   function(x, ...) {
   UseMethod("APA_Xtabs")
 }
@@ -408,15 +417,33 @@ APA_Xtabs.glm <- function(x,
 
 
 #' @rdname APA_
+#' @param addNA,exclude,drop.unused.levels An xtabs() default = FALSE
 #' @export
 APA_Xtabs.formula <- function(x,
                               data = NULL,
                               caption = "",
                               output = which_output(),
                               labels = FALSE,
+                              addNA = FALSE, 
+                              exclude = if(!addNA) c(NA, NaN),
+                              drop.unused.levels = FALSE,
+                              
+                              include.prop.chisq = TRUE,
+                              include.chisq = FALSE, include.correlation = FALSE,
+                              include.fisher = FALSE,
+                              include.mcnemar = FALSE,
+                              include.resid = FALSE,
+                              include.sresid = FALSE,
+                             ## include.asresid = FALSE,
+                              include.sensitivity = FALSE,
+                              
+                              test=  include.prop.chisq | include.chisq | include.fisher | include.mcnemar,
+                               
                               ...) {
   fm_x <- x
-  x <- stats::xtabs(x, data)
+  x <- stats::xtabs(x, data,  
+                    addNA = addNA, exclude = exclude,
+                    drop.unused.levels = drop.unused.levels)
   
   if (is.logical(labels)) {
     if (labels) {
@@ -433,6 +460,40 @@ APA_Xtabs.formula <- function(x,
   }else if(is.list(labels)){
     dimnames(x) <- labels
   }
+  
+  
+  # noch nicht fertig ----
+  CST <- NULL  #chisq.test
+  
+  if(include.chisq | include.correlation){
+    
+    
+    # chisq.test(x ) #Pearson's Chi-squared test with Yates
+    # chisq.test(x, correct = FALSE) #Pearson's Chi-squared test
+    # summary(x) # Test for independence of all factors
+    # 
+    
+    CST <- chisq.test(x, correct = FALSE)
+    
+    
+  }  
+  
+  if(include.resid){
+    if(is.null( CST))  CST <- chisq.test(x, correct = FALSE)
+  resid <-  formatC(CST$observed-CST$expected, digits = 2,
+                    format = "f" ) }
+  
+  if(include.sresid){
+    if(is.null( CST))  CST <- chisq.test(x, correct = FALSE)
+  sresid  <-  formatC(CST$residual , digits = 2,
+                      format = "f" ) 
+  }
+  
+  if (include.mcnemar)
+  {
+    McN <- mcnemar.test(x, correct = FALSE)
+  }
+  
   
   APA2(x, caption = caption, output = output, ...)
 }
@@ -491,8 +552,12 @@ chisq_Statistik <- function(xtabs, type,
 
  if (any(c("correlation", "r") %in% type))
   ans[["Correlation"]] <- data.frame(
-        Test = c("Phi-Coefficient","Contingency Coefficient","Cramer's V"),
-        r = Format2(c(stat$phi,stat$contingency,stat$cramer), 3)
+        Test = c("Phi-Coefficient",
+                 "Contingency Coefficient",
+                 "Cramer's V"),
+        r = Format2(c(stat$phi,
+                      stat$contingency,
+                      stat$cramer), 3)
       )
   ans
 }

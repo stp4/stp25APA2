@@ -19,6 +19,10 @@
 \alias{APA_Ttest}
 \alias{APA_vif}
 \alias{APA_Xtabs}
+\alias{APA_Xtabs.glm}
+\alias{APA_Xtabs.formula}
+\alias{APA_Xtabs.data.frame}
+\alias{APA_Xtabs.default}
 \title{APA Syle Table}
 \usage{
 APA_NULL(x, ...)
@@ -72,8 +76,24 @@ APA_Ttest(x, data, var.equal = FALSE, paired = FALSE,
 
 APA_vif(..., caption = "VIF", notes = "")
 
-APA_Xtabs(x, data = NULL, caption = "", output = which_output(),
-  thresh = 0.5, labels = NULL, ...)
+APA_Xtabs(x, ...)
+
+\method{APA_Xtabs}{glm}(x, caption = "", output = which_output(),
+  thresh = 0.5, ...)
+
+\method{APA_Xtabs}{formula}(x, data = NULL, caption = "",
+  output = which_output(), labels = FALSE, addNA = FALSE, exclude = if
+  (!addNA) c(NA, NaN), drop.unused.levels = FALSE,
+  include.prop.chisq = TRUE, include.chisq = FALSE,
+  include.correlation = FALSE, include.fisher = FALSE,
+  include.mcnemar = FALSE, include.resid = FALSE, include.sresid = FALSE,
+  include.sensitivity = FALSE, test = include.prop.chisq | include.chisq |
+  include.fisher | include.mcnemar, ...)
+
+\method{APA_Xtabs}{data.frame}(data = NULL, formula, caption = "",
+  output = which_output(), labels = FALSE, ...)
+
+\method{APA_Xtabs}{default}(x, ...)
 }
 \arguments{
 \item{x}{An object to be converted into a tidy data.frame or Formula}
@@ -130,6 +150,8 @@ APA_Xtabs(x, data = NULL, caption = "", output = which_output(),
 
 \item{digits}{Nachkommastellen}
 
+\item{addNA, exclude, drop.unused.levels}{An xtabs() default = FALSE}
+
 \item{...}{Formel mit Daten wird von prepare_data2()aufgedroeselt}
 
 \item{caption, note}{Ueberschrift}
@@ -157,30 +179,31 @@ method=c("resample","normal"),
 alternative=c("two.sided", "positive", "negative")): Durbin-Watson Test for Autocorrelated Errors. 
   Kopie der Funktion car::durbinWatsonTest
 
+\strong{APA_Validation}
 Validation of Linear Models Assumptions
+(Testing Linear Regression Models)
 
-Testing Linear Regression Models
-
-\strong{loglik} Likelihood Ratio Test The log-likelihood from the intercept-only restricted model
-
+\itemize{
+\item{loglik} Likelihood Ratio Test The log-likelihood from the intercept-only restricted model.
 -2LL: The LL (log-likelihood from the fitted model)
 llhNull	(The log-likelihood from the intercept-only restricted model),
 G2	(Minus two times the difference in the log-likelihoods)
 
-\strong{Autocorrelation} Durbin-Watson test for autocorrelation of disturbances. Ist nur bei Zeitreihendaten sinnvoll.
+\item{Autocorrelation} Durbin-Watson test for autocorrelation of disturbances. Ist nur bei Zeitreihendaten sinnvoll.
 
-\strong{Homogeneity of Variances} Levene Computes Levene's test for homogeneity of variance across groups.
+\item{Homogeneity of Variances} Levene Computes Levene's test for homogeneity of variance across groups.
  Bartlett Test of Homogeneity of Variances
 
-\strong{Heteroskedasticity} Breusch-Pagan test against heteroskedasticity.
+\item{Heteroskedasticity} Breusch-Pagan test against heteroskedasticity.
 
-\strong{VIF} variance inflation factor. VIF values over 5 are troubling, should probably investigate anything over 2.5.
+\item{VIF} variance inflation factor. VIF values over 5 are troubling, should probably investigate anything over 2.5.
 
-\strong{Residual} RMSE values should be low (<0.5 and <0.3, respectively).
+\item{Residual} RMSE values should be low (<0.5 and <0.3, respectively).
  SigmaResidual standard error  When the residual standard error is exactly 0 then the model fits the data perfectly (likely due to overfitting)
-\strong{ R-Quadrats } Cox und Snell R2: [ 0.2 = akzeptabel, 0.4 = gut ] 
+\item{ R-Quadrats } Cox und Snell R2: [ 0.2 = akzeptabel, 0.4 = gut ] 
 Nagelkerke R2: [ 0.2 = akzeptabel, 0.4 = gut, 0.5 = sehr gut] 
 McFaddens R2: [ 0.2 = akzeptabel, 0.4 = gut ] (see pR2)
+}
 
 APA_R2: R2-Tabelle (noch nicht fretig)
 
@@ -188,9 +211,24 @@ APA_Ttest: Berechnung von Mittelwerten und Mittelwertdifferenzen und des T-Test
 
 APA_vif:  variance inflation factor, aka VIF
 
-APA_Xtabs Kreuztabellen : 
-   include.total,  include.total.columns, include.total.sub,include.total.rows
-   Die Prozent werden ueber include.percent mit margin erstellt. Der Parameter  add.margins wird automatisch vergeben.
+\strong{Kreuztabellen} APA_Xtabs, APA2.xtabs : 
+Die Funktion Formatiert xtabs() mit NxM und NxMxO Tabellen.
+
+\itemize{
+ \item{"Haufigkeit/Prozent 1"}{
+   Die Prozent werden ueber include.percent mit margin erstellt. Der Parameter  
+   add.margins wird automatisch vergeben.
+   include.total, include.total.columns, include.total.sub, include.total.rows, include.percent,
+   include.count.
+   Feineinstellungen erfolgt ueber \code{margin = 2}).
+   }
+ \item{"Sensitivitaets Analyse"}{Nur bei 2x" Tabellen ueber test=TRUE}
+ \item{"Sig.-Tests"}{Bei 2x" Tabellen Fischer sonst Chi-test.
+ Die Berechnung erfolgt hier mit \link{assocstats}. 
+ Weiter Einstellungen sind Correlationen, Pearson, Kontingentkoeffizient 
+ berechnet alternativ steht auch  der Phi-Coefficient}
+ 
+}
 }
 \examples{
 
@@ -272,4 +310,69 @@ APA_Ttest(m~time, varanax, var.equal=FALSE)
 #broom::tidy(t.test(m~time, varanax, var.equal=FALSE))
 
 #End()
+
+#  APA_Xtabs ################################
+# Projekt("html")
+
+ dat<-GetData("
+sex treatment  neg  pos
+f   KG         10	   9
+f   UG         14	   5
+m   KG         23	   7
+m   UG         18	  14",Tabel_Expand = TRUE, id.vars = 1:2, value="befund")
+
+x1<-xtabs( ~ sex + treatment , dat)
+x2<-xtabs( ~ sex + befund + treatment , dat)
+APA2(x1)
+APA2(x1, include.total=TRUE, percent=F)
+APA2(x2, include.total=TRUE)
+
+APA2(x1, include.total.columns=T)
+APA2(x2, include.total.columns=T)
+
+APA2(x1, include.total.rows=T)
+APA2(x2,include.total.rows=T)
+APA2(x2,include.total.sub=T)
+APA2(x2,include.total.sub=T, include.total.rows=T)
+APA2(x2,
+include.total.columns = T,
+include.total.rows = T)
+
+
+
+
+
+
+hkarz$LAI<- factor(hkarz$lai, 0:1, c("pos", "neg"))
+hkarz$Tzell<- cut(hkarz$tzell, 3, c("low", "med", "hig"))
+
+
+xtab <- xtabs(~ gruppe+LAI, hkarz)
+APA2(xtab, 
+caption="Harnblasenkarzinom", test=FALSE)
+APA2(xtab, type="sens", 
+test=TRUE, caption = "type=sens")
+APA2(xtab, type="sens", 
+caption = "geht nur mit teat=TRUE +  type=sens")
+APA2(xtabs(~ gruppe+Tzell, hkarz), 
+caption="APA_Xtabs: 2x3 Tabelle", test=FALSE)
+APA2(xtabs(~ gruppe+LAI+Tzell, hkarz), 
+caption="APA_Xtabs: 2x2x3 Tabelle", test=FALSE)
+
+
+APA2(xtab, 
+include.total.columns=TRUE, caption = "include.total.columns")
+APA2(xtab, 
+include.total.sub=TRUE, caption = "include.total.sub")
+
+
+
+
+xtab <- xtabs(~ gruppe+Tzell, hkarz)
+APA2(xtab, test=FALSE, caption="APA2: 2x3 Tabelle")
+
+
+ #################################
+ 
+ 
 }

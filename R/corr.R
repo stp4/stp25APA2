@@ -30,7 +30,7 @@ APA.biVar <- function(x, ...) {
 #' @param col_names nicht benutzt
 #'
 #' @rdname APA_
-#' @description APA_Correlation: Korrelationstabelle (Interkorrelationen mit der Hilfe
+#' @description \strong{APA_Correlation}: Korrelationstabelle (Interkorrelationen mit der Hilfe
 #' der Funktion  Hmisc::rcorr. Erlaubt ist die getrennte Auswertung ueber by=~b
 #' 
 #' @export
