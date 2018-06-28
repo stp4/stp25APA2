@@ -128,6 +128,7 @@
 APA_Table <- function(...,
                       caption = NULL,
                       note =  NULL,
+                      output = which_output(),
                       type = c("default","long",
                                "broom",
                                "texreg","stargazer","sjPlot",
@@ -140,7 +141,7 @@ APA_Table <- function(...,
                       include.b = TRUE,
                       include.se = TRUE,
                       include.beta = FALSE,
-                      include.eta = FALSE,
+                      
                       include.odds = FALSE,
                       include.ci = FALSE,
                       
@@ -163,6 +164,9 @@ APA_Table <- function(...,
                       include.bic = include.aic,
                       
                       include.anova = FALSE,
+                      include.sumsq = TRUE ,
+                      include.meansq = FALSE,
+                      include.eta = FALSE,
                       
                       ci.level = .95,
                       single.row = TRUE,
@@ -176,6 +180,7 @@ APA_Table <- function(...,
    
   result <- NULL
   type <-  match.arg(type, several.ok = TRUE)
+  type<- type[1]
   # print(include.pseudo)
   custom_model_names <- function() {
     if (length(myfits) == 1) { 
@@ -194,14 +199,14 @@ APA_Table <- function(...,
       names <- names(myfits)
   }
   
-  if (type[1] == "default") {
+  if (type == "default") {
     custom.model.names <- custom_model_names()
     #  print(custom.model.names)
     for (i in  seq_len(length(myfits)) ) {
       x <- type_default(
         myfits[[i]],
         caption = caption,
-        note = note,
+        note = note, output=output,
         custom.model.names = custom.model.names[i],
         include.b = include.b,
         include.se = include.se,
@@ -230,11 +235,11 @@ APA_Table <- function(...,
     }
   }
   else{
-    if ("broom" %in%  type) {
+    if ( type == "broom" ) {
       APA_Table(
         ...,
         caption = caption,
-        note = note,
+        note = note, output=output,
         type = "default",
         names = names,
         digits = digits,
@@ -244,11 +249,11 @@ APA_Table <- function(...,
         include.variance = include.variance
       )
     }
-    else if ("long" %in%  type) {
+    else if ( type == "long" ) {
       result <- APA2.list(
         myfits,
         caption = caption ,
-        note = note ,
+        note = note , output=output,
         digits =  digits,
         custom.model.names = names ,
         include.custom = include.custom ,
@@ -286,11 +291,11 @@ APA_Table <- function(...,
       
       
     }
-    else if ("texreg" %in%  type) {
+    else if ( type == "texreg" ) {
       result <-  type_texreg(
         myfits,
         caption = caption,
-        note = note,
+        note = note, output=output,
         digits = digits,
         single.row = single.row,
         include.stars = include.stars,
@@ -299,14 +304,14 @@ APA_Table <- function(...,
         include.variance = include.variance
       )
     }
-    else if ("stargazer" %in% type) {
+    else if ( type =="stargazer" ) {
       # myfits<-list(...)
       #if(is.list(myfits[[1]])) myfits <- myfits[[1]]
       type_stargazer(myfits,
                      caption = caption,
                      digits = digits)
     }
-    else if ("sjPlot" %in% type) {
+    else if (type == "sjPlot" ) {
       Text("sjPlot ist noch nicht implementiert")
     }
     else{
@@ -316,16 +321,18 @@ APA_Table <- function(...,
   }
   
   
-  if ( include.anova | ("anova" %in% type)) {
-    
-    #car::ANOVA Type II
-    result[["anova"]] <- APA_Table_Anova(
+  if ( include.anova ) {
+    #car::ANOVA Type II  print(str(result))
+
+   result[["anova"]] <- APA_Table_Anova(
       myfits,
       caption = caption,
-      note = note,
+      note = note, output=output,
       names = names,
-      include.eta = include.eta
+      include.eta = include.eta, include.sumsq = include.sumsq ,
+      include.meansq = include.meansq
     )
+
   }
   invisible(result)
 }
@@ -334,7 +341,7 @@ APA_Table <- function(...,
 
 
 #' @rdname APA_Table
-#' @description \code{type="default"} Default Formatierung als breite Tabelle
+#' @description \code{type="default"}  Formatierung als breite Tabelle
 type_default <- function(x,
                          caption = NULL,
                          note = NULL,
@@ -353,7 +360,8 @@ type_default <- function(x,
   Output(
     fix_format(res),
     caption = paste(custom.model.names, caption),
-    note = note)
+    note = note, 
+    output=output )
   
   res
 }
@@ -363,7 +371,7 @@ type_default <- function(x,
 #' @description \code{type="texreg"} Long-Format Kopie der texreg Funktion
 type_texreg <- function(list,
                         caption = "",
-                        note = "",
+                        note = "", output=output,
                         names = NULL,
                         digits = 2,
                         single.row = TRUE,
@@ -371,7 +379,7 @@ type_texreg <- function(list,
                         include.p  = FALSE,
                         ci.force = FALSE,
                         include.variance = TRUE,
-                        output = stp25output:::which_output(),
+                        #output = stp25output:::which_output(),
                         custom.model.names = if (is.null(names))
                           paste0("(", 1:length(list), ")")
                         else
@@ -434,7 +442,7 @@ type_texreg <- function(list,
     # Text("In texregTable")
     # class(reg_result) <- "texregTable"
 
-    stp25output:::Output.htmlTable(reg_result)
+    stp25output:::Output.htmlTable(reg_result, output=output)
 
   }
   else {
@@ -481,7 +489,7 @@ type_stargazer <- function(list, caption, digits) {
       digits = digits,
       digit.separator = "",
       type = "html"
-    )
+    ), output=output
   )
 
   NULL

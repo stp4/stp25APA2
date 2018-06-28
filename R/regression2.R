@@ -35,7 +35,7 @@
 APA2.list <-
   function (x,
             caption = "" ,
-            note = "",
+            note = "", output = which_output(),
             digits = 2,
             custom.model.names = NULL,
             include.custom = NULL,
@@ -53,7 +53,7 @@ APA2.list <-
             include.bic = include.aic,
             ci.level = .95,
             rgroup = c("Parameter", "Goodness of fit"),
-            output = stp25output:::which_output(),
+          #  output = stp25output:::which_output(),
             ...)
   {
     param<- NULL
@@ -284,6 +284,9 @@ APA2.list <-
     }
     else if (output == "markdown") {
       Output_kable(result)
+    }
+    else if (is.na(output)){
+      
     }
     else {
       print(result)

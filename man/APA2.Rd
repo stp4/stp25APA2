@@ -148,14 +148,14 @@ errate_statistik2(Formula, data, caption = "caption", note = "note",
   caption = "Durbin-Watson Test for Autocorrelated Errors", note = NULL,
   ...)
 
-\method{APA2}{list}(x, caption = "", note = "", digits = 2,
-  custom.model.names = NULL, include.custom = NULL, include.b = TRUE,
-  include.ci = FALSE, include.odds = FALSE, include.se = if (include.ci)
-  FALSE else TRUE, include.p = FALSE, include.stars = if (include.p) FALSE
-  else TRUE, include.ftest = FALSE, include.loglik = FALSE,
-  include.pseudo = TRUE, include.r = TRUE, include.aic = TRUE,
-  include.bic = include.aic, ci.level = 0.95, rgroup = c("Parameter",
-  "Goodness of fit"), output = stp25output:::which_output(), ...)
+\method{APA2}{list}(x, caption = "", note = "", output = which_output(),
+  digits = 2, custom.model.names = NULL, include.custom = NULL,
+  include.b = TRUE, include.ci = FALSE, include.odds = FALSE,
+  include.se = if (include.ci) FALSE else TRUE, include.p = FALSE,
+  include.stars = if (include.p) FALSE else TRUE, include.ftest = FALSE,
+  include.loglik = FALSE, include.pseudo = TRUE, include.r = TRUE,
+  include.aic = TRUE, include.bic = include.aic, ci.level = 0.95,
+  rgroup = c("Parameter", "Goodness of fit"), ...)
 
 \method{APA2}{lm}(x, caption = NULL, note = NULL, output = which_output(),
   col_names = NULL, ...)

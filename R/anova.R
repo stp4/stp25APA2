@@ -99,57 +99,53 @@ APA2.aovlist <- function(x,
 
  
 #' @rdname APA_Table
-#' @description \code{type="anova"} Anova Funktionen
+#' @description \code{type="anova"} Anova (car::Anova) Funktionen aus APA_Table(..., include.anova=TRUE)
 #' @export
 APA_Table_Anova <- function(myfits,
-                            caption, note,
-                            names,
-                            include.eta)
+                            caption=NULL,
+                            note=NULL,
+                            output = which_output(),
+                            names=NULL,
+                            include.eta=TRUE,
+                            include.sumsq = TRUE ,
+                            include.meansq = FALSE, ...)
 {
-  result <- NULL
+  #cat("\nAPA_Table_Anova()\n")
+  result <- list()
   
- # cat("\n in APA_Table_Anova\n")
   for (i in seq_len(length(myfits)))  {
-  #  print(class(myfits[[i]]))
     
-    if (is(myfits[[i]], "aov") |
-        length(model_info(myfits[[i]])$x) == 0) {
+    if (is(myfits[[i]], "aov") | length(model_info(myfits[[i]])$x) == 0) {
       res <- "Null-Model"
       result[[i]] <- res
     }
     else{
-      res <- Ordnen(car::Anova(myfits[[i]]),
-                    include.eta = FALSE)
+      res <- Ordnen(
+        car::Anova(myfits[[i]]),
+        include.eta = include.eta,
+        include.sumsq = include.sumsq,
+        include.meansq = include.meansq
+      )
+      if (!is.null(caption)) {
+        if (!is.null(names))
+          caption <-  names[i]
+        else
+          caption <-  attr(res, "caption")
+      }
       
-      
-      #ändern 
-     # auf 
-    if( include.eta  & is(myfits[[i]], "lm") ) 
-      res<- cbind(res, etaSquared2(myfits[[i]]))
-      
-      
-      if (is.null(caption))
-        caption <-
-          attr(res, "caption")##paste(, "Obs: ", attr(res,"N"))
       if (is.null(note))
         note <- attr(res, "note")
       
-      # if (include.eta &
-      #     is(myfits[[i]], "lm")  & !is(myfits[[i]], "glm")) {
-      #   k <- ncol(res)
-      #   res <-
-      #     cbind(res[, -k], etaSquared2(myfits[[i]], 2, FALSE), res[k])
-      # }
-      
-      if (!is.null(names))
-        caption <-  names[i]
-      fix_format(res)  %>%
-        Output(caption = caption, note = note)
-      
+     res <-  fix_format(res)
+      Output(
+        res,
+        caption = caption,
+        note = note,
+        output = output
+      )
+      result[[i]] <- res
     }
-    
-  }
-  
+  } # -end for
   result
 }
   

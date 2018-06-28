@@ -167,7 +167,7 @@ a data.frame or list with data.frame
 All functions in stringr start with APA_ and take a Object (formula, data.frame, lm, ...) 
 as the first argument.
 
-APA_Correlation: Korrelationstabelle (Interkorrelationen mit der Hilfe
+\strong{APA_Correlation}: Korrelationstabelle (Interkorrelationen mit der Hilfe
 der Funktion  Hmisc::rcorr. Erlaubt ist die getrennte Auswertung ueber by=~b
 
 APA_ICC  Intra-Klassen-Korrelation ( mit psych ).
@@ -207,7 +207,8 @@ McFaddens R2: [ 0.2 = akzeptabel, 0.4 = gut ] (see pR2)
 
 APA_R2: R2-Tabelle (noch nicht fretig)
 
-APA_Ttest: Berechnung von Mittelwerten und Mittelwertdifferenzen und des T-Test
+\strong{APA_Ttest}:
+ Berechnung von Mittelwerten und Mittelwertdifferenzen und des T-Test.
 
 APA_vif:  variance inflation factor, aka VIF
 
