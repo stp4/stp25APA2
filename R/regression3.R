@@ -343,7 +343,7 @@ APA_Table <- function(...,
 #' @rdname APA_Table
 #' @description \code{type="default"}  Formatierung als breite Tabelle
 type_default <- function(x,
-                         caption = NULL,
+                         caption = NULL, output=NA,
                          note = NULL,
                          custom.model.names = NULL,
                          ...) {
@@ -371,7 +371,7 @@ type_default <- function(x,
 #' @description \code{type="texreg"} Long-Format Kopie der texreg Funktion
 type_texreg <- function(list,
                         caption = "",
-                        note = "", output=output,
+                        note = "", output=NA,
                         names = NULL,
                         digits = 2,
                         single.row = TRUE,
