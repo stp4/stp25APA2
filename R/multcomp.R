@@ -75,7 +75,7 @@
 
 APA2.TukeyHSD <- function(x,
                           caption = " TukeyHSD",
-                          note = "",
+                          note = "", output = which_output(),
                           ...) {
  # res <- list()
   for (i in names(x)) {
@@ -83,7 +83,7 @@ APA2.TukeyHSD <- function(x,
     rs <- prepare_output(cbind(Source = rownames(rs), rs),
                          caption = caption,
                          note = note)
-    Output(rs)
+    Output(rs, output=output)
    # res[[i]] <- rs
   }
   invisible(x)
@@ -120,7 +120,7 @@ APA2.TukeyHSD <- function(x,
 APA2.glht <-
   function(x,
            caption = "Multiple Comparisons of Means",
-           note = "",
+           note = "", output = which_output(),
            include.ci=TRUE,
            # include.se=TRUE,
            # include.t=TRUE,
@@ -159,11 +159,11 @@ APA2.glht <-
     }
     
     res <- prepare_output(res, caption=caption, note=note)
-    Output(fix_format(res))
+    Output(fix_format(res), output=output)
     invisible(res)
   }
 
 
 #' @rdname APA2
 #' @export
-APA2.multicomp <-function(x,...) APA2.glht(x,...)
+APA2.multicomp <-function(x, ...) APA2.glht(x, ...)
