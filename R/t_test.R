@@ -69,7 +69,9 @@ APA.ScalarIndependenceTest <- function(x, ...) {
 #' #End()
 
 APA_Ttest <- function(x,
-                      data,
+                      data, 
+                      caption=NULL, #note=NULL,  
+                      output = which_output(),
                       var.equal = FALSE,
                       paired = FALSE,
                       alternative =  "two.sided",
@@ -147,13 +149,15 @@ APA_Ttest <- function(x,
       )
     }
     # Text(method)
+    
     ANS <- prepare_output(ANS,
                           paste("UV =", r),
                           method)
     result[[l]] <- ANS
   }
   
-  Output(result, ...)
+  Output(result, caption=caption, #note=note, 
+         output=output )
   invisible(result)
 }
 
