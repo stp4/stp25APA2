@@ -133,3 +133,100 @@ boxplot(x~z, main="cut2")
 abline(h=c(10,20,30))
 
 
+## ------------------------------------------------------------------------
+set.seed(1)
+DF <- data.frame(treatment = gl(6, 300 / 6, labels = c("A","B", "C", "D", "E", "F")),
+             sex = gl(2, 300 / 2, labels = c("male", "female"))[sample.int(300)])[sample.int(300,50),]
+
+Xtabs <- function(x, data = DF, ...) {
+  dat <-  xtabs(x, data)
+  data.frame(dat, Percent = data.frame(prop.table(dat, ...))$Freq * 100)
+  
+}
+dat1 <-  Xtabs( ~ treatment, DF)
+dat2 <- data.frame(prop.table(xtabs( ~ treatment + sex  , DF),1))
+
+## ----torte, fig.height=6, fig.width=5------------------------------------
+
+
+
+
+
+require(ggplot2)
+require(gridExtra)
+# The palette with grey:
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+# The palette with black:
+cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+# To use for fills, add
+#scale_fill_manual(values=cbPalette)
+
+# To use for line and point colors, add
+#scale_colour_manual(values=cbPalette)
+
+
+
+blank_theme <- theme_minimal() +
+  theme(
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    
+    panel.border = element_blank(),
+    panel.grid = element_blank(),
+    axis.ticks = element_blank(),
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5)
+  )
+
+ 
+fig.cap <-  "Behandlung"
+p1 <- barchart(
+          reorder(treatment, Percent) ~ Percent,  dat1,
+          origin = 0, xlim = c(-1, 26),
+          xlab = "Prozent",  main = fig.cap,
+          #  scale=list(y=list(cex=1)),
+          panel = function(x, y, ...) {
+                    prz <- rndr_percent(dat1$Percent, dat1$Freq)
+                    panel.barchart(x, y, ...)
+                    ltext(x = .4, y = y,adj = c(0, NA),
+                          col = "white",labels = prz, cex = .75
+                          )
+          }
+  )
+
+
+
+
+
+## Torte
+
+fig.cap <- "Geschlechterverteilung"  
+
+p2 <- ggplot(data = dat2,
+            aes(x = "",  y = Freq, fill = factor(sex))) +
+            geom_bar(width = 1, stat = "identity") +
+            facet_grid(facets = . ~ treatment) +
+            coord_polar(theta = "y") +
+            xlab('') + ylab('') +
+            labs(fill = '') +
+            scale_fill_manual(values = c("#F781BF", "#377EB8")) +
+            blank_theme  +
+            # geom_text(aes(
+            #   y = c(.7, .2, .7, .2, .7, .2),
+            #   label = paste0(round(Freq * 100), "%")
+            # ), size = 4) +
+            theme(legend.position = "bottom", legend.box = "horizontal")  +
+            ggtitle(fig.cap)
+
+myPlot <-
+  gridExtra::arrangeGrob(grobs = list(p1, p2),
+                         ncol = 1,
+                         heights=unit(c(.60,.40), "npc"),
+                         newpage = TRUE)
+ 
+grid.draw(myPlot)
+
+
+
