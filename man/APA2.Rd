@@ -129,10 +129,11 @@ errate_statistik2(Formula, data, caption = "caption", note = "note",
 \method{APA2}{lda}(x, fit_predict = MASS:::predict.lda(x),
   newdata = model.frame(x), ...)
 
-\method{APA2}{TukeyHSD}(x, caption = " TukeyHSD", note = "", ...)
+\method{APA2}{TukeyHSD}(x, caption = " TukeyHSD", note = "",
+  output = which_output(), ...)
 
 \method{APA2}{glht}(x, caption = "Multiple Comparisons of Means", note = "",
-  include.ci = TRUE, level = 0.95, ...)
+  output = which_output(), include.ci = TRUE, level = 0.95, ...)
 
 \method{APA2}{multicomp}(x, ...)
 

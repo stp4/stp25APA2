@@ -157,8 +157,7 @@ APA2.xtabs  <- function(x,
   type <- match.arg(type, several.ok = TRUE)
   # test <- if (test)  type  else  0
 
-    if (is.null(digits))
-       digits <- options()$stp25$apa.style$prozent$digits[1]
+    if (is.null(digits)) digits <- options()$stp25$apa.style$prozent$digits[1]
   
   
   x_tab <- Xtabelle(
@@ -173,11 +172,13 @@ APA2.xtabs  <- function(x,
     include.percent,
     digits
   )
-  
+#  print(x_tab)
   x_tab <- prepare_output(x_tab, caption = caption)
   Output(x_tab, output = output)
-  res <- list(xtab = x_tab, test = NULL)
+
   
+  res <- list(xtab = x_tab, test = NULL)
+  #  print(class(res))
   if (test){
     dimension <- length(dimnames(x))
   
@@ -461,40 +462,35 @@ APA_Xtabs.formula <- function(x,
     dimnames(x) <- labels
   }
   
+  #print(x)
   
   # noch nicht fertig ----
   CST <- NULL  #chisq.test
   
-  if(include.chisq | include.correlation){
-    
-    
+  if(include.chisq | include.correlation) {
     # chisq.test(x ) #Pearson's Chi-squared test with Yates
     # chisq.test(x, correct = FALSE) #Pearson's Chi-squared test
     # summary(x) # Test for independence of all factors
     # 
-    
     CST <- chisq.test(x, correct = FALSE)
-    
-    
   }  
   
-  if(include.resid){
+  if(include.resid) {
     if(is.null( CST))  CST <- chisq.test(x, correct = FALSE)
   resid <-  formatC(CST$observed-CST$expected, digits = 2,
                     format = "f" ) }
   
-  if(include.sresid){
+  if(include.sresid) {
     if(is.null( CST))  CST <- chisq.test(x, correct = FALSE)
   sresid  <-  formatC(CST$residual , digits = 2,
                       format = "f" ) 
   }
   
-  if (include.mcnemar)
-  {
+  if (include.mcnemar) {
     McN <- mcnemar.test(x, correct = FALSE)
   }
   
-  
+  #cat("\n vor APA")
   APA2(x, caption = caption, output = output, ...)
 }
 
@@ -634,17 +630,20 @@ Xtabelle <- function(x,
                      percent = TRUE,
                      
                      digits = 0)  {
+  
   mrgn <-
     which_margin(x,
                  include.total,
                  include.total.columns,
                  include.total.sub,
                  include.total.rows)
-  
+ # print(mrgn)
   if (!is.na(margin))
     mrgn$prop <- margin
   if (!is.na(add.margins))
     mrgn$add <- add.margins
+  
+ 
   
   f_count <- ftable(addmargins(x, mrgn$add))
   f_percent <-
@@ -652,11 +651,12 @@ Xtabelle <- function(x,
   
   
   if (count & percent) {
-    
-    #print(digits)
+ 
     rndr_percent_ftable(f_percent, f_count, digits=digits)
   }
-  else if (!percent)  {stp25output::fix_to_data_frame(f_count)}
+  else if (!percent)  {
+    stp25output::fix_to_data_frame(f_count)
+    }
   else{
     rndr_percent_ftable(f_percent, digits=digits)
   }

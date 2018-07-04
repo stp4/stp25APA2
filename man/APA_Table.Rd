@@ -10,28 +10,30 @@
 \alias{regression_output}
 \title{Regressions Tabelle}
 \usage{
-APA_Table_Anova(myfits, caption, note, names, include.eta)
+APA_Table_Anova(myfits, caption = NULL, note = NULL,
+  output = which_output(), names = NULL, include.eta = TRUE,
+  include.sumsq = TRUE, include.meansq = FALSE, ...)
 
-APA_Table(..., caption = NULL, note = NULL, type = c("default", "long",
-  "broom", "texreg", "stargazer", "sjPlot", "anova"), names = NULL,
-  custom.model.names = NULL, digits = 2, include.b = TRUE,
-  include.se = TRUE, include.beta = FALSE, include.eta = FALSE,
+APA_Table(..., caption = NULL, note = NULL, output = which_output(),
+  type = c("default", "long", "broom", "texreg", "stargazer", "sjPlot",
+  "anova"), names = NULL, custom.model.names = NULL, digits = 2,
+  include.b = TRUE, include.se = TRUE, include.beta = FALSE,
   include.odds = FALSE, include.ci = FALSE, include.p = FALSE,
   include.stars = if (include.p) FALSE else TRUE, include.variance = TRUE,
   include.r = TRUE, include.pseudo = FALSE, include.ftest = FALSE,
   include.loglik = FALSE, include.custom = NULL, include.aic = TRUE,
-  include.bic = include.aic, include.anova = FALSE, ci.level = 0.95,
+  include.bic = include.aic, include.anova = FALSE, include.sumsq = TRUE,
+  include.meansq = FALSE, include.eta = FALSE, ci.level = 0.95,
   single.row = TRUE, rgroup = c("Parameter", "Goodness of fit"))
 
-type_default(x, caption = NULL, note = NULL, custom.model.names = NULL,
-  ...)
+type_default(x, caption = NULL, output = NA, note = NULL,
+  custom.model.names = NULL, ...)
 
-type_texreg(list, caption = "", note = "", names = NULL, digits = 2,
-  single.row = TRUE, include.stars = TRUE, include.p = FALSE,
-  ci.force = FALSE, include.variance = TRUE,
-  output = stp25output:::which_output(), custom.model.names = if
-  (is.null(names)) paste0("(", 1:length(list), ")") else names,
-  center = options()$stp25$apa.style$center,
+type_texreg(list, caption = "", note = "", output = NA, names = NULL,
+  digits = 2, single.row = TRUE, include.stars = TRUE,
+  include.p = FALSE, ci.force = FALSE, include.variance = TRUE,
+  custom.model.names = if (is.null(names)) paste0("(", 1:length(list), ")")
+  else names, center = options()$stp25$apa.style$center,
   stars = options()$stp25$apa.style$p$stars.value,
   stars.symbols = options()$stp25$apa.style$p$stars.symbols)
 
@@ -80,11 +82,11 @@ regression_output(fits, caption = "", note = "",
 invisible data.frame und Output mit html/knit oder Text.
 }
 \description{
-\code{type="anova"} Anova Funktionen
+\code{type="anova"} Anova (car::Anova) Funktionen aus APA_Table(..., include.anova=TRUE)
 
 Erstellt APA-Style Tabellen aus R-Objekten (lm, glm,lmer, usw).
 
-\code{type="default"} Default Formatierung als breite Tabelle
+\code{type="default"}  Formatierung als breite Tabelle
 
 \code{type="texreg"} Long-Format Kopie der texreg Funktion
 

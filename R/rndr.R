@@ -297,6 +297,7 @@ rndr_percent_ftable <- function(x,
                                 style = options()$stp25$apa.style$prozent$style,
                                 null_percent_sign = options()$stp25$apa.style$prozent$null_percent_sign) {
   
+  cat("\nrndr_percent_ftable")
   
   x_char <- apply(x, 2, function(y)
     paste0(
@@ -325,7 +326,7 @@ rndr_percent_ftable <- function(x,
         )
     
     if (!is.null(null_percent_sign))
-      res[which(n == 0)] <- null_percent_sign
+      res[which(count == 0)] <- null_percent_sign
     
     ans <- stp25output::fix_to_data_frame(count)
     n <- ncol(ans)
@@ -334,7 +335,9 @@ rndr_percent_ftable <- function(x,
   
   else  {
     if (!is.null(null_percent_sign))
-      res[which(n == 0)] <- null_percent_sign
+    #   digits<-2
+    # 10^-digits
+      res[which(x <  10^-digits)] <- null_percent_sign
     ans <- stp25output::fix_to_data_frame(x_char)
   }
   ans
