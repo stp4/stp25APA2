@@ -70,7 +70,7 @@ APA.ScalarIndependenceTest <- function(x, ...) {
 
 APA_Ttest <- function(x,
                       data, 
-                      caption=NULL, #note=NULL,  
+                      caption="T Test", note=alternative,  
                       output = which_output(),
                       var.equal = FALSE,
                       paired = FALSE,
@@ -148,16 +148,13 @@ APA_Ttest <- function(x,
         " levels und kann daher nicht mittels T-Test berechnet werden!"
       )
     }
-    # Text(method)
-    
+
     ANS <- prepare_output(ANS,
-                          paste("UV =", r),
-                          method)
+                         caption=caption,note=note)
     result[[l]] <- ANS
   }
   
-  Output(result, caption=caption, #note=note, 
-         output=output )
+  Output(result,  output=output )
   invisible(result)
 }
 
