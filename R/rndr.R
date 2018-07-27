@@ -936,12 +936,16 @@ Format2.matrix <- function(x, digits, ...){
   else matrix(mapply(Format2, x, digits,...), ncol=ncol(x))
 }
 
+
+Format2.tbl_df <- function(x, ...) Format2.data.frame(data.frame(x), ...)
+
 #  Format2.data.frame(x, ...)
 #' @rdname Format2
 #' @description Format2.data.frame
 #' @export
 #' @examples
 #' #  str(Format2(data.frame(a1=1:10/100,a2=1:10, a3=1:10)))
+#' 
 Format2.data.frame <- function(x,
                                digits = NULL,
                                lead.zero = TRUE,
@@ -1057,7 +1061,7 @@ Format2.default <- function(x,
                             #-- wenn erster wert 0 dann trotzdem digits
                             ...)
 {
-  #cat("\n in Format2.default\n")
+ # cat("\n in Format2.default\n")
   #  print(class(x))
   #print(x)
   #print(digits)
