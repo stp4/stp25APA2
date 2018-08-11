@@ -820,7 +820,7 @@ rndr_nfi_cfa <- function(x) as.character(
 
 #' @rdname rndr_
 #' @param output  nur intern HTML oder Konsole
-symbol_chi2 <- function(output = stp25output:::which_output()) {
+symbol_chi2 <- function(output = stp25output::which_output()) {
   if (output == "html")
     "&chi;<sup>2</sup>"
   else
@@ -828,39 +828,39 @@ symbol_chi2 <- function(output = stp25output:::which_output()) {
 }
 
 symbol_kleiner_gleich <-
-  function(output = stp25output:::which_output()) {
+  function(output = stp25output::which_output()) {
     if (output == "html")
       "&le;"
     else
       "=<"
   }
 symbol_groesser_gleich <-
-  function(output = stp25output:::which_output()) {
+  function(output = stp25output::which_output()) {
     if (output == "html")
       "&ge;"
     else
       "=>"
   }
 
-symbol_alpha	<- function(output = stp25output:::which_output()){
+symbol_alpha	<- function(output = stp25output::which_output()){
   if (output == "html")
     "&alpha;"
   else
    "alpha"}
-symbol_beta	<- function(output = stp25output:::which_output()) {
+symbol_beta	<- function(output = stp25output::which_output()) {
   if (output == "html")
     "&beta;"
   else
     "beta"
 }
 symbol_eta	<-
-  function(output = stp25output:::which_output()) {
+  function(output = stp25output::which_output()) {
     if (output == "html")
       "&eta;"
     else
       "eta"
   }
-symbol_kappa	<- function(output = stp25output:::which_output()) {
+symbol_kappa	<- function(output = stp25output::which_output()) {
   if (output == "html")
     "&kappa;"
   else
