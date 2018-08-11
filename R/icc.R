@@ -225,7 +225,7 @@ AD_Index2 <- function(x, data, ... ,
   ##Ausgabe
   rbind(
     data.frame(
-      Item=GetLabelOrName(X$Y_data),
+      Item=stp25aggregate::GetLabelOrName(X$Y_data),
       Mean, SD, AD.Index,
       stringsAsFactors=FALSE),
     Overall) %>%
@@ -269,7 +269,7 @@ AD_Index.formula <- function(x,
   
   if(type=="judge") X$Y_data <- data.frame(t(X$Y_data))
   
-  data.frame(Item=GetLabelOrName(X$Y_data),
+  data.frame(Item=stp25aggregate::GetLabelOrName(X$Y_data),
              AD.Index=sapply(X$Y_data,
                              AD_Index_helper, ...))
   

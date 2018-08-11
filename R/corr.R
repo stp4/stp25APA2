@@ -75,7 +75,7 @@ APA.biVar <- function(x, ...) {
 APA_Correlation <-
   function(...,
            caption = "Korrelation", note = NULL,
-           output = which_output(),
+           output = stp25output::which_output(),
            col_names = NULL,
            cor_diagonale_up = TRUE,
            type = c("pearson", "spearman"),
@@ -151,7 +151,7 @@ Hmisc_rcorr <- function(...,
   measure_data <- apply(X$data[measure.vars], 2, as.numeric)
   group.vars <- X$group.vars
   N <- nrow(X$data[measure.vars])
-  row_name <- GetLabelOrName(X$data[measure.vars])
+  row_name <- stp25aggregate::GetLabelOrName(X$data[measure.vars])
   ans <- NULL
   
   if (!is.null(condition)) {

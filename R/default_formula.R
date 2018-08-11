@@ -146,7 +146,7 @@ APA2.formula <- function(x,
 
  if(include.names & include.labels) {
      nms<-names(data)
-     lbl <- GetLabelOrName(data)
+     lbl <- stp25aggregate::GetLabelOrName(data)
      lbl<-paste(nms, lbl)
      names(lbl)<-nms
      data<-label_data_frame(data, lbl)

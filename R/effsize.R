@@ -13,7 +13,9 @@
 #' 
 APA_Effsize<- function(x, ...){
   
-  if(is_formula2(x) | is.numeric(x)) cohens.d(x, ...)
+ 
+  
+  if(stpvers::is_formula2(x) | is.numeric(x)) cohens.d(x, ...)
   else etaSquared2(x, ...)
   
 }
@@ -49,7 +51,7 @@ APA2.efflist <- function(x,
                          caption = "Effekte: ",
                          type = NULL, 
                          ##c("fit", "lower",  "upper" ),
-                         note = "",  output = which_output(),
+                         note = "",  output = stp25output::which_output(),
                          digits = 2,
                          include.fit = TRUE,
                          include.n = FALSE,
@@ -439,7 +441,7 @@ cohens.d.formula = function(x, data = list(), ...) {
 # res<- list()
 # X<-Formula_Data(formula, data)
 #
-# myLabel<- GetLabelOrName(X$Y_data)
+# myLabel<- stp25aggregate::GetLabelOrName(X$Y_data)
 #
 # for(i in X$yname){
 #         d <-  X$Y_data[,i]

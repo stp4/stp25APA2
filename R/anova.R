@@ -3,7 +3,7 @@
 APA2.anova <- function(x, 
                        caption=gsub("\\n", "", paste(attr(x, "heading"), collapse=", ") ),
                        note=paste("contrasts: ", paste(options()$contrasts, collapse=", ")),
-                       output = which_output(),
+                       output = stp25output::which_output(),
                        col_names = NULL,
                        include.eta=FALSE,
                        ...
@@ -29,7 +29,7 @@ APA2.anova <- function(x,
 APA2.aov <- function(x, 
                      caption=NULL,
                      note=paste("contrasts: ", paste(options()$contrasts, collapse=", ")),
-                     output = which_output(),
+                     output = stp25output::which_output(),
                      col_names = NULL,
                      ...
                      ) {
@@ -45,7 +45,7 @@ APA2.aov <- function(x,
 APA2.summary.aov <- function(x,
                         caption = "ANOVA",
                         note = "",
-                        output = which_output(),
+                        output = stp25output::which_output(),
                         col_names = NULL,
                         ...) {
   res <- fix_format(broom::tidy(x[[1]]))
@@ -76,7 +76,7 @@ APA2.summary.aov <- function(x,
 #' APA2(aov.ex3)
 #' 
 APA2.aovlist <- function(x,
-                         output = which_output(),
+                         output = stp25output::which_output(),
                          col_names = NULL,
                          ...) {
   x <- summary(x)
@@ -104,7 +104,7 @@ APA2.aovlist <- function(x,
 APA_Table_Anova <- function(myfits,
                             caption=NULL,
                             note=NULL,
-                            output = which_output(),
+                            output = stp25output::which_output(),
                             names=NULL,
                             include.eta=TRUE,
                             include.sumsq = TRUE ,
