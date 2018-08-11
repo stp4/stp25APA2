@@ -35,8 +35,8 @@ berechne.default <- function(data,
                              x,
                              by = "1",
                              measure ,
-                             type = 2,
-                             fun = NULL,
+                             type ,
+                             fun = function(x) length( na.omit(x)),
                              fm = NULL,
                              digits = NULL,
                              measure.name = NULL 
@@ -49,7 +49,7 @@ berechne.default <- function(data,
       fm,
       data,
       FUN = function(x) {
-        if (type == 2 | type == "long")
+        if (type == "auto_long")
           rndr_median_range(
             median(x, na.rm = TRUE),
             IQR(x, na.rm = TRUE),
@@ -69,7 +69,7 @@ berechne.default <- function(data,
       fm,
       data,
       FUN = function(x) {
-        if (type == 2 | type == "long")
+        if (type == "auto_long")
           rndr_mean_range(
             mean(x, na.rm = TRUE),
             sd(x, na.rm = TRUE),
@@ -97,55 +97,50 @@ berechne.default <- function(data,
   }
   
   custom_fun <- function() {
-    aggregate(fm,
-              data ,
-              FUN = fun)
-  }
+   res <-  aggregate(fm, data, FUN = fun, simplify = TRUE)
+    #fun mit meheren rueckgabewerten
+    if (is.matrix(res[[ncol(res)]])) {
+      measure.name <<- NULL
+      cbind(res[-ncol(res)],  res[[ncol(res)]])
+    } else
+      res
+   }
+  
+ 
+  
   
   if (is.null(fm)){
     fm <- makeFormula(x, by)
-    } else  {
-    type <- 0
-    measure <- "custom_fun"
-    
-  }
-  
-  if (type[1] != 3) {
-    if (type[1] == "median") {
-      measure <- type[1]
-      type <- 2 ## Lange version
     }
+ 
+    
     res <- switch (
       measure,
-      median = mdn(),
+     
       factor = frq() ,
-      numeric = mn(),
+      numeric = mn(), 
+      median = mdn(),
       integer = mn(),
       mean = mn(),
       custom_fun = custom_fun(),
       NULL
     )
     
-  } else{
-    if (is.factor(x))
-      x <- if (nlevels(x) == 2)
-        as.numeric(x) - 1
-    else
-      as.numeric(x)
-    
-    res <- aggregate(
-      fm,
-      data,
-      FUN = function(x)
-        mean(x, na.rm = TRUE)
-    )
-    
-  }
+ 
   
-  
-  if(!is.null(measure.name)) names(res)[ncol(res)] <- measure.name[1]
-  res
+  if(!is.null(measure.name)) 
+      names(res)[ncol(res)] <- measure.name[1]
+ 
+
+ 
+ res
 }
+
+
+
+
+
+
 
 #' @rdname Berechne
 #' @param .data Daten
@@ -177,7 +172,7 @@ berechne.data.frame <- function(.data,
     measure[meAsNum] <- names(.data[ as.numeric(measure[meAsNum]) ])
   }
 
-  if (is_formula2(by)) by <- all.vars(by)
+  if (stpvers::is_formula2(by)) by <- all.vars(by)
 
 
   res<- NULL
@@ -231,7 +226,7 @@ berechneMean <- function(data=NULL,
   datac$ci <- datac$se * ciMult
   datac$ci.low <-    datac$mean-datac$ci
   datac$ci.hig <-    datac$mean+datac$ci
-  datac$variable<-GetLabelOrName(data[measurevar])
+  datac$variable<-stp25aggregate::GetLabelOrName(data[measurevar])
   return(datac)
 }
 

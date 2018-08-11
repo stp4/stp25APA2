@@ -80,19 +80,14 @@ Tabelle.default <- function(...,
                             formula = NULL,
                             fun = NULL,
                             type = c(
-                              "2",
-                              "1",
-                              "auto",
-                              "freq",
-                              "mean",
-                              "median",
-                              "ci",
+                              "2", # "auto_lang" ## 44.56 (SD 18.10, range 25.00 to 70.00)
+                              "1", # "auto_kurz" ## 44.56 (18.10)
+                             # "auto",
+                              "freq","freq.ci",
+                              "mean", "median", "ci","cohen.d","effsize",
                               "multiresponse",
-                              "cohen.d",
-                              "effsize",
-                              "freq.ci",
-                              "describe", "correlation"
-                            ),
+                              "describe", "correlation",
+                              "custom_fun"),
                             caption = "Charakteristik",
                             note = "",
                             
@@ -120,6 +115,13 @@ Tabelle.default <- function(...,
                            # normality.test = FALSE
                           ) {
   type <-  match.arg(type, several.ok = TRUE)[1]
+  
+  if(!is.null(fun)) type <- "custom_fun"
+  
+  if(type=="correlation"){
+    stop("Benutze Bitte die Funktion APA_Correlation()!")
+  }
+  
   if (APA) {
     
   #  cat("\ninAPA=TRUE")
@@ -152,9 +154,6 @@ Tabelle.default <- function(...,
    #   useconTest = useconTest,
     #  normality.test = normality.test
     )
-  }
-  else if(type=="correlation"){
-    stop("Benutze Bitte die Funktion APA_Correlation()!")
   }
   else
   {
@@ -189,17 +188,71 @@ Tabelle.default <- function(...,
 
 
 
-
-
-
-
-
-#' @rdname Tabelle
-#' @export
-Describe <-  function(x, ...) {
-  # @importFrom dplyr tbl_df
-  fix_format(broom::tidy(x))
+calculate_tabelle2 <- function(X,
+                               type,
+                               caption,
+                               note,
+                               fun = NULL,
+                               digits = digits) {
+  res <- NULL #ergebnis liste
+  
+  if(type[1] =="2") type <- "auto_long"
+  else if( type[1] == "1")  type <- "auto_kurz"
+  else if( type[1] == "custom_fun")  X$measure <- rep("custom_fun", length(X$measure))
+  else{
+    
+    if(type %in% c("mean", "median", "factor", "freq")){
+      type[which(type=="freq")] <- "factor"
+      
+    if(length(type) != length(X$measure)) X$measure  <- rep(type[1], length(X$measure))
+    else X$measure  <-  type
+    } else warning("Der gewaehlte type ", type[1], " ist nicht implementiert.")
+    
+    type <- "auto_kurz"
+  }
+ 
+  
+  for (i in seq_len(length(X$measure))) {
+    #-- Labels ----------------------------------
+    if (X$measure[i] == "factor"){
+      if( !is.factor(  X$data[[X$measure.vars[i]]])  ) {
+        
+        X$data[[X$measure.vars[i]]] <- factor(X$data[[X$measure.vars[i]]])
+        warning("Konvertiere die Variable ", X$measure.vars[i], " zu Factor!")
+      }
+      X$row_name[i] <- paste0(X$row_name[i], " (",
+                                paste0(levels(X$data[[X$measure.vars[i]]]), collapse = "/"), ")")}
+    else if (X$measure[i] == "mean")
+        X$row_name[i] <- paste0(X$row_name[i], " (mean)")
+    else if (X$measure[i] == "median")
+        X$row_name[i] <- paste0(X$row_name[i], " (median)")
+      
+      
+    res[[X$measure.vars[i]]]  <-
+      berechne.default(
+        X$data,
+        X$measure.vars[i],
+        X$by,
+        X$measure[i],
+        type,
+        fun = fun,
+        digits =  if (is.null(digits))  X$digits[i] else digits,
+        measure.name = "value"
+      )
+    
+    
+    
+    
+    
+  }
+  
+  df <- plyr::ldply(res)
+  df[, 1] <- factor(df[, 1], names(X$row_name), X$row_name)
+  
+  prepare_output(df, caption, note, nrow(X$data), NA)
 }
+
+
 
 
 
@@ -233,6 +286,8 @@ Tabelle.glm <- function(x,
   Tabelle.lm(x, digits, fun)
 }
 
+
+
 #' @rdname Tabelle
 #' @export
 Tabelle.lm <- function(x,
@@ -244,7 +299,7 @@ Tabelle.lm <- function(x,
                            SD = sd(x, na.rm = TRUE)
                          )
                        }
-                       ) {
+) {
   res_list <- NULL
   myeff <- effects::allEffects(x)
   
@@ -263,13 +318,16 @@ Tabelle.lm <- function(x,
           x),
         stringsAsFactors = FALSE)
     
-   
+    
     res_list[[i]] <- prepare_output(ans,
                                     paste0("AV: ", AV), "",
                                     info$N,  info$labels)
   }
   res_list
 }
+
+
+
 
 
 
@@ -295,55 +353,14 @@ aggregate_effect <- function(eff,
 }
 
 
-calculate_tabelle2 <- function(X,
-                               type,
-                               # wie soll Ausgewertet werden Mittelwerte: type=3, type="mean"
-                               caption,
-                               note,
-                               fun = NULL
-                               ,
-                               digits = digits) {
-  res <- NULL
-  
-  for (i in seq_len(length(X$measure))) {
-    # if (X$measure[i] == "default")
-    #  X$measure[i] <- X$measure.class[i]
-    
-    #-- Labels ----------------------------------
-    if (type == 3 | type == "mean") {
-      # cat("\nBerechne Mittelwerte\n")
-    } else{
-      if (X$measure[i] == "factor")
-        X$row_name[i] <- paste0(X$row_name[i], " (",
-                                paste0(levels(X$data[[X$measure.vars[i]]]), collapse = "/"), ")")
-      else if (X$measure[i] == "median")
-        X$row_name[i] <- paste0(X$row_name[i], " (median)")
-      else
-        X$row_name[i] <- paste0(X$row_name[i], " (mean)")
-      
-    }
-    
-    res[[X$measure.vars[i]]]  <-
-      berechne.default(
-        X$data,
-        X$measure.vars[i],
-        X$by,
-        X$measure[i],
-        type,
-        fun = fun,
-        digits =  if (is.null(digits))
-          X$digits[i]
-        else
-          digits,
-        measure.name = "value"
-      )
-    
-  }
-  
-  df <- plyr::ldply(res)
-  df[, 1] <- factor(df[, 1], names(X$row_name), X$row_name)
-  
-  prepare_output(df, caption, note, nrow(X$data), NA)
+
+
+
+#' @rdname Tabelle
+#' @export
+Describe <-  function(x, ...) {
+  # @importFrom dplyr tbl_df
+  fix_format(broom::tidy(x))
 }
 
 
@@ -360,7 +377,7 @@ Describe2 <- function(fml,
                     psych::describe(data),
                         stringsAsFactors=FALSE)[stat]
  result[-1] <- Format2(result[-1])
-  prepare_output(cbind(Item = GetLabelOrName(data), result),
+  prepare_output(cbind(Item = stp25aggregate::GetLabelOrName(data), result),
                  caption,
                  note,
                  nrow(data))
