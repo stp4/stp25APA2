@@ -54,7 +54,7 @@ prepare_data2.formula <-
            groups = NULL) {
 
 if(!is.null(groups)){
-  #is_formula2(x)
+ 
       x<- formula(
         paste(
         deparse(x), "|", gsub("~", "", deparse(groups))))
@@ -114,15 +114,15 @@ if(!is.null(groups)){
       dedect_number <- as.integer(gsub("[^0-9]", "",
                             stringr::str_extract(y_hsd[pos], "\\[.")))
 
-      if(!is_empty2(dedect_string)){
+      if(!stpvers::is_empty2(dedect_string)){
         for (i in  seq_len(length(pos)))
-          if(!is_empty2(dedect_string[i]))
+          if(!stpvers::is_empty2(dedect_string[i]))
             measure[pos[i]] <- dedect_string[i]
           }
 
-      if(!is_empty2(dedect_number)){
+      if(!stpvers::is_empty2(dedect_number)){
         for (i in seq_len(length(pos)))
-          if(!is_empty2(dedect_number[i]))
+          if(!stpvers::is_empty2(dedect_number[i]))
             digits[pos[i]] <- dedect_number[i]
           digits<- as.numeric(digits)
           }
@@ -133,7 +133,7 @@ if(!is.null(groups)){
       } else {
         x_hsd <- strsplit(deparse(formula[[3L]]), " \\+ ")[[1]]
         group.vars <- gsub("\\[.+\\]", "", x_hsd)
-        col_name <- GetLabelOrName(data[group.vars])
+        col_name <- stp25aggregate::GetLabelOrName(data[group.vars])
         formula <- to_formula(measure.vars, group.vars)
         all_vars<- c(measure.vars, group.vars, condition.vars)
       }
@@ -155,7 +155,7 @@ if(!is.null(groups)){
           xname <- all.vars(formula[[2L]])
           names(X_data) <-xname
 
-          row_name <- GetLabelOrName(X_data)
+          row_name <- stp25aggregate::GetLabelOrName(X_data)
          # names(Y_data) <- yname
           formula <- to_formula( xname, NULL)
         }
@@ -221,7 +221,7 @@ if(!tibble::is_tibble(.data))
 
  measure.vars = NULL
  group.vars = NULL
- condition.vars <- if(is_formula2(groups)) all.vars(groups) else groups
+ condition.vars <- if(stpvers::is_formula2(groups)) all.vars(groups) else groups
  formula = NULL
  row_name = NULL
  col_name = NULL
@@ -263,14 +263,14 @@ if(!tibble::is_tibble(.data))
       .data <- .data[all_vars]
       formula <- formula(paste("~", fm))
     }
-    else if (is_formula2(by)) {
+    else if (stpvers::is_formula2(by)) {
       group.vars <- all.vars(by)
       all_vars <- c(measure.vars, group.vars, condition.vars)
       .data <- .data[all_vars]
       group.class <- get_classes(.data[group.vars])
       formula <- to_formula(measure.vars, group.vars, condition.vars)
 
-      col_name<-GetLabelOrName(.data[group.vars])
+      col_name<-stp25aggregate::GetLabelOrName(.data[group.vars])
     }
     else {
       group.vars <- by
@@ -280,7 +280,7 @@ if(!tibble::is_tibble(.data))
       group.class <- get_classes(.data[group.vars])
       formula <- to_formula(measure.vars, group.vars, condition.vars)
 
-      col_name<-GetLabelOrName(.data[group.vars])
+      col_name<-stp25aggregate::GetLabelOrName(.data[group.vars])
     }
   }
  stp25DataObjekt(
@@ -300,7 +300,7 @@ to_formula <- function(measure.vars, group.vars, condition.vars=NULL) {
     fm <- paste0("~", paste(measure.vars, collapse = "+"))}
   else if (group.vars[1] == "1" ){fm <- paste0("~", paste(measure.vars, collapse = "+"))}
   else {
-    if (is_formula2(group.vars))
+    if (stpvers::is_formula2(group.vars))
       fm <- paste0(paste(measure.vars, collapse = "+"),
                    "~",
                    paste(all.vars(group.vars), collapse = "+"))
@@ -344,7 +344,7 @@ stp25DataObjekt <- function(data = NULL,
     if (is.null(measure))
       measure  <- measure.class
     if (is.null(row_name))
-      row_name <- GetLabelOrName(data[measure.vars])
+      row_name <- stp25aggregate::GetLabelOrName(data[measure.vars])
     if (is.null(digits))
       digits <- ifelse(
         measure == "factor",
@@ -358,7 +358,7 @@ stp25DataObjekt <- function(data = NULL,
       group.class <- get_classes(data[group.vars])
 
     if (is.null(col_name))
-      col_name <- GetLabelOrName(data[group.vars])
+      col_name <- stp25aggregate::GetLabelOrName(data[group.vars])
 
   } else{
     group.class <- col_name <- NULL

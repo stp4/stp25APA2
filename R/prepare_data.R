@@ -87,7 +87,7 @@ else data <- stats::model.frame(formula,
  #    by <- formula(paste("~", paste(xname, collapse="+")))
  #
  # }
- #row_name <- GetLabelOrName(Y_data)
+ #row_name <- stp25aggregate::GetLabelOrName(Y_data)
  #measure.class <- sapply( Y_data,  function(x)  setdiff(class(x), "labelled"))
  #measure <- rep.int("default", length(yname))
 
@@ -169,7 +169,7 @@ cat("\nmeasure\n")
     if (by == "1")
       fm <- paste("~", paste(measure, collapse = "+"))
     else {
-      if (is_formula2(by))
+      if (stpvers::is_formula2(by))
         fm <- paste(paste(measure, collapse = "+"),"~",
                 paste(all.vars(by), collapse = "+"))
       else
@@ -202,7 +202,7 @@ cat("\nmeasure\n")
   check_data_result <-
     if (by == "1")
       check_data(.data, measure.vars)
-  else if (is_formula2(by))
+  else if (stpvers::is_formula2(by))
     check_data(.data, c(measure.vars, all.vars(by)))
   else
     check_data(.data, c(measure.vars, by))
@@ -213,7 +213,7 @@ cat("\nmeasure\n")
 
 
   measure.class <-  get_classes(.data[measure.vars])
-  row_name <- GetLabelOrName(.data[measure.vars])
+  row_name <- stp25aggregate::GetLabelOrName(.data[measure.vars])
 
   fm<-paste(measure.vars, collapse="+")
 
@@ -223,7 +223,7 @@ cat("\nmeasure\n")
     group.class <- NULL
     fm <- formula(paste("~", fm))
   }
-  else if (is_formula2(by)) {
+  else if (stpvers::is_formula2(by)) {
     group.vars <- all.vars(by)
     .data <-  .data[c(measure.vars, group.vars)]
     group.class <- get_classes(.data[group.vars])
@@ -451,11 +451,11 @@ if (any(myvars %in% ".")) {
 #'
 makeFormula<- function(measurevar, groupvars ){
 
-  if (is_formula2(groupvars)) groupvars<-paste0(all.vars(groupvars), collapse = "+")
+  if (stpvers::is_formula2(groupvars)) groupvars<-paste0(all.vars(groupvars), collapse = "+")
   else groupvars <- paste0(groupvars, collapse = "+")
 
 
-  if (is_formula2(groupvars)) {
+  if (stpvers::is_formula2(groupvars)) {
     measurevar<- all.vars(measurevar)
     if(length(measurevar)!=1)
       measurevar<-  paste("cbind(", paste0(measurevar, collapse = ", "), ")")

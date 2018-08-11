@@ -271,7 +271,7 @@ Kano_default<-function(X,
   nams <- ifelse(nams == ""
                  , gsub(" $", "", gsub("[\\._]+", " ", names(nams)), perl = T)
                  , nams)
-  # nams <- GetLabelOrName(X[, vars])
+  # nams <- stp25aggregate::GetLabelOrName(X[, vars])
   if (is.factor(X[, 1]))
   { 
     cat("\nto numeric")

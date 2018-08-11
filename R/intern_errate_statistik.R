@@ -401,6 +401,13 @@ errate_statistik3 <-
          )
   {
     
+    mySep<- ' '
+    mySep2  <- '  '  
+      if(stp25output::which_output() == "hlml"){  
+        mySep <- '&nbsp;' 
+        mySep2 <- '&nbsp;&nbsp;'
+        }
+    
     Mittelwert_Einzel <- function(i, x) {
      
       x_NA <- x
@@ -437,7 +444,7 @@ errate_statistik3 <-
           m = "",stringsAsFactors=FALSE
         )
         res$n <- ""
-        x1 <- cbind(Item = "&nbsp;&nbsp;", res)
+        x1 <- cbind(Item = mySep2, res)
         rr <- rbind(x0, x1)
       } else
         rr <-
@@ -448,7 +455,7 @@ errate_statistik3 <-
     
     Mittelwert_Gruppe <- function(i, j, x = NULL) {
       groups <- droplevels(X$data[[j]])
-      tabel_header <- paste0("&nbsp;", names(table(groups)))
+      tabel_header <- paste0(mySep, names(table(groups)))
       
       ans <- NULL
       for (lev in seq_len(nlevels(groups))) {
@@ -475,7 +482,7 @@ errate_statistik3 <-
         res_n <-  cbind(res_n, cbind(n = "", res[, i]))
       }
       
-      colnames(res_n) <- paste0("&nbsp;",
+      colnames(res_n) <- paste0(mySep,
                                 rep(colnames(res), each = 2),
                                 "_",
                                 rep(c("n", "m"), length.out = ncol(res)))

@@ -178,12 +178,12 @@ Ordnen.lm <- function(x,
                       #  include.bic = include.aic,
                       ci.level = .95,
                       ...) {
-  #cat("\n In Ordnen.lm " )
+ # cat("\n In Ordnen.lm " )
   info <- model_info(x)
   AV <-
     ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
   
-  
+  #print(info)
   
   note <-  paste0("Model: ", info$family[1])
   if (include.ftest)
@@ -200,6 +200,7 @@ Ordnen.lm <- function(x,
   
   # res <- broom::tidy(x)
   coefs <- summary(x)$coef
+ # print(coefs)
   
   if (include.ci) {
     res <- cbind(coefs[, 1, drop = FALSE],
@@ -235,6 +236,8 @@ Ordnen.lm <- function(x,
   
   colnames(res)[ncol(res)] <- "p.value" 
  
+ # print(res)
+  
   prepare_output(data.frame(Source= rownames(res), res, stringsAsFactors = FALSE),
                  paste0("AV: ", AV),
                  note=note,    #  paste0("Model: ", info$family[1]),

@@ -35,7 +35,7 @@
 APA2.list <-
   function (x,
             caption = "" ,
-            note = "", output = which_output(),
+            note = "", output = stp25output::which_output(),
             digits = 2,
             custom.model.names = NULL,
             include.custom = NULL,
@@ -52,8 +52,7 @@ APA2.list <-
             include.aic = TRUE,
             include.bic = include.aic,
             ci.level = .95,
-            rgroup = c("Parameter", "Goodness of fit"),
-          #  output = stp25output:::which_output(),
+            rgroup = c("Parameter", "Goodness of fit"),        
             ...)
   {
     param<- NULL
@@ -330,7 +329,7 @@ APA2.psychobject <- function(x,
                              # paste("contrasts: ", paste(options()$contrasts, collapse=", ")),
                              include.ci = FALSE,
                              include.effect=FALSE,
-                             output = which_output(),
+                             output = stp25output::which_output(),
                              ...) {
   class(x)
   
@@ -376,7 +375,7 @@ APA2.psychobject <- function(x,
 APA2.lm <- function(x, 
                     caption=NULL,
                     note=NULL,   #paste("contrasts: ", paste(options()$contrasts, collapse=", ")),
-                    output = which_output(),
+                    output = stp25output::which_output(),
                     col_names = NULL,
                     ...)
  {
@@ -409,7 +408,7 @@ APA2.lm <- function(x,
 APA2.lme <- function(x,
                      caption = "" ,
                      note = "",
-                     output = which_output(),
+                     output = stp25output::which_output(),
                      col_names = NULL,
                      type = "III",
                      anova = TRUE,
@@ -502,7 +501,7 @@ APA2.lmerMod <- function(...) {
 APA2.glmerMod <- function(x,
                          caption = NULL ,
                          note = NULL,
-                         output = which_output(),
+                         output = stp25output::which_output(),
                          col_names = NULL,
                          include.random.effects = TRUE,
                          include.odds=TRUE,
@@ -529,7 +528,7 @@ APA2.glmerMod <- function(x,
 APA2.merModLmerTest <- function(x,
                                 caption = NULL ,
                                 note = NULL,
-                                output = which_output(),
+                                output = stp25output::which_output(),
                                 col_names = NULL,
                                 include.random.effects = TRUE,
                                 include.odds=FALSE,

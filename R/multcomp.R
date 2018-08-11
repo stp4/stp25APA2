@@ -75,7 +75,7 @@
 
 APA2.TukeyHSD <- function(x,
                           caption = " TukeyHSD",
-                          note = "", output = which_output(),
+                          note = "", output = stp25output::which_output(),
                           ...) {
  # res <- list()
   for (i in names(x)) {
@@ -120,7 +120,7 @@ APA2.TukeyHSD <- function(x,
 APA2.glht <-
   function(x,
            caption = "Multiple Comparisons of Means",
-           note = "", output = which_output(),
+           note = "", output = stp25output::which_output(),
            include.ci=TRUE,
            # include.se=TRUE,
            # include.t=TRUE,

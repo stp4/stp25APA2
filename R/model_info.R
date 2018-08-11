@@ -79,7 +79,7 @@ model_info.eff<-function(x,...){
     y = x$response,
     x = names(x$variables) ,
     # data = x$model,
-    labels = GetLabelOrName(x$data),
+    labels = stp25aggregate::GetLabelOrName(x$data),
     N=nrow(x$data)
   )
 
@@ -148,7 +148,7 @@ list(
       family = unlist(family(x)[1:2]) ,
       y = all.vars(formula(fm))[1],
       x = all.vars(formula(fm))[-1],
-      labels = GetLabelOrName(x$model),
+      labels = stp25aggregate::GetLabelOrName(x$model),
       N=nrow(x$model))
 }
 
@@ -185,7 +185,7 @@ model_info_lmer <- function(x, ...) {
         y = all.vars(formula(fm))[1],
         x = all.vars(formula(fm))[-1],
         # data = x@frame,
-        labels = GetLabelOrName(x@frame),
+        labels = stp25aggregate::GetLabelOrName(x@frame),
         N=nrow(x@frame)
       )
 
@@ -280,6 +280,6 @@ model_info.polr<- function(x){
     family = x$method ,
     y = names(x$model)[1],
     x = names(x$model)[-1],
-    labels = GetLabelOrName(x$model),
+    labels = stp25aggregate::GetLabelOrName(x$model),
     N= x$n)
 }

@@ -165,7 +165,7 @@ Rangreihe.default <- function (items,
   }
   
   
-  mylabels <- GetLabelOrName(items)
+  mylabels <- stp25aggregate::GetLabelOrName(items)
   my_ranks <-
     unique(unlist(lapply(items, function(x)
       levels(factor(

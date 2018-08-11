@@ -128,7 +128,7 @@
 APA_Table <- function(...,
                       caption = NULL,
                       note =  NULL,
-                      output = which_output(),
+                      output = stp25output::which_output(),
                       type = c("default","long",
                                "broom",
                                "texreg","stargazer","sjPlot",
@@ -347,10 +347,10 @@ type_default <- function(x,
                          note = NULL,
                          custom.model.names = NULL,
                          ...) {
- # print(class(x))
+  print(class(x))
  # print(list(...))
   res <-  Ordnen(x, ...) # ist das gleiche wie broom::tidy(x)
-
+ print(res)
   if (is.null(caption))
     caption <- paste(attr(res, "caption"),
                      "Obs: ", attr(res, "N"))
@@ -362,7 +362,7 @@ type_default <- function(x,
     caption = paste(custom.model.names, caption),
     note = note, 
     output=output )
-  
+ 
   res
 }
 
@@ -378,8 +378,7 @@ type_texreg <- function(list,
                         include.stars = TRUE,
                         include.p  = FALSE,
                         ci.force = FALSE,
-                        include.variance = TRUE,
-                        #output = stp25output:::which_output(),
+                        include.variance = TRUE,                       
                         custom.model.names = if (is.null(names))
                           paste0("(", 1:length(list), ")")
                         else
@@ -442,7 +441,7 @@ type_texreg <- function(list,
     # Text("In texregTable")
     # class(reg_result) <- "texregTable"
 
-    stp25output:::Output.htmlTable(reg_result, output=output)
+    Output.htmlTable(reg_result, output=output)
 
   }
   else {
@@ -481,7 +480,7 @@ type_stargazer <- function(list, caption, digits) {
   caption <- Tab(caption)
 #  Output_info$table <<-  c(Output_info$table, caption)
   # if(is.null(note)) note <- "" #default$note
-  stp25output:::Output.htmlTable(
+  Output.htmlTable(
     stargazer::stargazer(
       list,
       title = caption,

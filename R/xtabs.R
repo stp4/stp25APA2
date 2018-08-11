@@ -34,7 +34,7 @@ APA.table <- function(x, ...) APA.xtabs(x, ...)
 APA2.loglm <- function(x,
                        caption = "Likelihood",
                        note = "",
-                       output = which_output(),
+                       output = stp25output::which_output(),
                        col_names = NULL,
                        ...) {
   #-- Orginal MASS::print.loglm
@@ -131,7 +131,7 @@ APA2.table <- function(...) APA2.xtabs(...)
 APA2.xtabs  <- function(x,
                         caption = "" ,
                         note = "",
-                        output = which_output(),
+                        output = stp25output::which_output(),
                         col_names = NULL,
                         print_col = NULL,
                         digits = NULL,
@@ -151,7 +151,7 @@ APA2.xtabs  <- function(x,
                         include.count = TRUE,
                         margin = NA,
                         add.margins = NA,
-                        labels=NULL,   #GetLabelOrName()
+                        labels=NULL,   #stp25aggregate::GetLabelOrName()
                         ...) {
   res <- NULL
   type <- match.arg(type, several.ok = TRUE)
@@ -213,7 +213,7 @@ APA2.xtabs  <- function(x,
 # APA2.xtabs  <- function(x,
 #                         caption = "" ,
 #                         note = "",
-#                         output = which_output(),
+#                         output = stp25output::which_output(),
 #                         col_names = NULL,  # nicht benutzt print_col = NULL
 #                         digits = NULL,
 #                         test = FALSE,
@@ -407,7 +407,7 @@ APA_Xtabs <-   function(x, ...) {
 #' @export
 APA_Xtabs.glm <- function(x,
                           caption = "",
-                          output = which_output(),
+                          output = stp25output::which_output(),
                           thresh = 0.5,
                           ...) {
   x <- Klassifikation(x, thresh, caption)$xtab
@@ -423,7 +423,7 @@ APA_Xtabs.glm <- function(x,
 APA_Xtabs.formula <- function(x,
                               data = NULL,
                               caption = "",
-                              output = which_output(),
+                              output = stp25output::which_output(),
                               labels = FALSE,
                               addNA = FALSE, 
                               exclude = if(!addNA) c(NA, NaN),
@@ -450,7 +450,7 @@ APA_Xtabs.formula <- function(x,
     if (labels) {
       dnn <- dimnames(x)
       names(dnn) <-
-        GetLabelOrName(data[all.vars(fm_x)])
+        stp25aggregate::GetLabelOrName(data[all.vars(fm_x)])
       dimnames(x) <- dnn
     }
   } else if (is.character(labels)) {
@@ -499,7 +499,7 @@ APA_Xtabs.formula <- function(x,
 APA_Xtabs.data.frame <- function(data = NULL,
                                  formula,
                                  caption = "",
-                                 output = which_output(),
+                                 output = stp25output::which_output(),
                                  labels = FALSE,
                                  ...) {
   APA_Xtabs.formula(formula, data, caption, output, labels, ...)

@@ -71,7 +71,7 @@ APA.ScalarIndependenceTest <- function(x, ...) {
 APA_Ttest <- function(x,
                       data, 
                       caption="T Test", note=alternative,  
-                      output = which_output(),
+                      output = stp25output::which_output(),
                       var.equal = FALSE,
                       paired = FALSE,
                       alternative =  "two.sided",

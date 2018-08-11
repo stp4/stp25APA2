@@ -378,7 +378,7 @@ Umcodieren <- function(x,
 #-- Helper Funktion
 transform_to_numeric <- function(data, data_range) {
   #data2<- na.omit(data)
-  lvls <- GetLabelOrName(data)
+  lvls <- stp25aggregate::GetLabelOrName(data)
   
   objects <-
     sapply(data, function(x)
