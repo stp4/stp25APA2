@@ -526,7 +526,7 @@ Prozent2APA <- function(x,
 
 
 
- 
+ #Loechkandidat nach stp25formula
 stp25_stat_methode <- function(x,
                                mymet = c("freq",  # , "mean.ci", "median.ci","freq.ci", "cohen.d", "effsize"))
                                          "mean", "median",

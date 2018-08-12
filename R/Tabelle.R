@@ -108,11 +108,12 @@ Tabelle.default <- function(...,
                           #  include.mean=FALSE,  # fuer Correlation
                           #  corr_test = "pearson",
                           #  cor_diagonale_up = TRUE,
-                            max_factor_length = 35#,
+                            max_factor_length = 35,
                           #  order = FALSE,
                           #  decreasing = FALSE,
                          #   useconTest = FALSE,
                            # normality.test = FALSE
+                         measure.name = "value"
                           ) {
   type <-  match.arg(type, several.ok = TRUE)[1]
   
@@ -165,7 +166,8 @@ Tabelle.default <- function(...,
         caption = caption,
         note = note,
         fun = fun,
-        digits = digits
+        digits = digits,
+        measure.name = measure.name
       )
     }
     else {
@@ -175,7 +177,8 @@ Tabelle.default <- function(...,
         caption = caption,
         note = note,
         fun = fun,
-        digits = digits
+        digits = digits,
+        measure.name = measure.name
       )
       prepare_output(reshape2::dcast(res,
                                      formula, function(x) {
@@ -193,7 +196,8 @@ calculate_tabelle2 <- function(X,
                                caption,
                                note,
                                fun = NULL,
-                               digits = digits) {
+                               digits = digits,
+                               measure.name = "value") {
   res <- NULL #ergebnis liste
   
   if(type[1] =="2") type <- "auto_long"
@@ -237,7 +241,7 @@ calculate_tabelle2 <- function(X,
         type,
         fun = fun,
         digits =  if (is.null(digits))  X$digits[i] else digits,
-        measure.name = "value"
+        measure.name = measure.name
       )
     
     
