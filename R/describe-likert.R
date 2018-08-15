@@ -10,16 +10,24 @@ APA2.likert <- function(x,
                         note = "",
                         col_names = NULL,
                         print_col = NULL,
-                        ...,
+                        
                         ReferenceZero = NULL,
                         type = "percent",
                         include.mean = TRUE,
                         na.exclude = FALSE,
                         
                         labels = c("low", "neutral", "high"),
-                        order = FALSE) {
-  RowSums2 <-  function(x)  if (is.vector(x))   x  else   rowSums(x, na.rm = TRUE)
- # nlevels = x$nlevels
+                        order = FALSE,
+                        output = TRUE,
+                        ...
+                        ) {
+  RowSums2 <-
+    function(x)
+      if (is.vector(x))
+        x
+  else
+    rowSums(x, na.rm = TRUE)
+  # nlevels = x$nlevels
   
   #gelöscht @param nlevels APA2.likert: nicht ändern
   if (!is.null(ReferenceZero)) {
@@ -28,7 +36,7 @@ APA2.likert <- function(x,
     else if (!is.numeric(ReferenceZero))
       ReferenceZero <- median(1:x$nlevels)
     
-    cat(ReferenceZero, "\\n")
+    #  cat(ReferenceZero, "\\n")
     
     if (ceiling(ReferenceZero) == floor(ReferenceZero)) {
       freq <- cbind(
@@ -53,8 +61,10 @@ APA2.likert <- function(x,
         cbind(lowrange = RowSums2(x$freq[, 1:floor(ReferenceZero)]),
               highrange = RowSums2(x$freq[, ceiling(ReferenceZero):x$nlevels]))
       colnames(freq) <-
-        c(paste0(labels[1], "(1:", floor(ReferenceZero), ")"),
-          paste0(labels[3], "(", ceiling(ReferenceZero), ":", x$nlevels, ")"))
+        c(
+          paste0(labels[1], "(1:", floor(ReferenceZero), ")"),
+          paste0(labels[3], "(", ceiling(ReferenceZero), ":", x$nlevels, ")")
+        )
       x$freq <- freq
       x$freq.na <- if (names(x$freq.na)[ncol(x$freq.na)] == "NA")
         cbind(freq, x$freq.na[ncol(x$freq.na)])
@@ -63,32 +73,43 @@ APA2.likert <- function(x,
     }
   }
   
-  if (!na.exclude)  x$freq <- x$freq.na
+  if (!na.exclude)
+    x$freq <- x$freq.na
   results2Prozent <- x$freq / x$n * 100
   
-  if (type == "percent" | type == 2) x$freq <- rndr_percent(results2Prozent, x$freq)
+  if (type == "percent" |
+      type == 2)
+    x$freq <- rndr_percent(results2Prozent, x$freq)
   
   
- if (include.mean)
-    ans <-cbind(x$names,
-          x$freq,
-          n = x$n,
-          Mittelwert = x$Mittelwert)
+  if (include.mean)
+    ans <- cbind(x$names,
+                 x$freq,
+                 n = x$n,
+                 Mittelwert = x$Mittelwert)
   else
     ans <- cbind(x$names, x$freq)
   
   
   if (!is.logical(order) & order == "decreasing")
-    ans <- ans[order(x$m,  decreasing = TRUE),]
+    ans <- ans[order(x$m,  decreasing = TRUE), ]
   else if (order)
-    ans <- ans[order(x$m), ]
-  else  (NULL)
+    ans <- ans[order(x$m),]
+  else
+    (NULL)
   
-  ans<- prepare_output(ans,caption = paste0(caption, " (N = ", x$N, ")")  ,
-                       note = note ,N=x$N)
-  Output(ans,
-         col_names = col_names,
-         print_col = print_col)
+  ans <-
+    prepare_output(
+      ans,
+      caption = paste0(caption, " (N = ", x$N, ")")  ,
+      note = note ,
+      N = x$N
+    )
+  
+  if (output)
+    Output(ans,
+           col_names = col_names,
+           print_col = print_col)
   invisible(ans)
 }
 
