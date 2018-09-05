@@ -1,7 +1,7 @@
 context("test-tabelle-sig-test.R")
 
 test_that("auto sig test", {
-  require(stpvers)
+ 
   
   res <-
     Tabelle(
@@ -57,7 +57,7 @@ test_that("auto sig test", {
 
 test_that("eigene sig test", {
  
-   require(stpvers)
+ 
   
   expect_equal(
     Tabelle(
@@ -82,7 +82,18 @@ test_that("eigene sig test", {
     "F<sub>(1, 52)</sub>=2.67, p=.108"
   )
   
-  expect_equal(
+  # https://stats.stackexchange.com/questions/231738/clarification-on-mann-whitney-wilcoxon-test
+  # Finally, note that the "Warning" from wilcox.test was just that: 
+  # a warning rather than an indication that your results are incorrect. 
+  # The test was OK, reporting a p-value based on a normal approximation 
+  # rather than an exact p-value based on the data values. If you had 50 
+  # or more cases, your call to wilcox.test would not even have tried to 
+  # calculate exact p-values. The coin package in R has a wilcox_test 
+  # function that can calculate exact p-values in the presence of ties, 
+  # but I see no need here for an exact p-value.
+  
+  
+  expect_warning( expect_equal(
     Tabelle(
       warpbreaks,
       breaks,
@@ -91,9 +102,9 @@ test_that("eigene sig test", {
       test = "wilcox.test"
     )[[1]]$statistics,
     "U=431.00, p=.253"
-  )
+  ))
   
-  expect_equal(
+  expect_warning( expect_equal(
     Tabelle(
       warpbreaks,
       breaks,
@@ -102,7 +113,7 @@ test_that("eigene sig test", {
       test = "u.test"
     )[[1]]$statistics,
     "U=431.00, p=.253"
-  )
+  ))
   
   
   
@@ -191,11 +202,11 @@ test_that("eigene sig test", {
   
   
   
-  expect_equal(Tabelle(warpbreaks,
+  expect_warning(expect_equal(Tabelle(warpbreaks,
                        breaks ,
                        APA = TRUE,
                        test = "ks.test")$ks.test,
-               "W=0.17, p=.100")
+               "W=0.17, p=.100"))
   
   
 })

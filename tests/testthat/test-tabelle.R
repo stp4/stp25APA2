@@ -1,7 +1,6 @@
 context("test-tabelle.R")
 
 test_that("return value default", {
-  require(stpvers)
   res <-  Tabelle(warpbreaks, breaks, wool, tension)
   
   expect_that(is.data.frame(res),
@@ -19,7 +18,6 @@ test_that("return value default", {
 
 
 test_that("return value APA=TRUE", {
-  require(stpvers)
   res <-  Tabelle(warpbreaks, breaks, wool, tension, APA = TRUE)
   expect_that(is.data.frame(res),
               is_true())
@@ -36,7 +34,6 @@ test_that("return value APA=TRUE", {
 
 
 test_that("default Type APA=FALSE", {
-  require(stpvers)
   expect_equal(Tabelle(
     warpbreaks,
     breaks,
@@ -84,10 +81,9 @@ test_that("default Type APA=FALSE", {
     "0/0/0/0/0/0/0/0/0/0/0/0/1/2/0/0/0/1/0/0/0/0/0/0/0/0/1/1/1/1/1"
   )
 })
-  
-  
-  test_that("default Type fun = eigene Funktion", {
-    require(stpvers)  
+
+
+test_that("default Type fun = eigene Funktion", {
   expect_equal(
     Tabelle(
       warpbreaks,
