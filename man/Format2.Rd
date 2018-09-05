@@ -135,5 +135,6 @@ Format2(x, 2, FALSE)
 x<-matrix(rnorm(10), ncol=2)
 Format2.matrix(x[,1],c(1:5))
 #  str(Format2(data.frame(a1=1:10/100,a2=1:10, a3=1:10)))
+
 countDigits(1.2345)
 }

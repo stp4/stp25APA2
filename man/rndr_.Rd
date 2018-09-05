@@ -36,7 +36,6 @@
 \alias{rndr_agfi_cfa}
 \alias{rndr_rmsea_cfa}
 \alias{rndr_Chisq_cfa}
-\alias{rndr_rmsea_cfa}
 \alias{rndr_cfi_cfa}
 \alias{rndr_nfi_cfa}
 \alias{symbol_chi2}
@@ -76,7 +75,8 @@ rndr_CI(ci, digits = 2, sep = options()$stp25$apa.style$sep_element,
   sep_1 = options()$stp25$apa.style$brackets[1],
   sep_2 = options()$stp25$apa.style$brackets[2])
 
-rndr_ods_CI(ci, digits = 2, sep = options()$stp25$apa.style$sep_element,
+rndr_ods_CI(ci, digits = 2,
+  sep = options()$stp25$apa.style$sep_element,
   sep_1 = options()$stp25$apa.style$brackets[1],
   sep_2 = options()$stp25$apa.style$brackets[2])
 
@@ -122,7 +122,7 @@ rndr_cfi_cfa(x)
 
 rndr_nfi_cfa(x)
 
-symbol_chi2(output = stp25output:::which_output())
+symbol_chi2(output = stp25output::which_output())
 }
 \arguments{
 \item{...}{alles an Format2()}
