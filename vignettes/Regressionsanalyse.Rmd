@@ -1,7 +1,7 @@
 ---
 title: "Regressionsanalyse"
 subtitle: "Beispiele"
-author: "JJ Allaire, Yihui Xie, Dirk Eddelbuettel"
+author: "Wolfgang Peter"
 date: "`r Sys.Date()`"
 output: tint::tintHtml
 bibliography: skeleton.bib

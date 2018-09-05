@@ -20,7 +20,12 @@ vignette: >
   <!--  number_sections: yes  -->
  
    
+ Link:
  
+  -  [Grafiken](Methoden_Grafik.html)
+  -  [Beispiele](Beispiele.html)
+  -  [Kano-Analyse](Kano-Analyse.html)
+  -  [Regressionsanalyse](Regressionsanalyse.html)  
 
 
 ```{r setup, include=FALSE}

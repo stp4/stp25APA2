@@ -130,6 +130,13 @@ x1$statistic[c(1,7,8),]
 
 roc_curve <- roc(x1$response, x1$predictor)
 auc(roc_curve)
+
+
+roc_curve <- roc(data$Gruppe, data$Blutzucker)
+plot(roc_curve, print.thres = "best",
+     print.auc=TRUE)
+
+
 #plot(roc_curve, print.thres = "best", print.auc=TRUE)
 #abline(v = 1, lty = 2)
 #abline(h = 1, lty = 2)
@@ -467,7 +474,7 @@ txt_log_reg <-  paste("Eine logistische Regressionsanalyse zeigt, dass sowohl da
  "Steigen die T-Zelltypisierung  um jeweils eine Einheit, 
  so nimmt die relative Wahrscheinlichkeit eines Krank/Gesund um OR =",  x$OR[2], 
  "zu. Ist die  T-Zelltypisierung positiv so nimmt die  relative Wahrscheinlichkeit um OR= ", x$OR[2],
- "Das R-Quadrat nach Nagelkerke beträgt",round(Nagelkerke,2), 
+ "Das R-Quadrat nach Nagelkerke betr?gt",round(Nagelkerke,2), 
 " was nach Cohen (1992) einem starken Effekt entspricht."  )
 # 
 
