@@ -36,7 +36,8 @@
 #'     )
 #' )
 #'
-Tabelle <- function(...) {
+Tabelle <- function(...,     
+                    output = FALSE) {
   UseMethod("Tabelle")
 }
 
@@ -45,7 +46,8 @@ Tabelle <- function(...) {
 #' @export
 #' @examples
 #' varana2 %>% Tabelle2(Merkfgk, by=~ Zeit)
-Tabelle2 <- function(...) {
+Tabelle2 <- function(...,     
+                     output = TRUE) {
   x <- Tabelle(...)
   Output(x)
   invisible(x)
