@@ -35,7 +35,8 @@
 APA2.list <-
   function (x,
             caption = "" ,
-            note = "", output = stp25output::which_output(),
+            note = "", 
+            output = stp25output::which_output(),
             digits = 2,
             custom.model.names = NULL,
             include.custom = NULL,
@@ -43,6 +44,7 @@ APA2.list <-
             include.ci = FALSE,
             include.odds = FALSE,
             include.se = if (include.ci) FALSE else TRUE,
+            include.t= FALSE,
             include.p = FALSE,
             include.stars = if (include.p) FALSE else TRUE,
             include.ftest = FALSE,
@@ -51,11 +53,17 @@ APA2.list <-
             include.r = TRUE,
             include.aic = TRUE,
             include.bic = include.aic,
+            include.sigma  = FALSE,
+            include.rmse = TRUE, 
+            include.gof=TRUE,
+            include.param=TRUE,
             ci.level = .95,
-            rgroup = c("Parameter", "Goodness of fit"),        
+            rgroup = c("Parameter", "Goodness of fit"),  
+            test.my.fun=FALSE,
             ...)
   {
     param<- NULL
+    if(test.my.fun) cat("\n  -> APA2.list()")
     
     if(include.b)  param <- "b"
     if (include.odds) param <- c(param, "OR")
@@ -70,6 +78,8 @@ APA2.list <-
     coef.order <- character()
     
     # Goodnes of Fit GOF
+    
+  #  if(include.gof){
     gof.names <- character()
     if (is.null(custom.model.names) |
         length(custom.model.names)!=n)
@@ -77,10 +87,26 @@ APA2.list <-
     
     #-- Extrahieren ----------------------------------
     for (i in seq_len(n)) {
+      
+      class_fit <- class(x[[i]])
+      if(test.my.fun) cat("\n   texreg:::extract(", class_fit[1], ")")
       model <- texreg:::extract(x[[i]],
                                 include.aic = FALSE,
-                                include.bic = FALSE, ...)
+                                include.bic = FALSE, 
+                                #include.adjrs =TRUE,
+                                #include.fstatistic
+                                #include.loglik
+                                # include.mse
+                                #include.nagelkerke
+                                # include.rmse
+                                # include.rsquared
+                                # include.wald
+                                # standardized
+                                ...)
+      
+      
       if (include.ci) {
+        if(test.my.fun) cat("\n   include.ci: confint(", class_fit[1], ", level =", ci.level, ")")
         cis <- confint(x[[i]], level = ci.level)
         ci_inter <-
           which(rownames(cis) == "(Intercept)") # lmer gibt sigma aus
@@ -90,8 +116,9 @@ APA2.list <-
       }
       
       if (include.pseudo) {
-        if (any(class(x[[i]]) %in% "lm")) {
-          if (any(class(x[[i]]) %in% "glm")) {
+        if(test.my.fun) cat("\n   include.pseudo: R(", class_fit[1], ")")
+        if (any(class_fit %in% "lm")) {
+          if (any(class_fit %in% "glm")) {
             resr2 <- R2(x[[i]])
             model@gof.names <- c(names(resr2),  model@gof.names)
             model@gof  <- c(unlist(resr2),  model@gof)
@@ -111,6 +138,7 @@ APA2.list <-
       }
       
       if (include.aic) {
+        if(test.my.fun) cat("\n   include.ci: AIC(", class_fit[1],  ")")
         model@gof.names <- c("AIC", "BIC",  model@gof.names)
         model@gof  <- c(AIC(x[[i]]), BIC(x[[i]]),  model@gof)
         model@gof.decimal  <- c(rep(TRUE, 2),  model@gof.decimal)
@@ -135,8 +163,315 @@ APA2.list <-
       }
     }
     
+    if(test.my.fun) cat("\n   gof.names:  length =", length(gof.names) )
     gofs <- matrix(nrow = length(gof.names), ncol = length(models))
     row.names(gofs) <- gof.names
+   # }
+   # else {gofs <- NULL}
+    
+    
+    #-- Coef + Gofs --------------------------------
+    for (i in seq_len(n)) {
+      cf <- models[[i]]@coef
+      
+      if (length(digits) == 1)
+        dig <- digits
+      else if (is.list(digits))
+        dig <-  digits[[i]]
+      else
+        dig <- 2
+      # print(dig)
+      
+      se <- models[[i]]@se
+      pv <- models[[i]]@pvalues
+      
+      cf <- as.vector(Format2.matrix(cf, dig))
+      se <- as.vector(Format2.matrix(se, dig))
+      beta <-  "NA" # cf  # nicht fertig
+      
+      if(include.odds) {
+        or <- exp( models[[i]]@coef )
+        or <- as.vector(rndr_ods(or, 2))
+      }
+      else or <-  NA
+      
+      
+      p_stars  <- ffsigstars(pv)
+      pv    <- as.vector(ffpvalue(pv))
+      if (include.ci) {
+        cil <-
+          models[[i]]@ci.low  ## z <-  qnorm(1 - ((1 - ci.level)/2)) models[[i]]@coef + (z * models[[i]]@se)
+        ciu <-
+          models[[i]]@ci.up  # models[[i]]@coef - (z * models[[i]]@se)
+        ci <- rndr_CI(cbind(cil, ciu), digits)
+      } else ci<- NA
+      if (include.stars ){
+        if(include.b)  cf <- paste0(cf, p_stars)
+        else if(include.odds) or <- paste0(or, p_stars)
+      }
+      
+      coef <- data.frame(
+        b = cf,
+        OR=or,
+        beta = beta,
+        SE = se,
+        CI = ci,
+        p = pv
+      )
+      coef <- coef[param]
+      
+      
+      rownames(coef) <- models[[i]]@coef.names
+      colnames(coef) <-paste0(custom.model.names[i], "_", colnames(coef))
+      
+      coefs[[i]] <- coef
+      
+      #-- Gof  sortieren
+      if (include.gof & length(models[[i]]@gof) > 0) {
+        for (j in seq_len(length(models[[i]]@gof)) ) {
+          rn <- models[[i]]@gof.names[j]
+          val <- models[[i]]@gof[j]
+          col <- i
+          if (is.na(models[[i]]@gof.decimal[j])) {
+            dec <- 2
+          }
+          else if (models[[i]]@gof.decimal[j] == FALSE) {
+            dec <- 0
+          }
+          else {
+            dec <- 2
+          }
+          row <- which(row.names(gofs) == rn)
+          gofs[row, col] <-  mapply(Format2, val, dec)
+        }
+      }
+    }
+    
+    #-- Sortieren ----------------------------------
+    for (i in  seq_len(length(coefs))) {
+      for (j in  seq_len(length(rownames(coefs[[i]]))) ) {
+        
+        if (!rownames(coefs[[i]])[j] %in% coef.order) {
+          coef.order <- append(coef.order, rownames(coefs[[i]])[j])
+        }
+      }
+    }
+    
+    if (length(coefs) == 1) {
+      m <- coefs[[1]]
+    } else if (length(coefs) > 1) {
+      m <- coefs[[1]]
+      for (i in 2:length(coefs)) {
+        m <- merge(m, coefs[[i]], by = 0, all = TRUE)
+        rownames(m) <- m[, 1]
+        m <- m[, colnames(m) != "Row.names"]
+      }
+    }
+    
+    
+    m.temp <- matrix(nrow = nrow(m), ncol = ncol(m))
+    
+    for (i in  seq_len(nrow(m)) ) {
+      new.row <- which(coef.order == rownames(m)[i])
+      for (j in  seq_len(length(m[i, ])) ) {
+        m.temp[new.row, j] <- as.character(m[i, j])
+      }
+    }
+    rownames(m.temp) <- coef.order
+    colnames(m.temp) <- colnames(m)
+    if(test.my.fun) cat("\n   param sortieren und ordnen: length =", length(m.temp) )
+    #- hinzufügen von Sonder Zeilen ------------------
+    
+    if (include.gof) {
+      if (!is.null(include.custom)) {
+        gofs <-  rbind(gofs,
+                       matrix(
+                         unlist(include.custom),
+                         nrow = length(include.custom),
+                         byrow = TRUE,
+                         dimnames = list(names(include.custom))
+                       ))
+      }
+      
+      ngofs <- nrow(gofs)
+      emptygofs <- rep(NA, ngofs * (n_param - 1))
+      newgofs <-   gsub("[^[:alnum:] :().]", "", rownames(gofs))
+      
+      if (length(param > 1))
+        for (i in  seq_len(n)) {
+          gofs <-
+            append(gofs, emptygofs,
+                   after = ngofs * (1 + n_param * (i - 1)))
+        }
+      
+      gofs <- matrix(gofs , nrow = ngofs)
+      rownames(gofs) <- newgofs
+      
+      
+      #-- Ausgabe --------------------------------------
+      result <-
+        if (include.param)
+          prepare_output(fix_to_data_frame(rbind(m.temp, gofs)), 
+                         caption, note)
+      else
+        prepare_output(fix_to_data_frame(gofs), 
+                       caption, note)
+      }
+    else if (include.param) {
+      result <- prepare_output(fix_to_data_frame(m.temp), 
+                               caption, note)
+    }
+    else{
+      result <- NULL
+      
+    }
+    
+    
+    
+    if (!is.logical(output)) {
+      if (output == "html") {
+        Output(result,
+               rgroup = rgroup,
+               n.rgroup = nrow(m.temp))
+      }
+      else if (output == "markdown") {
+        Output_kable(result)
+      }
+      else if (is.na(output)) {
+        
+      }
+      else {
+        print(result)
+      }
+    } 
+    else{
+      if (output) {
+        Output(result,
+               rgroup = rgroup,
+               n.rgroup = nrow(m.temp))
+      }
+    }
+    
+    
+    if(test.my.fun) cat("\n  <- APA2.list()")
+    invisible(result)
+  }
+
+
+APA2_list_save <-
+  function (x,
+            caption = "" ,
+            note = "", 
+            output = stp25output::which_output(),
+            digits = 2,
+            custom.model.names = NULL,
+            include.custom = NULL,
+            include.b=TRUE,
+            include.ci = FALSE,
+            include.odds = FALSE,
+            include.se = if (include.ci) FALSE else TRUE,
+            include.t= FALSE,
+            include.p = FALSE,
+            include.stars = if (include.p) FALSE else TRUE,
+            include.ftest = FALSE,
+            include.loglik = FALSE,
+            include.pseudo = TRUE,
+            include.r = TRUE,
+            include.aic = TRUE,
+            include.bic = include.aic,
+            include.gof=TRUE,
+            include.param=TRUE,
+            ci.level = .95,
+            rgroup = c("Parameter", "Goodness of fit"),        
+            ...)
+  {
+    param<- NULL
+    
+    if(include.b)  param <- "b"
+    if (include.odds) param <- c(param, "OR")
+    if (include.se)   param <- c(param, "SE")
+    if (include.ci)   param <- c(param, "CI")
+    if (include.p)    param <- c(param, "p")
+    
+    n_param <- length(param)
+    n <- length(x)
+    models <- NULL
+    coefs <- list()
+    coef.order <- character()
+    
+    # Goodnes of Fit GOF
+    
+    if(include.gof){
+      gof.names <- character()
+      if (is.null(custom.model.names) |
+          length(custom.model.names)!=n)
+        custom.model.names <- paste0("Model ", 1:n)
+      
+      #-- Extrahieren ----------------------------------
+      for (i in seq_len(n)) {
+        model <- texreg:::extract(x[[i]],
+                                  include.aic = FALSE,
+                                  include.bic = FALSE, ...)
+        if (include.ci) {
+          cis <- confint(x[[i]], level = ci.level)
+          ci_inter <-
+            which(rownames(cis) == "(Intercept)") # lmer gibt sigma aus
+          ci_n <- nrow(cis)
+          model@ci.low <- cis[ci_inter:ci_n, 1]
+          model@ci.up <- cis[ci_inter:ci_n, 2]
+        }
+        
+        if (include.pseudo) {
+          if (any(class(x[[i]]) %in% "lm")) {
+            if (any(class(x[[i]]) %in% "glm")) {
+              resr2 <- R2(x[[i]])
+              model@gof.names <- c(names(resr2),  model@gof.names)
+              model@gof  <- c(unlist(resr2),  model@gof)
+              model@gof.decimal  <-
+                c(rep(TRUE, length(resr2)),  model@gof.decimal)
+            } else{
+              
+            }
+          } else{
+            # R2(x[[i]])    # Magrinal + Cond
+            resr2 <- R2(x[[i]])
+            model@gof.names <- c(names(resr2),  model@gof.names)
+            model@gof  <- c(unlist(resr2),  model@gof)
+            model@gof.decimal  <-
+              c(rep(TRUE, length(resr2)),  model@gof.decimal)
+          }
+        }
+        
+        if (include.aic) {
+          model@gof.names <- c("AIC", "BIC",  model@gof.names)
+          model@gof  <- c(AIC(x[[i]]), BIC(x[[i]]),  model@gof)
+          model@gof.decimal  <- c(rep(TRUE, 2),  model@gof.decimal)
+        }
+        
+        if (class(model) == "list") {
+          models <- append(models, model)
+        } else {
+          models <- append(models, list(model))
+        }
+      }
+      
+      #-- Gof Names -----------------------------------
+      for (i in  seq_len(n)) {
+        gn <- models[[i]]@gof.names
+        if (!is.null(gn) && length(gn) > 0) {
+          for (j in  seq_len(length(gn))) {
+            if (!gn[j] %in% gof.names) {
+              gof.names <- append(gof.names, gn[j])
+            }
+          }
+        }
+      }
+      
+      gofs <- matrix(nrow = length(gof.names), ncol = length(models))
+      row.names(gofs) <- gof.names
+    }
+    else {gofs <- NULL}
+    
     
     #-- Coef + Gofs --------------------------------
     for (i in seq_len(n)) {
@@ -188,10 +523,12 @@ APA2.list <-
       )
       coef <- coef[param]
       
+      
       rownames(coef) <- models[[i]]@coef.names
       colnames(coef) <-paste0(custom.model.names[i], "_", colnames(coef))
       
       coefs[[i]] <- coef
+      
       #-- Gof  sortieren
       if (length(models[[i]]@gof) > 0) {
         for (j in seq_len(length(models[[i]]@gof)) ) {
@@ -275,24 +612,31 @@ APA2.list <-
     #-- Ausgabe --------------------------------------
     result <- prepare_output(fix_to_data_frame(rbind(m.temp, gofs)),
                              caption , note)
+    if (!is.logical(output)) {
+      if (output == "html") {
+        Output(result,
+               rgroup = rgroup,
+               n.rgroup = nrow(m.temp))
+      }
+      else if (output == "markdown") {
+        Output_kable(result)
+      }
+      else if (is.na(output)) {
+        
+      }
+      else {
+        print(result)
+      }
+    } else{
+      if (output) {
+        Output(result,
+               rgroup = rgroup,
+               n.rgroup = nrow(m.temp))
+      }
+    }
     
-    if (output == "html") {
-      Output(result,
-             rgroup = rgroup,
-             n.rgroup = nrow(m.temp))
-    }
-    else if (output == "markdown") {
-      Output_kable(result)
-    }
-    else if (is.na(output)){
-      
-    }
-    else {
-      print(result)
-    }
     invisible(result)
   }
-
 
 
 

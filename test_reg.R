@@ -8,12 +8,23 @@ require(stpvers)
 library(lmerTest)
 
 fit1 <- lm(chol0 ~  ak + rrs0 + med + g, hyper)
-fit2 <- glm(chol0 ~ med +   ak +   g + rrs0 , hyper, family = poisson())
-fit3 <- lmerTest::lmer(chol0 ~ rrs0 + med +  ak  +  (1|g) , hyper )
+fit2 <-  glm(chol0 ~ med +   ak +   g + rrs0 , hyper, family = poisson())
+fit3 <- lmerTest::lmer(chol0 ~ rrs0 + med +  ak  +  (1 | g) , hyper)
 fits <- list(fit1, fit2, fit3)
 
-APA_Table(fit3,type="long")
+x <- APA_Table(fit1, fit2, fit3,  
+               test.my.fun = TRUE, output = FALSE)
 
+str(x)
+# x <-  APA_Table(fit1, fit2, fit3,
+#                 type = "long",
+#                 test.my.fun = TRUE, output = FALSE)
+
+
+
+
+
+stop()
 x1<-APA_Table(fit1,
               type="long",
               include.b = TRUE,
@@ -48,7 +59,26 @@ x1<-APA_Table(fit1,
 )
  
 
-   
+
+# 
+#  #  x2
+#  
+#   #RMSE( fit3)
+#    
+#   
+#    
+#  #  Extract2(fit1) 
+#  
+#    stp25APA2:::Ordnen.lm(fit1)
+#    broom::tidy(fit1)
+#    broom::tidy(fit2)
+#  #  broom::tidy(fit3)
+#    
+#  
+#   # stp25APA2:::Extract2.default(fit1)
+#    
+#    
+#    stp25APA2:::test_regression(fit1)   
    x2<-APA_Table(fit1,
                  type="long",
                  include.b = TRUE,
@@ -72,26 +102,10 @@ x1<-APA_Table(fit1,
              
                 include.param = FALSE,
                 
-                 output = FALSE
+                 output = FALSE,
+                test.my.fun=TRUE
    )
    
- #  x2
- 
-  #RMSE( fit3)
-   
-  
-   
- #  Extract2(fit1) 
- 
-   stp25APA2:::Ordnen.lm(fit1)
-   broom::tidy(fit1)
-   broom::tidy(fit2)
- #  broom::tidy(fit3)
-   
- 
-  # stp25APA2:::Extract2.default(fit1)
-   
-   
-   stp25APA2:::test_regression(fit1)
+
    
    

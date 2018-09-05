@@ -47,7 +47,8 @@ Ordnen <- function(x, ...) {
 
 #' @rdname Ordnen
 #' @export
-Ordnen.default <- function(x, ...) {
+Ordnen.default <- function(x,   test.my.fun=FALSE, ...) {
+  if(test.my.fun) cat("\n   -> Ordnen.default()")
   info <- model_info(x)
   AV <-
     ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
@@ -127,8 +128,9 @@ Ordnen.anova <- function(x, ...) Ordnen.aov(x, ...)
 Ordnen.aov <- function(x, 
                        include.eta = TRUE,
                        include.sumsq = TRUE,
-                       include.meansq = FALSE, 
+                       include.meansq = FALSE, test.my.fun=FALSE,
                        ...){
+  if(test.my.fun) cat("\n   -> Ordnen.aov()")
   info <- model_info(x)
   AV <-
     ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
@@ -177,7 +179,9 @@ Ordnen.lm <- function(x,
                       #  include.aic = TRUE,
                       #  include.bic = include.aic,
                       ci.level = .95,
-                      ...) {
+                     test.my.fun=FALSE,
+                     ...){
+  if(test.my.fun) cat("\n    -> Ordnen.lm()")
  # cat("\n In Ordnen.lm " )
   info <- model_info(x)
   AV <-
@@ -189,6 +193,8 @@ Ordnen.lm <- function(x,
   if (include.ftest)
     note <- paste(note, APA(x, FALSE))
   if (include.r) {
+ 
+    if(test.my.fun) cat("\n       include.r: R( )")
     r2 <- R2(x)
     note <-
       paste(note, "\nr-squared:", rndr_r2(r2))
@@ -237,7 +243,7 @@ Ordnen.lm <- function(x,
   colnames(res)[ncol(res)] <- "p.value" 
  
  # print(res)
-  
+  if(test.my.fun) cat("\n       prepare_output( )")
   prepare_output(data.frame(Source= rownames(res), res, stringsAsFactors = FALSE),
                  paste0("AV: ", AV),
                  note=note,    #  paste0("Model: ", info$family[1]),
@@ -279,7 +285,9 @@ Ordnen.glm <- function(x,
                       # include.aic = FALSE,
                      #  include.bic = FALSE, 
                        ci.level = .95,
-                        ...) {
+                     test.my.fun=FALSE,
+                     ...){
+  if(test.my.fun) cat("\n   -> Ordnen.glm()")
   
  # cat("\n In Ordnen.glm " )
   info <- model_info(x)
@@ -488,7 +496,9 @@ Ordnen.lmerModLmerTest<- function(x,
                                   #  include.aic = TRUE,
                                   #  include.bic = include.aic,
                                   ci.level = .95,
-                                  ...) {
+                                  test.my.fun=FALSE,
+                                  ...){
+  if(test.my.fun) cat("\n   -> Ordnen.lmer()")
 #  cat("\n In Ordnen.lmerModLmerTest \n")
   info <- model_info(x)
   AV <-
@@ -556,7 +566,9 @@ Ordnen.polr <- function(x,
                         include.se = TRUE,
                         include.ci = FALSE,
                         include.odds = TRUE,
-                        ...) {
+                        test.my.fun=FALSE,
+                        ...){
+  if(test.my.fun) cat("\n   -> Ordnen.polr()")
   
   info <- model_info(x)
   AV <-

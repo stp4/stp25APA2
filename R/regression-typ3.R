@@ -140,6 +140,8 @@ APA_Table <- function(...,
                      
                       include.b = TRUE,
                       include.se = TRUE,
+                      #noch nicht fertig
+                      include.t= FALSE,
                       include.beta = FALSE,
                       
                       include.odds = FALSE,
@@ -168,13 +170,17 @@ APA_Table <- function(...,
                       include.meansq = FALSE,
                       include.eta = FALSE,
                       
+                      include.gof=TRUE,
+                      include.param=TRUE,
+                      
                       ci.level = .95,
                       single.row = TRUE,
                       #  col_names = NULL, #c("b", "SE", "p"),
-                      rgroup = c("Parameter", "Goodness of fit"))
+                      rgroup = c("Parameter", "Goodness of fit"),
+                      test.my.fun=FALSE)
 # Parameter Goodness of fit)
 {
-  
+  if(test.my.fun) cat("\n--------------\nAPA_Table")
   if(include.ftest) Text("Achtung include.ftest noch nicht fertig!")
  # if(include.beta) Text("Achtung include.beta noch nicht fertig!")
    
@@ -199,7 +205,18 @@ APA_Table <- function(...,
       names <- names(myfits)
   }
   
+  
+  if(test.my.fun){
+    cat("\n Input: ")
+    for (i in myfits){
+      if (length(myfits) ==1) cat(class(i)[1])
+        else  cat(class(i)[1], " | ")
+    }
+   
+  }
+  
   if (type == "default") {
+    if(test.my.fun) cat("\n type = default")
     custom.model.names <- custom_model_names()
     #  print(custom.model.names)
     for (i in  seq_len(length(myfits)) ) {
@@ -210,6 +227,7 @@ APA_Table <- function(...,
         custom.model.names = custom.model.names[i],
         include.b = include.b,
         include.se = include.se,
+        include.t = include.t,
         include.beta = include.beta,
         include.eta = include.eta,
         include.odds = include.odds,
@@ -228,14 +246,15 @@ APA_Table <- function(...,
         include.custom = include.custom,
         include.aic = include.aic,
         include.bic = include.bic,
-        
-        ci.level = .95
+        ci.level = .95,
+        test.my.fun = test.my.fun
       )
       result[[i]] <- x
     }
   }
   else{
     if ( type == "broom" ) {
+      if(test.my.fun) cat("\n type = broom")
       APA_Table(
         ...,
         caption = caption,
@@ -250,6 +269,7 @@ APA_Table <- function(...,
       )
     }
     else if ( type == "long" ) {
+      if(test.my.fun) cat("\n type = long")
       result <- APA2.list(
         myfits,
         caption = caption ,
@@ -262,6 +282,7 @@ APA_Table <- function(...,
         #Fehler abfangen mit alter schreibweise
         include.odds = include.odds,
         include.se = include.se,
+        include.t = include.t,
         include.p =  include.p,
         include.stars =  include.stars,
         
@@ -272,8 +293,13 @@ APA_Table <- function(...,
         include.loglik = include.loglik ,
         include.aic =  include.aic,
         include.bic = include.bic ,
+        
+        include.gof=include.gof,
+        include.param=include.param,
+        
         ci.level =  ci.level,
-        rgroup = rgroup
+        rgroup = rgroup,
+        test.my.fun = test.my.fun
       )
       
       # result <- regression_output(myfits,
@@ -292,6 +318,7 @@ APA_Table <- function(...,
       
     }
     else if ( type == "texreg" ) {
+      if(test.my.fun) cat("\n type = texreg")
       result <-  type_texreg(
         myfits,
         caption = caption,
@@ -305,6 +332,7 @@ APA_Table <- function(...,
       )
     }
     else if ( type =="stargazer" ) {
+      if(test.my.fun) cat("\n type = stargazer")
       # myfits<-list(...)
       #if(is.list(myfits[[1]])) myfits <- myfits[[1]]
       type_stargazer(myfits,
@@ -312,9 +340,11 @@ APA_Table <- function(...,
                      digits = digits)
     }
     else if (type == "sjPlot" ) {
+      if(test.my.fun) cat("\n type = sjPlot")
       Text("sjPlot ist noch nicht implementiert")
     }
     else{
+      if(test.my.fun) cat("\n type = ist nicht definiert")
       cat("\n in else eventuell \n")
       
     }
@@ -323,7 +353,7 @@ APA_Table <- function(...,
   
   if ( include.anova ) {
     #car::ANOVA Type II  print(str(result))
-
+    if(test.my.fun) cat("\n include.anova = TRUE")
    result[["anova"]] <- APA_Table_Anova(
       myfits,
       caption = caption,
@@ -334,6 +364,8 @@ APA_Table <- function(...,
     )
 
   }
+  
+  if(test.my.fun) cat("\nresult: ", class(result), "\nEnde APA_Table()")
   invisible(result)
 }
 
@@ -346,23 +378,28 @@ type_default <- function(x,
                          caption = NULL, output=NA,
                          note = NULL,
                          custom.model.names = NULL,
+                         test.my.fun=FALSE,
                          ...) {
-  print(class(x))
+  if(test.my.fun) cat("\n  -> type_default()")
  # print(list(...))
-  res <-  Ordnen(x, ...) # ist das gleiche wie broom::tidy(x)
- print(res)
+  res <-  Ordnen(x, test.my.fun = test.my.fun, ... ) # ist das gleiche wie broom::tidy(x)
+  if(test.my.fun) cat("\n    res:", class(res))
+  
   if (is.null(caption))
     caption <- paste(attr(res, "caption"),
                      "Obs: ", attr(res, "N"))
   if (is.null(note))
     note <- attr(res, "note")
 
+  #print(output)
+  if( !is.logical(output) )
   Output(
     fix_format(res),
     caption = paste(custom.model.names, caption),
     note = note, 
     output=output )
- 
+  
+  if(test.my.fun) cat("\n  <- type_default()")
   res
 }
 
