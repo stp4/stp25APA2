@@ -603,16 +603,12 @@ Prozent2default <-
            n = length(x),
            exclude = NA,
            max_factor_length = 25) {
-    # cat( "\nProzent2default\n Levels: " )
     if (!is.factor(x))
       x <- factor(x)
-    #print(levels(x))
-    #cat("\n data: ")
-    # print(x[1:5])
-    
-    
-    x_NA <- x  #  x mit nas
+
+    x_NA <- x
     N    <- length(x)
+    
     if (n == 0) {
       result <- ""
       ans <- rep(NA, nlevels(x))
@@ -626,50 +622,48 @@ Prozent2default <-
         x <-
           factor(x, levels(x)[1:max_factor_length], exclude = NULL)
         x <-
-          addNA(x)  #- addNA modifies a factor by turning NA into an extra level
+          addNA(x)
+        #- addNA modifies a factor by turning NA into an extra level
         N <- length(x)
         n <- length(x)
         ans <- table(x)
       }
       
-      result <- rndr_percent(as.vector(prop.table(ans) )* 100, as.vector(ans))
-      #  cat("\nnach rendr")
-      # print(result)
+      result <-
+        rndr_percent(as.vector(prop.table(ans)) * 100, as.vector(ans))
+      
     }
     data.frame(
       lev = names(ans),
       n = c(n, rep("", length(ans) - 1)),
-      m = as.vector(result), 
-      stringsAsFactors=FALSE
+      m = as.vector(result),
+      stringsAsFactors = FALSE
     )
   }
 
 
-Multi2default<- function(x,
-                         digits = 0,
-                         n = length(x),
-                         use.level=1 ){
-  
-  if(is.factor(x) & nlevels(x)==2){
-    firstLevel<- levels(x)[use.level]
-    x<- factor(ifelse(x == firstLevel, firstLevel, 0), c(firstLevel,0))
+Multi2default <- function(x,
+                          digits = 0,
+                          n = length(x),
+                          use.level = 1) {
+  if (is.factor(x) & nlevels(x) == 2) {
+    firstLevel <- levels(x)[use.level]
+    x <-
+      factor(ifelse(x == firstLevel, firstLevel, 0), c(firstLevel, 0))
   }
-  else if(is.logical(x)){
-    x<-  factor(x)
-    ## xyz <- c(TRUE, FALSE, TRUE,TRUE, FALSE)
-    ## factor(xyz)
-    
+  else if (is.logical(x)) {
+    x <-  factor(x)
   }
-  else if(is.numeric(x) & is.integer(x)) {
-    x <- factor( ifelse(x == 1, 1, 0), 1:0)
-    
+  else if (is.numeric(x) | is.integer(x)) {
+    x <- factor(ifelse(x == use.level, 1, 0), 1:0)
   } else {
-    return( data.frame(
-      lev ="",
-      n =n,
-      m = "n.a.", 
-      stringsAsFactors=FALSE) )
+    return(data.frame(
+      lev = "",
+      n = n,
+      m = "n.a.",
+      stringsAsFactors = FALSE
+    ))
   }
   
-  Prozent2default(x, digits, n)[1,]
+  Prozent2default(x, digits, n)[1, ]
 }
