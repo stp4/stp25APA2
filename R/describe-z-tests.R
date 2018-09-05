@@ -37,7 +37,7 @@ conTest = function(fml,
   }
   # ANOVA
   Aov2 <- function(fml, data) {
-    res <- aov(fml, data, alternative =  "two.sided")
+    res <- aov(fml, data)
     res <- car::Anova(res, type = 3)
     rndr_F(res[2, 3], res[2, 2], res[3, 2], res[2, 4])
 
@@ -90,6 +90,7 @@ catTest = function(fml, data, include.test="chisq.test") {
   res <- stats::chisq.test(
     xtabs(fml, data, drop.unused.levels = TRUE),
     correct = FALSE)
+  
   res<- c(
     testname = "Chi-squared",
     stat = fftest(as.numeric(res$statistic)),

@@ -137,7 +137,7 @@ if(!is.null(groups)){
         formula <- to_formula(measure.vars, group.vars)
         all_vars<- c(measure.vars, group.vars, condition.vars)
       }
-
+     names( digits ) <- measure.vars
       data<-data[all_vars]
    } else {# A+B+C~G  oder log(a) + b + c
       formula <- Formula::Formula(formula)
@@ -182,7 +182,9 @@ if(!is.null(groups)){
     stp25DataObjekt(
       data,
       measure.vars,group.vars,condition.vars,
-      formula,by,
+      formula(formula),
+      
+      by,
       measure,
       row_name,col_name,
       measure.class,group.class,condition.class,
@@ -244,7 +246,8 @@ if(!tibble::is_tibble(.data))
      return( prepare_data2.formula(
               to_formula(measure, by, condition.vars), .data))
   }
-  else { # prepare_data2(varana, m1=median, m2, m3)
+  else {
+    # prepare_data2(varana, m1=median, m2, m3)
     if (length(names(measure)) != 0) {
         measure.vars <-
           ifelse(names(measure) == "", measure, names(measure))
@@ -255,7 +258,7 @@ if(!tibble::is_tibble(.data))
         measure.vars <- measure
         measure <- measure.class <- get_classes(.data[measure.vars])
     }
-
+    names(measure) <- measure.vars
     fm <- paste(measure.vars, collapse = "+")
 
     if (by == "1") {
@@ -317,8 +320,8 @@ to_formula <- function(measure.vars, group.vars, condition.vars=NULL) {
 #--helper extrahiere Classe
 get_classes <-
   function(data)
-    sapply(data, function(x)
-      setdiff(class(x), "labelled"))
+{    sapply(data, function(x)
+      setdiff(class(x), "labelled"))}
 
 
 #' @rdname prepare_data
@@ -341,16 +344,22 @@ stp25DataObjekt <- function(data = NULL,
   if (!is.null(measure.vars)) {
     if (is.null(measure.class))
       measure.class <- get_classes(data[measure.vars])
-    if (is.null(measure))
+    if (is.null(measure)){
       measure  <- measure.class
+      names(measure) <- measure.vars
+      
+      }
     if (is.null(row_name))
       row_name <- stp25aggregate::GetLabelOrName(data[measure.vars])
-    if (is.null(digits))
+    if (is.null(digits)){
+      
       digits <- ifelse(
         measure == "factor",
         options()$stp25$apa.style$prozent$digits[1],
         options()$stp25$apa.style$mittelwert$digits[1]
       )
+      names(digits) <- measure.vars
+      }
   }
 
   if (!is.null(group.vars)) {
