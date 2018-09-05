@@ -401,13 +401,36 @@ RMSE<- function(x, ...){
 
 #' @rdname R2
 #' @export
+#' @description sigma: Residual standard error  RMSE:
+#'  Root Mean Square Error 
+#'  RMSE.lmerModLmerTest sjstats::rmse(x)
+#' 
 RMSE.default <- function(x,...)
 {
   
-  # Residual standard error
-  # Root Mean Square Error
+  
+  
+  # https://stats.stackexchange.com/questions/110999/r-confused-on-residual-terminology
+  # # Mean squared error mean squared error (MSE) is the mean of the square of the residuals:
+  # mse <- mean(residuals(x)^2)
+  # 
+  # # Root mean squared error Root mean squared error (RMSE) is then the square root of MSE:
+  # rmse <- sqrt(x)
+  # 
+  # # Residual sum of squares Residual sum of squares (RSS) is the sum of the squared residuals:
+  # rss <- sum(residuals(x)^2)
+  # 
+  # # Residual standard errorResidual standard error (RSE) is the square root of (RSS / degrees of freedom):
+  # sigma <- rse <- sqrt( sum(residuals(x)^2) / x$df.residual )
+  # 
+  # 
+  
+  
+  
   data.frame(sigma=sigma(x),
-             RMSE = sqrt(mean(x$residuals^2)))
+             RMSE = sqrt(mean(x$residuals^2))
+             
+             )
 }
 
 #' @rdname R2

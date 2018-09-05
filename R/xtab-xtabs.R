@@ -82,39 +82,6 @@ APA2.summary.table <- function(x, ...) {
 #' 
 APA2.table <- function(...) APA2.xtabs(...)
 
-# APA2.table <- function(x,
-#                        caption = "" ,
-#                        note = "",
-#                        digits = NULL,
-#                        test = FALSE,
-#                        type = c("fischer",
-#                                 "odds",
-#                                 "sensitivity",
-#                                 "chisquare",
-#                                 "correlation",
-#                                 "r"),
-#                        include.total = FALSE,
-#                        include.total.columns = include.total,
-#                        include.total.sub = include.total,
-#                        include.total.rows = include.total,
-#                        include.percent = TRUE,
-#                        margin = NULL,
-#                        add.margins = seq_along(dim(x)),
-#                        ...) {
-#   APA2.xtabs(
-#     x,
-#     caption,note, digits,
-#     test, type,
-#     include.total,
-#     include.total.columns,
-#     include.total.sub,
-#     include.total.rows,
-#     include.percent,
-#     margin, add.margins,
-#     ...
-#   )
-# }
-
 
 #' @rdname APA2
 #'
@@ -122,7 +89,7 @@ APA2.table <- function(...) APA2.xtabs(...)
 #' @param digits Nachkommastellen 
 #' @param test,type fischer chi usw
 #' @param include.total,include.total.columns,include.total.sub,include.total.rows Zeilen Prozenz usw
-
+#' @param include.margins sollen überhaupt Summen (margins) ausgegeben werden die Prozent werden aber wie mit den Margins gerechnet
 #' @param include.percent,include.count ausgabe 
 #' @param margin,add.margins alternative zu include.total
 #'
@@ -149,6 +116,7 @@ APA2.xtabs  <- function(x,
                         include.total.rows = include.total,
                         include.percent = TRUE,
                         include.count = TRUE,
+                        include.margins=TRUE,
                         margin = NA,
                         add.margins = NA,
                         labels=NULL,   #stp25aggregate::GetLabelOrName()
@@ -166,6 +134,7 @@ APA2.xtabs  <- function(x,
     include.total.columns,
     include.total.sub,
     include.total.rows,
+    include.margins,
     margin,
     add.margins,
     include.count,
@@ -174,7 +143,10 @@ APA2.xtabs  <- function(x,
   )
 #  print(x_tab)
   x_tab <- prepare_output(x_tab, caption = caption)
-  Output(x_tab, output = output)
+  if( !is.logical(output) ) {
+    Output(x_tab, output = output)
+  }
+  else if (output)  Output(x_tab)
 
   
   res <- list(xtab = x_tab, test = NULL)
@@ -438,8 +410,8 @@ APA_Xtabs.formula <- function(x,
                              ## include.asresid = FALSE,
                               include.sensitivity = FALSE,
                               
-                              test=  include.prop.chisq | include.chisq | include.fisher | include.mcnemar,
-                               
+                              test = include.prop.chisq | include.chisq | include.fisher | include.mcnemar,
+                             
                               ...) {
   fm_x <- x
   x <- stats::xtabs(x, data,  
@@ -491,7 +463,7 @@ APA_Xtabs.formula <- function(x,
   }
   
   #cat("\n vor APA")
-  APA2(x, caption = caption, output = output, ...)
+  APA2.xtabs(x, caption = caption, output = output, ...)
 }
 
 #' @rdname APA_
@@ -566,12 +538,12 @@ chisq_Statistik <- function(xtabs, type,
 
 
 
-which_margin <- function(x,
+which_margin <- function(mydim, #x,
                          include.total = FALSE,
                          include.total.columns = include.total,
                          include.total.sub = include.total,
                          include.total.rows = include.total) {
-  mydim <- dim(x)
+  #mydim <- dim(x)
   mylength <- length(mydim)
   margin <-
     if (mylength == 2) {
@@ -619,11 +591,14 @@ which_margin <- function(x,
   
 }
 
+
+# main function for xtabs
 Xtabelle <- function(x,
                      include.total = FALSE,
                      include.total.columns = include.total,
                      include.total.sub = include.total,
                      include.total.rows = include.total,
+                     include.margins=TRUE,
                      margin = NA,
                      add.margins = NA,
                      count = TRUE,
@@ -632,7 +607,7 @@ Xtabelle <- function(x,
                      digits = 0)  {
   
   mrgn <-
-    which_margin(x,
+    which_margin(dim(x),
                  include.total,
                  include.total.columns,
                  include.total.sub,
@@ -643,11 +618,16 @@ Xtabelle <- function(x,
   if (!is.na(add.margins))
     mrgn$add <- add.margins
   
- 
   
-  f_count <- ftable(addmargins(x, mrgn$add))
-  f_percent <-
-    ftable(addmargins(prop.table(x, mrgn$prop) * 100, mrgn$add))
+  if (include.margins) {
+    f_count <- ftable(addmargins(x, mrgn$add))
+    f_percent <-
+      ftable(addmargins(prop.table(x, mrgn$prop) * 100, mrgn$add))
+  } else{
+    f_count <- ftable(x)
+    f_percent <-
+      ftable(prop.table(x, mrgn$prop) * 100)
+  }
   
   
   if (count & percent) {
@@ -704,215 +684,3 @@ test_xtabl_2x2 <- function(x, type, output, lvs = c("+", "-"), ...) {
   res
 }
 
-# #Input: Anzahl + Einstellungen
-# #Output: Anzahl+Prozent
-# Format_xtabs <- function(x,
-#                          margin,
-#                          add.margins = seq_along(dim(x)),
-#                          percent,
-#                          digits,
-#                          ...) {
-#   
-#   Text( paste("margin:", paste(margin, collapse=", ")," <br> ",
-#                 "add.margins: ", paste(add.margins, collapse=", ")))
-#   # print(margin)
-#   # print(add.margins)
-#   
-#   if (!add.margins[1]) {
-#     anzahl  <- ftable(x)
-#     prozent <- ftable(prop.table(x, margin = margin)) * 100
-#     
-#   } else if (is.null(margin[1]) | length(dim(x)) > 2) {
-#     anzahl  <- ftable(addmargins(x, add.margins))
-#     prozent <- ftable(addmargins(prop.table(x, margin = margin)
-#                                  , add.margins)) * 100
-#   } else {
-#     #- Spezialfall
-#     add.margins <- if (margin == 1)  2  else  1
-#     
-#     anzahl  <- ftable(addmargins(x, add.margins))
-#     prozent <- ftable(addmargins(prop.table(x, margin = margin),
-#                                  add.margins) * 100)
-#   }
-#   
-#   res <-
-#     as.matrix(rndr_percent_matrix(prozent, anzahl, percent, digits))
-#   
-#   ans <- stp25output::fix_to_data_frame(anzahl)
-#   n <- ncol(ans)
-#   ans[, (n - ncol(res) + 1):n] <- res
-#   ans
-#   
-# }
-#  #Text("Format_xtabs percent: ", percent)
-# cat("\n In Format_xtabs \n")
-#  
-#  
-#  print(x)
-#  cat("\n margin")
-#  print(margin)
-#  cat("\n add.margins")
-#  print(add.margins)
-#  cat("\n percent")
-#  print(percent)
-#  cat("\n digits")
-#  print(digits)
-#  
-#  my_colnames<- dimnames(x)[[2]]
-#  my_itemsnames <- dimnames(x)[[1]]
-#  if (!add.margins) {
-#    cat("  !add.margins ")
-#    anzahl  <- ftable(x)
-#    prozent <- ftable(prop.table(x, margin = margin)) * 100
-#  } else if (is.null(margin) | length(dim(x)) > 2) {
-#     cat("  add.margins:")
-#    my_colnames<- dimnames(x)[[2]]
-#    my_itemsnames <- dimnames(x)[[1]]
-#    
-#    print(add.margins)
-#    anzahl  <- ftable(addmargins(x, add.margins))
-#    print(anzahl)
-#    prozent <- ftable(addmargins(prop.table(x, margin = margin)
-#                                 , add.margins)) * 100
-#    
-#    my_colnames <- c(my_colnames, "Sum")
-#    
-#    my_itemsnames<- c(my_itemsnames, "Sum" )
-#  }
-#  else {
-#    #- Spezialfall
-#    add.margins <- if (margin == 1)
-#      2
-#    else
-#      1
-#    anzahl  <- ftable(addmargins(x, add.margins))
-#    prozent <- ftable(addmargins(prop.table(x, margin = margin),
-#                                 add.margins) * 100)
-#  }
-#  
-#  
-# # print(prozent)
-# # print(anzahl)
-#  res <-  rndr_percent_matrix(prozent, anzahl, percent, digits)
-# # print(res)
-# # cat("\n  colnames: ")
-#  
-#   print(my_colnames)
-#   print( colnames(res))
-#  colnames(res) <- my_colnames
-#  
-#  print(res)
-#  cat("\n  cbind: ")
-#  
-#  
-#  res <- cbind(Item = my_itemsnames, res)
-#  print(res)
-#  cat("\n  names: ")
-#  names(res)[1] <- paste(names(dimnames(x)), collapse = "/")
-#  
-#  
-#  print(res)
-#  res
-
-
-
-
-
-#Reihenfolge Input  x, caption, output,digits, type,percent, margin, add.margins
-
-
-# xtabl_NxMxO <- function(xtab,
-#                        caption,
-#                        output,
-#                        digits,
-#                        type,
-#                        percent,
-#                        margin,
-#                        add.margins){
-#  
-#   x_tab <- Format_xtabs(xtab, 
-#                          margin,
-#                          add.margins,
-#                          percent, 
-#                          digits)
-# 
-#   x_tab <- prepare_output(x_tab, caption=caption)
-#   Output(x_tab, output = output) 
-#   res <- list(xtab=x_tab)
-#   
-#   if (type[1] != "0" | isTRUE(type[1]) ){
-#     res$likelihood.test=NULL
-#     Text("Funktion noch nicht fertig. eventuell summary oder likelihood.test")
-#   }
-#   
-#   res
-# }
-# 
-# xtabl_NxM <- function (xtab,
-#                        caption,
-#                        output,
-#                        digits,
-#                        type,
-#                        percent,
-#                        margin,
-#                        add.margins)
-# {
-#   x_tab <- Format_xtabs(xtab, 
-#                         margin, add.margins, percent, 
-#                         digits)
-#   # Kreuztabelle
-#   x_tab <- prepare_output(x_tab, caption=caption)
-#   Output(x_tab, output=output)
-#     res <- list(xtab=x_tab)
-#   #Chi- Statistik
-#   if (type[1] != "0" | isTRUE(type[1]) ) {
-#     ans <- chisq_Statistik(xtab, type = type)
-#     for (i in names(ans)){
-#       res[[i]] <- ans[[i]] #Error in if (translate) nms <- Names2Language(nms)
-#       Output(ans[[i]], caption = paste(i, caption), fix_colnames = FALSE, output=output)}
-#   }
-#   
-#   res #liste mitX-Table und Test
-# }
-# 
-#  
-# 
-#  
-# xtabl_2x2 <- function(xtab,
-#                       caption,
-#                       output,
-#                       digits,
-#                       type,
-#                       percent,
-#                       margin,
-#                       add.margins,
-#                       lvs = c("+", "-")
-#                       ) {
-#  
-#   # Kreutzabelle
-#   x_tab <- Format_xtabs(xtab, 
-#                         margin, add.margins, percent, 
-#                         digits)
-#   x_tab <- prepare_output(x_tab, caption=caption)
-#   Output(x_tab, output=output)
-#   res <- list(xtab = x_tab)
-#   
-#   # Sig.Test
-#   # type kann mehr sein  #-- c("fischer", "odds","sensitivity", "chisquare" )
-#   if (type[1] != "0" | isTRUE(type[1]) ){
-#   if ("fischer" %in%  type ){
-#     x_fisher <- prepare_output(
-#                    fisher_Statistik(xtab),
-#                    caption = paste("Fisher's Exact Test ", caption) )
-#     Output(x_fisher, row.names = FALSE, output=output)
-#     res$fisher <- x_fisher
-#   }
-#   if ( "sensitivity" %in% type ) {
-#     x_diagnostic <- prepare_output(
-#                       Klassifikation.xtabs(xtab, lvs),
-#                       caption = paste("Sensitivity Test", caption))
-#     res$diagnostic <- x_diagnostic
-#     Output(x_diagnostic, output=output)
-#   }}
-#   res
-# }
