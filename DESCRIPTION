@@ -11,6 +11,10 @@ VignetteBuilder: knitr
 License: GPL-3
 Depends: R (>= 3.2)
 Imports: car,Hmisc
-Suggests: haven,knitr,rmarkdown
+Suggests: 
+    haven,
+    knitr,
+    rmarkdown,
+    testthat
 LazyData: TRUE
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
