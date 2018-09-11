@@ -28,10 +28,9 @@
 \alias{APA2.durbinWatsonTest}
 \alias{APA2.list}
 \alias{APA2.lm}
+\alias{APA2.glm}
 \alias{APA2.lme}
 \alias{APA2.lmerMod}
-\alias{APA2.glmerMod}
-\alias{APA2.merModLmerTest}
 \alias{APA2.anova}
 \alias{APA2.aov}
 \alias{APA2.summary.aov}
@@ -138,24 +137,35 @@ errate_statistik2(Formula, data, caption = "caption", note = "note",
   include.pseudo = TRUE, include.r = TRUE, include.aic = TRUE,
   include.bic = include.aic, include.sigma = FALSE,
   include.rmse = TRUE, include.gof = TRUE, include.param = TRUE,
-  ci.level = 0.95, rgroup = c("Parameter", "Goodness of fit"), ...)
+  ci.level = 0.95, rgroup = c("Parameter", "Goodness of fit"),
+  test.my.fun = FALSE, ...)
 
 \method{APA2}{lm}(x, caption = NULL, note = NULL,
-  output = stp25output::which_output(), col_names = NULL, ...)
-
-\method{APA2}{lme}(x, caption = "", note = "",
   output = stp25output::which_output(), col_names = NULL,
-  type = "III", anova = TRUE, anova_type = "F", ...)
+  include.b = TRUE, include.se = TRUE, include.beta = FALSE,
+  include.ci = FALSE, include.r = TRUE, include.test = FALSE,
+  ci.level = 0.95, test.my.fun = FALSE, conf.style.1 = TRUE, ...)
 
-\method{APA2}{lmerMod}(...)
-
-\method{APA2}{glmerMod}(x, caption = NULL, note = NULL,
+\method{APA2}{glm}(x, caption = NULL, note = NULL,
   output = stp25output::which_output(), col_names = NULL,
-  include.random.effects = TRUE, include.odds = TRUE, ...)
+  include.b = TRUE, include.se = TRUE, include.ci = FALSE,
+  include.odds = TRUE, include.odds.ci = include.ci,
+  include.statistic = TRUE, include.p = TRUE, include.stars = FALSE,
+  include.r = TRUE, include.pseudo = include.r, include.test = FALSE,
+  include.rr = FALSE, include.rr.ci = include.ci, ci.level = 0.95,
+  conf.method = "Wald", test.my.fun = FALSE, conf.style.1 = TRUE,
+  digits = 2, ...)
 
-\method{APA2}{merModLmerTest}(x, caption = NULL, note = NULL,
+\method{APA2}{lme}(...)
+
+\method{APA2}{lmerMod}(x, caption = NULL, note = NULL,
   output = stp25output::which_output(), col_names = NULL,
-  include.random.effects = TRUE, include.odds = FALSE, ...)
+  include.b = TRUE, include.se = TRUE, include.ci = FALSE,
+  include.odds = FALSE, include.odds.ci = include.ci,
+  include.statistic = TRUE, include.p = TRUE, include.stars = FALSE,
+  include.r = TRUE, include.pseudo = include.r, include.test = FALSE,
+  ci.level = 0.95, conf.method = "Wald", test.my.fun = FALSE,
+  conf.style.1 = TRUE, digits = 2, ...)
 
 \method{APA2}{anova}(x, caption = gsub("\\\\n", "", paste(attr(x,
   "heading"), collapse = ", ")), note = paste("contrasts: ",
@@ -294,8 +304,6 @@ labels = c("low", "neutral", "high")}
 
 \item{rgroup}{Zwischen Beschriftung}
 
-\item{anova_type}{bei lme:  "F"  F-werte (wie SPSS) oder Chi (car::Anova)}
-
 \item{fit_predict}{lda: MASS predict.lda}
 
 \item{newdata}{lda:model.frame}
@@ -305,6 +313,8 @@ labels = c("low", "neutral", "high")}
 \item{include.margins}{sollen überhaupt Summen (margins) ausgegeben werden die Prozent werden aber wie mit den Margins gerechnet}
 
 \item{margin, add.margins}{alternative zu include.total}
+
+\item{anova_type}{bei lme:  "F"  F-werte (wie SPSS) oder Chi (car::Anova)}
 
 \item{caption, note, output, col_names, print_col, labels}{an Output}
 
@@ -436,11 +446,6 @@ APA2.list(fits,
           include.custom=list(
                        Wald=c("F(1)=245", "F(2)=245","F(3)=245"),
                        Chi=c("X(4)=2.45", "X(5)=24.5","X(6)=24.5")))
-
-
-
-fm1 <- lmer(Reaction ~ Days + (Days|Subject), sleepstudy)
-APA2(fm1)
 
 
 

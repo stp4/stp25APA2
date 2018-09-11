@@ -1052,6 +1052,8 @@ Gute Werte sind -2LL nahe 0 und p-Wert nahe 1 *deviance(fit1)*
 
 **LR-Test** (Likeihood Ratio-Test) H0: Alle Regressionskoeffizienten sind gleich Null. Chi-Quadret möglichst hoch p<0.05
 
+Log-likelihood values cannot be used alone as an index of fit because they are a function of sample size but can be used to compare the fit of different coefficients. Because you want to maximize the log-likelihood, the higher value is better. For example, a log-likelihood value of -3 is better than -7
+
  
 Der **Wald Test** sind eigentlich zwei Methoden die erste ist der Test ob *irgendein* Koeffizient signifikant ist, die zweite Methode *welcher* Koeffizient signifikant ist.
 Der erstere Wald Test (Model Coefficients) ist in der Regel wenig informativ.

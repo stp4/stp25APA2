@@ -14,23 +14,24 @@
 \usage{
 Ordnen(x, ...)
 
-\method{Ordnen}{default}(x, ...)
+\method{Ordnen}{default}(x, test.my.fun = FALSE, ...)
 
 \method{Ordnen}{anova}(x, ...)
 
 \method{Ordnen}{aov}(x, include.eta = TRUE, include.sumsq = TRUE,
-  include.meansq = FALSE, ...)
+  include.meansq = FALSE, test.my.fun = FALSE, ...)
 
 \method{Ordnen}{lm}(x, include.b = TRUE, include.se = TRUE,
   include.beta = FALSE, include.ci = FALSE, include.r = TRUE,
-  include.ftest = FALSE, ci.level = 0.95, ...)
+  include.ftest = FALSE, ci.level = 0.95, test.my.fun = FALSE, ...)
 
-\method{Ordnen}{glm}(x, digits = 2, include.b = TRUE,
-  include.se = TRUE, include.b.ci = FALSE, include.ci = TRUE,
-  include.odds = TRUE, include.odds.ci = include.ci,
-  include.rr = FALSE, include.rr.ci = include.ci,
+\method{Ordnen}{glm}(x, include.b = TRUE, include.se = TRUE,
+  include.ci = FALSE, include.odds = TRUE,
+  include.odds.ci = include.ci, include.rr = FALSE,
+  include.rr.ci = include.ci, include.b.ci = include.ci,
   include.test = "lrt", include.r = TRUE, include.pseudo = include.r,
-  include.loglik = TRUE, ci.level = 0.95, ...)
+  include.loglik = TRUE, ci.level = 0.95, digits = 2,
+  test.my.fun = FALSE, ...)
 
 \method{Ordnen}{merModLmerTest}(x, include.b = TRUE, include.se = TRUE,
   include.beta = FALSE, include.ci = FALSE, include.odds = FALSE,
@@ -38,10 +39,11 @@ Ordnen(x, ...)
 
 \method{Ordnen}{lmerModLmerTest}(x, include.b = TRUE,
   include.se = TRUE, include.beta = FALSE, include.ci = FALSE,
-  include.odds = FALSE, ci.level = 0.95, ...)
+  include.odds = FALSE, ci.level = 0.95, test.my.fun = FALSE, ...)
 
 \method{Ordnen}{polr}(x, digits = 2, include.b = TRUE,
-  include.se = TRUE, include.ci = FALSE, include.odds = TRUE, ...)
+  include.se = TRUE, include.ci = FALSE, include.odds = TRUE,
+  test.my.fun = FALSE, ...)
 }
 \arguments{
 \item{x}{Objekt}

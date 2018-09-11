@@ -19,21 +19,22 @@ regression_output(fits, caption = "", note = "",
 
 APA_Table(..., caption = NULL, note = NULL,
   output = stp25output::which_output(), type = c("default", "long",
-  "broom", "texreg", "stargazer", "sjPlot", "anova"), names = NULL,
-  custom.model.names = NULL, digits = 2, include.b = TRUE,
-  include.se = TRUE, include.t = FALSE, include.beta = FALSE,
-  include.odds = FALSE, include.ci = FALSE, include.p = FALSE,
-  include.stars = if (include.p) FALSE else TRUE,
+  "long2", "broom", "texreg", "stargazer", "sjPlot", "anova"),
+  names = NULL, custom.model.names = NULL, digits = 2,
+  include.b = TRUE, include.se = TRUE, include.t = FALSE,
+  include.beta = FALSE, include.odds = FALSE, include.ci = FALSE,
+  include.p = FALSE, include.stars = if (include.p) FALSE else TRUE,
   include.variance = TRUE, include.r = TRUE, include.pseudo = FALSE,
   include.ftest = FALSE, include.loglik = FALSE,
   include.custom = NULL, include.aic = TRUE,
   include.bic = include.aic, include.anova = FALSE,
   include.sumsq = TRUE, include.meansq = FALSE, include.eta = FALSE,
   include.gof = TRUE, include.param = TRUE, ci.level = 0.95,
-  single.row = TRUE, rgroup = c("Parameter", "Goodness of fit"))
+  single.row = TRUE, rgroup = c("Parameter", "Goodness of fit"),
+  test.my.fun = FALSE)
 
 type_default(x, caption = NULL, output = NA, note = NULL,
-  custom.model.names = NULL, ...)
+  custom.model.names = NULL, test.my.fun = FALSE, ...)
 
 type_texreg(list, caption = "", note = "", output = NA,
   names = NULL, digits = 2, single.row = TRUE,
