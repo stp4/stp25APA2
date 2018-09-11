@@ -1,7 +1,7 @@
 #
 # 
 #
-usethis::use_test("APA_APA_Table")
+usethis::use_test("lmer-regression")
 # usethis::use_test("describe-likert")
 # usethis::use_test("describe-multi")
 # usethis::use_test("describe-rank")
