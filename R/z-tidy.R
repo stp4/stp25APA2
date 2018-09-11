@@ -166,89 +166,87 @@ Ordnen.aov <- function(x,
 #' @rdname Ordnen
 #' @export
 Ordnen.lm <- function(x,
-                      # custom.model.names = NULL,
-                     # digits = 2,
                       include.b = TRUE,
                       include.se = TRUE,
                       include.beta = FALSE,
-                      # include.eta = TRUE,
                       include.ci = FALSE,
-                      # include.variance = TRUE,
-                        include.r = TRUE,
-                        include.ftest = FALSE,
-                      #  include.aic = TRUE,
-                      #  include.bic = include.aic,
+                      include.r = TRUE,
+                      include.ftest = FALSE,
                       ci.level = .95,
-                     test.my.fun=FALSE,
-                     ...){
+                      test.my.fun=FALSE,
+                      ...
+                      ){
   if(test.my.fun) cat("\n    -> Ordnen.lm()")
  # cat("\n In Ordnen.lm " )
   info <- model_info(x)
-  AV <-
-    ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
-  
-  #print(info)
-  
+  AV <- ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
   note <-  paste0("Model: ", info$family[1])
   if (include.ftest)
     note <- paste(note, APA(x, FALSE))
   if (include.r) {
- 
     if(test.my.fun) cat("\n       include.r: R( )")
     r2 <- R2(x)
-    note <-
-      paste(note, "\nr-squared:", rndr_r2(r2))
+    note <- paste(note, "\nr-squared:", rndr_r2(r2))
   }
-  
-  
-  
-  
-  
-  # res <- broom::tidy(x)
-  coefs <- summary(x)$coef
- # print(coefs)
-  
-  if (include.ci) {
-    res <- cbind(coefs[, 1, drop = FALSE],
-                 confint(x, level = ci.level),
-                 coefs[,-1, drop = FALSE])
-  } else {
-    res <- coefs
-  }
-  
-  if (include.beta) {
-    b <- coefs[-1, 1]
-    
-    sx <- sapply(x$model[-1], function(x) {
-      if (!is.numeric(x)) {
-        cat("\nBeta macht bei ", class(x), "keinen Sinn!\n")
-        x <- as.numeric(x)
-      }
-      sd(x, na.rm = TRUE)
-    })
-    sy <- sd(x$model[[1]], na.rm = TRUE)
-    res <-
-      cbind(res[, 1, drop = FALSE], beta = c(NA, b * sx / sy), res[, -1, drop =
-                                                                     FALSE])
-  }
-  
-  if (!include.se) {
-    res <-  res[, colnames(res) != "Std. Error"]
-  }
-  
-  if (!include.b) {
-    res <-  res[, colnames(res) != "Estimate"]
-  }
-  
-  colnames(res)[ncol(res)] <- "p.value" 
- 
- # print(res)
-  if(test.my.fun) cat("\n       prepare_output( )")
-  prepare_output(data.frame(Source= rownames(res), res, stringsAsFactors = FALSE),
+
+  prepare_output(extract_param(x,
+                                 include.b,
+                                 include.se,
+                                 include.beta,
+                                 include.ci,
+                                 ci.level=ci.level),
                  paste0("AV: ", AV),
                  note=note,    #  paste0("Model: ", info$family[1]),
                  info$N,
                  info$labels)
+ #  
+ #  # res <- broom::tidy(x)
+ #  coefs <- summary(x)$coef
+ # # print(coefs)
+ #  
+ #  if (include.ci) {
+ #    res <- cbind(coefs[, 1, drop = FALSE],
+ #                 confint(x, level = ci.level),
+ #                 coefs[,-1, drop = FALSE])
+ #  } else {
+ #    res <- coefs
+ #  }
+ #  
+ #  if (include.beta) {
+ #    b <- coefs[-1, 1]
+ #    
+ #    sx <- sapply(x$model[-1], function(x) {
+ #      if (!is.numeric(x)) {
+ #        cat("\nBeta macht bei ", class(x), "keinen Sinn!\n")
+ #        x <- as.numeric(x)
+ #      }
+ #      sd(x, na.rm = TRUE)
+ #    })
+ #    sy <- sd(x$model[[1]], na.rm = TRUE)
+ #    res <-
+ #      cbind(res[, 1, drop = FALSE], beta = c(NA, b * sx / sy), res[, -1, drop =
+ #                                                                     FALSE])
+ #  }
+ #  
+ #  if (!include.se) {
+ #    res <-  res[, colnames(res) != "Std. Error"]
+ #  }
+ #  
+ #  if (!include.b) {
+ #    res <-  res[, colnames(res) != "Estimate"]
+ #  }
+ #  
+ #  colnames(res)[ncol(res)] <- "p.value" 
+ # 
+ # # print(res)
+ #  if(test.my.fun) cat("\n       prepare_output( )")
+ #  
+  # 
+  # prepare_output(data.frame(Source= rownames(res), res, stringsAsFactors = FALSE),
+  #                paste0("AV: ", AV),
+  #                note=note,    #  paste0("Model: ", info$family[1]),
+  #                info$N,
+  #                info$labels)
 }
 
 
@@ -258,35 +256,25 @@ Ordnen.lm <- function(x,
 #' @param include.b.ci,include.odds,include.rr.ci 95 Konfidenzintervalle
 #' @export
 Ordnen.glm <- function(x,
-                       digits = 2,
+                       
                        include.b = TRUE,
                        include.se = TRUE,
-                       include.b.ci = FALSE,
-                       include.ci = TRUE,
+                       include.ci = FALSE,
                        include.odds = TRUE,
                        include.odds.ci= include.ci,
                        include.rr=FALSE,
                        include.rr.ci=include.ci,
+                       include.b.ci = include.ci,
                        include.test = "lrt",
                        #"wald"  bei SPSS wird der Wald-Test verwendet, ich verwende den LRT
-                      
-                       
-                      # include.p = TRUE,
-                      # include.stars = FALSE,
-                       
-                      # include.variance = FALSE,
                        include.r = TRUE,
                        include.pseudo = include.r,
-                       # noch nicht fertig
-                     #  include.ftest = FALSE,
+
                        include.loglik = TRUE,
-                       # noch nicht fertig
-                     #  include.custom = FALSE,
-                      # include.aic = FALSE,
-                     #  include.bic = FALSE, 
-                       ci.level = .95,
-                     test.my.fun=FALSE,
-                     ...){
+                       ci.level = .95,digits = 2,
+                       test.my.fun=FALSE,
+                        ...
+                       ){
   if(test.my.fun) cat("\n   -> Ordnen.glm()")
   
  # cat("\n In Ordnen.glm " )
@@ -302,14 +290,15 @@ Ordnen.glm <- function(x,
   }
   
    
-   
   AV <-
     ifelse(is.na(info$labels[info$y]), info$y, info$labels[info$y])
   
   coefs <- data.frame(summary(x)$coef)
   names(coefs) <- c("b", "SE", "LR.Test", "p.value")
   
-  if ( include.test == "lrt"){
+  if ( include.test != "lrt"){
+    
+ #   car::Anova(x, type = "III", test.statistic = "Wald")
     coefs$LR.Test <- (coefs$b/coefs$SE)^2
     names(coefs)[3]<- "Wald"
   }
@@ -374,8 +363,6 @@ Ordnen.glm <- function(x,
       coefs <- cbind(coefs, rr[, 1])
   }
   
-  
-  
   if (!include.se) {
     coefs <-  coefs[, colnames(coefs) != "SE"]
   }
@@ -430,6 +417,7 @@ Ordnen.merModLmerTest <- function(x,
     cis<-  confint(x, level = ci.level)
     k <- which(rownames(cis) == "(Intercept)")
     
+    
     b.coef <- cbind(coefs[, 1, drop = FALSE],
                  cis[k:nrow(cis), ]  
                  )
@@ -453,7 +441,7 @@ Ordnen.merModLmerTest <- function(x,
     b.coef <- cbind(b.coef, odds)
    }
   
-  if (include.beta)  cat("\nBeta macht bei ", class(x), "keinen Sinn!\n")
+#  if (include.beta)  cat("\nBeta macht bei ", class(x), "keinen Sinn!\n")
  
   res <- cbind(b.coef, stat.coef)
     colnames(res)[ncol(res)] <- "p.value" 
@@ -664,3 +652,5 @@ Ordnen.polr <- function(x,
                  info$labels)
   
 }
+
+
