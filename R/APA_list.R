@@ -80,7 +80,7 @@ APA2_list <-
             conf.level = 0.95, conf.method = "Wald",
             digits.param = 3,digits.odds = 2, digits.test = 2, digits.beta = 2,
             format="fg",
-            include.r = TRUE,include.pseudo = TRUE,
+            include.r = TRUE, include.pseudo = TRUE,
             include.rmse = TRUE,include.sigma = FALSE,include.variance = FALSE,
             include.devianze = FALSE,
             include.loglik = FALSE,
@@ -91,6 +91,11 @@ APA2_list <-
             
             rgroup = c("Parameter", "Goodness of fit"),
             test.my.fun = FALSE,
+            
+            dictionary = c(std.error = "SE",
+                            estimate = "B",
+                            p.value = "p"),
+            
             ...
             )
   {
@@ -139,7 +144,11 @@ APA2_list <-
         model[, 2] <- paste0(model$estimate, model$stars)
         model <- model[,!(names(model) %in% "stars")]
       }
-      
+
+     names(model) <- sapply(names(model),
+                             function(y) if (y %in% names(dictionary))   dictionary[y] else  y, 
+                             USE.NAMES = FALSE)
+     
       if (i == 1) {
         coefs <- model
         coef.order <- unique(model$term)
@@ -168,14 +177,15 @@ APA2_list <-
       for (i in seq_len(n)) {
         model <- t(extract_gof(x[[i]],   
                                include.r=include.r,include.pseudo=include.pseudo,
-                               include.rmse=include.rmse,include.sigma=include.sigma,include.variance=include.variance,
+                               include.rmse=include.rmse,include.sigma=include.sigma,
+                               include.variance=include.variance,
                                include.devianze=include.devianze,
                                include.loglik=include.loglik,
                                include.test=include.test,
                                include.aic=include.aic,include.bic=include.bic,
                                include.nobs=include.nobs,
                                fix_format = TRUE ))
-        
+      
         model <- dplyr::tibble(term = rownames(model), 
                                model = model[, 1])
         if (i == 1) {
@@ -190,7 +200,7 @@ APA2_list <-
           )
         }
       }
-      
+ 
       gofs <- gofs[order(match(gofs$term, gofs.order)), ]
       
       if (!is.null(include.custom)) {

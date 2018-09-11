@@ -466,11 +466,14 @@ extract_gof <- function(x,
                         digits = 2,
                         fix_format=FALSE,
                         ...) {
+  
+  
   res <-  broom::glance(x)
   param <-  "term"
-  if (include.r)
-    param <- c(param, "")
-  if (include.pseudo) {
+ 
+  
+  
+  if (include.r | include.pseudo) {
     ans_r <- R2(x)
     res <- cbind(res, ans_r)
     param <- c(param, names(ans_r))
@@ -495,8 +498,13 @@ extract_gof <- function(x,
     param <- c(param, "sigma")
   
   
- 
   res <- round(res, digits = digits)
+  
+  #include.test
+  if (include.test){
+    param <- c(param, "Test")
+    res$Test <- "nicht implementiert"
+  }
   
   if (include.nobs) {
     param <- c(param, "Obs")
