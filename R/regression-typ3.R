@@ -129,7 +129,7 @@ APA_Table <- function(...,
                       caption = NULL,
                       note =  NULL,
                       output = stp25output::which_output(),
-                      type = c("default","long",
+                      type = c("default","long", "long2",
                                "broom",
                                "texreg","stargazer","sjPlot",
                                "anova"),
@@ -177,7 +177,23 @@ APA_Table <- function(...,
                       single.row = TRUE,
                       #  col_names = NULL, #c("b", "SE", "p"),
                       rgroup = c("Parameter", "Goodness of fit"),
-                      test.my.fun=FALSE)
+                      test.my.fun=FALSE,
+                      
+                      include.effects = c("ran_pars", "fixed"),
+                      include.statistic=FALSE,
+                      conf.int = TRUE,
+                      conf.level = 0.95,
+                      conf.method = "Wald",
+                      fix_format = FALSE,
+                      digits.param = 3,
+                      digits.odds = 2,
+                      digits.test = 2,
+                      digits.beta = 2,
+                      format="fg"
+                      
+                      
+                      
+                      )
 # Parameter Goodness of fit)
 {
   if(test.my.fun) cat("\n--------------\nAPA_Table")
@@ -268,6 +284,35 @@ APA_Table <- function(...,
         include.variance = include.variance
       )
     }
+    
+    
+    else if ( type == "long2" ) {
+      if(test.my.fun) cat("\n type = long")
+      result <- APA2_list(
+        myfits,
+        caption = caption, note = note , output=output,
+        custom.model.names = names ,
+        include.param=include.param,  include.gof=include.gof, include.custom = include.custom ,
+        include.b = include.b,include.se = include.se, include.beta = include.beta,
+        include.ci =  include.ci,
+        include.odds = include.odds,
+        include.statistic = include.statistic,
+        include.p =  include.p,
+        include.stars =  include.stars,
+        include.df = FALSE,
+        include.r = include.r, include.pseudo = include.pseudo,include.test = include.test ,
+        include.loglik = include.loglik ,
+        include.aic =  include.aic,include.bic = include.bic,
+        ci.level =  ci.level,
+        rgroup = rgroup,
+        test.my.fun = test.my.fun
+      )
+      
+  
+      
+      
+    }
+    
     else if ( type == "long" ) {
       if(test.my.fun) cat("\n type = long")
       result <- APA2.list(
