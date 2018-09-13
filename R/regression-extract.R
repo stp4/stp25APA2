@@ -500,41 +500,34 @@ extract_gof <- function(x,
     param <- c(param, "sigma")
   
   
- 
- if(fix_format){
-   res <- dplyr::tbl_df(
-     plyr::llply(res,
-                 function(z) formatC(z, digits=digits, format="f"))) 
- 
- 
-   if (include.test){
-     param <- c(param, "Test")
-     res$Test <- "nicht implementiert"
-   }
-   
-   if (include.nobs) {
-     param <- c(param, "Obs")
-     res$Obs <- formatC(nobs(x), digits=0, format="f")
-   }
-   
- }
-  else{
-     res <- round(res, digits = digits) 
-     #include.test
-     if (include.test){
-       param <- c(param, "Test")
-       res$Test <- "nicht implementiert"
-     }
-     
-     if (include.nobs) {
-       param <- c(param, "Obs")
-       res$Obs <- nobs(x)
-     }
+  if (fix_format) {
+    res <- dplyr::tbl_df(
+      plyr::llply(res,
+                  function(z) 
+                    formatC(z,
+                            digits = digits,
+                            format = "f")))
+    if (include.test) {
+      param <- c(param, "Test")
+      res$Test <- "nicht implementiert"
+    }
+    
+    if (include.nobs) {
+      param <- c(param, "Obs")
+      res$Obs <- formatC(nobs(x), digits = 0, format = "f")
+    }
   }
-
- 
- 
+  else{
+    res <- round(res, digits = digits)
+    if (include.test) {
+      param <- c(param, "Test")
+      res$Test <- "nicht implementiert"
+    }
+    if (include.nobs) {
+      param <- c(param, "Obs")
+      res$Obs <- nobs(x)
+    }
+  }
   param <- intersect(names(res), param)
-  
   tibble::as_tibble(res[param])
 }

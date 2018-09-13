@@ -78,7 +78,8 @@ APA2_list <-
             include.df = FALSE,
             include.effects = c("ran_pars", "fixed"),
             conf.level = 0.95, conf.method = "Wald",
-            digits.param = 3,digits.odds = 2, digits.test = 2, digits.beta = 2,
+            digits=NULL,
+            digits.param = 3, digits.odds = 2, digits.test = 2, digits.beta = 2,
             format="fg",
             include.r = TRUE, include.pseudo = TRUE,
             include.rmse = TRUE,include.sigma = FALSE,include.variance = FALSE,
@@ -112,6 +113,18 @@ APA2_list <-
     custom.model.names.s <- paste0(mySep, custom.model.names)
     #-- Extrahieren ----------------------------------
     for (i in seq_len(n)) {
+      if(!is.null(digits)){
+        format <- "f"
+        if(is.list(digits)){
+          digits.param = digits[[i]]
+          digits.odds = digits[[i]]
+        }else{
+          digits.param = digits 
+          digits.odds = digits 
+        }
+      }
+    
+      
       model <-  extract_param(
         x[[i]],
         include.b = include.b,
@@ -204,8 +217,24 @@ APA2_list <-
       gofs <- gofs[order(match(gofs$term, gofs.order)), ]
       
       if (!is.null(include.custom)) {
-        names(include.custom) <- names(gofs)
-        gofs <-  rbind(gofs, include.custom)
+        if (inherits(include.custom, "data.frame")) {
+          names(include.custom) <- names(gofs)
+          gofs <-  rbind(gofs, include.custom)
+        }  else if (inherits(include.custom, "list")) {
+         # print(names(gofs))
+         # print(names(include.custom))
+          
+          gofs <-  rbind(gofs,
+                         cbind(
+                           term = names(include.custom),
+                           matrix(
+                             unlist(include.custom),
+                             nrow = length(include.custom),
+                             byrow = TRUE,
+                             dimnames = list(names(include.custom), names(gofs)[-1])
+                           )
+                         ))
+        }
       }
       
       n_row <- nrow(gofs)
