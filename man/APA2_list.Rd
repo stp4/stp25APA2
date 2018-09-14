@@ -11,14 +11,15 @@ APA2_list(x, caption = "", note = "",
   include.ci = FALSE, include.odds = FALSE, include.odds.ci = FALSE,
   include.statistic = FALSE, include.p = FALSE, include.stars = TRUE,
   include.df = FALSE, include.effects = c("ran_pars", "fixed"),
-  conf.level = 0.95, conf.method = "Wald", digits.param = 3,
-  digits.odds = 2, digits.test = 2, digits.beta = 2, format = "fg",
-  include.r = TRUE, include.pseudo = TRUE, include.rmse = TRUE,
-  include.sigma = FALSE, include.variance = FALSE,
-  include.devianze = FALSE, include.loglik = FALSE,
-  include.test = FALSE, include.aic = TRUE,
+  conf.level = 0.95, conf.method = "Wald", digits = NULL,
+  digits.param = 3, digits.odds = 2, digits.test = 2,
+  digits.beta = 2, format = "fg", include.r = TRUE,
+  include.pseudo = TRUE, include.rmse = TRUE, include.sigma = FALSE,
+  include.variance = FALSE, include.devianze = FALSE,
+  include.loglik = FALSE, include.test = FALSE, include.aic = TRUE,
   include.bic = include.aic, include.nobs = TRUE,
-  rgroup = c("Parameter", "Goodness of fit"), test.my.fun = FALSE, ...)
+  rgroup = c("Parameter", "Goodness of fit"), test.my.fun = FALSE,
+  dictionary = c(std.error = "SE", estimate = "b", p.value = "p"), ...)
 }
 \arguments{
 \item{x}{Regressionsobjekt}

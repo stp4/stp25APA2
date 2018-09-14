@@ -123,6 +123,25 @@ require(pROC)
    Blutzucker=c(blz.diab, blz.cntr))
 
 
+## ----fig-roc1, fig.cap = "ROC-Kurve zu den Blutzuckerwerten",  fig.width=4, fig.height=4, cache=TRUE----
+# require(pROC)
+# data %>% Tabelle(Blutzucker, by=~Gruppe) 
+
+roc_curve <- roc(data$Gruppe, data$Blutzucker)
+plot(roc_curve, print.thres = "best",
+     print.auc=TRUE)
+
+# das selbe aber mit Regression daher sind die cut off -Werte nur indirekt interpretierbar
+# fit1  <- glm(Gruppe~Blutzucker, data, family = binomial)
+# x1 <- Klassifikation(fit1)
+# roc_curve   <- roc(x1$response, x1$predictor)
+# windows(8,8)
+# plot(roc_curve, print.thres = "best",
+#      print.auc=TRUE)
+# abline(v = 1, lty = 2)
+# abline(h = 1, lty = 2)
+
+
 ## ----roc2----------------------------------------------------------------
 fit1<- glm(gruppe~lai, hkarz, family = binomial)
 x1 <- Klassifikation(fit1)
@@ -130,18 +149,38 @@ x1$statistic[c(1,7,8),]
 
 roc_curve <- roc(x1$response, x1$predictor)
 auc(roc_curve)
-
-
-roc_curve <- roc(data$Gruppe, data$Blutzucker)
-plot(roc_curve, print.thres = "best",
-     print.auc=TRUE)
-
-
 #plot(roc_curve, print.thres = "best", print.auc=TRUE)
 #abline(v = 1, lty = 2)
 #abline(h = 1, lty = 2)
 #text(.90, .97, labels = "Ideal Model")
 #points(1,1, pch = "O", cex = 0.5)
+
+## ----fig-roc2, fig.cap = "ROC-Kurve zu den Harnblasenkarzinom",  fig.width=4, fig.height=4, cache=TRUE----
+fit1<- glm(gruppe~lai, hkarz, family = binomial)
+fit2<- glm(gruppe~lai+tzell, hkarz, family = binomial)
+#thkarz <- as.data.frame(xtabs(~gruppe+lai, hkarz))
+#fit2<- glm(Freq ~ gruppe*lai, thkarz, family = poisson())
+x1 <- Klassifikation(fit1)
+x2 <- Klassifikation(fit2) 
+#require(pROC)
+roc1   <- roc(x1$response, x1$predictor)
+roc2   <- roc(x2$response, x2$predictor)
+
+plot(roc1, print.auc = TRUE, print.auc.y = 0.6) 
+plot(roc2, lty = 2, col = "blue", print.auc.y = 0.7, print.auc = TRUE, add = TRUE)
+legend("bottomright",  legend = c("Lai", "Lai + T-Zell"),
+  col = c(par("fg"), "blue"), lty = 1:2, lwd = 2
+)
+roc.test(roc1, roc2)
+
+### Not run: 
+# The latter used Delong's test. To use bootstrap test:
+#roc.test(roc1, roc2, method="bootstrap")
+# Increase boot.n for a more precise p-value:
+#roc.test(roc1, roc2, method="bootstrap", boot.n=10000)
+
+#ciobj <- ci.se(roc2)
+#plot(ciobj, type = "shape", col="#D3D3D3", alpha = .5) 
 
 ## ---- results='asis', warning=FALSE--------------------------------------
 # APA2(tzell~gruppe,hkarz, type="cohen.d")  # APA_Effsize ist das gleiche
@@ -285,6 +324,20 @@ Giavarina <- transform(Giavarina, C = round( A + rnorm(30,0,20)),
 ICC2(~A+E, Giavarina, caption="ICC (Korrelationen)")
  
 
+## ----fig-BlandAltman3, fig.cap = "Bland Altman",  fig.width=8, fig.height=3, cache=TRUE----
+# A - Goldstandart
+
+x <- BlandAltman(~A+B+E, Giavarina)
+# x %>% Output("BA-Analyse der Messwertreihe")
+plot(x)
+
+
+## ----fig-BlandAltman4, fig.cap = "Bland Altman",  fig.width=8, fig.height=3, cache=TRUE----
+x <- BlandAltman(~A+E+B, Giavarina)
+# x %>% Output("BA-Analyse der Messwertreihe")
+plot(x)
+
+
 ## ------------------------------------------------------------------------
 set.seed(0815)
 
@@ -302,6 +355,26 @@ DF <- transform(DF, C = round( A + rnorm(n, -5, 20)),
                 #E = round( A + rnorm(n,5,10) + (100-A/10) )
                 E = A + ifelse(A<cutA, A/5, -A/5 )+ rnorm(n, 0, 10)
 )
+
+## ----fig-BAx1, fig.cap = "A und C Messen das gleiche mit SD=20",  fig.width=8, fig.height=3, cache=TRUE----
+x<- BlandAltman(~A+C, DF)
+plot(x)
+
+
+## ----fig-BAx2, fig.cap = "A und B Messen unterschiedliche Parameter",  fig.width=8, fig.height=3, cache=TRUE----
+x<- BlandAltman(~A+B, DF)
+plot(x)
+
+
+## ----fig-BAx3, fig.cap = "A und D Messen das unterschiedlich D hat im unteren Wertevereich deutlich geringere Werte",  fig.width=8, fig.height=3, cache=TRUE----
+x<- BlandAltman(~A+D, DF)
+plot(x)
+
+
+## ----fig-BAx4, fig.cap = "A und E Messen das unterschiedlich es esistiert ein Knick im Wertebereich 100",  fig.width=8, fig.height=3, cache=TRUE----
+x<- BlandAltman(~A+E, DF)
+plot(x)
+
 
 ## ---- results='asis', warning=FALSE--------------------------------------
 #-- breaks ~ wool + tension ----------------------
@@ -474,7 +547,7 @@ txt_log_reg <-  paste("Eine logistische Regressionsanalyse zeigt, dass sowohl da
  "Steigen die T-Zelltypisierung  um jeweils eine Einheit, 
  so nimmt die relative Wahrscheinlichkeit eines Krank/Gesund um OR =",  x$OR[2], 
  "zu. Ist die  T-Zelltypisierung positiv so nimmt die  relative Wahrscheinlichkeit um OR= ", x$OR[2],
- "Das R-Quadrat nach Nagelkerke betr?gt",round(Nagelkerke,2), 
+ "Das R-Quadrat nach Nagelkerke beträgt",round(Nagelkerke,2), 
 " was nach Cohen (1992) einem starken Effekt entspricht."  )
 # 
 

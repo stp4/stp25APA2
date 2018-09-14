@@ -387,7 +387,7 @@ fit1<-lm(score ~ agegrp+trial, MMvideo)
 fit2<-lmerTest::lmer(score ~ agegrp+trial + (1|id), MMvideo)
 fit3<-lm(score ~ agegrp*trial, MMvideo)
 fit4<-lmerTest::lmer(score ~ agegrp*trial + (1|id), MMvideo)
-APA_Table(fit1, fit2, fit3, fit4, type="tex")
+APA_Table(fit1, fit2, fit3, fit4, type="long2")
 
 
 

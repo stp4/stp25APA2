@@ -4,22 +4,14 @@
 \alias{extract_param}
 \title{extract_param}
 \usage{
-extract_param(x, include.b = TRUE, include.se = TRUE,
-  include.beta = FALSE, include.ci = FALSE, include.odds = FALSE,
-  include.odds.ci = if (include.odds & include.ci) TRUE else FALSE,
-  include.statistic = TRUE, include.p = TRUE, include.stars = FALSE,
-  include.df = FALSE, include.effects = c("ran_pars", "fixed"),
-  conf.int = TRUE, conf.level = 0.95, conf.method = "Wald",
-  fix_format = FALSE, digits.param = 3, digits.odds = 2,
-  digits.test = 2, digits.beta = 2, format = "fg",
-  conf.style.1 = FALSE, ...)
+extract_param(x, ...)
 }
 \arguments{
 \item{x}{Objekt}
 
-\item{include.b, include.beta, include.ci, include.se, include.odds, include.odds.ci, include.statistic, include.p, include.stars, include.df, include.effects, conf.level, conf.method}{Parameter wie in APA_Tabelle beschrieben.}
-
 \item{...}{weitere params}
+
+\item{include.b, include.beta, include.ci, include.se, include.odds, include.odds.ci, include.statistic, include.p, include.stars, include.df, include.effects, conf.level, conf.method}{Parameter wie in APA_Tabelle beschrieben.}
 }
 \value{
 data.frame tibble  "term","estimate", "beta","std.error" ,"statistic","p.value","stars","conf.high","conf.low","odds","odds.conf.low","odds.conf.high","df","group"
@@ -37,5 +29,6 @@ Ordnen(fit)
 extract_param(fit)
 APA_Table(fit)
 APA_Table(fit, type="long")
+
 
 }
