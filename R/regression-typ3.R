@@ -135,7 +135,7 @@ APA_Table <- function(...,
                                "anova"),
                       names = NULL,
                       custom.model.names = NULL,
-                      digits = 2,
+                      digits = NULL,
                       
                      
                       include.b = TRUE,
@@ -288,7 +288,7 @@ APA_Table <- function(...,
     
     
     else if ( type == "long2" ) {
-      if(test.my.fun) cat("\n type = long")
+      if(test.my.fun) cat("\n type = long\n")
       result <- APA2_list(
         myfits,
         caption = caption, note = note , output=output,
@@ -308,7 +308,7 @@ APA_Table <- function(...,
         ci.level =  ci.level,
         rgroup = rgroup,
         test.my.fun = test.my.fun,
-        digits.param = digits.param,
+        digits=digits, digits.param = digits.param,
         digits.odds = digits.odds,
         digits.test = digits.test,
         digits.beta = digits.beta,

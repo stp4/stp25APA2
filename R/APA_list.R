@@ -3,33 +3,6 @@
 
 
 
-
-
-#require(stpvers)
-# Projekt("html")
-# 
-# 
-# 
-# fit1 <- lm(chol0 ~ rrs0 + med, hyper)
-# fit2 <- lm(chol0 ~ rrs0 + med + ak, hyper)
-# fit3 <- lm(chol0 ~ ak + med + rrs0 , hyper)
-# fit4 <- lmerTest::lmer(chol0 ~ rrs0 + med +  ak  +  (1 | g) , hyper)
-# 
-# coefs <- APA2_list(
-#   list(fit1,
-#        fit2,
-#        fit3, fit4),
-#   include.beta = TRUE,
-#   
-#   include.custom =
-#     data.frame(term = "M",  "A", "B", "C", "D")
-# )
-# 
-# coefs
-# 
-# 
-# End()
-
 #' Formatierte Regressionstabelle
 #' 
 #' Formatiert Listen mit Modellen zu Dataframs.
@@ -94,7 +67,7 @@ APA2_list <-
             test.my.fun = FALSE,
             
             dictionary = c(std.error = "SE",
-                            estimate = "B",
+                            estimate = "b",
                             p.value = "p"),
             
             ...
@@ -123,7 +96,8 @@ APA2_list <-
           digits.odds = digits 
         }
       }
-    
+  #  print(digits.param)
+   # print(digits.odds)
       
       model <-  extract_param(
         x[[i]],
@@ -154,7 +128,7 @@ APA2_list <-
         ...
       )
       if (include.stars) {
-        model[, 2] <- paste0(model$estimate, model$stars)
+        model[, 2] <- paste0(unlist(model[, 2]), model$stars)
         model <- model[,!(names(model) %in% "stars")]
       }
 
@@ -176,14 +150,16 @@ APA2_list <-
       n_param[i] <- ncol(model) - 1 #auszaehlen an parametern
     }
     
-    n_names <- stringr::str_split(names(coefs)[-1], 
-                                  mySep, simplify = TRUE)
-    
-    suffix <- n_names[, 2]
-    param <-  n_names[, 1]
-    suffix[which(suffix == "")] <- custom.model.names[1]
-    names(coefs)[-1] <-  paste0(suffix, "_", param)
-        coefs <- coefs[order(match(coefs$term, coef.order)), ]
+    # colnames mit param_suffix
+    if (n > 1) {
+      n_names <-
+        stringr::str_split(names(coefs)[-1], mySep, simplify = TRUE)
+      suffix <- n_names[, 2]
+      param <-  n_names[, 1]
+      suffix[which(suffix == "")] <- custom.model.names[1]
+      names(coefs)[-1] <-  paste0(suffix, "_", param)
+      coefs <- coefs[order(match(coefs$term, coef.order)),]
+    }
     
     
     if (include.gof) {

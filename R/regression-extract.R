@@ -20,7 +20,13 @@
 #' APA_Table(fit)
 #' APA_Table(fit, type="long")
 #'
-extract_param <- function(x,
+#'
+extract_param <- function(x, ...){
+  UseMethod("extract_param")
+  
+}
+
+extract_param.default <- function(x,
                           include.b = TRUE,
                           include.se = TRUE,
                           include.beta = FALSE,
@@ -248,6 +254,62 @@ extract_param <- function(x,
 }
 
 
+
+
+
+extract_param.aov <- function(x, 
+                       include.eta = TRUE,
+                       include.sumsq = TRUE,
+                       include.meansq = FALSE, 
+                       test.my.fun=FALSE,
+                       fix_format = FALSE,
+                       digits.test = 2,
+                       format="f",
+                       ...){
+  if(test.my.fun) cat("\n   -> extract_param.aov()")
+  param <- "term"
+  res <- broom::tidy(x)
+
+  if (!include.sumsq)
+    param <- c(param, "sumsq")
+
+  if (!include.meansq)
+    param <- c(param, "meansq")
+  
+  param <- c(param, c("df", "statistic"))
+  
+  if (include.eta) {
+    if (is(x, "lm") | is(x, "anova")) {
+      param <- c(param, c("eta.sq", "eta.sq.part"))
+      k <- ncol(res)
+      res <- cbind(res[,-k], etaSquared2(x, 2, FALSE), res[k])
+      
+      if (fix_format) {
+        res$eta.sq <-
+          stp25rndr:::Format2.default(res$eta.sq,
+                                      digits = digits.test, format = format)
+        res$eta.sq.part <-
+          stp25rndr:::Format2.default(res$eta.sq.part,
+                                      digits = digits.test, format = format)
+        
+      }
+    }
+  }
+  
+  
+  param <- c(param, "p.value")
+  
+  if (fix_format){
+    res$statistic <-
+    stp25rndr:::Format2.default(res$statistic,digits = digits.test, format = format)
+    res$p.value <- stp25rndr::rndr_P(res$p.value, FALSE)
+    res$sumsq <-stp25rndr:::Format2.default(res$sumsq,digits = digits.test, format = format)
+    res$meansq <- stp25rndr:::Format2.default(res$meansq,  digits = digits.test, format = format)
+    res$df <- stp25rndr:::Format2.default(res$df, digits = 0, format = format)
+    }
+  
+  tibble::as_tibble(res[param])
+}
 
 
 #' Fix tidy_lmer
