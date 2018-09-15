@@ -317,32 +317,7 @@ APA2.list <-
     }
     
     
-    
-    if (!is.logical(output)) {
-      if (output == "html") {
-        Output(result,
-               rgroup = rgroup,
-               n.rgroup = nrow(m.temp))
-      }
-      else if (output == "markdown") {
-        Output_kable(result)
-      }
-      else if (is.na(output)) {
-        
-      }
-      else {
-        print(result)
-      }
-    } 
-    else{
-      if (output) {
-        Output(result,
-               rgroup = rgroup,
-               n.rgroup = nrow(m.temp))
-      }
-    }
-    
-    
+    if (!is.logical(output)) {Output(result, output=output)}
     if(test.my.fun) cat("\n  <- APA2.list()")
     invisible(result)
   }

@@ -297,7 +297,7 @@ rndr_percent_ftable <- function(x,
                                 style = options()$stp25$apa.style$prozent$style,
                                 null_percent_sign = options()$stp25$apa.style$prozent$null_percent_sign) {
   
-  cat("\nrndr_percent_ftable")
+ # cat("\nrndr_percent_ftable")
   
   x_char <- apply(x, 2, function(y)
     paste0(

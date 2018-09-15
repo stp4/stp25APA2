@@ -3,7 +3,9 @@ context("test-describe-apa2")
 test_that("Prop_Test2 works", {
   
  x<- factor(c("a", "b", "c", "b", "c", "b", "c","a", "b", "c", "b", "c", "a")) 
- expect_warning(expect_equal(Prop_Test2(x)[1,3], "23% CI=[ 6 - 54]"))
+ 
+ expect_warning(x<- Prop_Test2(x))
+expect_equal(as.character(x[1,3]), "23% CI=[ 6 - 54]")
 })
 
 

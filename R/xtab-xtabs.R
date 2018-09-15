@@ -670,14 +670,17 @@ test_xtabl_2x2 <- function(x, type, output, lvs = c("+", "-"), ...) {
   if ("fischer" %in%  type) {
     x_fisher <- prepare_output(fisher_Statistik(x),
                                caption = "Fisher's Exact Test ")
-    Output(x_fisher, row.names = FALSE, output = output)
+    
+    Output(x_fisher,  output = output)
     res$fisher <- x_fisher
   }
   if ("sensitivity" %in% type) {
     x_diagnostic <- prepare_output(Klassifikation.xtabs(x, lvs),
                                    caption = "Sensitivity Test")
   
-    Output(x_diagnostic, output = output)
+  #  cat("\n in test_xtabl_2x2\n")
+   # print(x_diagnostic)
+    Output(x_diagnostic$statistic, output = output)
     
     res$sensitivity <- x_diagnostic
   }

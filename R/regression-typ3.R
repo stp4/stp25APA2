@@ -289,6 +289,9 @@ APA_Table <- function(...,
     
     else if ( type == "long2" ) {
       if(test.my.fun) cat("\n type = long\n")
+     # print(output)
+      
+      
       result <- APA2_list(
         myfits,
         caption = caption, note = note , output=output,
@@ -418,6 +421,8 @@ APA_Table <- function(...,
   }
   
   if(test.my.fun) cat("\nresult: ", class(result), "\nEnde APA_Table()")
+  
+  
   invisible(result)
 }
 

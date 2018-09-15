@@ -11,6 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(stpvers)
 set.seed(1)
 Projekt("", "Introduction" )
+set_my_options(output="html")
+
 hkarz$Lai<- factor(hkarz$lai, 0:1, c("negativ", "positiv"))
 hkarz<- upData2(hkarz, c(gruppe="Gruppe"
                       ,tzell="T-Zelltypisierung"
@@ -79,7 +81,7 @@ res$tTable %>% fix_format() %>% Output(caption="Generalized Least Squares")
 
 
 
-## ------------------------------------------------------------------------
+## ---- results='asis'-----------------------------------------------------
 
 
 hkarz$LAI<- factor(hkarz$lai, 0:1, c("pos", "neg"))
@@ -105,7 +107,7 @@ APA2(xtab, test=FALSE, caption="APA2: 2x3 Tabelle")
 APA_Xtabs(xtab, caption="APA_Xtabs: 2x3 Tabelle")
 
 
-## ------------------------------------------------------------------------
+## ---- results='asis'-----------------------------------------------------
 xtab <- xtabs(~ gruppe+LAI, hkarz)
 fit1<- glm(gruppe~lai, hkarz, family = binomial)
  

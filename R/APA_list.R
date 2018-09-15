@@ -16,7 +16,7 @@
 #' @param include.df,include.r,include.pseudo,include.rmse,include.sigma,include.variance,include.devianze,include.loglik,include.aic,include.bic,include.nobs,include.test An extract_gof()
 #' @param ...  nicht benutzt
 #'
-#' @return
+#' @return data.frame
 #' @export
 #'
 #' @examples
@@ -241,28 +241,9 @@ APA2_list <-
     }
     
     if (!is.logical(output)) {
-      if (output == "html") {
-        Output(result,
-               rgroup = rgroup,
-               n.rgroup = nrow(coefs))
-      }
-      else if (output == "markdown") {
-        Output_kable(result)
-      }
-      else if (is.na(output)) {
-        return(result)
-      }
-      else {
-        print(result)
-      }
-    }
-    else{
-      if (output) {
-        Output(result,
-               rgroup = rgroup,
-               n.rgroup = nrow(coefs))
-      }
-    }
+      Output(result, output=output)
+    } 
+    
     invisible(result)
   }
 
