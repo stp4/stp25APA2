@@ -266,39 +266,48 @@ extract_param  <- function(x,
 #' @description Metode fuer ANOVA-Modelle
 #' @rdname extract_param
 #' 
-extract_param_aov <- function(x, 
-                       include.eta = TRUE,
-                       include.sumsq = TRUE,
-                       include.meansq = FALSE, 
-                       test.my.fun=FALSE,
-                       fix_format = FALSE,
-                       digits.test = 2,
-                       format="f",
-                       ...){
-  if(test.my.fun) cat("\n   -> extract_param.aov()")
+extract_param_aov <- function(x,
+                              include.eta = TRUE,
+                              include.sumsq = TRUE,
+                              include.meansq = FALSE,
+                              test.my.fun = FALSE,
+                              fix_format = FALSE,
+                              digits.test = 2,
+                              format = "f",
+                              ...) {
+  if (test.my.fun)
+    cat("\n   -> extract_param.aov()")
   param <- "term"
   res <- broom::tidy(x)
-
-  if (!include.sumsq){
+  
+  
+  if (!include.sumsq) {
     param <- c(param, "sumsq")
-    if (fix_format) 
-    res$sumsq <-stp25rndr:::Format2.default(res$sumsq, digits = 2, format = format)
-
-     }
-
-  if (!include.meansq){
+    if (fix_format)
+      res$sumsq <-
+        stp25rndr:::Format2.default(res$sumsq, digits = 2, format = format)
+  }
+  
+  if (!include.meansq) {
     param <- c(param, "meansq")
-    if (fix_format) 
-      res$meansq <-stp25rndr:::Format2.default(res$meansq, digits = 2, format = format)
-      }
+    if (fix_format)
+      res$meansq <-
+        stp25rndr:::Format2.default(res$meansq, digits = 2, format = format)
+  }
   
   param <- c(param, c("df", "statistic"))
-  
-  if (include.eta) {
+    if (include.eta) {
     if (is(x, "lm") | is(x, "anova")) {
       param <- c(param, c("eta.sq", "eta.sq.part"))
       k <- ncol(res)
-      res <- cbind(res[,-k], etaSquared2(x, 2, FALSE), res[k])
+      myeta <-  etaSquared2(x, 2, FALSE)
+      
+      if (nrow(myeta) != nrow(res))
+        stop(
+          "extract_param_aov mit etaSquared 
+          eventuell liefert car:Anova(lm(...)) das richtige Ergebniss"
+        )
+      res <- cbind(res[, -k], myeta , res[k])
       
       if (fix_format) {
         res$eta.sq <-
@@ -306,23 +315,22 @@ extract_param_aov <- function(x,
                                       digits = digits.test, format = format)
         res$eta.sq.part <-
           stp25rndr:::Format2.default(res$eta.sq.part,
-                                      digits = digits.test, format = format)
+                                      digits = digits.test,
+                                      format = format)
         
       }
     }
   }
   
-  
   param <- c(param, "p.value")
-  
-  if (fix_format){
+ 
+  if (fix_format) {
     res$statistic <-
-    stp25rndr:::Format2.default(res$statistic,digits = digits.test, format = format)
+      stp25rndr:::Format2.default(res$statistic, digits = digits.test, format = format)
     res$p.value <- stp25rndr::rndr_P(res$p.value, FALSE)
-
-    res$df <- stp25rndr:::Format2.default(res$df, digits = 0, format = format)
-    }
-  
+    res$df <-
+      stp25rndr:::Format2.default(res$df, digits = 0, format = format)
+  }
   tibble::as_tibble(res[param])
 }
 

@@ -14,7 +14,7 @@ extract_param(x, include.b = TRUE, include.se = TRUE,
   conf.int = TRUE, conf.level = 0.95, conf.method = "Wald",
   fix_format = FALSE, digits.param = 3, digits.odds = 2,
   digits.test = 2, digits.beta = 2, format = "fg",
-  conf.style.1 = FALSE, ...)
+  conf.style.1 = FALSE, test.my.fun = FALSE, ...)
 
 extract_param_aov(x, include.eta = TRUE, include.sumsq = TRUE,
   include.meansq = FALSE, test.my.fun = FALSE, fix_format = FALSE,
