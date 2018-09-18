@@ -38,6 +38,9 @@ APA2_list(x, caption = "", note = "",
 
 \item{...}{nicht benutzt}
 }
+\value{
+data.frame
+}
 \description{
 Formatiert Listen mit Modellen zu Dataframs.
 }

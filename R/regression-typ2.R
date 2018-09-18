@@ -440,6 +440,9 @@ APA2.lm <- function(x,
                        ci.level = ci.level,
                        fix_format=TRUE, conf.style.1 = conf.style.1)
                        ,  caption, note, info$N, info$labels)
+  
+  
+  
   if (!is.logical(output))
     Output(res, output = output, col_names = col_names)
   

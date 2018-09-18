@@ -118,7 +118,7 @@ test_that("APA2 vs APA_Table vs Ordnen vs ectract_param", {
                c("-10.1", "0.24","0.398", "0.000786", "-0.805", "-0.73"))
   
   expect_equal(fit_APA_Table[[1]][, 2],
-               c("-10.09", "  0.24", "  0.40", "  0.00", " -0.81", " -0.73"))
+               c("-10.09", "0.24", "0.40", "0.00", "-0.81", "-0.73"))
   
   fit_extract2 <- extract_param(
     fit,

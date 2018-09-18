@@ -2,22 +2,38 @@
 % Please edit documentation in R/regression-extract.R
 \name{extract_param}
 \alias{extract_param}
+\alias{extract_param_aov}
 \title{extract_param}
 \usage{
-extract_param(x, ...)
+extract_param(x, include.b = TRUE, include.se = TRUE,
+  include.beta = FALSE, include.ci = FALSE, include.odds = FALSE,
+  include.odds.ci = if (include.odds & include.ci) TRUE else FALSE,
+  include.statistic = TRUE, include.p = TRUE, include.stars = FALSE,
+  include.df = FALSE, include.effects = c("ran_pars", "fixed"),
+  include.eta = TRUE, include.sumsq = TRUE, include.meansq = FALSE,
+  conf.int = TRUE, conf.level = 0.95, conf.method = "Wald",
+  fix_format = FALSE, digits.param = 3, digits.odds = 2,
+  digits.test = 2, digits.beta = 2, format = "fg",
+  conf.style.1 = FALSE, ...)
+
+extract_param_aov(x, include.eta = TRUE, include.sumsq = TRUE,
+  include.meansq = FALSE, test.my.fun = FALSE, fix_format = FALSE,
+  digits.test = 2, format = "f", ...)
 }
 \arguments{
 \item{x}{Objekt}
 
-\item{...}{weitere params}
-
 \item{include.b, include.beta, include.ci, include.se, include.odds, include.odds.ci, include.statistic, include.p, include.stars, include.df, include.effects, conf.level, conf.method}{Parameter wie in APA_Tabelle beschrieben.}
+
+\item{...}{weitere params}
 }
 \value{
 data.frame tibble  "term","estimate", "beta","std.error" ,"statistic","p.value","stars","conf.high","conf.low","odds","odds.conf.low","odds.conf.high","df","group"
 }
 \description{
 Summary fuer Regressionsmodelle. Kopie von broom::tidy
+
+Metode fuer ANOVA-Modelle
 }
 \examples{
 fit <- lm(Sepal.Width ~ Petal.Length + Petal.Width, iris)
