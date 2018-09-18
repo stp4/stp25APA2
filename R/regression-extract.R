@@ -21,12 +21,7 @@
 #' APA_Table(fit, type="long")
 #'
 #'
-extract_param <- function(x, ...){
-  UseMethod("extract_param")
-  
-}
-
-extract_param.default <- function(x,
+extract_param  <- function(x,
                           include.b = TRUE,
                           include.se = TRUE,
                           include.beta = FALSE,
@@ -40,6 +35,11 @@ extract_param.default <- function(x,
                           include.df = FALSE,
                           
                           include.effects = c("ran_pars", "fixed"),
+                          
+                          include.eta = TRUE,
+                          include.sumsq = TRUE,
+                          include.meansq = FALSE, 
+                          
                           conf.int = TRUE,# if (include.ci | include.odds.ci) TRUE else  FALSE ,
                           conf.level = 0.95,
                           conf.method = "Wald",
@@ -50,13 +50,21 @@ extract_param.default <- function(x,
                           digits.beta = 2,
                           format="fg",
                           conf.style.1 = FALSE,
+                          test.my.fun=FALSE,
                           ...) {
   # "term","estimate", "beta","std.error" ,"statistic","p.value","stars","conf.high","conf.low","odds","odds.conf.low","odds.conf.high","df","group"
   
   
+#S3-Methode geht nicht
   
-  
-  
+  if (inherits(x, "aov")) return(extract_param_aov(x, 
+                                              include.eta ,
+                                              include.sumsq ,
+                                              include.meansq , 
+                                              test.my.fun,
+                                              fix_format ,
+                                              digits.test,
+                                              format="f"))  
   param <-  "term"
   res <- NULL
   
@@ -255,9 +263,10 @@ extract_param.default <- function(x,
 
 
 
-
-
-extract_param.aov <- function(x, 
+#' @description Metode fuer ANOVA-Modelle
+#' @rdname extract_param
+#' 
+extract_param_aov <- function(x, 
                        include.eta = TRUE,
                        include.sumsq = TRUE,
                        include.meansq = FALSE, 
@@ -270,11 +279,18 @@ extract_param.aov <- function(x,
   param <- "term"
   res <- broom::tidy(x)
 
-  if (!include.sumsq)
+  if (!include.sumsq){
     param <- c(param, "sumsq")
+    if (fix_format) 
+    res$sumsq <-stp25rndr:::Format2.default(res$sumsq, digits = 2, format = format)
 
-  if (!include.meansq)
+     }
+
+  if (!include.meansq){
     param <- c(param, "meansq")
+    if (fix_format) 
+      res$meansq <-stp25rndr:::Format2.default(res$meansq, digits = 2, format = format)
+      }
   
   param <- c(param, c("df", "statistic"))
   
@@ -303,8 +319,7 @@ extract_param.aov <- function(x,
     res$statistic <-
     stp25rndr:::Format2.default(res$statistic,digits = digits.test, format = format)
     res$p.value <- stp25rndr::rndr_P(res$p.value, FALSE)
-    res$sumsq <-stp25rndr:::Format2.default(res$sumsq,digits = digits.test, format = format)
-    res$meansq <- stp25rndr:::Format2.default(res$meansq,  digits = digits.test, format = format)
+
     res$df <- stp25rndr:::Format2.default(res$df, digits = 0, format = format)
     }
   
