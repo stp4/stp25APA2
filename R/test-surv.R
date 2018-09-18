@@ -239,3 +239,22 @@ APA2.coxph<- function(fit,
   Output(fix_to_data_frame(res), caption, note)
 }
 
+#'  fix_irgendwas fix_format_p ist nur hier in Verwendung
+#'  fix_format_p sucht automatisch nach den p-Werten die meist an der Letzten stelle sind
+#'  und gibt einen Vector-String mit der LAenge drei aus.
+#'  Nicht zu verwechseln mit \code{rndr_P()}
+#' 
+#'  fix_format_p Input(F, df,und p)  Output: (test, df, p.value)
+#' 
+#' 
+
+fix_format_p<- function(x, df1=NULL,df2=null, p=NULL){
+  if(is.vector(x) ){
+    if(length(x==3))
+      c(Format2(x[1], 2),  x[2],  ffpvalue(x[3]))
+    else if(length(x==4))
+      c(Format2(x[1], 2),  paste(x[2], ", ", x[3]),   ffpvalue(x[4]))
+    
+  }
+  else  { }
+}
