@@ -203,11 +203,13 @@ extract_param  <- function(x,
       coefs$odds[1] <- NA
     
     }
+
   
   if (include.odds.ci & inherits(x, "glm")) {
+   # cat("\n in Odds conf\n")
     
-    coefs$odds.conf.low<- exp(res$conf.low)
-    coefs$odds.conf.high<- exp(res$conf.high)
+    coefs$odds.conf.low <-  res$odds.conf.low <- exp(res$conf.low)
+    coefs$odds.conf.high <-  res$odds.conf.high <- exp(res$conf.high)
     
     if (fix_format) {
       if (conf.style.1) {
@@ -245,6 +247,11 @@ extract_param  <- function(x,
     
       }
   
+
+  
+  
+  
+  
   if (include.stars) {
     param <- c(param, "stars")
     coefs$stars <- stp25rndr::rndr_Stars(res$p.value)
@@ -260,6 +267,17 @@ extract_param  <- function(x,
   }
   tibble::as_tibble(coefs[param])
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -324,6 +342,9 @@ extract_param_aov <- function(x,
   
   param <- c(param, "p.value")
  
+
+  
+  
   if (fix_format) {
     res$statistic <-
       stp25rndr:::Format2.default(res$statistic, digits = digits.test, format = format)

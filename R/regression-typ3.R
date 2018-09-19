@@ -146,7 +146,7 @@ APA_Table <- function(...,
                       
                       include.odds = FALSE,
                       include.ci = FALSE,
-                      
+                      include.odds.ci=FALSE,
                       
                       #Fehler abfangeb
                       include.p = FALSE,
@@ -299,7 +299,7 @@ APA_Table <- function(...,
         include.param=include.param,  include.gof=include.gof, include.custom = include.custom,
         include.b = include.b, include.se = include.se, include.beta = include.beta,
         include.ci =  include.ci,
-        include.odds = include.odds,
+        include.odds = include.odds, include.odds.ci=include.odds.ci,
         include.statistic = include.statistic,
         include.p =  include.p,
         include.stars =  include.stars,
