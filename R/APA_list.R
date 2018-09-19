@@ -227,21 +227,32 @@ APA2_list <-
       gofs <-  dplyr::bind_cols(gofs)
       names(gofs) <-   names(coefs)
       
-      if (include.param)
+      if (include.param){
         result <- prepare_output(rbind(coefs, gofs), caption, note)
+        n.rgroup <- nrow(coefs)
+      }
       else
-        result <- prepare_output(gofs,
+        {result <- prepare_output(gofs,
                                   caption, note)
+        rgroup<- n.rgroup <- NULL
+        }
     } else if (include.param) {
       result <- prepare_output(coefs,
                                caption, note)
+      
+      rgroup<- n.rgroup <- NULL
     }
     else{
       result <- NULL
     }
     
     if (!is.logical(output)) {
-      Output(result, output=output)
+      Output(result, output=output,
+             
+             rgroup = rgroup,
+             n.rgroup = n.rgroup
+             
+             )
     } 
     
     invisible(result)
