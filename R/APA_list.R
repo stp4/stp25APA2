@@ -96,8 +96,7 @@ APA2_list <-
           digits.odds = digits 
         }
       }
-  #  print(digits.param)
-   # print(digits.odds)
+ 
       
       model <-  extract_param(
         x[[i]],
@@ -127,8 +126,7 @@ APA2_list <-
         conf.style.1 = TRUE,
         ...
       )
-      cat("\n in APA2_list\n")
-      print(model)
+ 
       
       if (include.stars) {
         model[, 2] <- paste0(unlist(model[, 2]), model$stars)
@@ -164,11 +162,7 @@ APA2_list <-
       coefs <- coefs[order(match(coefs$term, coef.order)),]
     }
     
-    
-    
  
-    
-   # print(param)
     
     if (include.gof) {
       for (i in seq_len(n)) {

@@ -11,7 +11,7 @@ test_that("extract_param estimate same as coef", {
   
   expect_equal(extract_param(fit)$estimate,
                broom::tidy(fit)$estimate)
- 
+  
   fit5 <-
     glm(num_awards ~ prog + math, poisson_sim, family =  poisson())
   
@@ -115,7 +115,7 @@ test_that("APA2 vs APA_Table vs Ordnen vs ectract_param", {
               is_true())
   
   expect_equal(fit_extract$estimate,
-               c("-10.1", "0.24","0.398", "0.000786", "-0.805", "-0.73"))
+               c("-10.1", "0.24", "0.398", "0.000786", "-0.805", "-0.73"))
   
   expect_equal(fit_APA_Table[[1]][, 2],
                c("-10.09", "0.24", "0.40", "0.00", "-0.81", "-0.73"))
@@ -138,11 +138,35 @@ test_that("APA2 vs APA_Table vs Ordnen vs ectract_param", {
     " ",
     "",
     paste0(
-      stp25rndr:::Format2.default(fit_extract2$estimate, 
+      stp25rndr:::Format2.default(fit_extract2$estimate,
                                   2, format = "f"),
       fit_extract$stars
     )
   ),
   gsub(" ", "", fit_APA_Table_long[1:6, 2]))
   
+})
+
+
+
+
+test_that("APA_list mit OR und CI", {
+  fit <-
+    glm(I(sr < 10) ~ pop15 + pop75 + dpi,
+        data = LifeCycleSavings,
+        family = binomial)
+  x <- APA_Table(
+    fit,
+    names = c("Leistung"),
+    
+    include.odds = TRUE,
+    include.odds.ci = TRUE,
+    include.p = TRUE,
+    include.b = FALSE,
+    include.se = FALSE,
+    type = "long2",
+    output = FALSE
+  )
+  expect_equal(names(x),
+               c("term" ,     "odds"  ,    "odds.conf", "p"))
 })
