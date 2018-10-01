@@ -395,13 +395,13 @@ APA_Table <- function(...,
                      digits = digits)
     }
     else if (type == "sjPlot" ) {
-      if(test.my.fun) cat("\n type = sjPlot")
+     # if(test.my.fun) cat("\n type = sjPlot")
       Text("sjPlot ist noch nicht implementiert")
     }
     else{
-      if(test.my.fun) cat("\n type = ist nicht definiert")
+      #if(test.my.fun) cat("\n type = ist nicht definiert")
       cat("\n in else eventuell \n")
-      
+      if(type=="anova")  include.anova=TRUE ## Altlast 
     }
   }
   
