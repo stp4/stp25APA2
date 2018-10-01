@@ -263,7 +263,7 @@ extract_param  <- function(x,
   if (include.p) {
     param <- c(param, "p.value")
     if (fix_format)
-      coefs$p.value <- stp25rndr::rndr_P(res$p.value, FALSE)
+      coefs$p.value <- stp25rndr::rndr_P(res$p.value, symbol.leading = c("", "<"))
   }
   tibble::as_tibble(coefs[param])
 }
@@ -348,7 +348,7 @@ extract_param_aov <- function(x,
   if (fix_format) {
     res$statistic <-
       stp25rndr:::Format2.default(res$statistic, digits = digits.test, format = format)
-    res$p.value <- stp25rndr::rndr_P(res$p.value, FALSE)
+    res$p.value <- stp25rndr::rndr_P(res$p.value, , symbol.leading = c("", "<"))
     res$df <-
       stp25rndr:::Format2.default(res$df, digits = 0, format = format)
   }
