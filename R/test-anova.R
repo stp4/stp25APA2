@@ -102,22 +102,23 @@ APA2.aovlist <- function(x,
 #' @description \code{type="anova"} Anova (car::Anova) Funktionen aus APA_Table(..., include.anova=TRUE)
 #' @export
 APA_Table_Anova <- function(myfits,
-                            caption=NULL,
-                            note=NULL,
+                            caption = NULL,
+                            note = NULL,
                             output = stp25output::which_output(),
-                            names=NULL,
-                            include.eta=TRUE,
+                            names = NULL,
+                            include.eta = TRUE,
                             include.sumsq = TRUE ,
-                            include.meansq = FALSE, ...)
+                            include.meansq = FALSE,
+                            ...)
 {
   #cat("\nAPA_Table_Anova()\n")
   result <- list()
-  
+  print(names(myfits))
   for (i in seq_len(length(myfits)))  {
+    my_input <- model_info(myfits[[i]])
     
-    if (is(myfits[[i]], "aov") | length(model_info(myfits[[i]])$x) == 0) {
-      res <- "Null-Model"
-      result[[i]] <- res
+    if (length(my_input$x) == 0) {
+      result[[i]] <- "Null-Model"
     }
     else{
       res <- Ordnen(
@@ -136,16 +137,14 @@ APA_Table_Anova <- function(myfits,
       if (is.null(note))
         note <- attr(res, "note")
       
-     res <-  fix_format(res)
-      Output(
-        res,
-        caption = caption,
-        note = note,
-        output = output
-      )
+      res <-  stp25output::fix_format(res)
+      
+      stp25output::Output(res,
+             caption = caption,
+             note = note,
+             output = output)
       result[[i]] <- res
     }
   } # -end for
   result
 }
-  

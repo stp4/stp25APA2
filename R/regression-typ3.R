@@ -400,24 +400,26 @@ APA_Table <- function(...,
     }
     else{
       #if(test.my.fun) cat("\n type = ist nicht definiert")
-      cat("\n in else eventuell \n")
+    #  cat("\n in else eventuell \n")
       if(type=="anova")  include.anova=TRUE ## Altlast 
     }
   }
   
   
-  if ( include.anova ) {
+  if (include.anova) {
     #car::ANOVA Type II  print(str(result))
-    if(test.my.fun) cat("\n include.anova = TRUE")
-   result[["anova"]] <- APA_Table_Anova(
+    if (test.my.fun)
+      cat("\n include.anova = TRUE")
+    result[["anova"]] <- APA_Table_Anova(
       myfits,
       caption = caption,
-      note = note, output=output,
+      note = note,
+      output = output,
       names = names,
-      include.eta = include.eta, include.sumsq = include.sumsq ,
+      include.eta = include.eta,
+      include.sumsq = include.sumsq ,
       include.meansq = include.meansq
     )
-
   }
   
   if(test.my.fun) cat("\nresult: ", class(result), "\nEnde APA_Table()")

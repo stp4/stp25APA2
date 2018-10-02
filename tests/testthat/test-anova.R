@@ -49,5 +49,40 @@ test_that("anova error mit interaction", {
   
 })
 
-
+test_that("anova mit APA_TAbelle", {
+  npk.lm <-
+    lm(yield ~ block + N + P + K, npk)
+  npk.aov <-
+    aov(yield ~ block + N + P + K, npk)
+  
+  npk.aov2 <-
+    aov(yield ~ block + N * P + K, npk)
+  
+  npk.aov3 <- aov(yield ~ block + N * P * K, npk)
+  
+  
+  res <-
+    APA_Table(npk.lm,
+              npk.aov,
+              npk.aov2,
+              npk.aov3,
+              type = "anova",
+              output = FALSE)
+  
+  
+  expect_equal(res$anova[[1]],  res$anova[[2]])
+  
+  
+  expect_equal(res$anova[[3]]$sumsq,
+               c("343.29" , "189.28", "8.40" ,  "95.20",  "21.28",  "218.90"))
+  expect_equal(
+    res$anova[[4]]$sumsq,
+    c(
+      "306.29",      "189.28",      "8.40",      "95.20",
+      "21.28",      "33.13",      "0.48",      "",      "185.29"
+    )
+  )
+  
+  
+})
 
