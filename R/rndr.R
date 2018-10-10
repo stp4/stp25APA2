@@ -24,11 +24,11 @@ rndr_ <- function(...) Format2(...)
 
 #' @rdname rndr_
 #' @param m Mittelwert 
-#' @param s,iqr SD,IRQ  (ein Wert)
+#' @param s,iqr SD,IQR  (ein Wert)
 #' @export
 rndr_median <- function(m, iqr, digits=NULL, ...){
   if(is.null(digits))  digits <- options()$stp25$apa.style$mittelwert$digits
-  paste0(Format2(m, digits[1],...), " (IRQ ", Format2(iqr, digits[1],...), ")")
+  paste0(Format2(m, digits[1],...), " (IQR ", Format2(iqr, digits[1],...), ")")
   }
 
 
@@ -53,7 +53,7 @@ rndr_median_range <- function (m, iqr, mn, mx,
                                digits = NULL, ...) {
   if(is.null(digits))  digits <- options()$stp25$apa.style$mittelwert$digits
   paste0(
-    Format2(m, digits[1],...), " (IRQ ", Format2(iqr, digits[1],...), 
+    Format2(m, digits[1],...), " (IQR ", Format2(iqr, digits[1],...), 
     ", range ",
     Format2(mn, digits[1],...),
     " to ",
