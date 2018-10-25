@@ -170,10 +170,10 @@ errate_statistik2(Formula, data, caption = "caption", note = "note",
 \method{APA2}{anova}(x, caption = gsub("\\\\n", "", paste(attr(x,
   "heading"), collapse = ", ")), note = paste("contrasts: ",
   paste(options()$contrasts, collapse = ", ")),
-  output = stp25output::which_output(), col_names = NULL,
-  include.eta = FALSE, ...)
+  output = stp25output::which_output(), include.eta = FALSE,
+  include.sumsq = TRUE, include.meansq = FALSE, ...)
 
-\method{APA2}{aov}(x, caption = NULL, note = paste("contrasts: ",
+\method{APA2}{aov}(x, caption = "ANOVA", note = paste("contrasts: ",
   paste(options()$contrasts, collapse = ", ")),
   output = stp25output::which_output(), col_names = NULL, ...)
 
@@ -455,7 +455,7 @@ npk.aov <- aov(yield ~ block + N*P*K, npk)
 #summary(npk.aov)
 #coefficients(npk.aov)
 
-APA2(npk.aov, include.eta = FALSE)
+#APA2(npk.aov, include.eta = FALSE)
 
 
 #- One way repeated Measures ---------------------
@@ -466,7 +466,7 @@ data.ex3=read.table(datafilename,header=T)   #read the data into a table
 
 aov.ex3 = aov(Recall~Valence+Error(Subject/Valence),data.ex3)
 
-APA2(aov.ex3)
+#APA2(aov.ex3)
 
 
 #-- Corr1

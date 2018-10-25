@@ -73,14 +73,11 @@ test_that("anova mit APA_TAbelle", {
   expect_equal(res$anova[[1]],  res$anova[[2]])
   
   
-  expect_equal(res$anova[[3]]$sumsq,
-               c("343.29" , "189.28", "8.40" ,  "95.20",  "21.28",  "218.90"))
+  expect_equal(res$anova[[3]]$statistic,
+               c("4.39", "12.11", "0.54", "6.09", "1.36", ""))
   expect_equal(
-    res$anova[[4]]$sumsq,
-    c(
-      "306.29",      "189.28",      "8.40",      "95.20",
-      "21.28",      "33.13",      "0.48",      "",      "185.29"
-    )
+    res$anova[[4]]$statistic,
+    c("4.96", "12.26", "0.54", "6.17", "1.38", "2.15", "0.03", "", "")
   )
   
   

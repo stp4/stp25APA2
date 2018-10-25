@@ -85,9 +85,9 @@ Die Funktion arbeitet Intern mit \code{aggregate} bzw. mit  berechne.default() a
 
 Tabelle2:  html-Output Tabelle(...) %>% Output()
 
-conTest Hilfsfunktion fuer Tabellen
+conTest (metrische-Skalen) Hilfsfunktion fuer Tabellen
 
-conTest Hilfsfunktion fuer Tabellen
+conTest (Kategorien Nominal-Skalen) Hilfsfunktion fuer Tabellen
 }
 \examples{
 

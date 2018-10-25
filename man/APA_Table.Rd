@@ -23,10 +23,10 @@ APA_Table(..., caption = NULL, note = NULL,
   names = NULL, custom.model.names = NULL, digits = NULL,
   include.b = TRUE, include.se = TRUE, include.t = FALSE,
   include.beta = FALSE, include.odds = FALSE, include.ci = FALSE,
-  include.p = FALSE, include.stars = if (include.p) FALSE else TRUE,
-  include.variance = TRUE, include.r = TRUE, include.pseudo = FALSE,
-  include.ftest = FALSE, include.loglik = FALSE,
-  include.custom = NULL, include.aic = TRUE,
+  include.odds.ci = FALSE, include.p = FALSE, include.stars = if
+  (include.p) FALSE else TRUE, include.variance = TRUE,
+  include.r = TRUE, include.pseudo = FALSE, include.ftest = FALSE,
+  include.loglik = FALSE, include.custom = NULL, include.aic = TRUE,
   include.bic = include.aic, include.anova = FALSE,
   include.sumsq = TRUE, include.meansq = FALSE, include.eta = FALSE,
   include.gof = TRUE, include.param = TRUE, ci.level = 0.95,
@@ -53,7 +53,7 @@ type_stargazer(list, caption, digits)
 
 type_long(...)
 
-APA_Table_Anova(myfits, caption = NULL, note = NULL,
+APA_Table_Anova(myfits, caption = "Anova", note = NULL,
   output = stp25output::which_output(), names = NULL,
   include.eta = TRUE, include.sumsq = TRUE, include.meansq = FALSE,
   ...)
