@@ -133,7 +133,7 @@ symbol_chi2(output = stp25output::which_output())
 
 \item{x}{Obkekt oder vektor}
 
-\item{s, iqr}{SD,IRQ  (ein Wert)}
+\item{s, iqr}{SD,IQR  (ein Wert)}
 
 \item{n}{Anzahl}
 

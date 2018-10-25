@@ -368,7 +368,7 @@ rndr_percent_matrix <- function(x,
   n_char <- apply(n, 2, function(x) {
     formatC(x, format = "f", digits = 0)
   })
-  #------------------------------------------------
+
   if (percent) {
     # cat(" percent ")
     x_char <- apply(x, 2, function(y)
@@ -445,7 +445,7 @@ rndr_percent_matrix <- function(x,
 #     n_char <- apply(n, 2, function(x) {
 #       formatC(x, format = "f", digits = 0) 
 #       })
-#     #------------------------------------------------
+
 #     if (percent) {
 #      # cat(" percent ")
 #       x_char <- apply(x, 2, function(y) formatC(
@@ -483,18 +483,21 @@ rndr_percent_matrix <- function(x,
 #' @examples
 #'
 #'rndr_P(c(1,.25,.08,0.05,0.01,0.0001))
-rndr_P<-function(p, include.symbol=TRUE, include.bracket=FALSE) {
-
-  if(include.symbol & !include.bracket){
-    pp_val<-  ifelse(p<.001, "p", "p=")
+rndr_P <- function(p,
+                   include.symbol = TRUE,
+                   include.bracket = FALSE) {
+  if (include.symbol & !include.bracket) {
+    pp_val <-  ifelse(p < .001, "p<", "p=")
     paste0(pp_val, ffpvalue(p))
-    }
-  else if(include.bracket) {
-    pp_val<-  ifelse(p<.001, "p", "p=")
-    paste0(" (",  paste0(pp_val, ffpvalue(p)),")")
-    }
-  else {ffpvalue(p)}
   }
+  else if (include.bracket) {
+    pp_val <-  ifelse(p < .001, "p", "p=")
+    paste0(" (",  paste0(pp_val, ffpvalue(p)), ")")
+  }
+  else {
+    ffpvalue(p)
+  }
+}
 
 
 
@@ -1229,7 +1232,6 @@ ffsigstars <- function (x,
 # ffsigstars(as.matrix(data.frame(x=x, x2=x, x3=x, x4=x)))
 
 
-#-------------------------------------------------------------------------------------
 
 # Prozent -----------------------------------------------------------------
 
@@ -1260,7 +1262,7 @@ ffprozent.table<-  function(...) rndr_percent(...) ## APA_Xtabs
 #   nrw <- nrow(anzahl)
 #   anzahl <- suppressWarnings(
 #     formatC(anzahl, format = "f", digits =  digits[2]))
-#   #------------------------------------------------
+
 #   if (percent | style>0) {
 #     prozent <- suppressWarnings(
 #       formatC(prozent, format = "f", digits = digits[1],
@@ -1341,8 +1343,6 @@ ffprozent.matrix<- function (prz, frq =NULL, ...){
 
 
 
-#-------------------------------------------------------------------------------------
-
 #' @rdname Format2
 #' @export
 ffCI <-function (CIs, digits=2,# = options()$stp25$apa.style$mittelwert$digits,
@@ -1370,7 +1370,7 @@ ffCI <-function (CIs, digits=2,# = options()$stp25$apa.style$mittelwert$digits,
   x
 }
 
-#-------------------------------------------------------------------------------------
+
 #' @rdname Format2
 #' @export
 ffreta <- function(x
@@ -1378,7 +1378,8 @@ ffreta <- function(x
                    ,lead.zero = options()$stp25$apa.style$r$lead.zero){
   Format2(x, digits, lead.zero, type= "digits")
 }
-#------------------------------------------------------------------------------------
+
+
 #' @rdname Format2
 #' @export
 fftest<- function (x, digits = options()$stp25$apa.style$Fstat$digits,

@@ -12,7 +12,7 @@
 
 
 #' @rdname Tabelle
-#' @description conTest Hilfsfunktion fuer Tabellen
+#' @description conTest (metrische-Skalen) Hilfsfunktion fuer Tabellen 
 conTest = function(fml,
                    data,
                    test_name = TRUE) {
@@ -84,21 +84,17 @@ conTest = function(fml,
 
 
 #' @rdname Tabelle
-#' @description conTest Hilfsfunktion fuer Tabellen
+#' @description conTest (Kategorien Nominal-Skalen) Hilfsfunktion fuer Tabellen
 catTest = function(fml, data, include.test="chisq.test") {
   #Fehlende Factoren eliminieren , drop.unused.levels = TRUE
   res <- stats::chisq.test(
     xtabs(fml, data, drop.unused.levels = TRUE),
     correct = FALSE)
   
-  res<- c(
-    testname = "Chi-squared",
-    stat = fftest(as.numeric(res$statistic)),
-    df = Format2(res$parameter,0),
-    p = ffpvalue(res$p.value)
-  )
-  #  paste0("X(df=", res[3], ")=", res[2], "; p=", res[4])
-  rndr_X(res[2], res[3], NULL, res[4] )
+  rndr_X( res$statistic, 
+          res$parameter,
+          NULL, 
+          res$p.value )
 }
 
 
