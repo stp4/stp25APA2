@@ -39,10 +39,12 @@ berechneMean(data = NULL, measurevar, by = NULL, na.rm = TRUE,
 Prozent2APA(x, exclude = NA, digits = 1, max_factor_length = 35, ...)
 
 Mean2default(x, digits = 2, n = length(x),
-  mean.style = get_my_options()$apa.style$mittelwert$mean.style)
+  mean.style = get_my_options()$apa.style$mittelwert$mean.style,
+  include.level = get_my_options()$apa.style$mittelwert$include_name)
 
 Median2default(x, digits = 2, n = length(x),
-  median.style = get_my_options()$apa.style$mittelwert$median.style)
+  median.style = get_my_options()$apa.style$mittelwert$median.style,
+  include.level = get_my_options()$apa.style$mittelwert$include_name)
 
 Prozent2default(x, digits = 0, n = length(x), exclude = NA,
   max_factor_length = 25)

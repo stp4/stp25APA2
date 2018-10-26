@@ -520,7 +520,7 @@ errate_statistik3 <-
         }
       }
       else
-        "NA"
+        NA
     }
     
     #-- Vorbereiten der Daten

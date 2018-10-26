@@ -244,7 +244,9 @@ rndr_percent(x, n)
 rndr_percent(data.frame(x), data.frame(n))
 
 
-rndr_P(c(1,.25,.08,0.05,0.01,0.0001))
+rndr_P(c(1,.25,.08,0.05,0.01, .000999, 0.0001))
+#    stp25rndr::rndr_P(c(1,.25,.08,0.05,0.01, .000999, 0.0001))
+#   "p=1.000" "p=.250"  "p=.080"  "p=.050"  "p=.010"  "p<.001" 
 rndr_corr(-.548369,0.005896,55)
   rndr_CI(matrix(c(NA, 1:10, NA), ncol=2))
 rndr_T(25.45, 45, .0045)

@@ -515,18 +515,28 @@ calc_mean <-  function(x,
 }
 
 #' @rdname Berechne
-#' @export
+ 
 Mean2default <- function(x,
                          digits = 2,
                          n = length(x),
-                         mean.style = get_my_options()$apa.style$mittelwert$mean.style) {
+                         mean.style = get_my_options()$apa.style$mittelwert$mean.style,
+                         include.level = get_my_options()$apa.style$mittelwert$include_name
+                         ) {
+  if (is.null(include.level))
+    mylevel <- "(mean)"
+  else if (include.level)
+    mylevel <- "(mean)"
+  else
+    mylevel <- ""
+      
+      
   m <- if (is.numeric(x))
     calc_mean(x, digits, n, mean.style)
   else
     calc_mean(as.numeric(x), digits, n, mean.style)
   
   data.frame(
-    lev = "(mean)",
+    lev = mylevel,
     n = as.character(n),
     m = m,
     stringsAsFactors = FALSE
@@ -544,8 +554,15 @@ Mean2default <- function(x,
 Median2default <- function(x,
                            digits = 2,
                            n = length(x),
-                           median.style = get_my_options()$apa.style$mittelwert$median.style
-                           ) {
+                           median.style = get_my_options()$apa.style$mittelwert$median.style,
+                           include.level = get_my_options()$apa.style$mittelwert$include_name
+) {
+  if (is.null(include.level))
+    mylevel <- "(median)"
+  else if (include.level)
+    mylevel <- "(median)"
+  else
+    mylevel <- ""
   #style=IQR  quantile rndr_median_range
   m <-
     if (is.numeric(x))
@@ -554,7 +571,7 @@ Median2default <- function(x,
     calc_median(as.numeric(x), digits, n, median.style)
   
   data.frame(
-    lev = "(median)",
+    lev = mylevel,
     n = as.character(n),
     m = m,
     stringsAsFactors = FALSE
