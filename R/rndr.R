@@ -482,22 +482,25 @@ rndr_percent_matrix <- function(x,
 #' @export
 #' @examples
 #'
-#'rndr_P(c(1,.25,.08,0.05,0.01,0.0001))
+#'rndr_P(c(1,.25,.08,0.05,0.01, .000999, 0.0001))
+#' #    stp25rndr::rndr_P(c(1,.25,.08,0.05,0.01, .000999, 0.0001))
+#' #   "p=1.000" "p=.250"  "p=.080"  "p=.050"  "p=.010"  "p<.001" 
 rndr_P <- function(p,
                    include.symbol = TRUE,
                    include.bracket = FALSE) {
   if (include.symbol & !include.bracket) {
-    pp_val <-  ifelse(p < .001, "p<", "p=")
+    pp_val <-  ifelse(round(p, 3) < .001, "p", "p=")
     paste0(pp_val, ffpvalue(p))
   }
   else if (include.bracket) {
-    pp_val <-  ifelse(p < .001, "p", "p=")
+    pp_val <-  ifelse(round(p, 3)  < .001, "p", "p=")
     paste0(" (",  paste0(pp_val, ffpvalue(p)), ")")
   }
   else {
     ffpvalue(p)
   }
 }
+
 
 
 
@@ -1189,6 +1192,7 @@ ffsigstars <- function (x,
   
   # ffsigstars(c(1,.1,.001))
   input <- lengths(x)
+  
   
   p_sternchen<-function(x)  {
     stern<-as.character(cut(round(x, 3),
