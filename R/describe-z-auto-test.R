@@ -92,7 +92,7 @@ errate_statistik2 <- function(Formula,
     if (all(is.na(x)))
       type_switch <- "all_NA"
     
-    #cat(type_switch,"\n")
+ 
     
     result <- switch(
       type_switch,
@@ -221,7 +221,7 @@ errate_statistik2 <- function(Formula,
                                   ifelse(is.null(attr(X$Y_data, "label")),
                                   y, attr(X$Y_data, "label")))
       my_levels <- levels(Xi)
-      #-- Test ob Gruppen cat("\n\nAchtung Gruppe ist kein Factor!\n\n")
+      #-- Test ob Gruppen  
       if (is.null(my_levels)) {
         #--Gruppe ist Numeric also Correlation
         if (corr_test %in% c("pearson", "spearman")) {
@@ -400,13 +400,19 @@ errate_statistik3 <-
         #    normality.test = FALSE
          )
   {
-    
+ 
+ 
     mySep<- ' '
     mySep2  <- '  '  
       if(stp25output::which_output() == "hlml"){  
         mySep <- '&nbsp;' 
         mySep2 <- '&nbsp;&nbsp;'
         }
+    
+    
+    Emty_res <- function(...) { data.frame(lev="", n="", m="", stringsAsFactors = FALSE)}
+     
+    
     
     Mittelwert_Einzel <- function(i, x) {
      
@@ -415,11 +421,12 @@ errate_statistik3 <-
       x    <- na.omit(x)
       n    <- length(x)
       rr <- NULL #Result
-      
+     
+      if(n==0 &  X$measure[i]=="logical")  X$measure[i] <- "header"
       # gelöscht wegen Fehler bei NAs
      # if (all(is.na(x)))
     #    X$measure[i] <- "all_NA"
-       
+ 
       res <- switch(
         X$measure[i],
         numeric = Mean2default(x, X$digits[i], n),
@@ -430,11 +437,10 @@ errate_statistik3 <-
         mean =    Mean2default(x, X$digits[i], n),
         median =  Median2default(x, X$digits[i], n),
         multi =   Multi2default(x, X$digits[i], n),
-        
-        "NA"
+        header =  Emty_res(), 
+        Emty_res()
       )
-    #  cat("\nin Mittelwert_Einzel")
-    #  print(res)
+  
       
       if (X$measure[i] == "factor") {
         x0 <- data.frame(
@@ -454,6 +460,7 @@ errate_statistik3 <-
     }
     
     Mittelwert_Gruppe <- function(i, j, x = NULL) {
+    
       groups <- droplevels(X$data[[j]])
       tabel_header <- paste0(mySep, names(table(groups)))
       
@@ -519,8 +526,12 @@ errate_statistik3 <-
     #-- Vorbereiten der Daten
     ANS <- NULL
     X <- prepare_data2(..., na.action = na.action)
+    
     group.vars   <- X$group.vars
     measure.vars <- X$measure.vars
+    
+   
+    print(measure.vars)
     N            <- nrow(data)
     
     if(is.character(include.test)){
@@ -544,7 +555,7 @@ errate_statistik3 <-
     
     #-- Einzelvergleich -------------------------------
     if (is.null(group.vars)) {
-    #  cat(" Einzelvergleich ")
+ 
       if (include.nr)
         ANS <-
           data.frame(

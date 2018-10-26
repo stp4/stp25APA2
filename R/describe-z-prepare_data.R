@@ -157,9 +157,7 @@ Data_Vars <- function(.data, ..., by = "1") {
     sapply(lazyeval::lazy_dots(...), function(x) {
       as.character(x[1])
     })
-cat("\nmeasure\n")
-    print(measure)
-    cat("\n")
+
   # 2 schauen ob was daherkommt - Alle auswerten mit Tabelle(data, .~.)
   if (length(measure) == 0){
     measure <- names(.data)
